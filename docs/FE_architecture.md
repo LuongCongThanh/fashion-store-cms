@@ -75,7 +75,7 @@ NestJS REST API
 | Lint | ESLint + perfectionist + unused-imports | Tự sắp xếp và xoá import thừa. Không auto-import code nội bộ (chỉ component Nuxt UI) |
 | Formatter | Prettier | |
 | Git hooks | Husky + lint-staged | |
-| Package Manager | pnpm | |
+| Package Manager | npm | |
 | API types | OpenAPI (`@nestjs/swagger`) + `openapi-typescript` | |
 | API mock | MSW — **chỉ dùng trong test** | Adapter thứ hai tại seam HTTP: component test và test refresh-token chạy qua interface thật thay vì mock axios. Chưa dùng cho dev runtime |
 
@@ -372,7 +372,7 @@ Quy tắc:
 
 - **Không viết tay** type cho request/response — lấy từ `api.generated.ts`.
 - `api.generated.ts` được commit để build/CI không phụ thuộc BE đang chạy.
-- Khi BE đổi contract → chạy `pnpm gen:api` → `pnpm typecheck` sẽ báo chỗ FE bị ảnh hưởng.
+- Khi BE đổi contract → chạy `npm run gen:api` → `npm run typecheck` sẽ báo chỗ FE bị ảnh hưởng.
 - CI kiểm tra file generated khớp với Swagger của môi trường dev/staging.
 - `features/*/types/` chỉ chứa type riêng của UI (form model, view model), alias từ type generated:
 
@@ -1137,7 +1137,7 @@ format
 CI (mỗi pull request):
 
 ```text
-pnpm gen:api (kiểm tra contract khớp)
+npm run gen:api (kiểm tra contract khớp)
 lint
 typecheck (vue-tsc)
 test
@@ -1174,15 +1174,15 @@ Không đặt secret backend vào frontend environment.
 # 28. Development Commands
 
 ```bash
-pnpm install
-pnpm dev
-pnpm build
-pnpm preview
-pnpm lint
-pnpm typecheck
-pnpm gen:api
-pnpm test
-pnpm test:e2e
+npm install
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm run typecheck
+npm run gen:api
+npm test
+npm run test:e2e
 ```
 
 ---
@@ -1190,23 +1190,23 @@ pnpm test:e2e
 # 29. Initial Setup
 
 ```bash
-pnpm create vite fashion-store-cms --template vue-ts
+npm create vite@latest fashion-store-cms -- --template vue-ts
 
 cd fashion-store-cms
 
-pnpm install
+npm install
 ```
 
 Install core dependencies:
 
 ```bash
-pnpm add vue-router pinia axios zod @tanstack/vue-query vue-i18n
+npm install vue-router pinia axios zod @tanstack/vue-query vue-i18n
 ```
 
 Install UI & libs:
 
 ```bash
-pnpm add @nuxt/ui tailwindcss @iconify-json/lucide \
+npm install @nuxt/ui tailwindcss @iconify-json/lucide \
   vee-validate @vee-validate/zod \
   echarts vue-echarts \
   @tiptap/vue-3 @tiptap/pm @tiptap/starter-kit dompurify \
@@ -1216,7 +1216,7 @@ pnpm add @nuxt/ui tailwindcss @iconify-json/lucide \
 Install development dependencies:
 
 ```bash
-pnpm add -D \
+npm install -D \
   eslint \
   eslint-plugin-perfectionist \
   eslint-plugin-unused-imports \
