@@ -26,4 +26,13 @@ describe('ErrorState', () => {
 
     expect(wrapper.text()).not.toContain('NullPointerException')
   })
+
+  it('shows the translated message chosen by the error policy', () => {
+    const { wrapper } = renderWithPlugins(ErrorState, {
+      props: { error: new ApiError(503, 'MAINTENANCE', 'raw') },
+    })
+
+    expect(wrapper.text()).toContain('Máy chủ gặp lỗi. Vui lòng thử lại sau.')
+    expect(wrapper.text()).toContain('Thử lại')
+  })
 })

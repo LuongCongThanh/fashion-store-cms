@@ -1,6 +1,6 @@
 # 08 — i18n
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 05
 Nguồn: Step 3c trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

@@ -13,6 +13,7 @@ import { installErrorHandling } from '@app/providers/ErrorHandling'
 import { createAppRouter } from '@app/router/Router'
 import { createNotifier, NOTIFIER_KEY } from '@shared/composables/UseNotify'
 import { createHttpClient, HTTP_CLIENT_KEY } from '@shared/lib/api/client/HttpClient'
+import { createAppI18n } from '@shared/lib/i18n/I18n'
 import { createAppQueryClient } from '@shared/lib/query/QueryClient'
 import { createSession, SESSION_KEY } from '@shared/lib/session/Session'
 
@@ -36,11 +37,10 @@ export interface RuntimeOverrides {
 /** Dựng toàn bộ runtime. Trả `plugin` để app.use() và các object để test assert. */
 export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const pinia = createPinia()
+  const i18n = createAppI18n()
   const router = overrides.router ?? createAppRouter()
   const notifier =
-    overrides.notifier ??
-    // Plan 08 thay t/te bằng i18n của app.
-    createNotifier({ toast: useToast(), t: (key) => key, te: () => false })
+    overrides.notifier ?? createNotifier({ toast: useToast(), t: i18n.translate, te: i18n.has })
   const queryClient = createAppQueryClient({
     onMutationError: notifier.error,
     retry: overrides.retry,
@@ -59,8 +59,7 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const http = createHttpClient({
     baseURL: env.VITE_API_BASE_URL,
     session,
-    // Plan 08 thay bằng i18n.getLocale.
-    getLocale: () => 'vi',
+    getLocale: i18n.getLocale,
     transport: overrides.transport,
   })
 
@@ -70,7 +69,7 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
 
   const plugin = {
     install(app: App) {
-      app.use(pinia).use(router).use(VueQueryPlugin, { queryClient }).use(ui)
+      app.use(pinia).use(i18n).use(router).use(VueQueryPlugin, { queryClient }).use(ui)
       app.provide(HTTP_CLIENT_KEY, http)
       app.provide(SESSION_KEY, session)
       app.provide(NOTIFIER_KEY, notifier)

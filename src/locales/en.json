@@ -1,0 +1,31 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "retry": "Retry",
+    "userMenu": "Account menu",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "auto": "System"
+    },
+    "language": {
+      "vi": "Tiếng Việt",
+      "en": "English"
+    }
+  },
+  "errors": {
+    "NETWORK_ERROR": "Cannot reach the server. Check your connection and try again.",
+    "TIMEOUT": "The server took too long to respond. Please try again.",
+    "UNAUTHORIZED": "Your session has expired. Please sign in again.",
+    "FORBIDDEN": "You do not have permission to do this.",
+    "NOT_FOUND": "Data not found.",
+    "CONFLICT": "The data was changed or already exists.",
+    "VALIDATION_FAILED": "The data is invalid.",
+    "BUSINESS_RULE": "This action breaks a business rule.",
+    "RATE_LIMITED": "Too many requests. Please try again later.",
+    "SERVER_ERROR": "The server encountered an error. Please try again later.",
+    "UNKNOWN": "Something went wrong. Please try again."
+  }
+}

@@ -194,9 +194,9 @@ export default tseslint.config(
       'check-file/folder-naming-convention': [
         'error',
         {
-          'src/**/': '+([a-z])|[A-Z]*([a-zA-Z0-9])',
-          'e2e/**/': '+([a-z])|[A-Z]*([a-zA-Z0-9])',
-          'scripts/**/': '+([a-z])|[A-Z]*([a-zA-Z0-9])',
+          'src/**/': '+([a-z0-9])|[A-Z]*([a-zA-Z0-9])',
+          'e2e/**/': '+([a-z0-9])|[A-Z]*([a-zA-Z0-9])',
+          'scripts/**/': '+([a-z0-9])|[A-Z]*([a-zA-Z0-9])',
         },
       ],
     },
