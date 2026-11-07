@@ -1,6 +1,6 @@
 # Spec 03 — GitHub template và CI
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 02
 Nguồn: Step 2b · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
