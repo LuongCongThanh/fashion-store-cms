@@ -1,7 +1,9 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
+
+import { createFakeNotifier } from '@test/Render'
 
 import { createAppRuntime } from './Runtime'
 
@@ -66,7 +68,7 @@ describe('createAppRuntime', () => {
 
   it('toasts mutation errors globally unless the mutation handles them locally', async () => {
     const mock = new MockAdapter(axios.create())
-    const notifier = { success: vi.fn(), error: vi.fn() }
+    const notifier = createFakeNotifier()
     const runtime = createAppRuntime({
       transport: mock.adapter(),
       router: memoryRouter(),
@@ -91,7 +93,7 @@ describe('createAppRuntime', () => {
 
   it('does not toast query errors (they are shown in place)', async () => {
     const mock = new MockAdapter(axios.create())
-    const notifier = { success: vi.fn(), error: vi.fn() }
+    const notifier = createFakeNotifier()
     const runtime = createAppRuntime({
       transport: mock.adapter(),
       router: memoryRouter(),
@@ -109,7 +111,7 @@ describe('createAppRuntime', () => {
 
   it('tells the user their session expired when refresh fails', async () => {
     const mock = new MockAdapter(axios.create())
-    const notifier = { success: vi.fn(), error: vi.fn() }
+    const notifier = createFakeNotifier()
     const runtime = createAppRuntime({
       transport: mock.adapter(),
       router: memoryRouter(),

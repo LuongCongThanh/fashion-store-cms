@@ -1,6 +1,6 @@
 # 11 — Chặn index và PWA
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 09
 Nguồn: Step 5b (phần 1) trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

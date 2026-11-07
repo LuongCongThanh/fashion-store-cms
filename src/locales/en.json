@@ -22,6 +22,11 @@
       "title": "Sign in"
     }
   },
+  "pwa": {
+    "updateAvailable": "A new version is available",
+    "reload": "Reload",
+    "offline": "You are offline. The data shown may be outdated."
+  },
   "errors": {
     "NETWORK_ERROR": "Cannot reach the server. Check your connection and try again.",
     "TIMEOUT": "The server took too long to respond. Please try again.",

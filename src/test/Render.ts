@@ -2,6 +2,7 @@ import UApp from '@nuxt/ui/components/App.vue'
 import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import { vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
@@ -11,6 +12,7 @@ import type { Router } from 'vue-router'
 import { createAppRuntime } from '@app/Runtime'
 import { useLocale } from '@shared/lib/i18n/I18n'
 
+import type { Notifier } from '@shared/composables/UseNotify'
 import type { SessionSnapshot } from '@shared/lib/session/Session'
 
 type MountOptions = Parameters<typeof mount>[1]
@@ -23,6 +25,11 @@ export interface RenderOptions {
   /** Props cho component được render. */
   props?: Record<string, unknown>
   mount?: MountOptions
+}
+
+/** Notifier giả: ghi lại lời gọi để assert toast. */
+export function createFakeNotifier() {
+  return { success: vi.fn(), error: vi.fn(), prompt: vi.fn() } satisfies Notifier
 }
 
 function defaultRouter() {
@@ -42,8 +49,10 @@ function defaultRouter() {
  */
 export function renderWithPlugins(component: Component, options: RenderOptions = {}) {
   const http = new MockAdapter(axios.create())
+  const notifier = createFakeNotifier()
   const runtime = createAppRuntime({
     transport: http.adapter(),
+    notifier,
     session: options.session ?? { accessToken: 'test-token', storeId: 'store-1' },
     retry: false,
     router: options.router ?? defaultRouter(),
@@ -57,5 +66,5 @@ export function renderWithPlugins(component: Component, options: RenderOptions =
     },
   })
   const wrapper = mount(Root, { ...options.mount, global: { plugins: [runtime.plugin] } })
-  return { wrapper, http, runtime }
+  return { wrapper, http, notifier, runtime }
 }

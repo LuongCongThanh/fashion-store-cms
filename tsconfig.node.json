@@ -24,6 +24,7 @@
     "vitest.config.ts",
     "playwright.config.ts",
     "e2e/**/*.ts",
+    "pwa-assets.config.ts",
     "src/app/config/Ui.config.ts"
   ]
 }

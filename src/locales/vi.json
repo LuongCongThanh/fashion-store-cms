@@ -22,6 +22,11 @@
       "title": "Đăng nhập"
     }
   },
+  "pwa": {
+    "updateAvailable": "Đã có phiên bản mới",
+    "reload": "Tải lại",
+    "offline": "Mất kết nối mạng. Dữ liệu đang hiển thị có thể đã cũ."
+  },
   "errors": {
     "NETWORK_ERROR": "Không kết nối được máy chủ. Kiểm tra mạng và thử lại.",
     "TIMEOUT": "Máy chủ phản hồi quá lâu. Vui lòng thử lại.",
