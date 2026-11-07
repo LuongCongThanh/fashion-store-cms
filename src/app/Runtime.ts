@@ -22,9 +22,9 @@ import { createSession, SESSION_KEY } from '@shared/lib/session/Session'
 import type { Notifier } from '@shared/composables/UseNotify'
 import type { SessionSnapshot } from '@shared/lib/session/Session'
 
-/** Những thứ test được phép thay. Prod không truyền gì. */
+/** Những thứ test (và Mock auth ở DEV) được phép thay. Prod không truyền gì. */
 export interface RuntimeOverrides {
-  /** Adapter axios-mock-adapter; `unknown` có chủ đích (D34). */
+  /** Adapter axios-mock-adapter (test, hoặc Mock auth ở DEV); `unknown` có chủ đích (D34). */
   transport?: unknown
   /** Notifier giả để assert toast. */
   notifier?: Notifier

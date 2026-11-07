@@ -10,6 +10,8 @@ export function useAuthApi() {
   return {
     login: (payload: LoginPayload) =>
       http.post('/auth/login', payload, { skipAuth: true }) as Promise<AuthTokens>,
+    forgotPassword: (email: string) =>
+      http.post('/auth/forgot-password', { email }, { skipAuth: true }) as Promise<void>,
     me: () => http.get('/auth/me') as Promise<CurrentUser>,
   }
 }

@@ -45,6 +45,8 @@ cms/
 │   ├── app/                                # composition root — CHỈ main.ts (và src/test/) import
 │   │   ├── Runtime.ts                      # createAppRuntime() — dựng toàn bộ runtime (D37)
 │   │   ├── Runtime.spec.ts                 # test wiring prod
+│   │   ├── dev/                            # chỉ DEV, import động sau `import.meta.env.DEV` (không vào build prod)
+│   │   │   └── MockAuth.ts                 # Mock auth: adapter giả lập /auth/* (GLOSSARY)
 │   │   ├── config/                         # cấu hình đọc lúc khởi động
 │   │   │   ├── Env.config.ts               # validate VITE_* bằng Zod
 │   │   │   ├── Env.config.spec.ts          # test thiếu/sai biến env
@@ -70,14 +72,21 @@ cms/
 │   ├── features/                           # cấu trúc chi tiết: §Q
 │   │   ├── auth/                           # feature đăng nhập / đăng xuất / thông tin user
 │   │   │   ├── api/                        # hàm gọi API của feature
-│   │   │   │   └── Auth.api.ts             # gọi API login, logout, me
+│   │   │   │   └── Auth.api.ts             # gọi API login, forgot-password, me
+│   │   │   ├── components/                 # component nội bộ feature
+│   │   │   │   └── LoginForm.vue           # form đăng nhập (props/emits), view lo gọi API
+│   │   │   ├── schemas/                    # Zod schema của form
+│   │   │   │   └── Login.schema.ts         # loginSchema, forgotPasswordSchema
 │   │   │   ├── stores/                     # Pinia store nội bộ feature
 │   │   │   │   └── Auth.store.ts           # Pinia store thông tin user hiện tại, nội bộ feature
 │   │   │   ├── types/                      # kiểu dữ liệu feature (feature khác được import)
-│   │   │   │   └── Auth.types.ts           # kiểu dữ liệu của auth (User, LoginPayload…)
+│   │   │   │   ├── Auth.types.ts           # kiểu dữ liệu của auth (User, LoginPayload…)
+│   │   │   │   └── MockAccount.ts          # tài khoản Mock auth, chỉ tham chiếu sau điều kiện DEV
 │   │   │   ├── views/                      # trang (route component) của feature
-│   │   │   │   └── LoginView.vue           # trang đăng nhập
-│   │   │   ├── Auth.routes.ts              # khai báo route /login của feature
+│   │   │   │   ├── LoginView.vue           # trang đăng nhập
+│   │   │   │   └── ForgotPasswordView.vue  # trang quên mật khẩu
+│   │   │   ├── Auth.routes.ts              # khai báo route /login, /forgot-password của feature
+│   │   │   ├── SafeRedirect.ts             # chọn đích sau login, chặn open redirect
 │   │   │   ├── UseAuth.ts                  # interface công khai duy nhất
 │   │   │   └── UseAuth.spec.ts             # test interface useAuth()
 │   │   └── StoreScope/                     # Store đang quản lý — mọi feature cần storeId
