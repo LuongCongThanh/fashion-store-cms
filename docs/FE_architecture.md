@@ -444,20 +444,20 @@ Backend NestJS vẫn phải kiểm tra authorization (Guards + `@Permissions()` 
 Ví dụ:
 
 ```text
-/admin
-/admin/products
-/admin/products/create
-/admin/products/:id/edit
-/admin/categories
-/admin/orders
-/admin/customers
+/
+/products
+/products/create
+/products/:id/edit
+/categories
+/orders
+/customers
 ```
 
 Route metadata:
 
 ```ts
 {
-  path: '/admin/products',
+  path: '/products',
   meta: {
     requiresAuth: true,
     permissions: ['product:read']
@@ -920,7 +920,7 @@ Các filter quan trọng nên được đồng bộ URL.
 Ví dụ:
 
 ```text
-/admin/products?page=2
+/products?page=2
   &status=published
   &category=shoes
   &search=nike

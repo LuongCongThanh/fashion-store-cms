@@ -4,7 +4,7 @@ import { useAuth } from '@features/auth/UseAuth'
 
 /**
  * Yêu cầu đăng nhập (`meta.requiresAuth`), quyền (`meta.permission`);
- * trang chỉ cho khách (`meta.guestOnly`) đẩy người đã đăng nhập về `/admin`.
+ * trang chỉ cho khách (`meta.guestOnly`) đẩy người đã đăng nhập về `/`.
  * Chỉ dùng useAuth(), không import store.
  */
 export async function authGuard(to: RouteLocationNormalized) {

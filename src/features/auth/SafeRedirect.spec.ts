@@ -4,19 +4,21 @@ import { safeRedirect } from './SafeRedirect'
 
 describe('safeRedirect', () => {
   it.each([
-    ['/admin', '/admin'],
-    ['/admin/design-system', '/admin/design-system'],
-    ['/admin/orders?page=2#top', '/admin/orders?page=2#top'],
-    [undefined, '/admin'],
-    [null, '/admin'],
-    ['', '/admin'],
-    [['/admin/x'], '/admin'],
-    ['//evil.com/admin', '/admin'],
-    ['https://evil.com', '/admin'],
-    ['/\\evil.com', '/admin'],
-    ['/login', '/admin'],
-    ['/administrator', '/admin'],
-    ['javascript:alert(1)', '/admin'],
+    ['/', '/'],
+    ['/design-system', '/design-system'],
+    ['/orders?page=2#top', '/orders?page=2#top'],
+    ['/login-history', '/login-history'],
+    [undefined, '/'],
+    [null, '/'],
+    ['', '/'],
+    [['/x'], '/'],
+    ['//evil.com/orders', '/'],
+    ['https://evil.com', '/'],
+    ['/\\evil.com', '/'],
+    ['/login', '/'],
+    ['/login?redirect=/orders', '/'],
+    ['/forgot-password', '/'],
+    ['javascript:alert(1)', '/'],
   ])('%j → %s', (raw, expected) => {
     expect(safeRedirect(raw)).toBe(expected)
   })

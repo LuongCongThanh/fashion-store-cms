@@ -14,7 +14,7 @@ async function renderLogin(query = '') {
     routes: [
       { path: '/login', name: 'auth.login', component: Blank },
       { path: '/forgot-password', name: 'auth.forgot-password', component: Blank },
-      { path: '/admin/:rest(.*)*', name: 'home', component: Blank },
+      { path: '/:rest(.*)*', name: 'home', component: Blank },
     ],
   })
   await router.push(`/login${query}`)
@@ -45,7 +45,7 @@ describe('LoginView', () => {
   })
 
   it('signs in and goes to the safe redirect target', async () => {
-    const { wrapper, http, router } = await renderLogin('?redirect=/admin/design-system')
+    const { wrapper, http, router } = await renderLogin('?redirect=/design-system')
     http.onPost(/\/auth\/login$/).reply(200, { accessToken: 'at-1', refreshToken: 'rt-1' })
     http.onGet(/\/auth\/me$/).reply(200, buildUser())
 
@@ -55,18 +55,18 @@ describe('LoginView', () => {
       email: 'lan@shop.vn',
       password: 'secret',
     })
-    expect(router.currentRoute.value.fullPath).toBe('/admin/design-system')
+    expect(router.currentRoute.value.fullPath).toBe('/design-system')
     expect(localStorage.getItem('cms.session.accessToken')).toBe('at-1')
   })
 
-  it('ignores an external redirect and goes to /admin', async () => {
+  it('ignores an external redirect and goes to /', async () => {
     const { wrapper, http, router } = await renderLogin('?redirect=//evil.com')
     http.onPost(/\/auth\/login$/).reply(200, { accessToken: 'at-1', refreshToken: 'rt-1' })
     http.onGet(/\/auth\/me$/).reply(200, buildUser())
 
     await fill(wrapper, 'lan@shop.vn', 'secret')
 
-    expect(router.currentRoute.value.fullPath).toBe('/admin')
+    expect(router.currentRoute.value.fullPath).toBe('/')
   })
 
   it('keeps the session only in this tab when Remember me is unchecked', async () => {

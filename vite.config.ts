@@ -28,7 +28,7 @@ export default defineConfig(({ command, mode }) => ({
         name: 'Fashion Store CMS',
         short_name: 'CMS',
         lang: 'vi',
-        start_url: '/admin',
+        start_url: '/',
         display: 'standalone',
         theme_color: '#e11d48',
         background_color: '#ffffff',
