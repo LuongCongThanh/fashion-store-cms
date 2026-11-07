@@ -1,0 +1,36 @@
+# Spec: Trang đăng nhập
+
+Status: resolved
+
+## Mục tiêu
+
+Người dùng CMS đăng nhập bằng email + mật khẩu và vào `/admin`. Backend chưa có API, nên DEV dùng **Mock auth** (xem `GLOSSARY.md`) để vào admin ngay.
+
+## Quyết định đã chốt
+
+| #   | Chủ đề                                       | Quyết định                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| --- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Q1  | Sau login                                    | Về `query.redirect` nếu là path nội bộ bắt đầu bằng `/admin` (chặn open redirect: `//evil.com`, `http://…`, `/login`); ngược lại về `/admin`.                                                                                                                                                                                                                                                                                                                                                  |
+| Q2  | Trường form                                  | Email, mật khẩu (có nút hiện/ẩn), checkbox "Ghi nhớ đăng nhập", link "Quên mật khẩu?".                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Q3  | Validation                                   | zod + `UForm`: email đúng định dạng, mật khẩu không rỗng. Không đặt độ dài tối thiểu.                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Q4  | Lỗi                                          | 401 → `UAlert` trên form: "Email hoặc mật khẩu không đúng" (không nói rõ sai trường nào). Lỗi mạng/5xx → để ErrorHandling chung xử lý. Nút submit loading + disabled khi đang gửi.                                                                                                                                                                                                                                                                                                             |
+| Q5  | Đã đăng nhập mở `/login`, `/forgot-password` | Guest guard chuyển về `/admin`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Q6  | Test                                         | TDD: spec cho LoginView, ForgotPasswordView, guard, redirect, Session remember, mock API. i18n vi + en. Không viết e2e.                                                                                                                                                                                                                                                                                                                                                                        |
+| Q7  | Remember me                                  | Tick → token lưu ở `localStorage`. Không tick → `sessionStorage`. Mặc định tick. `signIn(tokens, { remember })`. Lúc khởi động, đọc token từ cả hai nơi. Logout/refresh thất bại → xoá ở cả hai. Refresh token mới ghi vào đúng nơi đang lưu.                                                                                                                                                                                                                                                  |
+| Q8  | Quên mật khẩu                                | Trang `/forgot-password` (AuthLayout): nhập email → `POST /auth/forgot-password` → luôn hiện "Nếu email tồn tại, chúng tôi đã gửi hướng dẫn". Có link quay lại login. Trang reset mật khẩu để sau.                                                                                                                                                                                                                                                                                             |
+| Q9  | Tài khoản dummy                              | `VITE_MOCK_AUTH=true` **và** `import.meta.env.DEV` → `main.ts` truyền adapter giả lập `/auth/*` (`src/app/dev/MockAuth.ts`, axios-mock-adapter) vào Runtime; request khác đi thẳng backend. `Auth.api.ts` không đổi. Tài khoản `admin@cms.local` / `admin123`, có mọi quyền khai báo trong route. Giả lập login, me, refresh, forgot-password (độ trễ ~300ms). Import động sau điều kiện DEV để bản build production không chứa code mock. Thêm vào `.env.development`: `VITE_MOCK_AUTH=true`. |
+| Q10 | Glossary                                     | Thêm **Mock auth**, **Remember me**.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+
+## Ngoài phạm vi
+
+Trang reset mật khẩu, SSO/OAuth, captcha, khoá tài khoản sau nhiều lần sai, e2e.
+
+## Tiêu chí hoàn thành
+
+- `npm run dev` → `/admin` → bị đưa về `/login` → đăng nhập `admin@cms.local`/`admin123` → vào `/admin`.
+- Sai mật khẩu → hiện alert chung.
+- `/login?redirect=/admin/design-system` → login xong vào đúng trang đó. `?redirect=//evil.com` → vào `/admin`.
+- Bỏ tick remember → đóng tab, mở lại → phải login lại.
+- `npm run build` → không còn chuỗi `admin@cms.local` trong `dist/`.
+- `npm run typecheck && npm run lint && npm test` đều pass.
+- Cập nhật `docs/navigation-flow.md`: đóng câu hỏi mở số 1, thêm `/forgot-password`.

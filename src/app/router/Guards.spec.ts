@@ -27,7 +27,7 @@ async function setup(initial = '/login') {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
-      { path: '/login', name: 'auth.login', component: Blank },
+      { path: '/login', name: 'auth.login', component: Blank, meta: { guestOnly: true } },
       { path: '/admin', name: 'home', component: Blank, meta: { requiresAuth: true } },
       {
         path: '/admin/orders',
@@ -96,5 +96,20 @@ describe('authGuard', () => {
     await router.push('/admin/orders')
 
     expect(router.currentRoute.value.name).toBe('orders.list')
+  })
+
+  it('sends a signed-in user away from guest-only pages to /admin', async () => {
+    auth.isAuthenticated.value = true
+    const router = await setup('/admin')
+
+    await router.push('/login')
+
+    expect(router.currentRoute.value.name).toBe('home')
+  })
+
+  it('lets a guest open guest-only pages', async () => {
+    const router = await setup('/login')
+
+    expect(router.currentRoute.value.name).toBe('auth.login')
   })
 })

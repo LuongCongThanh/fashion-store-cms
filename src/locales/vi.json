@@ -24,7 +24,28 @@
   },
   "auth": {
     "login": {
-      "title": "Đăng nhập"
+      "title": "Đăng nhập",
+      "subtitle": "Đăng nhập để quản lý cửa hàng",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "showPassword": "Hiện mật khẩu",
+      "hidePassword": "Ẩn mật khẩu",
+      "remember": "Ghi nhớ đăng nhập",
+      "forgot": "Quên mật khẩu?",
+      "submit": "Đăng nhập",
+      "invalidCredentials": "Email hoặc mật khẩu không đúng",
+      "mockHint": "Chế độ Mock auth: dùng {email} / {password}"
+    },
+    "forgotPassword": {
+      "title": "Quên mật khẩu",
+      "subtitle": "Nhập email, chúng tôi sẽ gửi hướng dẫn đặt lại mật khẩu",
+      "submit": "Gửi hướng dẫn",
+      "sent": "Nếu email tồn tại, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu.",
+      "backToLogin": "Quay lại đăng nhập"
+    },
+    "validation": {
+      "emailInvalid": "Email không hợp lệ",
+      "required": "Không được để trống"
     }
   },
   "pwa": {

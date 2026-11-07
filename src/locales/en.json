@@ -24,7 +24,28 @@
   },
   "auth": {
     "login": {
-      "title": "Sign in"
+      "title": "Sign in",
+      "subtitle": "Sign in to manage your store",
+      "email": "Email",
+      "password": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "remember": "Remember me",
+      "forgot": "Forgot password?",
+      "submit": "Sign in",
+      "invalidCredentials": "Incorrect email or password",
+      "mockHint": "Mock auth mode: use {email} / {password}"
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "subtitle": "Enter your email and we'll send reset instructions",
+      "submit": "Send instructions",
+      "sent": "If the email exists, we've sent password reset instructions.",
+      "backToLogin": "Back to sign in"
+    },
+    "validation": {
+      "emailInvalid": "Invalid email",
+      "required": "Required"
     }
   },
   "pwa": {
