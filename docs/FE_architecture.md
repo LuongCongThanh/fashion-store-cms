@@ -219,13 +219,12 @@ Quy tắc:
 
 # 6.1. Shared Modules
 
-Ba module dùng chung, mỗi module đã có ≥ 3 nơi dùng thực tế (không vi phạm §32):
+Shared module dự kiến (ở `shared/`, không chứa tri thức nghiệp vụ). Chỉ tạo khi có nơi dùng thứ hai (scaffold-plan D33): `UseListState` tạo ở P5, `ApplyApiErrorToForm` tạo khi có form thứ hai.
 
 | Module | Interface | Giấu bên trong |
 |---|---|---|
 | `shared/composables/UseListState.ts` | `useListState(schema)` → `{ params, setFilter, setPage, setSort, reset }` | Đồng bộ URL ↔ params (§23), parse/validate query string bằng Zod, chuẩn `page/pageSize/sort=-field` (§22), reset `page` về 1 khi đổi filter/search, debounce search |
 | `shared/lib/form/ApplyApiErrorToForm.ts` | `applyApiErrorToForm(error, form): boolean` | Map `details.fields` → `setErrors`; phân biệt 400 / 422; lỗi không gắn được field → trả `false` để caller toast |
-| `features/media/UseMedia.ts` (nghiệp vụ, không ở `shared/`) | `useMedia().upload()` → `{ upload(files): Promise<string[]>, progress, cancel }` | 4 bước presign → PUT → complete (§17.1), validate mime/size/số lượng, progress, huỷ, retry |
 
 Ví dụ trang list:
 
@@ -697,7 +696,12 @@ Upload trực tiếp lên object storage qua presigned URL:
 
 FE validate trước khi upload: mime type, dung lượng tối đa, số lượng file. BE vẫn validate lại.
 
-Toàn bộ flow gói trong `useMediaUpload()` (§6.1); component chỉ gọi `upload(files)` và nhận `mediaId[]`.
+Toàn bộ flow nằm trong `features/media` — là nghiệp vụ nên không ở `shared/` (scaffold-plan D33). Feature khác chỉ dùng interface công khai `useMedia()`:
+
+- `useMedia().upload(files)` → `Promise<string[]>` (`mediaId[]`), kèm `progress`, `cancel`.
+- `useMedia().pickImages()` → mở `MediaPickerModal`, trả `Promise<Media[]>`.
+
+Bên trong (`MediaUpload.ts`): 4 bước presign → PUT → complete, validate mime/size/số lượng, progress, huỷ, retry. PUT lên S3 dùng `fetch` riêng, không qua HttpClient (khác origin, không gắn token).
 
 ---
 
