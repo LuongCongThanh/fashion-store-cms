@@ -1,0 +1,78 @@
+name: Báo lỗi
+description: Báo một lỗi trong CMS
+title: 'fix: '
+labels: [bug]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: Khớp scope trong commitlint.config.ts
+      options:
+        - auth
+        - store
+        - products
+        - orders
+        - router
+        - api
+        - ui
+        - i18n
+        - pwa
+        - test
+        - deps
+        - config
+        - ci
+        - docs
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Mức độ
+      options:
+        - Nghiêm trọng (chặn luồng chính, mất dữ liệu)
+        - Cao (sai chức năng, có cách né)
+        - Thấp (giao diện, chữ)
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Mô tả lỗi
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Các bước tái hiện
+      value: |
+        1.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Kết quả mong đợi
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Kết quả thực tế
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Môi trường
+      value: |
+        - Trình duyệt:
+        - Store:
+        - Tài khoản / vai trò:
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Ảnh chụp / log
+      description: Kéo thả ảnh hoặc dán log console / network

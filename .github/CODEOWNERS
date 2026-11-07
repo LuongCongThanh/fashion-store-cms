@@ -1,0 +1,6 @@
+# Mặc định: mọi thay đổi cần owner review
+* @LuongCongThanh
+
+# Cấu hình CI, quy ước, kiến trúc
+/.github/ @LuongCongThanh
+/docs/ @LuongCongThanh

@@ -1,6 +1,6 @@
 # 03 — GitHub template và CI
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 02
 Nguồn: Step 2b trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
