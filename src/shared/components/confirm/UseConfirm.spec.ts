@@ -1,5 +1,5 @@
 import { flushPromises } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import { renderWithPlugins } from '@test/Render'
@@ -31,10 +31,6 @@ function buttonByText(text: string) {
   return button
 }
 
-afterEach(() => {
-  document.body.innerHTML = ''
-})
-
 describe('useConfirm', () => {
   it('resolves true when the user confirms', async () => {
     const { wrapper } = renderHost({ title: 'Xoá sản phẩm?', confirmLabel: 'Xoá' })
@@ -47,7 +43,6 @@ describe('useConfirm', () => {
     await flushPromises()
 
     expect(wrapper.find('#open').text()).toBe('true')
-    wrapper.unmount()
   })
 
   it('resolves false when the user cancels', async () => {
@@ -63,6 +58,5 @@ describe('useConfirm', () => {
     await flushPromises()
 
     expect(wrapper.find('#open').text()).toBe('false')
-    wrapper.unmount()
   })
 })

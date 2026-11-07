@@ -9,6 +9,7 @@ import type { Component } from 'vue'
 import type { Router } from 'vue-router'
 
 import { createAppRuntime } from '@app/Runtime'
+import { useLocale } from '@shared/lib/i18n/I18n'
 
 import type { SessionSnapshot } from '@shared/lib/session/Session'
 
@@ -47,9 +48,13 @@ export function renderWithPlugins(component: Component, options: RenderOptions =
     retry: false,
     router: options.router ?? defaultRouter(),
   })
-  // Bọc UApp như App.vue ở prod: toast, overlay (useConfirm) cần nó.
+  // Bọc UApp như App.vue ở prod: toast, overlay (useConfirm), locale Nuxt UI cần nó.
   const Root = defineComponent({
-    render: () => h(UApp, null, { default: () => h(component, options.props) }),
+    setup() {
+      const { uiLocale } = useLocale()
+      return () =>
+        h(UApp, { locale: uiLocale.value }, { default: () => h(component, options.props) })
+    },
   })
   const wrapper = mount(Root, { ...options.mount, global: { plugins: [runtime.plugin] } })
   return { wrapper, http, runtime }
