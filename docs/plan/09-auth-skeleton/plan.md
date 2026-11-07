@@ -1,6 +1,6 @@
 # 09 — Khung features/auth và StoreScope
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 06, 07, 08
 Nguồn: Step 4 trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

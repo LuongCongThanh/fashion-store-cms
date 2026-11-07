@@ -3,6 +3,7 @@ import UButton from '@nuxt/ui/components/Button.vue'
 import UDropdownMenu from '@nuxt/ui/components/DropdownMenu.vue'
 import { computed } from 'vue'
 
+import { useAuth } from '@features/auth/UseAuth'
 import { useTheme } from '@shared/composables/UseTheme'
 import { useLocale, useT } from '@shared/lib/i18n/I18n'
 
@@ -12,6 +13,7 @@ import type { AppLocale } from '@shared/lib/i18n/I18n'
 const { t } = useT()
 const { mode } = useTheme()
 const { locale, setLocale } = useLocale()
+const { user, logout } = useAuth()
 
 const THEMES: { icon: string; value: ThemeMode }[] = [
   { value: 'light', icon: 'i-lucide-sun' },
@@ -20,14 +22,14 @@ const THEMES: { icon: string; value: ThemeMode }[] = [
 ]
 const LANGUAGES: AppLocale[] = ['vi', 'en']
 
-// Plan 09 thêm thông tin user + đăng xuất.
 const items = computed(() => [
+  [{ label: user.value?.name ?? '', type: 'label' as const }],
   THEMES.map((theme) => ({
     label: t(`common.theme.${theme.value}`),
     icon: theme.icon,
     type: 'checkbox' as const,
     checked: mode.value === theme.value,
-    onSelect: () => {
+    onSelect: (): void => {
       mode.value = theme.value
     },
   })),
@@ -36,8 +38,9 @@ const items = computed(() => [
     icon: 'i-lucide-languages',
     type: 'checkbox' as const,
     checked: locale.value === lang,
-    onSelect: () => setLocale(lang),
+    onSelect: (): void => setLocale(lang),
   })),
+  [{ label: t('common.logout'), icon: 'i-lucide-log-out', onSelect: (): void => void logout() }],
 ])
 </script>
 
