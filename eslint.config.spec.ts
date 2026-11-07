@@ -1,3 +1,4 @@
+// @vitest-environment node
 // Kiểm tra BẢNG RANH GIỚI (BOUNDARIES) chạy đúng — thay cho kiểm tay ở Step 2 (D41).
 // lintText() lint một đoạn code giả như thể nó nằm ở `filePath` → không cần tạo file thật.
 import { ESLint } from 'eslint'
