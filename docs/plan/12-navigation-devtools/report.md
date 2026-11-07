@@ -11,8 +11,8 @@ Ngày hoàn thành: —
 ## Kết quả kiểm tra
 
 | Mục kiểm tra (theo plan.md) | Kết quả | Ghi chú |
-| --- | --- | --- |
-| | | |
+| --------------------------- | ------- | ------- |
+|                             |         |         |
 
 ## Lệch so với plan / quyết định mới
 

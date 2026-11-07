@@ -17,13 +17,13 @@ Ngày hoàn thành: 2026-11-07
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md) | Kết quả | Ghi chú |
-| --- | --- | --- |
-| `npm run dev` mở được trang | Pass | `curl localhost:5179` trả HTML có `<title>Fashion Store CMS</title>` |
-| `npm run typecheck` | Pass | |
-| Alias §N chạy ở cả vue-tsc và Vite | Pass | Thử bằng file tạm `@shared/AliasProbe` import từ `App.vue`, sau đó xoá |
-| `noUncheckedIndexedAccess` có hiệu lực | Pass | `const y: number = x[0]` báo TS2322 |
-| `vite build` | Pass | |
+| Mục kiểm tra (theo plan.md)            | Kết quả | Ghi chú                                                                |
+| -------------------------------------- | ------- | ---------------------------------------------------------------------- |
+| `npm run dev` mở được trang            | Pass    | `curl localhost:5179` trả HTML có `<title>Fashion Store CMS</title>`   |
+| `npm run typecheck`                    | Pass    |                                                                        |
+| Alias §N chạy ở cả vue-tsc và Vite     | Pass    | Thử bằng file tạm `@shared/AliasProbe` import từ `App.vue`, sau đó xoá |
+| `noUncheckedIndexedAccess` có hiệu lực | Pass    | `const y: number = x[0]` báo TS2322                                    |
+| `vite build`                           | Pass    |                                                                        |
 
 ## Lệch so với plan / quyết định mới
 

@@ -45,7 +45,7 @@ export default defineConfig({
     vue(),
     ui({
       autoImport: false, // không auto-import code nội bộ (§2), chỉ component Nuxt UI
-      ui: uiConfig,      // nguồn duy nhất (D26)
+      ui: uiConfig, // nguồn duy nhất (D26)
     }),
   ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
@@ -69,11 +69,11 @@ Nguồn sự thật: token trong `main.css` (`@theme`) + map màu ngữ nghĩa c
 
 #### L.1. Ba tầng token
 
-| Tầng | Ví dụ | Ai được dùng |
-| --- | --- | --- |
-| 1. Palette (giá trị thô) | `--color-brand-500`, `--color-slate-200` | Chỉ `main.css` và `vite.config.ts` |
-| 2. Ngữ nghĩa (Nuxt UI) | `primary`, `neutral`, `success`, `--ui-bg`, `--ui-text-muted` | Component, layout |
-| 3. Nghiệp vụ | `OrderStatus → color` | Component nghiệp vụ, qua map trong `types/` của feature |
+| Tầng                     | Ví dụ                                                         | Ai được dùng                                            |
+| ------------------------ | ------------------------------------------------------------- | ------------------------------------------------------- |
+| 1. Palette (giá trị thô) | `--color-brand-500`, `--color-slate-200`                      | Chỉ `main.css` và `vite.config.ts`                      |
+| 2. Ngữ nghĩa (Nuxt UI)   | `primary`, `neutral`, `success`, `--ui-bg`, `--ui-text-muted` | Component, layout                                       |
+| 3. Nghiệp vụ             | `OrderStatus → color`                                         | Component nghiệp vụ, qua map trong `types/` của feature |
 
 Quy tắc: component **không** dùng tầng 1 (`bg-brand-500`, `#e11d48`, `text-slate-700`); chỉ dùng tầng 2 (`bg-primary`, `text-muted`, `color="error"`).
 
@@ -81,53 +81,53 @@ Quy tắc: component **không** dùng tầng 1 (`bg-brand-500`, `#e11d48`, `text
 
 **Palette brand (tạm):**
 
-| Step | Hex |
-| --- | --- |
-| 50 | `#fff1f2` |
-| 100 | `#ffe4e6` |
-| 200 | `#fecdd3` |
-| 300 | `#fda4af` |
-| 400 | `#fb7185` |
-| 500 | `#f43f5e` |
-| 600 | `#e11d48` |
-| 700 | `#be123c` |
-| 800 | `#9f1239` |
-| 900 | `#881337` |
-| 950 | `#4c0519` |
+| Step | Hex       |
+| ---- | --------- |
+| 50   | `#fff1f2` |
+| 100  | `#ffe4e6` |
+| 200  | `#fecdd3` |
+| 300  | `#fda4af` |
+| 400  | `#fb7185` |
+| 500  | `#f43f5e` |
+| 600  | `#e11d48` |
+| 700  | `#be123c` |
+| 800  | `#9f1239` |
+| 900  | `#881337` |
+| 950  | `#4c0519` |
 
 **Map ngữ nghĩa (Nuxt UI):**
 
-| Màu ngữ nghĩa | Palette | Dùng cho |
-| --- | --- | --- |
-| `primary` | `brand` | Nút chính, link, focus, item sidebar active |
-| `secondary` | `indigo` | Hành động phụ nổi bật (hiếm dùng) |
-| `success` | `emerald` | Thành công, đã giao, còn hàng |
-| `info` | `sky` | Thông tin, đang xử lý |
-| `warning` | `amber` | Cảnh báo, sắp hết hàng, chờ xác nhận |
-| `error` | `red` | Lỗi, xoá, huỷ, hết hàng |
-| `neutral` | `slate` | Nền, chữ, viền, trạng thái nháp |
+| Màu ngữ nghĩa | Palette   | Dùng cho                                    |
+| ------------- | --------- | ------------------------------------------- |
+| `primary`     | `brand`   | Nút chính, link, focus, item sidebar active |
+| `secondary`   | `indigo`  | Hành động phụ nổi bật (hiếm dùng)           |
+| `success`     | `emerald` | Thành công, đã giao, còn hàng               |
+| `info`        | `sky`     | Thông tin, đang xử lý                       |
+| `warning`     | `amber`   | Cảnh báo, sắp hết hàng, chờ xác nhận        |
+| `error`       | `red`     | Lỗi, xoá, huỷ, hết hàng                     |
+| `neutral`     | `slate`   | Nền, chữ, viền, trạng thái nháp             |
 
 Không thêm màu ngữ nghĩa mới nếu chưa thống nhất; cần màu mới thì bổ sung vào bảng này trước.
 
 #### L.3. Token nền / chữ / viền (Nuxt UI, tự đổi theo dark mode)
 
-| Mục đích | Class | Biến |
-| --- | --- | --- |
-| Nền trang | `bg-default` | `--ui-bg` |
-| Nền khối phụ (card, sidebar) | `bg-muted` / `bg-elevated` | `--ui-bg-muted`, `--ui-bg-elevated` |
-| Chữ chính | `text-default` / `text-highlighted` | `--ui-text`, `--ui-text-highlighted` |
-| Chữ phụ | `text-muted` / `text-dimmed` | `--ui-text-muted`, `--ui-text-dimmed` |
-| Viền | `border-default` / `border-muted` | `--ui-border`, `--ui-border-muted` |
+| Mục đích                     | Class                               | Biến                                  |
+| ---------------------------- | ----------------------------------- | ------------------------------------- |
+| Nền trang                    | `bg-default`                        | `--ui-bg`                             |
+| Nền khối phụ (card, sidebar) | `bg-muted` / `bg-elevated`          | `--ui-bg-muted`, `--ui-bg-elevated`   |
+| Chữ chính                    | `text-default` / `text-highlighted` | `--ui-text`, `--ui-text-highlighted`  |
+| Chữ phụ                      | `text-muted` / `text-dimmed`        | `--ui-text-muted`, `--ui-text-dimmed` |
+| Viền                         | `border-default` / `border-muted`   | `--ui-border`, `--ui-border-muted`    |
 
 #### L.4. Màu theo trạng thái nghiệp vụ
 
 Map đặt trong component badge của feature (VD `features/orders/components/OrderStatusBadge.vue`), không đặt trong `types/` (§B.3). Feature khác cần hiển thị trạng thái thì dùng component đó qua `Use*.ts` hoặc nhận màu qua prop:
 
-| Đối tượng | Trạng thái → màu |
-| --- | --- |
-| Order | `pending` → warning · `confirmed` → info · `shipping` → primary · `delivered` → success · `cancelled` → error · `refunded` → neutral |
-| Product | `draft` → neutral · `active` → success · `archived` → warning |
-| Tồn kho | còn hàng → success · sắp hết → warning · hết hàng → error |
+| Đối tượng | Trạng thái → màu                                                                                                                     |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Order     | `pending` → warning · `confirmed` → info · `shipping` → primary · `delivered` → success · `cancelled` → error · `refunded` → neutral |
+| Product   | `draft` → neutral · `active` → success · `archived` → warning                                                                        |
+| Tồn kho   | còn hàng → success · sắp hết → warning · hết hàng → error                                                                            |
 
 (Tên trạng thái chính xác sẽ chốt khi làm domain model; bảng này chỉ cố định **nguyên tắc** và màu.)
 
@@ -135,23 +135,23 @@ Map đặt trong component badge của feature (VD `features/orders/components/O
 
 Kết hợp 2 font: **Plus Jakarta Sans** (display — tiêu đề, số nổi bật) + **Inter** (mọi thứ còn lại). Cùng họ sans, x-height gần nhau nên ghép không lệch.
 
-| Token | Giá trị | Class |
-| --- | --- | --- |
-| `--font-sans` | `'Inter Variable', ui-sans-serif, system-ui, sans-serif` | mặc định (`font-sans`) |
-| `--font-display` | `'Plus Jakarta Sans Variable', var(--font-sans)` | `font-display` |
-| `--font-mono` | `ui-monospace, SFMono-Regular, monospace` | `font-mono` |
+| Token            | Giá trị                                                  | Class                  |
+| ---------------- | -------------------------------------------------------- | ---------------------- |
+| `--font-sans`    | `'Inter Variable', ui-sans-serif, system-ui, sans-serif` | mặc định (`font-sans`) |
+| `--font-display` | `'Plus Jakarta Sans Variable', var(--font-sans)`         | `font-display`         |
+| `--font-mono`    | `ui-monospace, SFMono-Regular, monospace`                | `font-mono`            |
 
 **Phân vai**
 
-| Vị trí | Font | Cỡ · độ đậm |
-| --- | --- | --- |
-| Tiêu đề trang | Plus Jakarta Sans | `text-2xl` · 600 |
-| Tiêu đề card / section / modal | Plus Jakarta Sans | `text-lg` · 600 |
-| Số KPI Dashboard | Plus Jakarta Sans | `text-3xl` · 700 · `tabular-nums` |
-| Logo / tên store ở sidebar | Plus Jakarta Sans | `text-base` · 700 |
-| Body, bảng, form, nút, badge, menu, tooltip | Inter | `text-sm` · 400/500 |
-| Cột tiền, số lượng | Inter | `tabular-nums` |
-| SKU, mã đơn | mono hệ thống | `text-xs` |
+| Vị trí                                      | Font              | Cỡ · độ đậm                       |
+| ------------------------------------------- | ----------------- | --------------------------------- |
+| Tiêu đề trang                               | Plus Jakarta Sans | `text-2xl` · 600                  |
+| Tiêu đề card / section / modal              | Plus Jakarta Sans | `text-lg` · 600                   |
+| Số KPI Dashboard                            | Plus Jakarta Sans | `text-3xl` · 700 · `tabular-nums` |
+| Logo / tên store ở sidebar                  | Plus Jakarta Sans | `text-base` · 700                 |
+| Body, bảng, form, nút, badge, menu, tooltip | Inter             | `text-sm` · 400/500               |
+| Cột tiền, số lượng                          | Inter             | `tabular-nums`                    |
+| SKU, mã đơn                                 | mono hệ thống     | `text-xs`                         |
 
 **Quy tắc**
 
@@ -164,14 +164,14 @@ Kết hợp 2 font: **Plus Jakarta Sans** (display — tiêu đề, số nổi b
 
 #### L.6. Spacing, radius, shadow, kích thước
 
-| Nhóm | Quy tắc |
-| --- | --- |
-| Spacing | Thang Tailwind (bội 4px). Khoảng cách chuẩn: trong card `p-4`, giữa section `gap-6`, padding trang `p-6` (mobile `p-4`) |
-| Radius | `--ui-radius: 0.375rem`; dùng `rounded-md` (control), `rounded-lg` (card), `rounded-full` (avatar, badge tròn) |
-| Shadow | Chỉ `shadow-xs` (card), `shadow-lg` (dropdown, modal); ưu tiên viền thay bóng |
-| Control size | Mặc định Nuxt UI `md`; bảng dày dùng `sm` |
-| Sidebar | Rộng 256px, thu gọn 64px |
-| Container | Nội dung tối đa `max-w-screen-2xl` |
+| Nhóm         | Quy tắc                                                                                                                 |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Spacing      | Thang Tailwind (bội 4px). Khoảng cách chuẩn: trong card `p-4`, giữa section `gap-6`, padding trang `p-6` (mobile `p-4`) |
+| Radius       | `--ui-radius: 0.375rem`; dùng `rounded-md` (control), `rounded-lg` (card), `rounded-full` (avatar, badge tròn)          |
+| Shadow       | Chỉ `shadow-xs` (card), `shadow-lg` (dropdown, modal); ưu tiên viền thay bóng                                           |
+| Control size | Mặc định Nuxt UI `md`; bảng dày dùng `sm`                                                                               |
+| Sidebar      | Rộng 256px, thu gọn 64px                                                                                                |
+| Container    | Nội dung tối đa `max-w-screen-2xl`                                                                                      |
 
 #### L.7. Breakpoint, z-index, motion
 
@@ -244,7 +244,8 @@ Map màu ngữ nghĩa (bảng §L.2) khai báo **một lần** trong `src/app/co
 <script>
   try {
     const m = localStorage.getItem('cms.colorMode') || 'auto'
-    const dark = m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches)
+    const dark =
+      m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches)
     document.documentElement.classList.toggle('dark', dark)
   } catch {}
 </script>
@@ -264,8 +265,13 @@ Chỉnh tập trung trong `src/app/config/Ui.config.ts`, import vào `vite.confi
 // src/app/config/Ui.config.ts
 export const uiConfig = {
   colors: {
-    primary: 'brand', secondary: 'indigo', success: 'emerald',
-    info: 'sky', warning: 'amber', error: 'red', neutral: 'slate',
+    primary: 'brand',
+    secondary: 'indigo',
+    success: 'emerald',
+    info: 'sky',
+    warning: 'amber',
+    error: 'red',
+    neutral: 'slate',
   },
   button: { defaultVariants: { size: 'md' } },
   input: { defaultVariants: { size: 'md' } },

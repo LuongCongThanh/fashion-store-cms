@@ -18,11 +18,11 @@ Repo mới chỉ có tài liệu. Cần dựng khung dự án Vue 3 + Vite + Typ
 
 Mỗi plan con nằm trong `docs/plan/NN-<slug>/`. Số thứ tự là thứ tự thực hiện. Mỗi folder gồm:
 
-| File | Vai trò |
-| --- | --- |
-| `spec.md` | Spec riêng của plan con: mục tiêu, phạm vi, tiêu chí hoàn thành, phụ thuộc. Mỗi mục có chú thích giải thích. |
-| `plan.md` | Việc cần làm, tiêu chí kiểm tra, và các phần tham chiếu chép nguyên văn từ plan gốc. Có dòng `Status:` và `Blocked by:` ở đầu. |
-| `report.md` | Ghi kết quả sau khi làm: đã làm gì, kết quả kiểm tra, chỗ lệch so với plan, việc còn tồn. |
+| File        | Vai trò                                                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `spec.md`   | Spec riêng của plan con: mục tiêu, phạm vi, tiêu chí hoàn thành, phụ thuộc. Mỗi mục có chú thích giải thích.                   |
+| `plan.md`   | Việc cần làm, tiêu chí kiểm tra, và các phần tham chiếu chép nguyên văn từ plan gốc. Có dòng `Status:` và `Blocked by:` ở đầu. |
+| `report.md` | Ghi kết quả sau khi làm: đã làm gì, kết quả kiểm tra, chỗ lệch so với plan, việc còn tồn.                                      |
 
 Số token của mọi plan ghi chung trong [token-usage.md](./token-usage.md).
 
@@ -41,22 +41,22 @@ Giá trị của `Status`: `ready-for-agent` → `in-progress` → `done`.
 
 ## Danh sách plan con
 
-| # | Plan | Nguồn | Blocked by |
-| --- | --- | --- | --- |
-| 01 | [Khởi tạo dự án](./01-init-project/plan.md) | Step 1 | — |
-| 02 | [Lint, format, hooks](./02-lint-format-hooks/plan.md) | Step 2 | 01 |
-| 03 | [GitHub template và CI](./03-github-ci/plan.md) | Step 2b | 02 |
-| 04 | [Env và nền tảng test](./04-test-env-foundation/plan.md) | Step 3a (phần 1) | 02 |
-| 05 | [Session, HttpClient, Runtime](./05-session-http-runtime/plan.md) | Step 3a (phần 2) | 04 |
-| 06 | [Lỗi, toast, dialog](./06-errors-toast-dialog/plan.md) | Step 3a+ | 05 |
-| 07 | [CSS, design system, theme](./07-css-design-system/plan.md) | Step 3b | 05 |
-| 08 | [i18n](./08-i18n/plan.md) | Step 3c | 05 |
-| 09 | [Khung features/auth và StoreScope](./09-auth-skeleton/plan.md) | Step 4 | 06, 07, 08 |
-| 10 | [E2E và coverage](./10-e2e-coverage/plan.md) | Step 5 | 09 |
-| 11 | [Chặn index và PWA](./11-pwa-noindex/plan.md) | Step 5b (phần 1) | 09 |
-| 12 | [Navigation và tool dev](./12-navigation-devtools/plan.md) | Step 5b (phần 2) | 09 |
-| 13 | [Script sinh API types](./13-gen-api-types/plan.md) | Step 6 | 05 |
-| 14 | [Đối chiếu và chốt](./14-reconcile-finalize/plan.md) | Step 7 | 10, 11, 12, 13 |
+| #   | Plan                                                              | Nguồn            | Blocked by     |
+| --- | ----------------------------------------------------------------- | ---------------- | -------------- |
+| 01  | [Khởi tạo dự án](./01-init-project/plan.md)                       | Step 1           | —              |
+| 02  | [Lint, format, hooks](./02-lint-format-hooks/plan.md)             | Step 2           | 01             |
+| 03  | [GitHub template và CI](./03-github-ci/plan.md)                   | Step 2b          | 02             |
+| 04  | [Env và nền tảng test](./04-test-env-foundation/plan.md)          | Step 3a (phần 1) | 02             |
+| 05  | [Session, HttpClient, Runtime](./05-session-http-runtime/plan.md) | Step 3a (phần 2) | 04             |
+| 06  | [Lỗi, toast, dialog](./06-errors-toast-dialog/plan.md)            | Step 3a+         | 05             |
+| 07  | [CSS, design system, theme](./07-css-design-system/plan.md)       | Step 3b          | 05             |
+| 08  | [i18n](./08-i18n/plan.md)                                         | Step 3c          | 05             |
+| 09  | [Khung features/auth và StoreScope](./09-auth-skeleton/plan.md)   | Step 4           | 06, 07, 08     |
+| 10  | [E2E và coverage](./10-e2e-coverage/plan.md)                      | Step 5           | 09             |
+| 11  | [Chặn index và PWA](./11-pwa-noindex/plan.md)                     | Step 5b (phần 1) | 09             |
+| 12  | [Navigation và tool dev](./12-navigation-devtools/plan.md)        | Step 5b (phần 2) | 09             |
+| 13  | [Script sinh API types](./13-gen-api-types/plan.md)               | Step 6           | 05             |
+| 14  | [Đối chiếu và chốt](./14-reconcile-finalize/plan.md)              | Step 7           | 10, 11, 12, 13 |
 
 Step 3a, 5b được tách đôi (phần 1/2) chỉ trong danh sách này, không có heading riêng trong scaffold-plan. Step 0 (chốt tài liệu) đã xong trong PR #1 nên không có plan con.
 

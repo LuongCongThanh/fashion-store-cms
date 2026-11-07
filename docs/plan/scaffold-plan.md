@@ -13,47 +13,47 @@ Nguyên tắc thực hiện:
 
 ## Quyết định đã chốt
 
-| # | Quyết định | Giá trị |
-|---|---|---|
-| D1 | Vị trí scaffold | Thẳng vào thư mục gốc `cms/` (cạnh `docs/`), không tạo thư mục con |
-| D2 | Phạm vi tạo lần đầu | Chỉ Foundation + `features/auth`; feature khác tạo theo Phase ở §30 |
-| D3 | Bổ sung vào cây | `locales/`, `app/router/Guards.ts`, `shared/lib/i18n/I18n.ts`, `src/test/`, `e2e/` |
-| D4 | Thư mục bỏ | `components/ui`, `components/layout`, `components/modal` (trùng Nuxt UI / `layouts/`) |
-| D5 | Vị trí test | Unit/component test cạnh file nguồn (`*.spec.ts`); E2E ở `e2e/` |
-| D6 | Thứ tự | Sửa tài liệu trước, scaffold code sau |
-| D7 | Tên file | **PascalCase cho cả `.vue` và `.ts`** trong `src/` (xem §A) |
-| D8 | Commit | Conventional Commits + commitlint |
-| D9 | Git flow | Trunk-based trên `main`, squash merge qua PR |
-| D10 | Hooks | pre-commit: lint-staged · commit-msg: commitlint · pre-push: typecheck |
-| D11 | Template | PR + issue template (GitHub); template feature dạng snippet, chưa viết generator |
-| D12 | Ranh giới feature | Chặn bằng `no-restricted-imports`, không thêm plugin |
-| D13 | Tool phụ | `.editorconfig`, `.nvmrc`, `engines`; chưa dùng Storybook |
-| D14 | Composable | File `UseAuth.ts` (PascalCase), hàm export `useAuth()` |
-| D15 | Hậu tố file | Giữ chữ thường: `Auth.store.ts`, `Products.api.ts`, `Product.types.ts` |
-| D16 | Ngoại lệ tên | `main.ts`, `main.css`, `locales/*.json`, file config gốc, `robots.txt`, `favicon.svg`; thư mục một từ viết thường, nhiều từ PascalCase; **không dùng kebab-case** cho tên file/thư mục |
-| D17 | Nền tảng | Repo trên GitHub; mã ticket `CMS-123`; commit message tiếng Anh |
-| D18 | Fake API trong test | Bỏ MSW; `axios-mock-adapter` cho HTTP client, `vi.mock` module `*.api.ts` cho component (§I) |
-| D19 | i18n | `vi` mặc định, fallback `en`, key type-safe (§H) |
-| D20 | CSS | Tailwind v4 CSS-first, một `main.css`, không `tailwind.config.js`, không SCSS (§J) |
-| D21 | Design system | Token 3 tầng, component chỉ dùng màu ngữ nghĩa Nuxt UI; màu brand tạm chờ chính thức (§L) |
-| D22 | Font | Plus Jakarta Sans (display) + Inter (body), self-host (§L.5) |
-| D23 | Theme | Sáng/Tối/Hệ thống (mặc định hệ thống), chống nháy, một theme chung không theo Store, mặc định component trong `Ui.config.ts` (§L.11) |
-| D25 | Locale | Instance do `createAppI18n()` tạo sở hữu locale (persist, `<html lang>`, locale Nuxt UI) khi được `app.use()`; `useLocale()` inject instance đó; không export singleton, không side effect khi import (§H) |
-| D26 | Nguồn màu | `Ui.config.ts` là nguồn duy nhất của map màu ngữ nghĩa + mặc định component (§L.9) |
-| D27 | PR | Mỗi step = 1 PR riêng, squash merge (§C.3); không gộp commit cuối |
-| D28 | Alias | Mỗi thư mục cấp 1 của `src/` một alias (`@app`, `@features`, `@shared`…), không có `@/`; nguồn duy nhất `tsconfig.app.json` (§N) |
-| D29 | Lỗi | Mọi lỗi HTTP → `ApiError`; query lỗi hiển thị tại chỗ, mutation lỗi toast global; dialog xác nhận global, modal nghiệp vụ internal (§O, §P) |
-| D30 | PWA | Cài được + báo bản mới; chỉ cache app shell, không cache API (§R) |
-| D31 | Bổ trợ | Command palette, phím tắt, title theo route ở Foundation; tool dev theo §S |
-| D33 | Phân tầng + shared | Phân tầng một chiều `main.ts → app → layouts → features → shared`, chi tiết và ngoại lệ ở §A, ESLint ở §E. Code vào `src/shared/` (alias `@shared/*`) chỉ khi ≥ 2 nơi dùng và không chứa nghiệp vụ; Store đang quản lý là feature `StoreScope`; upload media ở `features/media` |
-| D34 | Seam HTTP | `HttpClient` không import feature nào, interface hẹp có kiểu theo Swagger (không lộ axios, kể cả trong `HttpClientDeps`); HttpClient chỉ nhận `{ baseURL, session, getLocale }`; `Session` (`shared/lib/session/`) sở hữu token + Store hiện tại + xoá cache khi logout/đổi Store; `storeId` qua header `X-Store-Id` — chờ BE xác nhận (§M) |
-| D35 | Luồng dữ liệu | View (container) → [composable] → api (server state) → [mapper, chỉ khi DTO lệch Model] → HttpClient; component chỉ props/emits; DTO không ra khỏi `api/`; server state chỉ ở Vue Query (§T) |
-| D36 | SOLID | Áp dụng ở mức module, không class/DI container; composition root là `createAppRuntime()` trong `app/Runtime.ts` (D37, §U) |
-| D37 | Composition root | Một module `createAppRuntime(overrides)` ở `app/Runtime.ts` dựng toàn bộ runtime (pinia, i18n, router, notifier, session, http, queryClient); `main.ts` gọi rồi mount, `src/test/Render.ts` gọi cùng hàm với fake — test chạy qua wiring thật (§M.2) |
-| D38 | Navigation | Một module `layouts/Navigation.ts` (`buildNavigation(routes, can)` thuần + `useNavigation()`) là nơi duy nhất đọc route meta cho sidebar, palette, phím tắt, title. Palette + phím tắt + bảng phím tắt hoãn tới P5 (§S.1) |
-| D39 | Error policy | Quy tắc lỗi (retry, key i18n, im lặng, mutation lỗi đi đâu) tập trung ở `shared/lib/api/errors/ErrorPolicy.ts`; QueryClient chuyển sang `shared/lib/query/`; `UseNotify` chỉ hiển thị; `app/providers` chỉ glue Vue (§O.4) |
-| D40 | HttpClient một file | `client/` chỉ còn `HttpClient.ts` (+ spec); bỏ `noClientInternals`, `createHttpClientWithAdapter`, `TestHttpClient.ts`; test thay transport qua `deps.transport`. Refresh đi qua HttpClient với `skipAuth`. Bỏ `getDefaultPathParams` tới khi BE chốt (§M) |
-| D41 | Ranh giới import | `no-restricted-imports` khai báo bằng một bảng `BOUNDARIES` + `toFlatConfig()`; `eslint.config.spec.ts` kiểm tự động mọi ca ở Step 2. Giữ Model độc lập DTO (§T.3); feature tối thiểu `api/ + types/ + views/` (§E, §Q.1) |
+| #   | Quyết định          | Giá trị                                                                                                                                                                                                                                                                                                                                     |
+| --- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D1  | Vị trí scaffold     | Thẳng vào thư mục gốc `cms/` (cạnh `docs/`), không tạo thư mục con                                                                                                                                                                                                                                                                          |
+| D2  | Phạm vi tạo lần đầu | Chỉ Foundation + `features/auth`; feature khác tạo theo Phase ở §30                                                                                                                                                                                                                                                                         |
+| D3  | Bổ sung vào cây     | `locales/`, `app/router/Guards.ts`, `shared/lib/i18n/I18n.ts`, `src/test/`, `e2e/`                                                                                                                                                                                                                                                          |
+| D4  | Thư mục bỏ          | `components/ui`, `components/layout`, `components/modal` (trùng Nuxt UI / `layouts/`)                                                                                                                                                                                                                                                       |
+| D5  | Vị trí test         | Unit/component test cạnh file nguồn (`*.spec.ts`); E2E ở `e2e/`                                                                                                                                                                                                                                                                             |
+| D6  | Thứ tự              | Sửa tài liệu trước, scaffold code sau                                                                                                                                                                                                                                                                                                       |
+| D7  | Tên file            | **PascalCase cho cả `.vue` và `.ts`** trong `src/` (xem §A)                                                                                                                                                                                                                                                                                 |
+| D8  | Commit              | Conventional Commits + commitlint                                                                                                                                                                                                                                                                                                           |
+| D9  | Git flow            | Trunk-based trên `main`, squash merge qua PR                                                                                                                                                                                                                                                                                                |
+| D10 | Hooks               | pre-commit: lint-staged · commit-msg: commitlint · pre-push: typecheck                                                                                                                                                                                                                                                                      |
+| D11 | Template            | PR + issue template (GitHub); template feature dạng snippet, chưa viết generator                                                                                                                                                                                                                                                            |
+| D12 | Ranh giới feature   | Chặn bằng `no-restricted-imports`, không thêm plugin                                                                                                                                                                                                                                                                                        |
+| D13 | Tool phụ            | `.editorconfig`, `.nvmrc`, `engines`; chưa dùng Storybook                                                                                                                                                                                                                                                                                   |
+| D14 | Composable          | File `UseAuth.ts` (PascalCase), hàm export `useAuth()`                                                                                                                                                                                                                                                                                      |
+| D15 | Hậu tố file         | Giữ chữ thường: `Auth.store.ts`, `Products.api.ts`, `Product.types.ts`                                                                                                                                                                                                                                                                      |
+| D16 | Ngoại lệ tên        | `main.ts`, `main.css`, `locales/*.json`, file config gốc, `robots.txt`, `favicon.svg`; thư mục một từ viết thường, nhiều từ PascalCase; **không dùng kebab-case** cho tên file/thư mục                                                                                                                                                      |
+| D17 | Nền tảng            | Repo trên GitHub; mã ticket `CMS-123`; commit message tiếng Anh                                                                                                                                                                                                                                                                             |
+| D18 | Fake API trong test | Bỏ MSW; `axios-mock-adapter` cho HTTP client, `vi.mock` module `*.api.ts` cho component (§I)                                                                                                                                                                                                                                                |
+| D19 | i18n                | `vi` mặc định, fallback `en`, key type-safe (§H)                                                                                                                                                                                                                                                                                            |
+| D20 | CSS                 | Tailwind v4 CSS-first, một `main.css`, không `tailwind.config.js`, không SCSS (§J)                                                                                                                                                                                                                                                          |
+| D21 | Design system       | Token 3 tầng, component chỉ dùng màu ngữ nghĩa Nuxt UI; màu brand tạm chờ chính thức (§L)                                                                                                                                                                                                                                                   |
+| D22 | Font                | Plus Jakarta Sans (display) + Inter (body), self-host (§L.5)                                                                                                                                                                                                                                                                                |
+| D23 | Theme               | Sáng/Tối/Hệ thống (mặc định hệ thống), chống nháy, một theme chung không theo Store, mặc định component trong `Ui.config.ts` (§L.11)                                                                                                                                                                                                        |
+| D25 | Locale              | Instance do `createAppI18n()` tạo sở hữu locale (persist, `<html lang>`, locale Nuxt UI) khi được `app.use()`; `useLocale()` inject instance đó; không export singleton, không side effect khi import (§H)                                                                                                                                  |
+| D26 | Nguồn màu           | `Ui.config.ts` là nguồn duy nhất của map màu ngữ nghĩa + mặc định component (§L.9)                                                                                                                                                                                                                                                          |
+| D27 | PR                  | Mỗi step = 1 PR riêng, squash merge (§C.3); không gộp commit cuối                                                                                                                                                                                                                                                                           |
+| D28 | Alias               | Mỗi thư mục cấp 1 của `src/` một alias (`@app`, `@features`, `@shared`…), không có `@/`; nguồn duy nhất `tsconfig.app.json` (§N)                                                                                                                                                                                                            |
+| D29 | Lỗi                 | Mọi lỗi HTTP → `ApiError`; query lỗi hiển thị tại chỗ, mutation lỗi toast global; dialog xác nhận global, modal nghiệp vụ internal (§O, §P)                                                                                                                                                                                                 |
+| D30 | PWA                 | Cài được + báo bản mới; chỉ cache app shell, không cache API (§R)                                                                                                                                                                                                                                                                           |
+| D31 | Bổ trợ              | Command palette, phím tắt, title theo route ở Foundation; tool dev theo §S                                                                                                                                                                                                                                                                  |
+| D33 | Phân tầng + shared  | Phân tầng một chiều `main.ts → app → layouts → features → shared`, chi tiết và ngoại lệ ở §A, ESLint ở §E. Code vào `src/shared/` (alias `@shared/*`) chỉ khi ≥ 2 nơi dùng và không chứa nghiệp vụ; Store đang quản lý là feature `StoreScope`; upload media ở `features/media`                                                             |
+| D34 | Seam HTTP           | `HttpClient` không import feature nào, interface hẹp có kiểu theo Swagger (không lộ axios, kể cả trong `HttpClientDeps`); HttpClient chỉ nhận `{ baseURL, session, getLocale }`; `Session` (`shared/lib/session/`) sở hữu token + Store hiện tại + xoá cache khi logout/đổi Store; `storeId` qua header `X-Store-Id` — chờ BE xác nhận (§M) |
+| D35 | Luồng dữ liệu       | View (container) → [composable] → api (server state) → [mapper, chỉ khi DTO lệch Model] → HttpClient; component chỉ props/emits; DTO không ra khỏi `api/`; server state chỉ ở Vue Query (§T)                                                                                                                                                |
+| D36 | SOLID               | Áp dụng ở mức module, không class/DI container; composition root là `createAppRuntime()` trong `app/Runtime.ts` (D37, §U)                                                                                                                                                                                                                   |
+| D37 | Composition root    | Một module `createAppRuntime(overrides)` ở `app/Runtime.ts` dựng toàn bộ runtime (pinia, i18n, router, notifier, session, http, queryClient); `main.ts` gọi rồi mount, `src/test/Render.ts` gọi cùng hàm với fake — test chạy qua wiring thật (§M.2)                                                                                        |
+| D38 | Navigation          | Một module `layouts/Navigation.ts` (`buildNavigation(routes, can)` thuần + `useNavigation()`) là nơi duy nhất đọc route meta cho sidebar, palette, phím tắt, title. Palette + phím tắt + bảng phím tắt hoãn tới P5 (§S.1)                                                                                                                   |
+| D39 | Error policy        | Quy tắc lỗi (retry, key i18n, im lặng, mutation lỗi đi đâu) tập trung ở `shared/lib/api/errors/ErrorPolicy.ts`; QueryClient chuyển sang `shared/lib/query/`; `UseNotify` chỉ hiển thị; `app/providers` chỉ glue Vue (§O.4)                                                                                                                  |
+| D40 | HttpClient một file | `client/` chỉ còn `HttpClient.ts` (+ spec); bỏ `noClientInternals`, `createHttpClientWithAdapter`, `TestHttpClient.ts`; test thay transport qua `deps.transport`. Refresh đi qua HttpClient với `skipAuth`. Bỏ `getDefaultPathParams` tới khi BE chốt (§M)                                                                                  |
+| D41 | Ranh giới import    | `no-restricted-imports` khai báo bằng một bảng `BOUNDARIES` + `toFlatConfig()`; `eslint.config.spec.ts` kiểm tự động mọi ca ở Step 2. Giữ Model độc lập DTO (§T.3); feature tối thiểu `api/ + types/ + views/` (§E, §Q.1)                                                                                                                   |
 
 D24 và D32 đã bị huỷ trong quá trình review; giữ nguyên số để không đổi tham chiếu.
 
@@ -273,29 +273,29 @@ Mục này là bản cho người đọc; bảng `BOUNDARIES` (§E) là bản đ
 
 ### B.1. File và thư mục
 
-| Loại | Quy tắc | Ví dụ |
-|---|---|---|
-| Thư mục | Một từ: viết thường · nhiều từ: PascalCase · không kebab-case; feature số nhiều (trừ danh từ không đếm được: `auth`, `dashboard`, `inventory`, `media`) | `features/products/`, `features/AuditLogs/`, `test/factories/` |
-| Thư mục chức năng trong feature | cố định, số nhiều: `api/`, `components/`, `composables/`, `schemas/`, `stores/`, `types/`, `views/` (riêng `api/` giữ nguyên) | |
-| Component | PascalCase, ≥ 2 từ | `ProductTable.vue`, `ProductStatusBadge.vue` |
-| View (gắn route) | PascalCase + hậu tố `View` | `ProductListView.vue` |
-| Layout | PascalCase + hậu tố `Layout` | `DashboardLayout.vue` |
-| Composable | `Use` + PascalCase | `UseAuth.ts`, `UseListState.ts` |
-| Store | PascalCase + `.store.ts` | `Auth.store.ts` |
-| API | PascalCase + `.api.ts` | `Products.api.ts` |
-| Schema (Zod) | PascalCase + `.schema.ts` | `Product.schema.ts` |
-| Types | PascalCase + `.types.ts` | `Product.types.ts` |
-| Config | PascalCase + `.config.ts` | `Env.config.ts` |
-| Module thường | PascalCase | `HttpClient.ts`, `ApiError.ts` |
-| Test | tên file nguồn + `.spec.ts` | `Guards.spec.ts`, `ProductTable.spec.ts` |
-| Route của feature | `<Feature>` + `.routes.ts` | `Products.routes.ts` |
-| Mapper | `<Entity>` + `.mapper.ts`, trong `api/`, chỉ khi DTO lệch Model (§T.3) | `Product.mapper.ts` |
-| Test factory | `<Entity>` + `.factory.ts` | `User.factory.ts` |
-| Khai báo kiểu | PascalCase + `.d.ts` | `Router.d.ts`, `VueQuery.d.ts` |
-| File sinh tự động | PascalCase + `.generated.ts` | `Api.generated.ts` |
-| Asset tĩnh (`assets/`, `public/`) | PascalCase (trừ `favicon.svg`, `robots.txt` do trình duyệt/bot yêu cầu) | `Logo.svg`, `EmptyBox.svg` |
-| Ngoài `src/` (`e2e/`, `scripts/`) | PascalCase | `Smoke.spec.ts`, `GenApi.ts` |
-| File do tool quy định | Giữ nguyên tên tool yêu cầu | `package.json`, `vite.config.ts`, `.github/ISSUE_TEMPLATE/bug_report.md`, `pwa-assets.config.ts` |
+| Loại                              | Quy tắc                                                                                                                                                 | Ví dụ                                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Thư mục                           | Một từ: viết thường · nhiều từ: PascalCase · không kebab-case; feature số nhiều (trừ danh từ không đếm được: `auth`, `dashboard`, `inventory`, `media`) | `features/products/`, `features/AuditLogs/`, `test/factories/`                                   |
+| Thư mục chức năng trong feature   | cố định, số nhiều: `api/`, `components/`, `composables/`, `schemas/`, `stores/`, `types/`, `views/` (riêng `api/` giữ nguyên)                           |                                                                                                  |
+| Component                         | PascalCase, ≥ 2 từ                                                                                                                                      | `ProductTable.vue`, `ProductStatusBadge.vue`                                                     |
+| View (gắn route)                  | PascalCase + hậu tố `View`                                                                                                                              | `ProductListView.vue`                                                                            |
+| Layout                            | PascalCase + hậu tố `Layout`                                                                                                                            | `DashboardLayout.vue`                                                                            |
+| Composable                        | `Use` + PascalCase                                                                                                                                      | `UseAuth.ts`, `UseListState.ts`                                                                  |
+| Store                             | PascalCase + `.store.ts`                                                                                                                                | `Auth.store.ts`                                                                                  |
+| API                               | PascalCase + `.api.ts`                                                                                                                                  | `Products.api.ts`                                                                                |
+| Schema (Zod)                      | PascalCase + `.schema.ts`                                                                                                                               | `Product.schema.ts`                                                                              |
+| Types                             | PascalCase + `.types.ts`                                                                                                                                | `Product.types.ts`                                                                               |
+| Config                            | PascalCase + `.config.ts`                                                                                                                               | `Env.config.ts`                                                                                  |
+| Module thường                     | PascalCase                                                                                                                                              | `HttpClient.ts`, `ApiError.ts`                                                                   |
+| Test                              | tên file nguồn + `.spec.ts`                                                                                                                             | `Guards.spec.ts`, `ProductTable.spec.ts`                                                         |
+| Route của feature                 | `<Feature>` + `.routes.ts`                                                                                                                              | `Products.routes.ts`                                                                             |
+| Mapper                            | `<Entity>` + `.mapper.ts`, trong `api/`, chỉ khi DTO lệch Model (§T.3)                                                                                  | `Product.mapper.ts`                                                                              |
+| Test factory                      | `<Entity>` + `.factory.ts`                                                                                                                              | `User.factory.ts`                                                                                |
+| Khai báo kiểu                     | PascalCase + `.d.ts`                                                                                                                                    | `Router.d.ts`, `VueQuery.d.ts`                                                                   |
+| File sinh tự động                 | PascalCase + `.generated.ts`                                                                                                                            | `Api.generated.ts`                                                                               |
+| Asset tĩnh (`assets/`, `public/`) | PascalCase (trừ `favicon.svg`, `robots.txt` do trình duyệt/bot yêu cầu)                                                                                 | `Logo.svg`, `EmptyBox.svg`                                                                       |
+| Ngoài `src/` (`e2e/`, `scripts/`) | PascalCase                                                                                                                                              | `Smoke.spec.ts`, `GenApi.ts`                                                                     |
+| File do tool quy định             | Giữ nguyên tên tool yêu cầu                                                                                                                             | `package.json`, `vite.config.ts`, `.github/ISSUE_TEMPLATE/bug_report.md`, `pwa-assets.config.ts` |
 
 Hậu tố hợp lệ (cấu hình cho `check-file`): `.api`, `.mapper`, `.routes`, `.store`, `.schema`, `.types`, `.config`, `.factory`, `.generated`, `.spec`, `.d`.
 
@@ -305,23 +305,23 @@ Lưu ý: tên file `UseAuth.ts` khác hoa/thường với hàm `useAuth` là có
 
 ### B.2. Trong code
 
-| Loại | Quy tắc | Ví dụ |
-|---|---|---|
-| Biến, hàm | camelCase | `fetchProducts`, `isLoading` |
-| Boolean | tiền tố `is/has/can/should` | `canEdit` |
-| Hằng số module | UPPER_SNAKE_CASE | `DEFAULT_PAGE_SIZE` |
-| Type / interface | PascalCase, không tiền tố `I` | `Product`, `ProductListQuery` |
-| Enum-like | `as const` object + union type, không dùng `enum` | `OrderStatus` |
-| Composable export | `useXxx` | `export function useAuth()` |
-| Pinia store | `useXxxStore`, id = tên feature | `defineStore('auth', …)` |
-| Zod schema | `xxxSchema`, type suy ra `XxxInput` | `productSchema` |
-| Component trong template | PascalCase | `<ProductTable />` |
-| Props / emits | camelCase cả script và template (`vue/attribute-hyphenation: never`, `vue/v-on-event-hyphenation: never`) | `:modelValue`, `@update:modelValue` |
-| Route name | `feature.action` | `products.list`, `products.edit` |
-| Route path | chữ thường, nhiều từ nối `-` (URL, không phải tên file — giữ chuẩn web), số nhiều | `/admin/products/:id/edit`, `/admin/audit-logs` |
-| i18n key | `feature.scope.key`, camelCase từng đoạn | `products.form.titleCreate` |
-| Query key | mảng bắt đầu bằng tên feature | `['products', 'list', params]` |
-| Env | `VITE_` + UPPER_SNAKE | `VITE_API_BASE_URL` |
+| Loại                     | Quy tắc                                                                                                   | Ví dụ                                           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| Biến, hàm                | camelCase                                                                                                 | `fetchProducts`, `isLoading`                    |
+| Boolean                  | tiền tố `is/has/can/should`                                                                               | `canEdit`                                       |
+| Hằng số module           | UPPER_SNAKE_CASE                                                                                          | `DEFAULT_PAGE_SIZE`                             |
+| Type / interface         | PascalCase, không tiền tố `I`                                                                             | `Product`, `ProductListQuery`                   |
+| Enum-like                | `as const` object + union type, không dùng `enum`                                                         | `OrderStatus`                                   |
+| Composable export        | `useXxx`                                                                                                  | `export function useAuth()`                     |
+| Pinia store              | `useXxxStore`, id = tên feature                                                                           | `defineStore('auth', …)`                        |
+| Zod schema               | `xxxSchema`, type suy ra `XxxInput`                                                                       | `productSchema`                                 |
+| Component trong template | PascalCase                                                                                                | `<ProductTable />`                              |
+| Props / emits            | camelCase cả script và template (`vue/attribute-hyphenation: never`, `vue/v-on-event-hyphenation: never`) | `:modelValue`, `@update:modelValue`             |
+| Route name               | `feature.action`                                                                                          | `products.list`, `products.edit`                |
+| Route path               | chữ thường, nhiều từ nối `-` (URL, không phải tên file — giữ chuẩn web), số nhiều                         | `/admin/products/:id/edit`, `/admin/audit-logs` |
+| i18n key                 | `feature.scope.key`, camelCase từng đoạn                                                                  | `products.form.titleCreate`                     |
+| Query key                | mảng bắt đầu bằng tên feature                                                                             | `['products', 'list', params]`                  |
+| Env                      | `VITE_` + UPPER_SNAKE                                                                                     | `VITE_API_BASE_URL`                             |
 
 ### B.3. Ranh giới feature
 
@@ -341,15 +341,15 @@ Lưu ý: tên file `UseAuth.ts` khác hoa/thường với hàm `useAuth` là có
 - Không có `develop`. Release bằng tag `vX.Y.Z` trên `main`.
 - Tên nhánh: `<type>/<TICKET>-<mo-ta-ngan>` (kebab-case, không dấu). Không có ticket thì bỏ phần `<TICKET>-`.
 
-| type | Dùng khi |
-|---|---|
-| `feature/` | Tính năng mới |
-| `fix/` | Sửa lỗi |
-| `hotfix/` | Sửa lỗi khẩn trên production |
+| type        | Dùng khi                        |
+| ----------- | ------------------------------- |
+| `feature/`  | Tính năng mới                   |
+| `fix/`      | Sửa lỗi                         |
+| `hotfix/`   | Sửa lỗi khẩn trên production    |
 | `refactor/` | Đổi cấu trúc, không đổi hành vi |
-| `chore/` | Tooling, dependency, config |
-| `docs/` | Tài liệu |
-| `test/` | Chỉ thêm/sửa test |
+| `chore/`    | Tooling, dependency, config     |
+| `docs/`     | Tài liệu                        |
+| `test/`     | Chỉ thêm/sửa test               |
 
 Ví dụ: `feature/CMS-123-product-list`, `fix/CMS-210-refresh-token-loop`.
 
@@ -390,11 +390,11 @@ Ví dụ: `feat(products): add server-side pagination to product table`.
 
 ## D. Git hooks (Husky)
 
-| Hook | Lệnh | Mục đích |
-|---|---|---|
-| `pre-commit` | `npx lint-staged` | ESLint `--fix` + Prettier trên file staged |
-| `commit-msg` | `npx --no -- commitlint --edit "$1"` | Kiểm tra format commit |
-| `pre-push` | `npm run typecheck` | Chặn push code sai type |
+| Hook         | Lệnh                                 | Mục đích                                   |
+| ------------ | ------------------------------------ | ------------------------------------------ |
+| `pre-commit` | `npx lint-staged`                    | ESLint `--fix` + Prettier trên file staged |
+| `commit-msg` | `npx --no -- commitlint --edit "$1"` | Kiểm tra format commit                     |
+| `pre-push`   | `npm run typecheck`                  | Chặn push code sai type                    |
 
 `lint-staged.config.ts`:
 
@@ -413,28 +413,28 @@ export default {
 
 Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (strict), `eslint-plugin-vue` (`flat/recommended`), `eslint-config-prettier` (tắt rule format).
 
-| Rule | Mức | Lý do |
-|---|---|---|
-| `perfectionist/sort-imports`, `sort-named-imports` | error | Thứ tự import ổn định, auto-fix |
-| `unused-imports/no-unused-imports` | error | Xoá import thừa khi fix |
-| `unused-imports/no-unused-vars` | warn (bỏ qua `_` prefix) | |
-| `@typescript-eslint/no-explicit-any` | error | TypeScript strict thực sự |
-| `@typescript-eslint/consistent-type-imports` | error | `import type`, tree-shake tốt |
-| `@typescript-eslint/no-non-null-assertion` | warn | |
-| `no-console` | error, cho phép `warn`/`error` | |
-| `no-restricted-imports` | error | Ranh giới feature (§B.3, whitelist), ngoài `features/` cấm mọi `../`; trong feature cấm `../../` |
-| `vue/multi-word-component-names` | error | Component ≥ 2 từ |
-| `vue/component-name-in-template-casing` | error, `PascalCase` | `<ProductTable />` |
-| `vue/block-order` | error, `script` → `template` → `style` | |
-| `vue/define-macros-order` | error, `defineProps` → `defineEmits` → `defineModel` | |
-| `vue/component-api-style` | error, `script-setup` | Một kiểu viết duy nhất |
-| `vue/define-props-declaration` | error, `type-based` | |
-| `vue/no-v-html` | error | Chỉ cho phép qua component sanitize DOMPurify |
-| `vue/require-explicit-emits` | error | |
-| `check-file/filename-naming-convention` | error | `src/**/*.{ts,vue}` = PascalCase (bỏ qua phần hậu tố `.store`, `.api`…; ngoại lệ §B.1) |
-| `check-file/folder-naming-convention` | error | `src/**/`, `e2e/**/`, `scripts/**/` = `^([a-z]+|[A-Z][a-zA-Z0-9]*)$` (một từ thường hoặc PascalCase) |
-| `check-file/filename-naming-convention` (ngoài src) | error | `e2e/**`, `scripts/**`, `src/assets/**`, `public/**` = PascalCase (trừ `favicon.svg`, `robots.txt`) |
-| `vue/attribute-hyphenation`, `vue/v-on-event-hyphenation` | error, `never` | Không kebab-case trong template |
+| Rule                                                      | Mức                                                  | Lý do                                                                                               |
+| --------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `perfectionist/sort-imports`, `sort-named-imports`        | error                                                | Thứ tự import ổn định, auto-fix                                                                     |
+| `unused-imports/no-unused-imports`                        | error                                                | Xoá import thừa khi fix                                                                             |
+| `unused-imports/no-unused-vars`                           | warn (bỏ qua `_` prefix)                             |                                                                                                     |
+| `@typescript-eslint/no-explicit-any`                      | error                                                | TypeScript strict thực sự                                                                           |
+| `@typescript-eslint/consistent-type-imports`              | error                                                | `import type`, tree-shake tốt                                                                       |
+| `@typescript-eslint/no-non-null-assertion`                | warn                                                 |                                                                                                     |
+| `no-console`                                              | error, cho phép `warn`/`error`                       |                                                                                                     |
+| `no-restricted-imports`                                   | error                                                | Ranh giới feature (§B.3, whitelist), ngoài `features/` cấm mọi `../`; trong feature cấm `../../`    |
+| `vue/multi-word-component-names`                          | error                                                | Component ≥ 2 từ                                                                                    |
+| `vue/component-name-in-template-casing`                   | error, `PascalCase`                                  | `<ProductTable />`                                                                                  |
+| `vue/block-order`                                         | error, `script` → `template` → `style`               |                                                                                                     |
+| `vue/define-macros-order`                                 | error, `defineProps` → `defineEmits` → `defineModel` |                                                                                                     |
+| `vue/component-api-style`                                 | error, `script-setup`                                | Một kiểu viết duy nhất                                                                              |
+| `vue/define-props-declaration`                            | error, `type-based`                                  |                                                                                                     |
+| `vue/no-v-html`                                           | error                                                | Chỉ cho phép qua component sanitize DOMPurify                                                       |
+| `vue/require-explicit-emits`                              | error                                                |                                                                                                     |
+| `check-file/filename-naming-convention`                   | error                                                | `src/**/*.{ts,vue}` = PascalCase (bỏ qua phần hậu tố `.store`, `.api`…; ngoại lệ §B.1)              |
+| `check-file/folder-naming-convention`                     | error                                                | `src/**/`, `e2e/**/`, `scripts/**/` = `^([a-z]+                                                     | [A-Z][a-zA-Z0-9]*)$` (một từ thường hoặc PascalCase) |
+| `check-file/filename-naming-convention` (ngoài src)       | error                                                | `e2e/**`, `scripts/**`, `src/assets/**`, `public/**` = PascalCase (trừ `favicon.svg`, `robots.txt`) |
+| `vue/attribute-hyphenation`, `vue/v-on-event-hyphenation` | error, `never`                                       | Không kebab-case trong template                                                                     |
 
 Mẫu ranh giới feature (whitelist — không cần thêm block khi có feature mới):
 
@@ -454,7 +454,10 @@ const noEscapeFeature = {
   group: ['../../*', '../../**'],
   message: 'Không import tương đối ra ngoài feature; dùng alias (§N).',
 }
-const noApp = { group: ['@app/*'], message: 'Chỉ main.ts và src/test/ được import @app/* (§A, D37).' }
+const noApp = {
+  group: ['@app/*'],
+  message: 'Chỉ main.ts và src/test/ được import @app/* (§A, D37).',
+}
 const noLayouts = { group: ['@layouts/*'], message: 'features/ không import layouts/.' }
 const noUpper = {
   group: ['@app/*', '@layouts/*', '@features/*'],
@@ -488,21 +491,60 @@ const featureBoundaryForRoutes = {
  * nên dòng cụ thể đặt sau dòng chung và tự liệt kê đủ pattern của nó.
  */
 export const BOUNDARIES = [
-  { name: 'mặc định',            files: ['src/**/*.{ts,vue}'],                    forbid: [featureBoundary, noParentImport, noDto] },
-  { name: 'layouts',             files: ['src/layouts/**/*.{ts,vue}'],            forbid: [featureBoundary, noParentImport, noApp, noDto] },
-  { name: 'features',            files: ['src/features/**/*.{ts,vue}'],           forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto] },
-  { name: 'feature/components',  files: ['src/features/*/components/**/*.{ts,vue}'], forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto, presentational] },
-  { name: 'feature/api (DTO ok)', files: ['src/features/*/api/**/*.ts'],          forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts] },
-  { name: 'shared',              files: ['src/shared/**/*.{ts,vue}'],             forbid: [noUpper, noParentImport, noDto] },
-  { name: 'shared/components',   files: ['src/shared/components/**/*.{ts,vue}'],  forbid: [noUpper, noParentImport, noDto, noHttpInSharedUi] },
-  { name: 'shared/lib',          files: ['src/shared/lib/**/*.ts'],               forbid: [noUpper, noParentImport, noDto, libIsBottom] },
-  { name: 'shared/lib/api (DTO ok)', files: ['src/shared/lib/api/**/*.ts'],       forbid: [noUpper, noParentImport, libIsBottom] },
-  { name: 'Routes.ts',           files: ['src/app/router/Routes.ts'],             forbid: [featureBoundaryForRoutes, noParentImport] },
+  {
+    name: 'mặc định',
+    files: ['src/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noParentImport, noDto],
+  },
+  {
+    name: 'layouts',
+    files: ['src/layouts/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noParentImport, noApp, noDto],
+  },
+  {
+    name: 'features',
+    files: ['src/features/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto],
+  },
+  {
+    name: 'feature/components',
+    files: ['src/features/*/components/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto, presentational],
+  },
+  {
+    name: 'feature/api (DTO ok)',
+    files: ['src/features/*/api/**/*.ts'],
+    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts],
+  },
+  { name: 'shared', files: ['src/shared/**/*.{ts,vue}'], forbid: [noUpper, noParentImport, noDto] },
+  {
+    name: 'shared/components',
+    files: ['src/shared/components/**/*.{ts,vue}'],
+    forbid: [noUpper, noParentImport, noDto, noHttpInSharedUi],
+  },
+  {
+    name: 'shared/lib',
+    files: ['src/shared/lib/**/*.ts'],
+    forbid: [noUpper, noParentImport, noDto, libIsBottom],
+  },
+  {
+    name: 'shared/lib/api (DTO ok)',
+    files: ['src/shared/lib/api/**/*.ts'],
+    forbid: [noUpper, noParentImport, libIsBottom],
+  },
+  {
+    name: 'Routes.ts',
+    files: ['src/app/router/Routes.ts'],
+    forbid: [featureBoundaryForRoutes, noParentImport],
+  },
 ]
 
 /** Chuyển bảng thành các block flat config. Không chứa logic nào khác. */
 const toFlatConfig = (rows) =>
-  rows.map(({ files, forbid }) => ({ files, rules: { 'no-restricted-imports': ['error', { patterns: forbid }] } }))
+  rows.map(({ files, forbid }) => ({
+    files,
+    rules: { 'no-restricted-imports': ['error', { patterns: forbid }] },
+  }))
 
 export default [
   // ...typescript-eslint, vue, prettier, check-file, perfectionist (bảng rule ở trên)
@@ -528,20 +570,20 @@ async function isBlocked(from: string, importPath: string) {
 
 // [file đặt code, đường import, có bị chặn không] — mỗi dòng là một ca ở Step 2
 const CASES: [string, string, boolean][] = [
-  ['src/layouts/AuthLayout.vue',                 '@features/auth/stores/Auth.store', true],
-  ['src/layouts/AuthLayout.vue',                 '@features/auth/UseAuth',           false],
-  ['src/features/auth/views/LoginView.vue',      '../../products/api/X',             true],
-  ['src/features/auth/views/LoginView.vue',      '../stores/Auth.store',             false],
-  ['src/app/router/Routes.ts',                   '@features/auth/views/LoginView.vue', false],
-  ['src/test/Render.ts',                         '@app/Runtime',                     false],
-  ['src/features/auth/api/Auth.api.ts',          '@app/Runtime',                     true],
-  ['src/shared/composables/UseNotify.ts',        '@features/auth/UseAuth',           true],
-  ['src/features/auth/components/X.vue',         'vue-router',                       true],
-  ['src/features/auth/views/LoginView.vue',      '@shared/types/Api.generated',      true],
-  ['src/features/auth/api/Auth.api.ts',          '@shared/types/Api.generated',      false],
-  ['src/shared/lib/query/QueryClient.ts',        '@shared/composables/UseNotify',    true],
-  ['src/shared/lib/api/client/HttpClient.ts',    '@shared/components/confirm/UseConfirm', true],
-  ['src/shared/lib/query/QueryClient.ts',        '@shared/lib/api/errors/ErrorPolicy', false],
+  ['src/layouts/AuthLayout.vue', '@features/auth/stores/Auth.store', true],
+  ['src/layouts/AuthLayout.vue', '@features/auth/UseAuth', false],
+  ['src/features/auth/views/LoginView.vue', '../../products/api/X', true],
+  ['src/features/auth/views/LoginView.vue', '../stores/Auth.store', false],
+  ['src/app/router/Routes.ts', '@features/auth/views/LoginView.vue', false],
+  ['src/test/Render.ts', '@app/Runtime', false],
+  ['src/features/auth/api/Auth.api.ts', '@app/Runtime', true],
+  ['src/shared/composables/UseNotify.ts', '@features/auth/UseAuth', true],
+  ['src/features/auth/components/X.vue', 'vue-router', true],
+  ['src/features/auth/views/LoginView.vue', '@shared/types/Api.generated', true],
+  ['src/features/auth/api/Auth.api.ts', '@shared/types/Api.generated', false],
+  ['src/shared/lib/query/QueryClient.ts', '@shared/composables/UseNotify', true],
+  ['src/shared/lib/api/client/HttpClient.ts', '@shared/components/confirm/UseConfirm', true],
+  ['src/shared/lib/query/QueryClient.ts', '@shared/lib/api/errors/ErrorPolicy', false],
   ['src/shared/components/feedback/ErrorState.vue', '@shared/lib/api/client/HttpClient', true],
   ['src/shared/components/feedback/ErrorState.vue', '@shared/composables/UseNotify', false],
   // ... đủ các ca liệt kê ở Step 2
@@ -566,17 +608,21 @@ Prettier (`.prettierrc.json`): `semi: false`, `singleQuote: true`, `printWidth: 
 
 ```md
 ## Mục đích
+
 <!-- Ticket: CMS-xxx -->
 
 ## Thay đổi chính
+
 -
 
 ## Cách test
+
 -
 
 ## Ảnh chụp (nếu có UI)
 
 ## Checklist
+
 - [ ] Tiêu đề PR theo Conventional Commits
 - [ ] Đã thêm/cập nhật test
 - [ ] Đã thêm i18n key (vi + en)
@@ -623,18 +669,18 @@ Spec mẫu (`<File>.spec.ts`): `describe` theo tên module, `it` mô tả hành 
 
 ## G. Tooling
 
-| Tool | Vai trò | Package |
-|---|---|---|
-| EditorConfig | Indent 2 space, LF, UTF-8 | — |
-| nvm | Ghim Node 22 | `.nvmrc` + `"engines": { "node": ">=22" }` |
-| ESLint | Lint | `eslint`, `typescript-eslint`, `eslint-plugin-vue`, `eslint-plugin-perfectionist`, `eslint-plugin-unused-imports`, `eslint-plugin-check-file`, `eslint-config-prettier` |
-| Prettier | Format | `prettier`, `prettier-plugin-tailwindcss` |
-| Husky | Git hooks | `husky` |
-| lint-staged | Chạy trên file staged | `lint-staged` |
-| commitlint | Kiểm tra commit | `@commitlint/cli`, `@commitlint/config-conventional` |
-| vue-tsc | Typecheck | `vue-tsc` |
-| Vitest / Playwright | Test | `vitest`, `@vue/test-utils`, `jsdom`, `@vitest/coverage-v8`, `axios-mock-adapter`, `@playwright/test` (§I) |
-| openapi-typescript | Sinh type API | xem Step 6 |
+| Tool                | Vai trò                   | Package                                                                                                                                                                 |
+| ------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| EditorConfig        | Indent 2 space, LF, UTF-8 | —                                                                                                                                                                       |
+| nvm                 | Ghim Node 22              | `.nvmrc` + `"engines": { "node": ">=22" }`                                                                                                                              |
+| ESLint              | Lint                      | `eslint`, `typescript-eslint`, `eslint-plugin-vue`, `eslint-plugin-perfectionist`, `eslint-plugin-unused-imports`, `eslint-plugin-check-file`, `eslint-config-prettier` |
+| Prettier            | Format                    | `prettier`, `prettier-plugin-tailwindcss`                                                                                                                               |
+| Husky               | Git hooks                 | `husky`                                                                                                                                                                 |
+| lint-staged         | Chạy trên file staged     | `lint-staged`                                                                                                                                                           |
+| commitlint          | Kiểm tra commit           | `@commitlint/cli`, `@commitlint/config-conventional`                                                                                                                    |
+| vue-tsc             | Typecheck                 | `vue-tsc`                                                                                                                                                               |
+| Vitest / Playwright | Test                      | `vitest`, `@vue/test-utils`, `jsdom`, `@vitest/coverage-v8`, `axios-mock-adapter`, `@playwright/test` (§I)                                                              |
+| openapi-typescript  | Sinh type API             | xem Step 6                                                                                                                                                              |
 
 npm scripts:
 
@@ -679,7 +725,16 @@ VS Code: `.vscode/settings.json` (format on save bằng Prettier, `source.fixAll
 ```ts
 // src/shared/lib/i18n/I18n.ts
 import { en as uiEn, vi as uiVi } from '@nuxt/ui/locale'
-import { computed, inject, readonly, ref, watchEffect, type App, type InjectionKey, type Ref } from 'vue'
+import {
+  computed,
+  inject,
+  readonly,
+  ref,
+  watchEffect,
+  type App,
+  type InjectionKey,
+  type Ref,
+} from 'vue'
 import { createI18n } from 'vue-i18n'
 
 import en from '@locales/en.json'
@@ -711,10 +766,15 @@ export function createAppI18n(opts: { storageKey?: string } = {}) {
     },
   })
   const locale = ref<AppLocale>('vi')
-  const state: AppLocaleState = { locale, setLocale: (next) => { locale.value = next } }
+  const state: AppLocaleState = {
+    locale,
+    setLocale: (next) => {
+      locale.value = next
+    },
+  }
 
   return {
-    getLocale: () => locale.value,          // cho HttpClient (Accept-Language)
+    getLocale: () => locale.value, // cho HttpClient (Accept-Language)
     install(app: App) {
       locale.value = (localStorage.getItem(key) as AppLocale | null) ?? 'vi'
       watchEffect(() => {
@@ -760,13 +820,13 @@ const { uiLocale } = useLocale()
 
 **Chiến lược fake API (đã bỏ MSW):**
 
-| Loại test | Cách fake | Ví dụ |
-|---|---|---|
-| Unit logic thuần (util, schema, guard) | Không fake | `Product.schema.spec.ts` |
-| HTTP client | `createHttpClient({ session, transport: mock.adapter() })` trực tiếp trong `HttpClient.spec.ts` (Session dựng bằng `createSession({ initial })`) | N request 401 → 1 lần `session.refresh()`; mất mạng → `ApiError` `NETWORK_ERROR` |
-| Session | Pinia thật + `axios-mock-adapter` cho endpoint refresh, `QueryClient` thật | `Session.spec.ts`: signIn/logout, `switchStore` xoá cache, refresh thất bại → phát `authFailure` |
-| Component / composable / view | `axios-mock-adapter` trên HTTP client mà `renderWithPlugins()` cung cấp — **một seam duy nhất là HTTP** | `ProductTable.spec.ts` |
-| Code dùng feature khác | Chỉ được mock interface công khai: `vi.mock('@features/x/UseX')` | Guard dùng `useAuth` |
+| Loại test                              | Cách fake                                                                                                                                        | Ví dụ                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| Unit logic thuần (util, schema, guard) | Không fake                                                                                                                                       | `Product.schema.spec.ts`                                                                         |
+| HTTP client                            | `createHttpClient({ session, transport: mock.adapter() })` trực tiếp trong `HttpClient.spec.ts` (Session dựng bằng `createSession({ initial })`) | N request 401 → 1 lần `session.refresh()`; mất mạng → `ApiError` `NETWORK_ERROR`                 |
+| Session                                | Pinia thật + `axios-mock-adapter` cho endpoint refresh, `QueryClient` thật                                                                       | `Session.spec.ts`: signIn/logout, `switchStore` xoá cache, refresh thất bại → phát `authFailure` |
+| Component / composable / view          | `axios-mock-adapter` trên HTTP client mà `renderWithPlugins()` cung cấp — **một seam duy nhất là HTTP**                                          | `ProductTable.spec.ts`                                                                           |
+| Code dùng feature khác                 | Chỉ được mock interface công khai: `vi.mock('@features/x/UseX')`                                                                                 | Guard dùng `useAuth`                                                                             |
 
 Cấm `vi.mock` vào file nội bộ của feature (`api/`, `stores/`…): test bị buộc vào cấu trúc file, đổi tên là vỡ.
 
@@ -783,20 +843,23 @@ Cấm `vi.mock` vào file nội bộ của feature (`api/`, `stores/`…): test 
 import { defineConfig, mergeConfig } from 'vitest/config'
 import viteConfig from './vite.config'
 
-export default mergeConfig(viteConfig, defineConfig({
-  test: {
-    environment: 'jsdom',
-    globals: false,
-    include: ['src/**/*.spec.ts', 'eslint.config.spec.ts'],   // + test bảng ranh giới (D41)
-    setupFiles: ['src/test/Setup.ts'],
-    restoreMocks: true,
-    coverage: {
-      provider: 'v8',
-      include: ['src/**/*.{ts,vue}'],
-      exclude: ['src/**/*.spec.ts', 'src/shared/types/Api.generated.ts', 'src/main.ts'],
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    test: {
+      environment: 'jsdom',
+      globals: false,
+      include: ['src/**/*.spec.ts', 'eslint.config.spec.ts'], // + test bảng ranh giới (D41)
+      setupFiles: ['src/test/Setup.ts'],
+      restoreMocks: true,
+      coverage: {
+        provider: 'v8',
+        include: ['src/**/*.{ts,vue}'],
+        exclude: ['src/**/*.spec.ts', 'src/shared/types/Api.generated.ts', 'src/main.ts'],
+      },
     },
-  },
-}))
+  }),
+)
 ```
 
 ```ts
@@ -811,14 +874,14 @@ afterEach(() => {
 ```ts
 // src/test/Render.ts (phác thảo)
 export function renderWithPlugins(component, options: RenderOptions = {}) {
-  const http = new MockAdapter()                   // axios-mock-adapter
-  const notifier = createFakeNotifier()            // ghi lại toast để assert
+  const http = new MockAdapter() // axios-mock-adapter
+  const notifier = createFakeNotifier() // ghi lại toast để assert
   const runtime = createAppRuntime({
     transport: http.adapter(),
     notifier,
     session: options.session ?? { accessToken: 'test-token', storeId: 'store-1' },
     retry: false,
-    router: options.router,                        // mặc định memory history
+    router: options.router, // mặc định memory history
   })
   const wrapper = mount(component, { global: { plugins: [runtime.plugin] }, ...options.mount })
   return { wrapper, http, notifier, runtime }
@@ -855,7 +918,7 @@ export default defineConfig({
     vue(),
     ui({
       autoImport: false, // không auto-import code nội bộ (§2), chỉ component Nuxt UI
-      ui: uiConfig,      // nguồn duy nhất (D26)
+      ui: uiConfig, // nguồn duy nhất (D26)
     }),
   ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
@@ -879,17 +942,17 @@ Nguyên tắc: chỉ cài khi có step/feature dùng đến; khoá version bằn
 
 ### K.1. Dependencies — cài ở Foundation (Step 1–4)
 
-| Nhóm | Package | Vai trò |
-|---|---|---|
-| Core | `vue`, `vue-router`, `pinia` | Framework, routing, client state |
-| Server state | `@tanstack/vue-query` | Cache/fetch dữ liệu API |
-| HTTP | `axios` | HTTP client + interceptor |
-| i18n | `vue-i18n` | Đa ngôn ngữ (§H) |
-| UI | `@nuxt/ui`, `tailwindcss` | Component + styling (§J) |
-| Icon | `@iconify-json/lucide` | Bộ icon offline cho Nuxt UI |
-| Validation | `zod` | Schema env (`Env.config.ts`, Step 3a); sau này cả form, list params |
-| Tiện ích | `@vueuse/core` | Composable dùng chung (debounce, storage…) |
-| Font | `@fontsource-variable/inter`, `@fontsource-variable/plus-jakarta-sans` | Font self-host (§L.5) |
+| Nhóm         | Package                                                                | Vai trò                                                             |
+| ------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Core         | `vue`, `vue-router`, `pinia`                                           | Framework, routing, client state                                    |
+| Server state | `@tanstack/vue-query`                                                  | Cache/fetch dữ liệu API                                             |
+| HTTP         | `axios`                                                                | HTTP client + interceptor                                           |
+| i18n         | `vue-i18n`                                                             | Đa ngôn ngữ (§H)                                                    |
+| UI           | `@nuxt/ui`, `tailwindcss`                                              | Component + styling (§J)                                            |
+| Icon         | `@iconify-json/lucide`                                                 | Bộ icon offline cho Nuxt UI                                         |
+| Validation   | `zod`                                                                  | Schema env (`Env.config.ts`, Step 3a); sau này cả form, list params |
+| Tiện ích     | `@vueuse/core`                                                         | Composable dùng chung (debounce, storage…)                          |
+| Font         | `@fontsource-variable/inter`, `@fontsource-variable/plus-jakarta-sans` | Font self-host (§L.5)                                               |
 
 ```bash
 npm i vue-router pinia @tanstack/vue-query axios vue-i18n zod \
@@ -900,30 +963,30 @@ npm i vue-router pinia @tanstack/vue-query axios vue-i18n zod \
 
 ### K.2. Dependencies — cài khi tới Phase tương ứng (§30)
 
-| Package | Khi nào | Vai trò |
-|---|---|---|
-| `echarts`, `vue-echarts` | Phase 4 — Dashboard | Biểu đồ, import theo module, lazy-load |
-| `@tiptap/vue-3`, `@tiptap/pm`, `@tiptap/starter-kit` | Phase 5 — Product (mô tả) | Rich text editor |
-| `dompurify` | Cùng lúc Tiptap | Sanitize HTML trước khi render (`vue/no-v-html`) |
-| `vee-validate`, `@vee-validate/zod` | Form có validate đầu tiên (login thật / P5) | Form + map lỗi API; field array cho Variants (lý do chọn: FE_architecture §2) |
-| `dayjs` | P5 — `RelativeTime.vue` | Format ngày giờ, thời gian tương đối |
-| `@internationalized/date` | DatePicker đầu tiên | Kiểu ngày cho DatePicker Nuxt UI (có thể đã có sẵn qua `@nuxt/ui` — chỉ thêm khi import trực tiếp) |
+| Package                                              | Khi nào                                     | Vai trò                                                                                            |
+| ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `echarts`, `vue-echarts`                             | Phase 4 — Dashboard                         | Biểu đồ, import theo module, lazy-load                                                             |
+| `@tiptap/vue-3`, `@tiptap/pm`, `@tiptap/starter-kit` | Phase 5 — Product (mô tả)                   | Rich text editor                                                                                   |
+| `dompurify`                                          | Cùng lúc Tiptap                             | Sanitize HTML trước khi render (`vue/no-v-html`)                                                   |
+| `vee-validate`, `@vee-validate/zod`                  | Form có validate đầu tiên (login thật / P5) | Form + map lỗi API; field array cho Variants (lý do chọn: FE_architecture §2)                      |
+| `dayjs`                                              | P5 — `RelativeTime.vue`                     | Format ngày giờ, thời gian tương đối                                                               |
+| `@internationalized/date`                            | DatePicker đầu tiên                         | Kiểu ngày cho DatePicker Nuxt UI (có thể đã có sẵn qua `@nuxt/ui` — chỉ thêm khi import trực tiếp) |
 
 ### K.3. DevDependencies
 
-| Nhóm | Package |
-|---|---|
-| Build | `vite`, `@vitejs/plugin-vue`, `typescript`, `vue-tsc`, `@types/node`, `@vue/tsconfig` |
-| Lint | `eslint`, `typescript-eslint`, `eslint-plugin-vue`, `eslint-plugin-perfectionist`, `eslint-plugin-unused-imports`, `eslint-plugin-check-file`, `eslint-config-prettier`, `jiti` (đọc `eslint.config.ts`) |
-| Format | `prettier`, `prettier-plugin-tailwindcss` |
-| Git | `husky`, `lint-staged`, `@commitlint/cli`, `@commitlint/config-conventional` |
-| Unit test | `vitest`, `@vitest/coverage-v8`, `@vue/test-utils`, `jsdom`, `axios-mock-adapter`, `@pinia/testing` |
-| E2E | `@playwright/test` |
-| API types | `openapi-typescript`, `tsx` (chạy `scripts/GenApi.ts`) |
-| Dev UX | `vite-plugin-vue-devtools`, `vite-plugin-checker`, `@tanstack/vue-query-devtools`, `vite-tsconfig-paths` |
-| PWA | `vite-plugin-pwa`, `@vite-pwa/assets-generator` |
-| Test data | `@faker-js/faker` |
-| Bảo trì | `knip`, `rollup-plugin-visualizer` |
+| Nhóm      | Package                                                                                                                                                                                                  |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build     | `vite`, `@vitejs/plugin-vue`, `typescript`, `vue-tsc`, `@types/node`, `@vue/tsconfig`                                                                                                                    |
+| Lint      | `eslint`, `typescript-eslint`, `eslint-plugin-vue`, `eslint-plugin-perfectionist`, `eslint-plugin-unused-imports`, `eslint-plugin-check-file`, `eslint-config-prettier`, `jiti` (đọc `eslint.config.ts`) |
+| Format    | `prettier`, `prettier-plugin-tailwindcss`                                                                                                                                                                |
+| Git       | `husky`, `lint-staged`, `@commitlint/cli`, `@commitlint/config-conventional`                                                                                                                             |
+| Unit test | `vitest`, `@vitest/coverage-v8`, `@vue/test-utils`, `jsdom`, `axios-mock-adapter`, `@pinia/testing`                                                                                                      |
+| E2E       | `@playwright/test`                                                                                                                                                                                       |
+| API types | `openapi-typescript`, `tsx` (chạy `scripts/GenApi.ts`)                                                                                                                                                   |
+| Dev UX    | `vite-plugin-vue-devtools`, `vite-plugin-checker`, `@tanstack/vue-query-devtools`, `vite-tsconfig-paths`                                                                                                 |
+| PWA       | `vite-plugin-pwa`, `@vite-pwa/assets-generator`                                                                                                                                                          |
+| Test data | `@faker-js/faker`                                                                                                                                                                                        |
+| Bảo trì   | `knip`, `rollup-plugin-visualizer`                                                                                                                                                                       |
 
 ```bash
 npm i -D @types/node vue-tsc \
@@ -939,24 +1002,24 @@ npm i -D @types/node vue-tsc \
 
 ### K.4. Lib bổ trợ — cân nhắc, chưa cài
 
-| Package | Dùng khi | Ghi chú |
-|---|---|---|
-| `@intlify/eslint-plugin-vue-i18n` | Muốn ESLint bắt text hard-code / key thiếu | Bổ sung cho §H |
-| `@intlify/unplugin-vue-i18n` | Locale tách nhiều file, muốn precompile | Giảm bundle, bỏ runtime compiler |
-| `pinia-plugin-persistedstate` | Nhiều store cần persist | Hiện chỉ locale → dùng `useLocalStorage` của VueUse |
-| `@sentry/vue` | Có môi trường production | Theo dõi lỗi runtime |
-| `nprogress` | Muốn thanh tiến trình khi đổi route | Có thể dùng `ULoadingIndicator`/tự làm |
+| Package                           | Dùng khi                                   | Ghi chú                                             |
+| --------------------------------- | ------------------------------------------ | --------------------------------------------------- |
+| `@intlify/eslint-plugin-vue-i18n` | Muốn ESLint bắt text hard-code / key thiếu | Bổ sung cho §H                                      |
+| `@intlify/unplugin-vue-i18n`      | Locale tách nhiều file, muốn precompile    | Giảm bundle, bỏ runtime compiler                    |
+| `pinia-plugin-persistedstate`     | Nhiều store cần persist                    | Hiện chỉ locale → dùng `useLocalStorage` của VueUse |
+| `@sentry/vue`                     | Có môi trường production                   | Theo dõi lỗi runtime                                |
+| `nprogress`                       | Muốn thanh tiến trình khi đổi route        | Có thể dùng `ULoadingIndicator`/tự làm              |
 
 ### K.5. Không dùng
 
-| Package | Lý do |
-|---|---|
-| `msw` | Đã bỏ (D18) |
-| `lodash` | Dùng JS thuần + VueUse; nếu cần thì `es-toolkit` |
-| `moment` | Đã chọn dayjs |
-| `sass` | CSS-first Tailwind (§J) |
-| `vuex` | Đã chọn Pinia |
-| `unplugin-auto-import` cho code nội bộ | Quy định import tường minh (§2) |
+| Package                                | Lý do                                            |
+| -------------------------------------- | ------------------------------------------------ |
+| `msw`                                  | Đã bỏ (D18)                                      |
+| `lodash`                               | Dùng JS thuần + VueUse; nếu cần thì `es-toolkit` |
+| `moment`                               | Đã chọn dayjs                                    |
+| `sass`                                 | CSS-first Tailwind (§J)                          |
+| `vuex`                                 | Đã chọn Pinia                                    |
+| `unplugin-auto-import` cho code nội bộ | Quy định import tường minh (§2)                  |
 
 ---
 
@@ -968,11 +1031,11 @@ Nguồn sự thật: token trong `main.css` (`@theme`) + map màu ngữ nghĩa c
 
 ### L.1. Ba tầng token
 
-| Tầng | Ví dụ | Ai được dùng |
-|---|---|---|
-| 1. Palette (giá trị thô) | `--color-brand-500`, `--color-slate-200` | Chỉ `main.css` và `vite.config.ts` |
-| 2. Ngữ nghĩa (Nuxt UI) | `primary`, `neutral`, `success`, `--ui-bg`, `--ui-text-muted` | Component, layout |
-| 3. Nghiệp vụ | `OrderStatus → color` | Component nghiệp vụ, qua map trong `types/` của feature |
+| Tầng                     | Ví dụ                                                         | Ai được dùng                                            |
+| ------------------------ | ------------------------------------------------------------- | ------------------------------------------------------- |
+| 1. Palette (giá trị thô) | `--color-brand-500`, `--color-slate-200`                      | Chỉ `main.css` và `vite.config.ts`                      |
+| 2. Ngữ nghĩa (Nuxt UI)   | `primary`, `neutral`, `success`, `--ui-bg`, `--ui-text-muted` | Component, layout                                       |
+| 3. Nghiệp vụ             | `OrderStatus → color`                                         | Component nghiệp vụ, qua map trong `types/` của feature |
 
 Quy tắc: component **không** dùng tầng 1 (`bg-brand-500`, `#e11d48`, `text-slate-700`); chỉ dùng tầng 2 (`bg-primary`, `text-muted`, `color="error"`).
 
@@ -980,53 +1043,53 @@ Quy tắc: component **không** dùng tầng 1 (`bg-brand-500`, `#e11d48`, `text
 
 **Palette brand (tạm):**
 
-| Step | Hex |
-|---|---|
-| 50 | `#fff1f2` |
-| 100 | `#ffe4e6` |
-| 200 | `#fecdd3` |
-| 300 | `#fda4af` |
-| 400 | `#fb7185` |
-| 500 | `#f43f5e` |
-| 600 | `#e11d48` |
-| 700 | `#be123c` |
-| 800 | `#9f1239` |
-| 900 | `#881337` |
-| 950 | `#4c0519` |
+| Step | Hex       |
+| ---- | --------- |
+| 50   | `#fff1f2` |
+| 100  | `#ffe4e6` |
+| 200  | `#fecdd3` |
+| 300  | `#fda4af` |
+| 400  | `#fb7185` |
+| 500  | `#f43f5e` |
+| 600  | `#e11d48` |
+| 700  | `#be123c` |
+| 800  | `#9f1239` |
+| 900  | `#881337` |
+| 950  | `#4c0519` |
 
 **Map ngữ nghĩa (Nuxt UI):**
 
-| Màu ngữ nghĩa | Palette | Dùng cho |
-|---|---|---|
-| `primary` | `brand` | Nút chính, link, focus, item sidebar active |
-| `secondary` | `indigo` | Hành động phụ nổi bật (hiếm dùng) |
-| `success` | `emerald` | Thành công, đã giao, còn hàng |
-| `info` | `sky` | Thông tin, đang xử lý |
-| `warning` | `amber` | Cảnh báo, sắp hết hàng, chờ xác nhận |
-| `error` | `red` | Lỗi, xoá, huỷ, hết hàng |
-| `neutral` | `slate` | Nền, chữ, viền, trạng thái nháp |
+| Màu ngữ nghĩa | Palette   | Dùng cho                                    |
+| ------------- | --------- | ------------------------------------------- |
+| `primary`     | `brand`   | Nút chính, link, focus, item sidebar active |
+| `secondary`   | `indigo`  | Hành động phụ nổi bật (hiếm dùng)           |
+| `success`     | `emerald` | Thành công, đã giao, còn hàng               |
+| `info`        | `sky`     | Thông tin, đang xử lý                       |
+| `warning`     | `amber`   | Cảnh báo, sắp hết hàng, chờ xác nhận        |
+| `error`       | `red`     | Lỗi, xoá, huỷ, hết hàng                     |
+| `neutral`     | `slate`   | Nền, chữ, viền, trạng thái nháp             |
 
 Không thêm màu ngữ nghĩa mới nếu chưa thống nhất; cần màu mới thì bổ sung vào bảng này trước.
 
 ### L.3. Token nền / chữ / viền (Nuxt UI, tự đổi theo dark mode)
 
-| Mục đích | Class | Biến |
-|---|---|---|
-| Nền trang | `bg-default` | `--ui-bg` |
-| Nền khối phụ (card, sidebar) | `bg-muted` / `bg-elevated` | `--ui-bg-muted`, `--ui-bg-elevated` |
-| Chữ chính | `text-default` / `text-highlighted` | `--ui-text`, `--ui-text-highlighted` |
-| Chữ phụ | `text-muted` / `text-dimmed` | `--ui-text-muted`, `--ui-text-dimmed` |
-| Viền | `border-default` / `border-muted` | `--ui-border`, `--ui-border-muted` |
+| Mục đích                     | Class                               | Biến                                  |
+| ---------------------------- | ----------------------------------- | ------------------------------------- |
+| Nền trang                    | `bg-default`                        | `--ui-bg`                             |
+| Nền khối phụ (card, sidebar) | `bg-muted` / `bg-elevated`          | `--ui-bg-muted`, `--ui-bg-elevated`   |
+| Chữ chính                    | `text-default` / `text-highlighted` | `--ui-text`, `--ui-text-highlighted`  |
+| Chữ phụ                      | `text-muted` / `text-dimmed`        | `--ui-text-muted`, `--ui-text-dimmed` |
+| Viền                         | `border-default` / `border-muted`   | `--ui-border`, `--ui-border-muted`    |
 
 ### L.4. Màu theo trạng thái nghiệp vụ
 
 Map đặt trong component badge của feature (VD `features/orders/components/OrderStatusBadge.vue`), không đặt trong `types/` (§B.3). Feature khác cần hiển thị trạng thái thì dùng component đó qua `Use*.ts` hoặc nhận màu qua prop:
 
-| Đối tượng | Trạng thái → màu |
-|---|---|
-| Order | `pending` → warning · `confirmed` → info · `shipping` → primary · `delivered` → success · `cancelled` → error · `refunded` → neutral |
-| Product | `draft` → neutral · `active` → success · `archived` → warning |
-| Tồn kho | còn hàng → success · sắp hết → warning · hết hàng → error |
+| Đối tượng | Trạng thái → màu                                                                                                                     |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Order     | `pending` → warning · `confirmed` → info · `shipping` → primary · `delivered` → success · `cancelled` → error · `refunded` → neutral |
+| Product   | `draft` → neutral · `active` → success · `archived` → warning                                                                        |
+| Tồn kho   | còn hàng → success · sắp hết → warning · hết hàng → error                                                                            |
 
 (Tên trạng thái chính xác sẽ chốt khi làm domain model; bảng này chỉ cố định **nguyên tắc** và màu.)
 
@@ -1034,23 +1097,23 @@ Map đặt trong component badge của feature (VD `features/orders/components/O
 
 Kết hợp 2 font: **Plus Jakarta Sans** (display — tiêu đề, số nổi bật) + **Inter** (mọi thứ còn lại). Cùng họ sans, x-height gần nhau nên ghép không lệch.
 
-| Token | Giá trị | Class |
-|---|---|---|
-| `--font-sans` | `'Inter Variable', ui-sans-serif, system-ui, sans-serif` | mặc định (`font-sans`) |
-| `--font-display` | `'Plus Jakarta Sans Variable', var(--font-sans)` | `font-display` |
-| `--font-mono` | `ui-monospace, SFMono-Regular, monospace` | `font-mono` |
+| Token            | Giá trị                                                  | Class                  |
+| ---------------- | -------------------------------------------------------- | ---------------------- |
+| `--font-sans`    | `'Inter Variable', ui-sans-serif, system-ui, sans-serif` | mặc định (`font-sans`) |
+| `--font-display` | `'Plus Jakarta Sans Variable', var(--font-sans)`         | `font-display`         |
+| `--font-mono`    | `ui-monospace, SFMono-Regular, monospace`                | `font-mono`            |
 
 **Phân vai**
 
-| Vị trí | Font | Cỡ · độ đậm |
-|---|---|---|
-| Tiêu đề trang | Plus Jakarta Sans | `text-2xl` · 600 |
-| Tiêu đề card / section / modal | Plus Jakarta Sans | `text-lg` · 600 |
-| Số KPI Dashboard | Plus Jakarta Sans | `text-3xl` · 700 · `tabular-nums` |
-| Logo / tên store ở sidebar | Plus Jakarta Sans | `text-base` · 700 |
-| Body, bảng, form, nút, badge, menu, tooltip | Inter | `text-sm` · 400/500 |
-| Cột tiền, số lượng | Inter | `tabular-nums` |
-| SKU, mã đơn | mono hệ thống | `text-xs` |
+| Vị trí                                      | Font              | Cỡ · độ đậm                       |
+| ------------------------------------------- | ----------------- | --------------------------------- |
+| Tiêu đề trang                               | Plus Jakarta Sans | `text-2xl` · 600                  |
+| Tiêu đề card / section / modal              | Plus Jakarta Sans | `text-lg` · 600                   |
+| Số KPI Dashboard                            | Plus Jakarta Sans | `text-3xl` · 700 · `tabular-nums` |
+| Logo / tên store ở sidebar                  | Plus Jakarta Sans | `text-base` · 700                 |
+| Body, bảng, form, nút, badge, menu, tooltip | Inter             | `text-sm` · 400/500               |
+| Cột tiền, số lượng                          | Inter             | `tabular-nums`                    |
+| SKU, mã đơn                                 | mono hệ thống     | `text-xs`                         |
 
 **Quy tắc**
 
@@ -1063,14 +1126,14 @@ Kết hợp 2 font: **Plus Jakarta Sans** (display — tiêu đề, số nổi b
 
 ### L.6. Spacing, radius, shadow, kích thước
 
-| Nhóm | Quy tắc |
-|---|---|
-| Spacing | Thang Tailwind (bội 4px). Khoảng cách chuẩn: trong card `p-4`, giữa section `gap-6`, padding trang `p-6` (mobile `p-4`) |
-| Radius | `--ui-radius: 0.375rem`; dùng `rounded-md` (control), `rounded-lg` (card), `rounded-full` (avatar, badge tròn) |
-| Shadow | Chỉ `shadow-xs` (card), `shadow-lg` (dropdown, modal); ưu tiên viền thay bóng |
-| Control size | Mặc định Nuxt UI `md`; bảng dày dùng `sm` |
-| Sidebar | Rộng 256px, thu gọn 64px |
-| Container | Nội dung tối đa `max-w-screen-2xl` |
+| Nhóm         | Quy tắc                                                                                                                 |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Spacing      | Thang Tailwind (bội 4px). Khoảng cách chuẩn: trong card `p-4`, giữa section `gap-6`, padding trang `p-6` (mobile `p-4`) |
+| Radius       | `--ui-radius: 0.375rem`; dùng `rounded-md` (control), `rounded-lg` (card), `rounded-full` (avatar, badge tròn)          |
+| Shadow       | Chỉ `shadow-xs` (card), `shadow-lg` (dropdown, modal); ưu tiên viền thay bóng                                           |
+| Control size | Mặc định Nuxt UI `md`; bảng dày dùng `sm`                                                                               |
+| Sidebar      | Rộng 256px, thu gọn 64px                                                                                                |
+| Container    | Nội dung tối đa `max-w-screen-2xl`                                                                                      |
 
 ### L.7. Breakpoint, z-index, motion
 
@@ -1143,7 +1206,8 @@ Map màu ngữ nghĩa (bảng §L.2) khai báo **một lần** trong `src/app/co
 <script>
   try {
     const m = localStorage.getItem('cms.colorMode') || 'auto'
-    const dark = m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches)
+    const dark =
+      m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches)
     document.documentElement.classList.toggle('dark', dark)
   } catch {}
 </script>
@@ -1163,8 +1227,13 @@ Chỉnh tập trung trong `src/app/config/Ui.config.ts`, import vào `vite.confi
 // src/app/config/Ui.config.ts
 export const uiConfig = {
   colors: {
-    primary: 'brand', secondary: 'indigo', success: 'emerald',
-    info: 'sky', warning: 'amber', error: 'red', neutral: 'slate',
+    primary: 'brand',
+    secondary: 'indigo',
+    success: 'emerald',
+    info: 'sky',
+    warning: 'amber',
+    error: 'red',
+    neutral: 'slate',
   },
   button: { defaultVariants: { size: 'md' } },
   input: { defaultVariants: { size: 'md' } },
@@ -1212,20 +1281,38 @@ export interface HttpClientDeps {
 
 /** Tuỳ chọn cho từng request. */
 export interface RequestOpts<P, M> {
-  path?: PathParamsOf<P, M>      // thay {id} trong URL
-  query?: QueryOf<P, M>          // ?page=1&size=20
-  signal?: AbortSignal           // huỷ request → không bị coi là lỗi (§O.3)
+  path?: PathParamsOf<P, M> // thay {id} trong URL
+  query?: QueryOf<P, M> // ?page=1&size=20
+  signal?: AbortSignal // huỷ request → không bị coi là lỗi (§O.3)
   /** true = không gắn token, không vào hàng đợi refresh. Chỉ Session dùng cho chính request refresh. */
   skipAuth?: boolean
 }
 
 /** Mọi method trả thẳng `data`; lỗi LUÔN là ApiError (§O.1). URL, params, body, kết quả có kiểu theo `paths`. */
 export interface HttpClient {
-  get<P extends PathsWith<'get'>>(url: P, opts?: RequestOpts<P, 'get'>): Promise<ResponseOf<P, 'get'>>
-  post<P extends PathsWith<'post'>>(url: P, body: BodyOf<P, 'post'>, opts?: RequestOpts<P, 'post'>): Promise<ResponseOf<P, 'post'>>
-  put<P extends PathsWith<'put'>>(url: P, body: BodyOf<P, 'put'>, opts?: RequestOpts<P, 'put'>): Promise<ResponseOf<P, 'put'>>
-  patch<P extends PathsWith<'patch'>>(url: P, body: BodyOf<P, 'patch'>, opts?: RequestOpts<P, 'patch'>): Promise<ResponseOf<P, 'patch'>>
-  delete<P extends PathsWith<'delete'>>(url: P, opts?: RequestOpts<P, 'delete'>): Promise<ResponseOf<P, 'delete'>>
+  get<P extends PathsWith<'get'>>(
+    url: P,
+    opts?: RequestOpts<P, 'get'>,
+  ): Promise<ResponseOf<P, 'get'>>
+  post<P extends PathsWith<'post'>>(
+    url: P,
+    body: BodyOf<P, 'post'>,
+    opts?: RequestOpts<P, 'post'>,
+  ): Promise<ResponseOf<P, 'post'>>
+  put<P extends PathsWith<'put'>>(
+    url: P,
+    body: BodyOf<P, 'put'>,
+    opts?: RequestOpts<P, 'put'>,
+  ): Promise<ResponseOf<P, 'put'>>
+  patch<P extends PathsWith<'patch'>>(
+    url: P,
+    body: BodyOf<P, 'patch'>,
+    opts?: RequestOpts<P, 'patch'>,
+  ): Promise<ResponseOf<P, 'patch'>>
+  delete<P extends PathsWith<'delete'>>(
+    url: P,
+    opts?: RequestOpts<P, 'delete'>,
+  ): Promise<ResponseOf<P, 'delete'>>
 }
 
 export function createHttpClient(deps: HttpClientDeps): HttpClient
@@ -1315,11 +1402,11 @@ import { env } from '@app/config/Env.config'
 
 /** Những thứ test được phép thay. Prod không truyền gì. */
 export interface RuntimeOverrides {
-  transport?: unknown                    // adapter axios-mock-adapter; `unknown` có chủ đích (D34)
-  notifier?: Notifier                    // notifier giả để assert toast
-  router?: Router                        // router memory history
-  session?: SessionSnapshot              // trạng thái đăng nhập sẵn
-  retry?: false                          // tắt retry query trong test
+  transport?: unknown // adapter axios-mock-adapter; `unknown` có chủ đích (D34)
+  notifier?: Notifier // notifier giả để assert toast
+  router?: Router // router memory history
+  session?: SessionSnapshot // trạng thái đăng nhập sẵn
+  retry?: false // tắt retry query trong test
 }
 
 /** Dựng toàn bộ runtime. Trả `plugin` để app.use() và các object để test assert. */
@@ -1328,7 +1415,10 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const i18n = createAppI18n()
   const router = overrides.router ?? createAppRouter()
   const notifier = overrides.notifier ?? createNotifier()
-  const queryClient = createAppQueryClient({ onMutationError: notifier.error, retry: overrides.retry })
+  const queryClient = createAppQueryClient({
+    onMutationError: notifier.error,
+    retry: overrides.retry,
+  })
   // Session tạo trước nhưng chỉ gọi `http` khi refresh thật sự xảy ra (lazy) → không vòng phụ thuộc.
   let http!: HttpClient
   const session = createSession({
@@ -1337,7 +1427,12 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
     callRefresh: (rt) => http.post('/auth/refresh', { refreshToken: rt }, { skipAuth: true }),
     initial: overrides.session,
   })
-  http = createHttpClient({ baseURL: env.VITE_API_BASE_URL, session, getLocale: i18n.getLocale, transport: overrides.transport })
+  http = createHttpClient({
+    baseURL: env.VITE_API_BASE_URL,
+    session,
+    getLocale: i18n.getLocale,
+    transport: overrides.transport,
+  })
 
   session.on('authFailure', () => router.push({ name: 'auth.login' }))
   session.on('loggedOut', () => router.push({ name: 'auth.login' }))
@@ -1368,7 +1463,7 @@ createApp(App).use(createAppRuntime().plugin).mount('#app')
 - `HttpClient` gắn header `X-Store-Id` từ `session.getStoreId()` vào mọi request (bỏ qua nếu null).
 - `switchStore(id)` (Session) tự persist và gọi `queryClient.clear()` → cache Store cũ bị xoá, query đang mở tự fetch lại.
 - Hệ quả: query key **không** chứa `storeId` (`['products', 'list', params]`); file `*.api.ts` không gọi `useStoreScope()`.
-- **Chờ BE xác nhận** nhận header `X-Store-Id`. *Phương án dự phòng (chưa đưa vào interface, D40):* nếu BE bắt buộc `storeId` trong path (`/stores/{storeId}/products`), thêm vào `HttpClientDeps` một `getDefaultPathParams()` do runtime cấp từ `session.getStoreId()` — chỉ làm khi BE chốt.
+- **Chờ BE xác nhận** nhận header `X-Store-Id`. _Phương án dự phòng (chưa đưa vào interface, D40):_ nếu BE bắt buộc `storeId` trong path (`/stores/{storeId}/products`), thêm vào `HttpClientDeps` một `getDefaultPathParams()` do runtime cấp từ `session.getStoreId()` — chỉ làm khi BE chốt.
 - `StoreSwitcher.vue` đặt ở `layouts/components/`, chỉ dùng `useStoreScope()`; composable không trả về component.
 
 ```ts
@@ -1376,10 +1471,9 @@ createApp(App).use(createAppRuntime().plugin).mount('#app')
 export function useStoreScope(): {
   storeId: Readonly<Ref<string | null>>
   stores: Readonly<Ref<StoreSummary[]>>
-  switchStore: (id: string) => Promise<void>   // ủy quyền cho session.switchStore
+  switchStore: (id: string) => Promise<void> // ủy quyền cho session.switchStore
 }
 ```
-
 
 ---
 
@@ -1391,15 +1485,15 @@ Mỗi thư mục cấp 1 trong `src/` có một alias (7 alias: `@app`, `@assets
 - **Trong một feature**: được `./` và `../` (một cấp, giữa `api/`, `components/`…); `../../` bị chặn.
 - Còn lại luôn dùng alias.
 
-| Alias | Trỏ tới | Ví dụ |
-|---|---|---|
-| `@app/*` | `src/app/*` | `@app/router/Router` (chỉ `main.ts`) |
-| `@assets/*` | `src/assets/*` | `@assets/images/Logo.svg` |
-| `@features/*` | `src/features/*` | `@features/auth/UseAuth` |
-| `@layouts/*` | `src/layouts/*` | `@layouts/DashboardLayout.vue` |
-| `@shared/*` | `src/shared/*` | `@shared/components/feedback/ErrorState.vue`, `@shared/lib/api/errors/ApiError`, `@shared/types/Api.generated` |
-| `@locales/*` | `src/locales/*` | `@locales/vi.json` |
-| `@test/*` | `src/test/*` | `@test/Render` (chỉ trong `*.spec.ts`) |
+| Alias         | Trỏ tới          | Ví dụ                                                                                                          |
+| ------------- | ---------------- | -------------------------------------------------------------------------------------------------------------- |
+| `@app/*`      | `src/app/*`      | `@app/router/Router` (chỉ `main.ts`)                                                                           |
+| `@assets/*`   | `src/assets/*`   | `@assets/images/Logo.svg`                                                                                      |
+| `@features/*` | `src/features/*` | `@features/auth/UseAuth`                                                                                       |
+| `@layouts/*`  | `src/layouts/*`  | `@layouts/DashboardLayout.vue`                                                                                 |
+| `@shared/*`   | `src/shared/*`   | `@shared/components/feedback/ErrorState.vue`, `@shared/lib/api/errors/ApiError`, `@shared/types/Api.generated` |
+| `@locales/*`  | `src/locales/*`  | `@locales/vi.json`                                                                                             |
+| `@test/*`     | `src/test/*`     | `@test/Render` (chỉ trong `*.spec.ts`)                                                                         |
 
 - Không có alias gốc `@/` — mỗi import cho thấy ngay nó thuộc tầng nào, ESLint kiểm tra chiều phụ thuộc (§A) dễ hơn.
 - **Nguồn duy nhất là `tsconfig.app.json`**; Vite/Vitest đọc lại qua `vite-tsconfig-paths`, không khai báo lặp `resolve.alias`.
@@ -1416,9 +1510,9 @@ Mỗi thư mục cấp 1 trong `src/` có một alias (7 alias: `@app`, `@assets
       "@layouts/*": ["src/layouts/*"],
       "@locales/*": ["src/locales/*"],
       "@shared/*": ["src/shared/*"],
-      "@test/*": ["src/test/*"]
-    }
-  }
+      "@test/*": ["src/test/*"],
+    },
+  },
 }
 ```
 
@@ -1442,12 +1536,14 @@ Mọi lỗi đi ra khỏi HttpClient **luôn** là `ApiError` (kể cả mất m
 // src/shared/lib/api/errors/ApiError.ts
 export class ApiError extends Error {
   constructor(
-    readonly status: number,                 // 0 = không có response (mạng / timeout)
+    readonly status: number, // 0 = không có response (mạng / timeout)
     readonly code: ErrorCodeValue | (string & {}), // mã BE (PRODUCT_SLUG_TAKEN) hoặc mã client (§O.2)
-    message: string,                          // message thô từ BE — KHÔNG hiển thị trực tiếp
+    message: string, // message thô từ BE — KHÔNG hiển thị trực tiếp
     readonly fields?: Record<string, string[]>, // details.fields → form
-    readonly requestId?: string,              // header x-request-id, để báo lỗi
-  ) { super(message) }
+    readonly requestId?: string, // header x-request-id, để báo lỗi
+  ) {
+    super(message)
+  }
 }
 export const isApiError = (e: unknown): e is ApiError => e instanceof ApiError
 ```
@@ -1456,24 +1552,24 @@ export const isApiError = (e: unknown): e is ApiError => e instanceof ApiError
 
 Hai nguồn mã:
 
-| Nguồn | Ví dụ | Khai báo ở |
-|---|---|---|
-| Client (mặc định theo status / mạng) | `NETWORK_ERROR`, `TIMEOUT`, `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_FAILED`, `CONFLICT`, `BUSINESS_RULE`, `RATE_LIMITED`, `SERVER_ERROR`, `UNKNOWN` | `shared/lib/api/errors/ErrorCode.ts` |
-| BE nghiệp vụ | `PRODUCT_SLUG_TAKEN`, `ORDER_ALREADY_SHIPPED` | Swagger (enum trong `Api.generated.ts`) khi BE cung cấp; trước đó là string |
+| Nguồn                                | Ví dụ                                                                                                                                                             | Khai báo ở                                                                  |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Client (mặc định theo status / mạng) | `NETWORK_ERROR`, `TIMEOUT`, `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_FAILED`, `CONFLICT`, `BUSINESS_RULE`, `RATE_LIMITED`, `SERVER_ERROR`, `UNKNOWN` | `shared/lib/api/errors/ErrorCode.ts`                                        |
+| BE nghiệp vụ                         | `PRODUCT_SLUG_TAKEN`, `ORDER_ALREADY_SHIPPED`                                                                                                                     | Swagger (enum trong `Api.generated.ts`) khi BE cung cấp; trước đó là string |
 
 ```ts
 // src/shared/lib/api/errors/ErrorCode.ts
 export const ErrorCode = {
   NETWORK_ERROR: 'NETWORK_ERROR',
   TIMEOUT: 'TIMEOUT',
-  UNAUTHORIZED: 'UNAUTHORIZED',     // 401
-  FORBIDDEN: 'FORBIDDEN',           // 403
-  NOT_FOUND: 'NOT_FOUND',           // 404
-  CONFLICT: 'CONFLICT',             // 409
+  UNAUTHORIZED: 'UNAUTHORIZED', // 401
+  FORBIDDEN: 'FORBIDDEN', // 403
+  NOT_FOUND: 'NOT_FOUND', // 404
+  CONFLICT: 'CONFLICT', // 409
   VALIDATION_FAILED: 'VALIDATION_FAILED', // 400
-  BUSINESS_RULE: 'BUSINESS_RULE',   // 422
-  RATE_LIMITED: 'RATE_LIMITED',     // 429
-  SERVER_ERROR: 'SERVER_ERROR',     // 5xx
+  BUSINESS_RULE: 'BUSINESS_RULE', // 422
+  RATE_LIMITED: 'RATE_LIMITED', // 429
+  SERVER_ERROR: 'SERVER_ERROR', // 5xx
   UNKNOWN: 'UNKNOWN',
 } as const
 export type ErrorCodeValue = (typeof ErrorCode)[keyof typeof ErrorCode]
@@ -1488,11 +1584,11 @@ export function codeFromStatus(status: number): ErrorCodeValue
 
 Toàn bộ là **chi tiết nội bộ** trong `HttpClient.ts`; interface vẫn chỉ là `createHttpClient(deps)` (§M). Ba bước dưới là ba hàm private trong cùng file:
 
-| Thứ tự | Hàm nội bộ (trong `HttpClient.ts`) | Loại | Việc làm |
-|---|---|---|---|
-| 1 | `attachHeaders(config)` | request interceptor | Gắn `Authorization` (bỏ nếu `skipAuth`), `Accept-Language`, `X-Store-Id` (bỏ nếu null) |
-| 2 | `retryAfterRefresh(error)` | response interceptor | 401 → chờ **một** `session.refresh()` đang chạy, gắn token mới, gửi lại request; refresh trả null → ném lỗi (Session đã phát `authFailure`); bỏ qua request có `skipAuth` |
-| 3 | `toApiError(error)` | response interceptor | Mọi lỗi còn lại → `throw ApiError` (bảng dưới); đăng ký **cuối cùng** để chạy sau bước 2 |
+| Thứ tự | Hàm nội bộ (trong `HttpClient.ts`) | Loại                 | Việc làm                                                                                                                                                                  |
+| ------ | ---------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | `attachHeaders(config)`            | request interceptor  | Gắn `Authorization` (bỏ nếu `skipAuth`), `Accept-Language`, `X-Store-Id` (bỏ nếu null)                                                                                    |
+| 2      | `retryAfterRefresh(error)`         | response interceptor | 401 → chờ **một** `session.refresh()` đang chạy, gắn token mới, gửi lại request; refresh trả null → ném lỗi (Session đã phát `authFailure`); bỏ qua request có `skipAuth` |
+| 3      | `toApiError(error)`                | response interceptor | Mọi lỗi còn lại → `throw ApiError` (bảng dưới); đăng ký **cuối cùng** để chạy sau bước 2                                                                                  |
 
 Mọi ca dưới đây được test trong `HttpClient.spec.ts` qua interface (`createHttpClient({ transport: mock.adapter() })`), không test hàm private — refactor bên trong không làm vỡ test.
 
@@ -1500,13 +1596,13 @@ Mọi ca dưới đây được test trong `HttpClient.spec.ts` qua interface (`
 
 Bảng chuẩn hoá lỗi (`toApiError`, nội bộ):
 
-| Đầu vào | Kết quả |
-|---|---|
-| Có response, body `{ code, message, details }` | `ApiError(status, code, message, details.fields)` |
-| Có response, body không đúng chuẩn | `ApiError(status, codeFromStatus(status), …)` |
-| `ECONNABORTED` / timeout | `ApiError(0, TIMEOUT)` |
-| Không có response | `ApiError(0, NETWORK_ERROR)` |
-| Request bị huỷ (`AbortController`) | Ném lại nguyên lỗi huỷ — **không** coi là lỗi, không toast |
+| Đầu vào                                        | Kết quả                                                    |
+| ---------------------------------------------- | ---------------------------------------------------------- |
+| Có response, body `{ code, message, details }` | `ApiError(status, code, message, details.fields)`          |
+| Có response, body không đúng chuẩn             | `ApiError(status, codeFromStatus(status), …)`              |
+| `ECONNABORTED` / timeout                       | `ApiError(0, TIMEOUT)`                                     |
+| Không có response                              | `ApiError(0, NETWORK_ERROR)`                               |
+| Request bị huỷ (`AbortController`)             | Ném lại nguyên lỗi huỷ — **không** coi là lỗi, không toast |
 
 ### O.4. Xử lý lỗi: global hay internal
 
@@ -1521,7 +1617,10 @@ export function messageKeyOf(e: unknown, has: (key: string) => boolean): string
 /** Lỗi không hiển thị gì: request bị huỷ. */
 export function isSilent(e: unknown): boolean
 /** Mutation lỗi đi đâu. */
-export function routeMutationError(e: unknown, meta?: { errorHandling?: 'global' | 'local' }): 'form' | 'toast' | 'local' | 'silent'
+export function routeMutationError(
+  e: unknown,
+  meta?: { errorHandling?: 'global' | 'local' },
+): 'form' | 'toast' | 'local' | 'silent'
 ```
 
 Các module tiêu thụ chỉ là adapter mỏng:
@@ -1532,26 +1631,25 @@ Các module tiêu thụ chỉ là adapter mỏng:
 - `app/providers/ErrorHandling.ts` — chỉ glue Vue (`errorHandler`, `unhandledrejection`, `router.onError`), dùng `isSilent` + notifier.
 - `toApiError` trong `HttpClient.ts` là bước transport (axios → `ApiError`), không phải policy.
 
-
 Nguyên tắc: **lỗi đọc dữ liệu (query) hiển thị tại chỗ; lỗi hành động (mutation) mặc định toast global**, trừ khi màn hình tự xử lý được tốt hơn.
 
-| Tình huống | Ai xử lý | Hiển thị |
-|---|---|---|
-| 401 | Global — `retryAfterRefresh` trong HttpClient + `Session.refresh()` | Refresh im lặng; thất bại → về `/login` + toast `errors.UNAUTHORIZED` |
-| Query lỗi (list, detail) | **Internal** — view | `ErrorState` + nút Retry (§21); không toast |
-| Query 404 | Internal | `ErrorState` "không tìm thấy" trong trang, hoặc `router.replace({ name: 'not-found' })` với trang detail |
-| Query 403 | Internal | `ErrorState` "không có quyền"; route bị guard chặn từ trước thì vào `ForbiddenView` |
-| Mutation 400 / 422 có `fields` | **Internal** — form | `applyApiErrorToForm()` gắn lỗi vào field; trả `false` → toast global |
-| Mutation 409 / 422 không `fields`, 403, 429, 5xx, mạng | **Global** — `MutationCache.onError` | Toast lỗi theo §O.2 |
-| Mutation cần xử lý riêng (VD dialog xác nhận khi 409) | Internal — khai báo `meta: { errorHandling: 'local' }` | Màn hình tự quyết định |
-| Lỗi JS không bắt (render, watcher, promise) | Global — `app.config.errorHandler`, `unhandledrejection` | Toast `errors.UNKNOWN` + `console.error` (sau này gửi Sentry) |
-| Lỗi tải chunk khi đổi route | Global — `router.onError` | Reload trang một lần |
+| Tình huống                                             | Ai xử lý                                                            | Hiển thị                                                                                                 |
+| ------------------------------------------------------ | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 401                                                    | Global — `retryAfterRefresh` trong HttpClient + `Session.refresh()` | Refresh im lặng; thất bại → về `/login` + toast `errors.UNAUTHORIZED`                                    |
+| Query lỗi (list, detail)                               | **Internal** — view                                                 | `ErrorState` + nút Retry (§21); không toast                                                              |
+| Query 404                                              | Internal                                                            | `ErrorState` "không tìm thấy" trong trang, hoặc `router.replace({ name: 'not-found' })` với trang detail |
+| Query 403                                              | Internal                                                            | `ErrorState` "không có quyền"; route bị guard chặn từ trước thì vào `ForbiddenView`                      |
+| Mutation 400 / 422 có `fields`                         | **Internal** — form                                                 | `applyApiErrorToForm()` gắn lỗi vào field; trả `false` → toast global                                    |
+| Mutation 409 / 422 không `fields`, 403, 429, 5xx, mạng | **Global** — `MutationCache.onError`                                | Toast lỗi theo §O.2                                                                                      |
+| Mutation cần xử lý riêng (VD dialog xác nhận khi 409)  | Internal — khai báo `meta: { errorHandling: 'local' }`              | Màn hình tự quyết định                                                                                   |
+| Lỗi JS không bắt (render, watcher, promise)            | Global — `app.config.errorHandler`, `unhandledrejection`            | Toast `errors.UNKNOWN` + `console.error` (sau này gửi Sentry)                                            |
+| Lỗi tải chunk khi đổi route                            | Global — `router.onError`                                           | Reload trang một lần                                                                                     |
 
 ```ts
 // src/shared/lib/query/QueryClient.ts
 export function createAppQueryClient(opts: {
   onMutationError: (e: unknown) => void
-  retry?: false                       // test truyền false
+  retry?: false // test truyền false
 }) {
   const { onMutationError } = opts
   return new QueryClient({
@@ -1588,12 +1686,12 @@ Component **không** tự `try/catch` để toast lỗi mutation (đã có globa
 
 ## P. Dialog, toast: global hay internal
 
-| Loại | Phạm vi | Đặt ở | Cách mở |
-|---|---|---|---|
-| Toast (thành công / lỗi) | Global | Nuxt UI `UApp` (đã có sẵn) | `useNotify()` → `{ success(key), error(e) }` |
-| Dialog xác nhận (xoá, huỷ đơn, bỏ thay đổi chưa lưu) | **Global**, generic | `shared/components/confirm/ConfirmDialog.vue` | `await useConfirm()({ title, description, confirmLabel?, color? })` → `boolean` |
-| Modal nghiệp vụ (sửa nhanh sản phẩm, chọn ảnh, gán role) | **Internal** của feature | `features/<x>/components/<Entity>Modal.vue` | `useOverlay().create(Comp)` của Nuxt UI hoặc `<UModal v-model:open>` trong view |
-| Slideover chi tiết (xem nhanh đơn hàng) | Internal | `features/<x>/components/<Entity>Slideover.vue` | Như trên |
+| Loại                                                     | Phạm vi                  | Đặt ở                                           | Cách mở                                                                         |
+| -------------------------------------------------------- | ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------------- |
+| Toast (thành công / lỗi)                                 | Global                   | Nuxt UI `UApp` (đã có sẵn)                      | `useNotify()` → `{ success(key), error(e) }`                                    |
+| Dialog xác nhận (xoá, huỷ đơn, bỏ thay đổi chưa lưu)     | **Global**, generic      | `shared/components/confirm/ConfirmDialog.vue`   | `await useConfirm()({ title, description, confirmLabel?, color? })` → `boolean` |
+| Modal nghiệp vụ (sửa nhanh sản phẩm, chọn ảnh, gán role) | **Internal** của feature | `features/<x>/components/<Entity>Modal.vue`     | `useOverlay().create(Comp)` của Nuxt UI hoặc `<UModal v-model:open>` trong view |
+| Slideover chi tiết (xem nhanh đơn hàng)                  | Internal                 | `features/<x>/components/<Entity>Slideover.vue` | Như trên                                                                        |
 
 Quy tắc:
 
@@ -1824,25 +1922,24 @@ features/
 
 Bảng gồm shared module (`shared/`) và interface công khai của feature / `app/` mà nơi khác gọi tới. Chỉ các dòng `shared/` là shared module theo [GLOSSARY.md](../../GLOSSARY.md).
 
-| Module | Interface | Giấu bên trong |
-|---|---|---|
-| `shared/lib/api/client/HttpClient.ts` | `createHttpClient(deps): HttpClient` (get/post/put/patch/delete có kiểu theo Swagger), `HTTP_CLIENT_KEY`, `useHttpClient()` | axios, gắn header (token, locale, `X-Store-Id`), path param mặc định, gom refresh, timeout, chuẩn hoá lỗi |
-| `shared/lib/session/Session.ts` | `createSession()`, `useSession()` | token, storeId, refresh (1 lần đồng thời), xoá cache khi logout/đổi Store, sự kiện `authFailure` |
-| `features/auth/UseAuth.ts` | `useAuth()` | user, login/logout qua Session |
-| `shared/lib/api/errors/ApiError.ts` + `ErrorCode.ts` | `ApiError`, `isApiError`, `ErrorCode`, `codeFromStatus` | — (kiểu dữ liệu) |
-| `features/StoreScope/UseStoreScope.ts` | `useStoreScope()` → `{ storeId, stores, switchStore }` | danh sách Store; đổi Store ủy quyền cho Session |
-| `shared/composables/UsePwa.ts` | `usePwa()` → `{ needRefresh, reload }` | Đăng ký SW, kiểm tra định kỳ |
-| `shared/lib/form/ApplyApiErrorToForm.ts` | `applyApiErrorToForm(error, form): boolean` | Map `fields`, phân biệt 400/422 |
-| `shared/composables/UseNotify.ts` | `useNotify()` → `{ success, error }`; `createNotifier()` dùng ngoài setup | Hiển thị toast; key lấy từ `ErrorPolicy.messageKeyOf` |
-| `shared/lib/api/errors/ErrorPolicy.ts` | `isRetryable`, `messageKeyOf`, `isSilent`, `routeMutationError` | Toàn bộ quy tắc §O.4 |
-| `shared/components/confirm/UseConfirm.ts` | `useConfirm()` → `(opts) => Promise<boolean>` | `useOverlay`, `ConfirmDialog.vue` |
-| `app/providers/ErrorHandling.ts` | `installErrorHandling(app, deps)` | errorHandler, unhandledrejection, chunk reload |
-| `shared/lib/query/QueryClient.ts` | `createAppQueryClient(onMutationError)` | Nối ErrorPolicy vào Vue Query (retry, MutationCache) |
-| `shared/lib/i18n/I18n.ts` | `createAppI18n()`, `useLocale()` | persist, `<html lang>`, locale Nuxt UI — do instance sở hữu |
-| `shared/composables/UseTheme.ts` | `useTheme()` → `{ mode, setMode }` | storage key, đồng bộ script chống nháy |
+| Module                                               | Interface                                                                                                                   | Giấu bên trong                                                                                            |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `shared/lib/api/client/HttpClient.ts`                | `createHttpClient(deps): HttpClient` (get/post/put/patch/delete có kiểu theo Swagger), `HTTP_CLIENT_KEY`, `useHttpClient()` | axios, gắn header (token, locale, `X-Store-Id`), path param mặc định, gom refresh, timeout, chuẩn hoá lỗi |
+| `shared/lib/session/Session.ts`                      | `createSession()`, `useSession()`                                                                                           | token, storeId, refresh (1 lần đồng thời), xoá cache khi logout/đổi Store, sự kiện `authFailure`          |
+| `features/auth/UseAuth.ts`                           | `useAuth()`                                                                                                                 | user, login/logout qua Session                                                                            |
+| `shared/lib/api/errors/ApiError.ts` + `ErrorCode.ts` | `ApiError`, `isApiError`, `ErrorCode`, `codeFromStatus`                                                                     | — (kiểu dữ liệu)                                                                                          |
+| `features/StoreScope/UseStoreScope.ts`               | `useStoreScope()` → `{ storeId, stores, switchStore }`                                                                      | danh sách Store; đổi Store ủy quyền cho Session                                                           |
+| `shared/composables/UsePwa.ts`                       | `usePwa()` → `{ needRefresh, reload }`                                                                                      | Đăng ký SW, kiểm tra định kỳ                                                                              |
+| `shared/lib/form/ApplyApiErrorToForm.ts`             | `applyApiErrorToForm(error, form): boolean`                                                                                 | Map `fields`, phân biệt 400/422                                                                           |
+| `shared/composables/UseNotify.ts`                    | `useNotify()` → `{ success, error }`; `createNotifier()` dùng ngoài setup                                                   | Hiển thị toast; key lấy từ `ErrorPolicy.messageKeyOf`                                                     |
+| `shared/lib/api/errors/ErrorPolicy.ts`               | `isRetryable`, `messageKeyOf`, `isSilent`, `routeMutationError`                                                             | Toàn bộ quy tắc §O.4                                                                                      |
+| `shared/components/confirm/UseConfirm.ts`            | `useConfirm()` → `(opts) => Promise<boolean>`                                                                               | `useOverlay`, `ConfirmDialog.vue`                                                                         |
+| `app/providers/ErrorHandling.ts`                     | `installErrorHandling(app, deps)`                                                                                           | errorHandler, unhandledrejection, chunk reload                                                            |
+| `shared/lib/query/QueryClient.ts`                    | `createAppQueryClient(onMutationError)`                                                                                     | Nối ErrorPolicy vào Vue Query (retry, MutationCache)                                                      |
+| `shared/lib/i18n/I18n.ts`                            | `createAppI18n()`, `useLocale()`                                                                                            | persist, `<html lang>`, locale Nuxt UI — do instance sở hữu                                               |
+| `shared/composables/UseTheme.ts`                     | `useTheme()` → `{ mode, setMode }`                                                                                          | storage key, đồng bộ script chống nháy                                                                    |
 
 ---
-
 
 ## R. PWA, chặn index
 
@@ -1850,11 +1947,11 @@ Bảng gồm shared module (`shared/`) và interface công khai của feature / 
 
 CMS là trang admin, **không được index**. Ba lớp, làm cả ba:
 
-| Lớp | Nội dung | Ghi chú |
-|---|---|---|
-| `index.html` | `<meta name="robots" content="noindex, nofollow">` | Bot đọc HTML |
-| `public/robots.txt` | `User-agent: *` + `Disallow: /` | Bot ngoan chấp hành; không phải cơ chế bảo mật |
-| Header server/CDN | `X-Robots-Tag: noindex, nofollow` trên mọi response | Chắc nhất, áp dụng cả file tĩnh/PDF; cấu hình ở hạ tầng deploy (ghi chú cho DevOps) |
+| Lớp                 | Nội dung                                            | Ghi chú                                                                             |
+| ------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `index.html`        | `<meta name="robots" content="noindex, nofollow">`  | Bot đọc HTML                                                                        |
+| `public/robots.txt` | `User-agent: *` + `Disallow: /`                     | Bot ngoan chấp hành; không phải cơ chế bảo mật                                      |
+| Header server/CDN   | `X-Robots-Tag: noindex, nofollow` trên mọi response | Chắc nhất, áp dụng cả file tĩnh/PDF; cấu hình ở hạ tầng deploy (ghi chú cho DevOps) |
 
 Thêm vào manifest PWA không ảnh hưởng. SEO thật (slug, meta của sản phẩm) thuộc Customer Store, ngoài phạm vi plan này.
 
@@ -1862,17 +1959,17 @@ Thêm vào manifest PWA không ảnh hưởng. SEO thật (slug, meta của sả
 
 Mục tiêu cho CMS (công cụ nội bộ, dữ liệu nhạy cảm): **cài được như app, mở nhanh, báo khi có bản mới**. **Không** làm offline dữ liệu.
 
-| Hạng mục | Quyết định |
-|---|---|
-| Plugin | `vite-plugin-pwa` (Workbox, `generateSW`) |
-| Cài đặt | Manifest `display: standalone`, `start_url: /admin`, `theme_color` = `brand-600`, `background_color` = `--ui-bg` (sáng) |
-| Icon | Sinh từ `src/assets/images/Logo.svg` (cấu hình `images` trong `pwa-assets.config.ts`) bằng `@vite-pwa/assets-generator` (`pwa-assets.config.ts`), gồm maskable + apple-touch |
-| Cache | **Chỉ precache app shell** (JS/CSS/font/icon). Không cache response API (`/api/**` trong `navigateFallbackDenylist`, không có `runtimeCaching` cho API) — tránh lộ dữ liệu sau logout và tránh dữ liệu cũ |
-| Cập nhật | `registerType: 'prompt'`: có bản mới → toast "Đã có phiên bản mới" + nút **Tải lại**; không tự reload (mất dữ liệu form đang nhập) |
-| Kiểm tra bản mới | Mỗi 60 phút và khi tab được focus lại |
-| Offline | Mất mạng → `OfflineBanner` cố định đầu trang; mutation bị chặn ở UI (nút lưu disabled), query giữ dữ liệu đang có |
-| Dev | `devOptions.enabled: false` (tránh SW cache khi dev); kiểm tra bằng `npm run build && npm run preview` |
-| Không làm | Web push, background sync, offline CRUD |
+| Hạng mục         | Quyết định                                                                                                                                                                                                |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Plugin           | `vite-plugin-pwa` (Workbox, `generateSW`)                                                                                                                                                                 |
+| Cài đặt          | Manifest `display: standalone`, `start_url: /admin`, `theme_color` = `brand-600`, `background_color` = `--ui-bg` (sáng)                                                                                   |
+| Icon             | Sinh từ `src/assets/images/Logo.svg` (cấu hình `images` trong `pwa-assets.config.ts`) bằng `@vite-pwa/assets-generator` (`pwa-assets.config.ts`), gồm maskable + apple-touch                              |
+| Cache            | **Chỉ precache app shell** (JS/CSS/font/icon). Không cache response API (`/api/**` trong `navigateFallbackDenylist`, không có `runtimeCaching` cho API) — tránh lộ dữ liệu sau logout và tránh dữ liệu cũ |
+| Cập nhật         | `registerType: 'prompt'`: có bản mới → toast "Đã có phiên bản mới" + nút **Tải lại**; không tự reload (mất dữ liệu form đang nhập)                                                                        |
+| Kiểm tra bản mới | Mỗi 60 phút và khi tab được focus lại                                                                                                                                                                     |
+| Offline          | Mất mạng → `OfflineBanner` cố định đầu trang; mutation bị chặn ở UI (nút lưu disabled), query giữ dữ liệu đang có                                                                                         |
+| Dev              | `devOptions.enabled: false` (tránh SW cache khi dev); kiểm tra bằng `npm run build && npm run preview`                                                                                                    |
+| Không làm        | Web push, background sync, offline CRUD                                                                                                                                                                   |
 
 ```ts
 // vite.config.ts (phần pwa)
@@ -1880,7 +1977,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 VitePWA({
   registerType: 'prompt',
-  injectRegister: false,              // tự đăng ký trong UsePwa.ts
+  injectRegister: false, // tự đăng ký trong UsePwa.ts
   manifest: {
     name: 'Fashion Store CMS',
     short_name: 'CMS',
@@ -1890,7 +1987,7 @@ VitePWA({
     theme_color: '#e11d48',
     background_color: '#ffffff',
   },
-  pwaAssets: { config: true },        // đọc pwa-assets.config.ts
+  pwaAssets: { config: true }, // đọc pwa-assets.config.ts
   workbox: {
     globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
     navigateFallback: '/index.html',
@@ -1924,19 +2021,19 @@ export function usePwa() {
 
 ### S.1. Tính năng tăng tốc thao tác (làm sẵn ở Foundation, phần nghiệp vụ gắn dần theo Phase)
 
-| Tính năng | Cách làm | Phase |
-|---|---|---|
-| **Navigation module** | `layouts/Navigation.ts` — **một nơi duy nhất** suy ra từ route meta: `buildNavigation(routes, can)` (hàm thuần) → `{ sidebar, commands, shortcuts, titleOf }`; `useNavigation()` bọc reactive với `useAuth().can`. Sidebar, palette, bảng phím tắt, `document.title` chỉ render kết quả, không tự đọc `meta`. Test: `Navigation.spec.ts`, không mount (D38) | Foundation |
-| **Command palette** (`Ctrl/⌘ + K`) | `UCommandPalette` của Nuxt UI trong `layouts/components/CommandPalette.vue`, render `useNavigation().commands`. Nhóm "Đi tới" từ route có `meta.command` (đã lọc theo `can()` trong Navigation); nhóm "Hành động nhanh" (Tạo sản phẩm, Tạo danh mục…) cũng khai báo bằng `meta.command` của route create; nhóm "Tìm kiếm" gọi qua `Use<Feature>.ts` (`useProducts().search(q)`) | P5 (Phase đầu có ≥ 2 route có `meta.command`) |
-| **Phím tắt** | `defineShortcuts` của Nuxt UI, đọc `useNavigation().shortcuts` — Navigation gộp phím từ `meta.command.shortcut` (`g d`, `g p`, `g o`, `n`) với phím toàn cục không gắn route (`/`, `?`, `Ctrl/⌘+K`) | P5 |
-| Bảng phím tắt | `layouts/components/ShortcutsHelpModal.vue`, render `useNavigation().shortcuts` | P5 |
-| **Cảnh báo rời trang khi chưa lưu** | `shared/composables/UseUnsavedGuard.ts`: `onBeforeRouteLeave` + `beforeunload` + `useConfirm()` | P5 |
-| **Bộ lọc đã lưu** | Trong `UseListState.ts`: lưu/đặt tên tổ hợp filter vào `localStorage` theo route (`cms.views.<routeName>`) | P5 |
-| **Xem gần đây** | `shared/composables/UseRecentItems.ts` lưu 10 bản ghi vừa mở (id, title, route), hiện trong command palette | P5 |
-| **Thao tác hàng loạt** | `DataTable.vue` hỗ trợ chọn nhiều + thanh bulk action (xoá, đổi trạng thái), luôn qua `useConfirm()` | P5 |
-| **Xuất CSV** | `shared/lib/export/ExportCsv.ts` (không dùng thư viện), xuất theo filter hiện tại | P10 |
-| **Sao chép nhanh** | `shared/components/display/CopyText.vue` (SKU, mã đơn) dùng `useClipboard` của VueUse | P5 |
-| **Tương đối thời gian** | `dayjs/plugin/relativeTime` + tooltip ngày giờ đầy đủ | P5 |
+| Tính năng                           | Cách làm                                                                                                                                                                                                                                                                                                                                                                        | Phase                                         |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| **Navigation module**               | `layouts/Navigation.ts` — **một nơi duy nhất** suy ra từ route meta: `buildNavigation(routes, can)` (hàm thuần) → `{ sidebar, commands, shortcuts, titleOf }`; `useNavigation()` bọc reactive với `useAuth().can`. Sidebar, palette, bảng phím tắt, `document.title` chỉ render kết quả, không tự đọc `meta`. Test: `Navigation.spec.ts`, không mount (D38)                     | Foundation                                    |
+| **Command palette** (`Ctrl/⌘ + K`)  | `UCommandPalette` của Nuxt UI trong `layouts/components/CommandPalette.vue`, render `useNavigation().commands`. Nhóm "Đi tới" từ route có `meta.command` (đã lọc theo `can()` trong Navigation); nhóm "Hành động nhanh" (Tạo sản phẩm, Tạo danh mục…) cũng khai báo bằng `meta.command` của route create; nhóm "Tìm kiếm" gọi qua `Use<Feature>.ts` (`useProducts().search(q)`) | P5 (Phase đầu có ≥ 2 route có `meta.command`) |
+| **Phím tắt**                        | `defineShortcuts` của Nuxt UI, đọc `useNavigation().shortcuts` — Navigation gộp phím từ `meta.command.shortcut` (`g d`, `g p`, `g o`, `n`) với phím toàn cục không gắn route (`/`, `?`, `Ctrl/⌘+K`)                                                                                                                                                                             | P5                                            |
+| Bảng phím tắt                       | `layouts/components/ShortcutsHelpModal.vue`, render `useNavigation().shortcuts`                                                                                                                                                                                                                                                                                                 | P5                                            |
+| **Cảnh báo rời trang khi chưa lưu** | `shared/composables/UseUnsavedGuard.ts`: `onBeforeRouteLeave` + `beforeunload` + `useConfirm()`                                                                                                                                                                                                                                                                                 | P5                                            |
+| **Bộ lọc đã lưu**                   | Trong `UseListState.ts`: lưu/đặt tên tổ hợp filter vào `localStorage` theo route (`cms.views.<routeName>`)                                                                                                                                                                                                                                                                      | P5                                            |
+| **Xem gần đây**                     | `shared/composables/UseRecentItems.ts` lưu 10 bản ghi vừa mở (id, title, route), hiện trong command palette                                                                                                                                                                                                                                                                     | P5                                            |
+| **Thao tác hàng loạt**              | `DataTable.vue` hỗ trợ chọn nhiều + thanh bulk action (xoá, đổi trạng thái), luôn qua `useConfirm()`                                                                                                                                                                                                                                                                            | P5                                            |
+| **Xuất CSV**                        | `shared/lib/export/ExportCsv.ts` (không dùng thư viện), xuất theo filter hiện tại                                                                                                                                                                                                                                                                                               | P10                                           |
+| **Sao chép nhanh**                  | `shared/components/display/CopyText.vue` (SKU, mã đơn) dùng `useClipboard` của VueUse                                                                                                                                                                                                                                                                                           | P5                                            |
+| **Tương đối thời gian**             | `dayjs/plugin/relativeTime` + tooltip ngày giờ đầy đủ                                                                                                                                                                                                                                                                                                                           | P5                                            |
 
 Route meta dùng chung (khai báo kiểu trong `src/app/router/RouteMeta.d.ts`):
 
@@ -1945,7 +2042,7 @@ declare module 'vue-router' {
   interface RouteMeta {
     requiresAuth?: boolean
     permission?: string
-    titleKey?: string                       // i18n key cho <title> + breadcrumb
+    titleKey?: string // i18n key cho <title> + breadcrumb
     command?: { icon: string; group: 'navigate' | 'create'; shortcut?: string[] }
   }
 }
@@ -1955,18 +2052,17 @@ declare module 'vue-router' {
 
 ### S.2. Tool cho dev
 
-| Tool | Vai trò | Khi nào |
-|---|---|---|
-| `vite-plugin-checker` | Hiện lỗi `vue-tsc` + ESLint ngay trên overlay trình duyệt khi `npm run dev` | Step 2 |
-| `vite-plugin-vue-devtools` | Vue devtools trong trang | Step 1 (đã có) |
-| `@tanstack/vue-query-devtools` | Xem cache query, chỉ load khi dev | Step 3a (chuyển từ K.2 lên) |
-| `@faker-js/faker` | Factory dữ liệu test: `src/test/factories/<Entity>.factory.ts` | Step 3a |
-| `.github/dependabot.yml` | PR cập nhật dependency hằng tuần, gom nhóm theo `vue`, `nuxt-ui`, `eslint`, `vitest` | Step 2b |
-| `knip` | Tìm file/export/dependency thừa — chạy `npm run knip` trong CI (không chặn merge) | Step 2b |
-| `rollup-plugin-visualizer` | `npm run analyze` xem kích thước bundle | Step 7 |
+| Tool                           | Vai trò                                                                              | Khi nào                     |
+| ------------------------------ | ------------------------------------------------------------------------------------ | --------------------------- |
+| `vite-plugin-checker`          | Hiện lỗi `vue-tsc` + ESLint ngay trên overlay trình duyệt khi `npm run dev`          | Step 2                      |
+| `vite-plugin-vue-devtools`     | Vue devtools trong trang                                                             | Step 1 (đã có)              |
+| `@tanstack/vue-query-devtools` | Xem cache query, chỉ load khi dev                                                    | Step 3a (chuyển từ K.2 lên) |
+| `@faker-js/faker`              | Factory dữ liệu test: `src/test/factories/<Entity>.factory.ts`                       | Step 3a                     |
+| `.github/dependabot.yml`       | PR cập nhật dependency hằng tuần, gom nhóm theo `vue`, `nuxt-ui`, `eslint`, `vitest` | Step 2b                     |
+| `knip`                         | Tìm file/export/dependency thừa — chạy `npm run knip` trong CI (không chặn merge)    | Step 2b                     |
+| `rollup-plugin-visualizer`     | `npm run analyze` xem kích thước bundle                                              | Step 7                      |
 
 ---
-
 
 ## T. Luồng dữ liệu — tách bạch data khỏi UI
 
@@ -1988,23 +2084,23 @@ declare module 'vue-router' {
             shared/lib/api/client/HttpClient  ──►  BE
 ```
 
-| Tầng | Được làm | Không được làm |
-|---|---|---|
-| `views/` (container) | Gọi composable của `api/` và `composables/`; truyền **model** xuống component qua props; xử lý emits; Loading/Empty/Error (§21) | Gọi `useHttpClient()`; map DTO; chứa logic validate |
-| `components/` (presentational) | Render theo props, emit sự kiện, state UI cục bộ (mở/đóng, hover) | Import `../api/`, `../stores/`, `../composables/`; gọi router; biết DTO |
-| `composables/` (feature) | Ghép schema + mutation + `applyApiErrorToForm`; tính toán dẫn xuất | Render; giữ bản sao dữ liệu server |
-| `api/<Feature>.api.ts` | Hàm HTTP (nội bộ), query key, `useXxxQuery` / `useXxxMutation`, invalidate; **trả về Model** | Toast thành công, điều hướng, UI |
-| `api/<Entity>.mapper.ts` | `toModel(dto)`, `toPayload(input)` — thuần, có test | Gọi HTTP, phụ thuộc Vue |
-| `types/` | **Model** của FE (tên field theo FE, `Date` thay chuỗi ISO, tiền là `number`…) | Re-export DTO |
-| `schemas/` | Zod cho **input** form và list params | Kiểu server trả về |
+| Tầng                           | Được làm                                                                                                                        | Không được làm                                                          |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `views/` (container)           | Gọi composable của `api/` và `composables/`; truyền **model** xuống component qua props; xử lý emits; Loading/Empty/Error (§21) | Gọi `useHttpClient()`; map DTO; chứa logic validate                     |
+| `components/` (presentational) | Render theo props, emit sự kiện, state UI cục bộ (mở/đóng, hover)                                                               | Import `../api/`, `../stores/`, `../composables/`; gọi router; biết DTO |
+| `composables/` (feature)       | Ghép schema + mutation + `applyApiErrorToForm`; tính toán dẫn xuất                                                              | Render; giữ bản sao dữ liệu server                                      |
+| `api/<Feature>.api.ts`         | Hàm HTTP (nội bộ), query key, `useXxxQuery` / `useXxxMutation`, invalidate; **trả về Model**                                    | Toast thành công, điều hướng, UI                                        |
+| `api/<Entity>.mapper.ts`       | `toModel(dto)`, `toPayload(input)` — thuần, có test                                                                             | Gọi HTTP, phụ thuộc Vue                                                 |
+| `types/`                       | **Model** của FE (tên field theo FE, `Date` thay chuỗi ISO, tiền là `number`…)                                                  | Re-export DTO                                                           |
+| `schemas/`                     | Zod cho **input** form và list params                                                                                           | Kiểu server trả về                                                      |
 
 ### T.2. Ba loại dữ liệu, ba chỗ ở
 
-| Loại | Ở đâu | Ví dụ | Quy tắc |
-|---|---|---|---|
-| Server state | Vue Query cache (qua `api/`) | danh sách sản phẩm, đơn hàng | **Không** copy vào Pinia/`ref`; đọc qua query, đổi qua mutation + invalidate |
-| Client state dùng chung | Pinia trong `stores/` của feature | token, Store đang chọn | Chỉ `api/` và `Use<Feature>.ts` đọc/ghi |
-| UI / form state | `ref` trong component hoặc composable | bản nháp form, dialog mở, filter (đồng bộ URL) | Form làm việc trên **bản nháp** (`XxxInput` từ schema), submit mới `toPayload` |
+| Loại                    | Ở đâu                                 | Ví dụ                                          | Quy tắc                                                                        |
+| ----------------------- | ------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------ |
+| Server state            | Vue Query cache (qua `api/`)          | danh sách sản phẩm, đơn hàng                   | **Không** copy vào Pinia/`ref`; đọc qua query, đổi qua mutation + invalidate   |
+| Client state dùng chung | Pinia trong `stores/` của feature     | token, Store đang chọn                         | Chỉ `api/` và `Use<Feature>.ts` đọc/ghi                                        |
+| UI / form state         | `ref` trong component hoặc composable | bản nháp form, dialog mở, filter (đồng bộ URL) | Form làm việc trên **bản nháp** (`XxxInput` từ schema), submit mới `toPayload` |
 
 ### T.3. DTO không đi ra khỏi `api/`
 
@@ -2027,7 +2123,9 @@ export const toProduct = (dto: ProductDto): Product => ({
   updatedAt: new Date(dto.updatedAt),
 })
 
-export const toProductPayload = (input: ProductInput): components['schemas']['UpsertProductDto'] => ({
+export const toProductPayload = (
+  input: ProductInput,
+): components['schemas']['UpsertProductDto'] => ({
   name: input.name.trim(),
   price: String(input.price),
   status: input.status,
@@ -2042,7 +2140,7 @@ export function useProductsQuery(params: MaybeRef<ProductListParams>) {
     queryKey: computed(() => productKeys.list(toValue(params))),
     queryFn: async ({ signal }) => {
       const page = await http.get('/products', { query: toValue(params), signal })
-      return { ...page, items: page.items.map(toProduct) }   // Model, không DTO
+      return { ...page, items: page.items.map(toProduct) } // Model, không DTO
     },
   })
 }
@@ -2053,12 +2151,18 @@ export function useProductsQuery(params: MaybeRef<ProductListParams>) {
 <script setup lang="ts">
 const { params, setPage } = useListState(productListParamsSchema)
 const { data, isPending, isError, refetch } = useProductsQuery(params)
-const { remove } = useProductActions()          // composables/: confirm + mutation
+const { remove } = useProductActions() // composables/: confirm + mutation
 </script>
 
 <template>
   <ErrorState v-if="isError" @retry="refetch" />
-  <ProductTable v-else :items="data?.items ?? []" :loading="isPending" @delete="remove" @page="setPage" />
+  <ProductTable
+    v-else
+    :items="data?.items ?? []"
+    :loading="isPending"
+    @delete="remove"
+    @page="setPage"
+  />
 </template>
 ```
 
@@ -2068,13 +2172,13 @@ const { remove } = useProductActions()          // composables/: confirm + mutat
 
 Áp dụng ở mức **module** (file, composable, adapter), không ép thành class/interface cho mọi thứ. Một seam chỉ tạo khi có ≥ 2 adapter thật (VD: HttpClient thật + adapter test).
 
-| Nguyên lý | Áp dụng trong CMS | Ở đâu |
-|---|---|---|
-| **S** — Single Responsibility | Mỗi tầng một lý do để đổi: hiển thị (component), điều phối (view), logic màn hình (composable), server state (api), hình dạng dữ liệu (mapper), vận chuyển HTTP (HttpClient). Tầng tuỳ chọn (composable, mapper) chỉ tạo khi có trách nhiệm thật | §T.1, §O.3 |
-| **O** — Open/Closed | Mở rộng bằng **khai báo**, không sửa lõi: thêm route → tự vào sidebar/command palette/phím tắt qua `meta`; thêm mã lỗi → thêm key `errors.*`; thêm cột bảng → mảng `columns` truyền vào `DataTable`; thêm trạng thái → thêm dòng trong map màu | §S.1, §O.2, §L.4, §22 |
-| **L** — Liskov Substitution | Mọi adapter tại một seam phải giữ đúng hợp đồng của interface: `HttpClient` test (adapter mock) vẫn ném `ApiError`, vẫn trả `data`; Session dựng với `initial` trong test vẫn phát `authFailure` khi refresh thất bại. Component bọc Nuxt UI (VD `DataTable`) nhận/emit đúng như component gốc, không đổi nghĩa props | §M, §I |
-| **I** — Interface Segregation | Interface nhỏ theo nhu cầu caller: `useStoreScope()` chỉ 3 thành viên; HttpClient chỉ thấy `Session` (token, storeId, refresh) — không thấy `login`, `user`, danh sách Store; props component chỉ nhận Model cần hiển thị, không nhận cả object query | §M, §Q.3 |
-| **D** — Dependency Inversion | Tầng thấp không biết tầng cao: `HttpClient` phụ thuộc hàm (`getAccessToken`, `getStoreId`…), không import feature; feature phụ thuộc interface `HttpClient`, không phụ thuộc axios; mọi thứ được nối ở **một** nơi — `createAppRuntime()` trong `app/Runtime.ts` (composition root, D37) | §A (chiều phụ thuộc), §M.2 |
+| Nguyên lý                     | Áp dụng trong CMS                                                                                                                                                                                                                                                                                                     | Ở đâu                      |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| **S** — Single Responsibility | Mỗi tầng một lý do để đổi: hiển thị (component), điều phối (view), logic màn hình (composable), server state (api), hình dạng dữ liệu (mapper), vận chuyển HTTP (HttpClient). Tầng tuỳ chọn (composable, mapper) chỉ tạo khi có trách nhiệm thật                                                                      | §T.1, §O.3                 |
+| **O** — Open/Closed           | Mở rộng bằng **khai báo**, không sửa lõi: thêm route → tự vào sidebar/command palette/phím tắt qua `meta`; thêm mã lỗi → thêm key `errors.*`; thêm cột bảng → mảng `columns` truyền vào `DataTable`; thêm trạng thái → thêm dòng trong map màu                                                                        | §S.1, §O.2, §L.4, §22      |
+| **L** — Liskov Substitution   | Mọi adapter tại một seam phải giữ đúng hợp đồng của interface: `HttpClient` test (adapter mock) vẫn ném `ApiError`, vẫn trả `data`; Session dựng với `initial` trong test vẫn phát `authFailure` khi refresh thất bại. Component bọc Nuxt UI (VD `DataTable`) nhận/emit đúng như component gốc, không đổi nghĩa props | §M, §I                     |
+| **I** — Interface Segregation | Interface nhỏ theo nhu cầu caller: `useStoreScope()` chỉ 3 thành viên; HttpClient chỉ thấy `Session` (token, storeId, refresh) — không thấy `login`, `user`, danh sách Store; props component chỉ nhận Model cần hiển thị, không nhận cả object query                                                                 | §M, §Q.3                   |
+| **D** — Dependency Inversion  | Tầng thấp không biết tầng cao: `HttpClient` phụ thuộc hàm (`getAccessToken`, `getStoreId`…), không import feature; feature phụ thuộc interface `HttpClient`, không phụ thuộc axios; mọi thứ được nối ở **một** nơi — `createAppRuntime()` trong `app/Runtime.ts` (composition root, D37)                              | §A (chiều phụ thuộc), §M.2 |
 
 **Không làm (tránh over-engineering):**
 

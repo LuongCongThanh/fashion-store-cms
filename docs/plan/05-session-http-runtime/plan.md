@@ -49,20 +49,38 @@ export interface HttpClientDeps {
 
 /** Tuỳ chọn cho từng request. */
 export interface RequestOpts<P, M> {
-  path?: PathParamsOf<P, M>      // thay {id} trong URL
-  query?: QueryOf<P, M>          // ?page=1&size=20
-  signal?: AbortSignal           // huỷ request → không bị coi là lỗi (§O.3)
+  path?: PathParamsOf<P, M> // thay {id} trong URL
+  query?: QueryOf<P, M> // ?page=1&size=20
+  signal?: AbortSignal // huỷ request → không bị coi là lỗi (§O.3)
   /** true = không gắn token, không vào hàng đợi refresh. Chỉ Session dùng cho chính request refresh. */
   skipAuth?: boolean
 }
 
 /** Mọi method trả thẳng `data`; lỗi LUÔN là ApiError (§O.1). URL, params, body, kết quả có kiểu theo `paths`. */
 export interface HttpClient {
-  get<P extends PathsWith<'get'>>(url: P, opts?: RequestOpts<P, 'get'>): Promise<ResponseOf<P, 'get'>>
-  post<P extends PathsWith<'post'>>(url: P, body: BodyOf<P, 'post'>, opts?: RequestOpts<P, 'post'>): Promise<ResponseOf<P, 'post'>>
-  put<P extends PathsWith<'put'>>(url: P, body: BodyOf<P, 'put'>, opts?: RequestOpts<P, 'put'>): Promise<ResponseOf<P, 'put'>>
-  patch<P extends PathsWith<'patch'>>(url: P, body: BodyOf<P, 'patch'>, opts?: RequestOpts<P, 'patch'>): Promise<ResponseOf<P, 'patch'>>
-  delete<P extends PathsWith<'delete'>>(url: P, opts?: RequestOpts<P, 'delete'>): Promise<ResponseOf<P, 'delete'>>
+  get<P extends PathsWith<'get'>>(
+    url: P,
+    opts?: RequestOpts<P, 'get'>,
+  ): Promise<ResponseOf<P, 'get'>>
+  post<P extends PathsWith<'post'>>(
+    url: P,
+    body: BodyOf<P, 'post'>,
+    opts?: RequestOpts<P, 'post'>,
+  ): Promise<ResponseOf<P, 'post'>>
+  put<P extends PathsWith<'put'>>(
+    url: P,
+    body: BodyOf<P, 'put'>,
+    opts?: RequestOpts<P, 'put'>,
+  ): Promise<ResponseOf<P, 'put'>>
+  patch<P extends PathsWith<'patch'>>(
+    url: P,
+    body: BodyOf<P, 'patch'>,
+    opts?: RequestOpts<P, 'patch'>,
+  ): Promise<ResponseOf<P, 'patch'>>
+  delete<P extends PathsWith<'delete'>>(
+    url: P,
+    opts?: RequestOpts<P, 'delete'>,
+  ): Promise<ResponseOf<P, 'delete'>>
 }
 
 export function createHttpClient(deps: HttpClientDeps): HttpClient
@@ -152,11 +170,11 @@ import { env } from '@app/config/Env.config'
 
 /** Những thứ test được phép thay. Prod không truyền gì. */
 export interface RuntimeOverrides {
-  transport?: unknown                    // adapter axios-mock-adapter; `unknown` có chủ đích (D34)
-  notifier?: Notifier                    // notifier giả để assert toast
-  router?: Router                        // router memory history
-  session?: SessionSnapshot              // trạng thái đăng nhập sẵn
-  retry?: false                          // tắt retry query trong test
+  transport?: unknown // adapter axios-mock-adapter; `unknown` có chủ đích (D34)
+  notifier?: Notifier // notifier giả để assert toast
+  router?: Router // router memory history
+  session?: SessionSnapshot // trạng thái đăng nhập sẵn
+  retry?: false // tắt retry query trong test
 }
 
 /** Dựng toàn bộ runtime. Trả `plugin` để app.use() và các object để test assert. */
@@ -165,7 +183,10 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const i18n = createAppI18n()
   const router = overrides.router ?? createAppRouter()
   const notifier = overrides.notifier ?? createNotifier()
-  const queryClient = createAppQueryClient({ onMutationError: notifier.error, retry: overrides.retry })
+  const queryClient = createAppQueryClient({
+    onMutationError: notifier.error,
+    retry: overrides.retry,
+  })
   // Session tạo trước nhưng chỉ gọi `http` khi refresh thật sự xảy ra (lazy) → không vòng phụ thuộc.
   let http!: HttpClient
   const session = createSession({
@@ -174,7 +195,12 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
     callRefresh: (rt) => http.post('/auth/refresh', { refreshToken: rt }, { skipAuth: true }),
     initial: overrides.session,
   })
-  http = createHttpClient({ baseURL: env.VITE_API_BASE_URL, session, getLocale: i18n.getLocale, transport: overrides.transport })
+  http = createHttpClient({
+    baseURL: env.VITE_API_BASE_URL,
+    session,
+    getLocale: i18n.getLocale,
+    transport: overrides.transport,
+  })
 
   session.on('authFailure', () => router.push({ name: 'auth.login' }))
   session.on('loggedOut', () => router.push({ name: 'auth.login' }))
@@ -205,7 +231,7 @@ createApp(App).use(createAppRuntime().plugin).mount('#app')
 - `HttpClient` gắn header `X-Store-Id` từ `session.getStoreId()` vào mọi request (bỏ qua nếu null).
 - `switchStore(id)` (Session) tự persist và gọi `queryClient.clear()` → cache Store cũ bị xoá, query đang mở tự fetch lại.
 - Hệ quả: query key **không** chứa `storeId` (`['products', 'list', params]`); file `*.api.ts` không gọi `useStoreScope()`.
-- **Chờ BE xác nhận** nhận header `X-Store-Id`. *Phương án dự phòng (chưa đưa vào interface, D40):* nếu BE bắt buộc `storeId` trong path (`/stores/{storeId}/products`), thêm vào `HttpClientDeps` một `getDefaultPathParams()` do runtime cấp từ `session.getStoreId()` — chỉ làm khi BE chốt.
+- **Chờ BE xác nhận** nhận header `X-Store-Id`. _Phương án dự phòng (chưa đưa vào interface, D40):_ nếu BE bắt buộc `storeId` trong path (`/stores/{storeId}/products`), thêm vào `HttpClientDeps` một `getDefaultPathParams()` do runtime cấp từ `session.getStoreId()` — chỉ làm khi BE chốt.
 - `StoreSwitcher.vue` đặt ở `layouts/components/`, chỉ dùng `useStoreScope()`; composable không trả về component.
 
 ```ts
@@ -213,6 +239,6 @@ createApp(App).use(createAppRuntime().plugin).mount('#app')
 export function useStoreScope(): {
   storeId: Readonly<Ref<string | null>>
   stores: Readonly<Ref<StoreSummary[]>>
-  switchStore: (id: string) => Promise<void>   // ủy quyền cho session.switchStore
+  switchStore: (id: string) => Promise<void> // ủy quyền cho session.switchStore
 }
 ```

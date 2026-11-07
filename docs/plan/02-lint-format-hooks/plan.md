@@ -1,6 +1,6 @@
 # 02 — Lint, format, hooks
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 01
 Nguồn: Step 2 trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
@@ -43,29 +43,29 @@ Phần dùng chung (không chép lại, đọc trong [scaffold-plan.md](../scaff
 
 #### B.1. File và thư mục
 
-| Loại | Quy tắc | Ví dụ |
-| --- | --- | --- |
-| Thư mục | Một từ: viết thường · nhiều từ: PascalCase · không kebab-case; feature số nhiều (trừ danh từ không đếm được: `auth`, `dashboard`, `inventory`, `media`) | `features/products/`, `features/AuditLogs/`, `test/factories/` |
-| Thư mục chức năng trong feature | cố định, số nhiều: `api/`, `components/`, `composables/`, `schemas/`, `stores/`, `types/`, `views/` (riêng `api/` giữ nguyên) | |
-| Component | PascalCase, ≥ 2 từ | `ProductTable.vue`, `ProductStatusBadge.vue` |
-| View (gắn route) | PascalCase + hậu tố `View` | `ProductListView.vue` |
-| Layout | PascalCase + hậu tố `Layout` | `DashboardLayout.vue` |
-| Composable | `Use` + PascalCase | `UseAuth.ts`, `UseListState.ts` |
-| Store | PascalCase + `.store.ts` | `Auth.store.ts` |
-| API | PascalCase + `.api.ts` | `Products.api.ts` |
-| Schema (Zod) | PascalCase + `.schema.ts` | `Product.schema.ts` |
-| Types | PascalCase + `.types.ts` | `Product.types.ts` |
-| Config | PascalCase + `.config.ts` | `Env.config.ts` |
-| Module thường | PascalCase | `HttpClient.ts`, `ApiError.ts` |
-| Test | tên file nguồn + `.spec.ts` | `Guards.spec.ts`, `ProductTable.spec.ts` |
-| Route của feature | `<Feature>` + `.routes.ts` | `Products.routes.ts` |
-| Mapper | `<Entity>` + `.mapper.ts`, trong `api/`, chỉ khi DTO lệch Model (§T.3) | `Product.mapper.ts` |
-| Test factory | `<Entity>` + `.factory.ts` | `User.factory.ts` |
-| Khai báo kiểu | PascalCase + `.d.ts` | `Router.d.ts`, `VueQuery.d.ts` |
-| File sinh tự động | PascalCase + `.generated.ts` | `Api.generated.ts` |
-| Asset tĩnh (`assets/`, `public/`) | PascalCase (trừ `favicon.svg`, `robots.txt` do trình duyệt/bot yêu cầu) | `Logo.svg`, `EmptyBox.svg` |
-| Ngoài `src/` (`e2e/`, `scripts/`) | PascalCase | `Smoke.spec.ts`, `GenApi.ts` |
-| File do tool quy định | Giữ nguyên tên tool yêu cầu | `package.json`, `vite.config.ts`, `.github/ISSUE_TEMPLATE/bug_report.md`, `pwa-assets.config.ts` |
+| Loại                              | Quy tắc                                                                                                                                                 | Ví dụ                                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Thư mục                           | Một từ: viết thường · nhiều từ: PascalCase · không kebab-case; feature số nhiều (trừ danh từ không đếm được: `auth`, `dashboard`, `inventory`, `media`) | `features/products/`, `features/AuditLogs/`, `test/factories/`                                   |
+| Thư mục chức năng trong feature   | cố định, số nhiều: `api/`, `components/`, `composables/`, `schemas/`, `stores/`, `types/`, `views/` (riêng `api/` giữ nguyên)                           |                                                                                                  |
+| Component                         | PascalCase, ≥ 2 từ                                                                                                                                      | `ProductTable.vue`, `ProductStatusBadge.vue`                                                     |
+| View (gắn route)                  | PascalCase + hậu tố `View`                                                                                                                              | `ProductListView.vue`                                                                            |
+| Layout                            | PascalCase + hậu tố `Layout`                                                                                                                            | `DashboardLayout.vue`                                                                            |
+| Composable                        | `Use` + PascalCase                                                                                                                                      | `UseAuth.ts`, `UseListState.ts`                                                                  |
+| Store                             | PascalCase + `.store.ts`                                                                                                                                | `Auth.store.ts`                                                                                  |
+| API                               | PascalCase + `.api.ts`                                                                                                                                  | `Products.api.ts`                                                                                |
+| Schema (Zod)                      | PascalCase + `.schema.ts`                                                                                                                               | `Product.schema.ts`                                                                              |
+| Types                             | PascalCase + `.types.ts`                                                                                                                                | `Product.types.ts`                                                                               |
+| Config                            | PascalCase + `.config.ts`                                                                                                                               | `Env.config.ts`                                                                                  |
+| Module thường                     | PascalCase                                                                                                                                              | `HttpClient.ts`, `ApiError.ts`                                                                   |
+| Test                              | tên file nguồn + `.spec.ts`                                                                                                                             | `Guards.spec.ts`, `ProductTable.spec.ts`                                                         |
+| Route của feature                 | `<Feature>` + `.routes.ts`                                                                                                                              | `Products.routes.ts`                                                                             |
+| Mapper                            | `<Entity>` + `.mapper.ts`, trong `api/`, chỉ khi DTO lệch Model (§T.3)                                                                                  | `Product.mapper.ts`                                                                              |
+| Test factory                      | `<Entity>` + `.factory.ts`                                                                                                                              | `User.factory.ts`                                                                                |
+| Khai báo kiểu                     | PascalCase + `.d.ts`                                                                                                                                    | `Router.d.ts`, `VueQuery.d.ts`                                                                   |
+| File sinh tự động                 | PascalCase + `.generated.ts`                                                                                                                            | `Api.generated.ts`                                                                               |
+| Asset tĩnh (`assets/`, `public/`) | PascalCase (trừ `favicon.svg`, `robots.txt` do trình duyệt/bot yêu cầu)                                                                                 | `Logo.svg`, `EmptyBox.svg`                                                                       |
+| Ngoài `src/` (`e2e/`, `scripts/`) | PascalCase                                                                                                                                              | `Smoke.spec.ts`, `GenApi.ts`                                                                     |
+| File do tool quy định             | Giữ nguyên tên tool yêu cầu                                                                                                                             | `package.json`, `vite.config.ts`, `.github/ISSUE_TEMPLATE/bug_report.md`, `pwa-assets.config.ts` |
 
 Hậu tố hợp lệ (cấu hình cho `check-file`): `.api`, `.mapper`, `.routes`, `.store`, `.schema`, `.types`, `.config`, `.factory`, `.generated`, `.spec`, `.d`.
 
@@ -75,23 +75,23 @@ Lưu ý: tên file `UseAuth.ts` khác hoa/thường với hàm `useAuth` là có
 
 #### B.2. Trong code
 
-| Loại | Quy tắc | Ví dụ |
-| --- | --- | --- |
-| Biến, hàm | camelCase | `fetchProducts`, `isLoading` |
-| Boolean | tiền tố `is/has/can/should` | `canEdit` |
-| Hằng số module | UPPER_SNAKE_CASE | `DEFAULT_PAGE_SIZE` |
-| Type / interface | PascalCase, không tiền tố `I` | `Product`, `ProductListQuery` |
-| Enum-like | `as const` object + union type, không dùng `enum` | `OrderStatus` |
-| Composable export | `useXxx` | `export function useAuth()` |
-| Pinia store | `useXxxStore`, id = tên feature | `defineStore('auth', …)` |
-| Zod schema | `xxxSchema`, type suy ra `XxxInput` | `productSchema` |
-| Component trong template | PascalCase | `<ProductTable />` |
-| Props / emits | camelCase cả script và template (`vue/attribute-hyphenation: never`, `vue/v-on-event-hyphenation: never`) | `:modelValue`, `@update:modelValue` |
-| Route name | `feature.action` | `products.list`, `products.edit` |
-| Route path | chữ thường, nhiều từ nối `-` (URL, không phải tên file — giữ chuẩn web), số nhiều | `/admin/products/:id/edit`, `/admin/audit-logs` |
-| i18n key | `feature.scope.key`, camelCase từng đoạn | `products.form.titleCreate` |
-| Query key | mảng bắt đầu bằng tên feature | `['products', 'list', params]` |
-| Env | `VITE_` + UPPER_SNAKE | `VITE_API_BASE_URL` |
+| Loại                     | Quy tắc                                                                                                   | Ví dụ                                           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| Biến, hàm                | camelCase                                                                                                 | `fetchProducts`, `isLoading`                    |
+| Boolean                  | tiền tố `is/has/can/should`                                                                               | `canEdit`                                       |
+| Hằng số module           | UPPER_SNAKE_CASE                                                                                          | `DEFAULT_PAGE_SIZE`                             |
+| Type / interface         | PascalCase, không tiền tố `I`                                                                             | `Product`, `ProductListQuery`                   |
+| Enum-like                | `as const` object + union type, không dùng `enum`                                                         | `OrderStatus`                                   |
+| Composable export        | `useXxx`                                                                                                  | `export function useAuth()`                     |
+| Pinia store              | `useXxxStore`, id = tên feature                                                                           | `defineStore('auth', …)`                        |
+| Zod schema               | `xxxSchema`, type suy ra `XxxInput`                                                                       | `productSchema`                                 |
+| Component trong template | PascalCase                                                                                                | `<ProductTable />`                              |
+| Props / emits            | camelCase cả script và template (`vue/attribute-hyphenation: never`, `vue/v-on-event-hyphenation: never`) | `:modelValue`, `@update:modelValue`             |
+| Route name               | `feature.action`                                                                                          | `products.list`, `products.edit`                |
+| Route path               | chữ thường, nhiều từ nối `-` (URL, không phải tên file — giữ chuẩn web), số nhiều                         | `/admin/products/:id/edit`, `/admin/audit-logs` |
+| i18n key                 | `feature.scope.key`, camelCase từng đoạn                                                                  | `products.form.titleCreate`                     |
+| Query key                | mảng bắt đầu bằng tên feature                                                                             | `['products', 'list', params]`                  |
+| Env                      | `VITE_` + UPPER_SNAKE                                                                                     | `VITE_API_BASE_URL`                             |
 
 #### B.3. Ranh giới feature
 
@@ -121,11 +121,11 @@ Ví dụ: `feat(products): add server-side pagination to product table`.
 
 ### D. Git hooks (Husky)
 
-| Hook | Lệnh | Mục đích |
-| --- | --- | --- |
-| `pre-commit` | `npx lint-staged` | ESLint `--fix` + Prettier trên file staged |
-| `commit-msg` | `npx --no -- commitlint --edit "$1"` | Kiểm tra format commit |
-| `pre-push` | `npm run typecheck` | Chặn push code sai type |
+| Hook         | Lệnh                                 | Mục đích                                   |
+| ------------ | ------------------------------------ | ------------------------------------------ |
+| `pre-commit` | `npx lint-staged`                    | ESLint `--fix` + Prettier trên file staged |
+| `commit-msg` | `npx --no -- commitlint --edit "$1"` | Kiểm tra format commit                     |
+| `pre-push`   | `npm run typecheck`                  | Chặn push code sai type                    |
 
 `lint-staged.config.ts`:
 
@@ -142,28 +142,28 @@ export default {
 
 Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (strict), `eslint-plugin-vue` (`flat/recommended`), `eslint-config-prettier` (tắt rule format).
 
-| Rule | Mức | Lý do |
-| --- | --- | --- |
-| `perfectionist/sort-imports`, `sort-named-imports` | error | Thứ tự import ổn định, auto-fix |
-| `unused-imports/no-unused-imports` | error | Xoá import thừa khi fix |
-| `unused-imports/no-unused-vars` | warn (bỏ qua `_` prefix) | |
-| `@typescript-eslint/no-explicit-any` | error | TypeScript strict thực sự |
-| `@typescript-eslint/consistent-type-imports` | error | `import type`, tree-shake tốt |
-| `@typescript-eslint/no-non-null-assertion` | warn | |
-| `no-console` | error, cho phép `warn`/`error` | |
-| `no-restricted-imports` | error | Ranh giới feature (§B.3, whitelist), ngoài `features/` cấm mọi `../`; trong feature cấm `../../` |
-| `vue/multi-word-component-names` | error | Component ≥ 2 từ |
-| `vue/component-name-in-template-casing` | error, `PascalCase` | `<ProductTable />` |
-| `vue/block-order` | error, `script` → `template` → `style` | |
-| `vue/define-macros-order` | error, `defineProps` → `defineEmits` → `defineModel` | |
-| `vue/component-api-style` | error, `script-setup` | Một kiểu viết duy nhất |
-| `vue/define-props-declaration` | error, `type-based` | |
-| `vue/no-v-html` | error | Chỉ cho phép qua component sanitize DOMPurify |
-| `vue/require-explicit-emits` | error | |
-| `check-file/filename-naming-convention` | error | `src/**/*.{ts,vue}` = PascalCase (bỏ qua phần hậu tố `.store`, `.api`…; ngoại lệ §B.1) |
-| `check-file/folder-naming-convention` | error | `src/**/`, `e2e/**/`, `scripts/**/` = `^([a-z]+|[A-Z][a-zA-Z0-9]*)$` (một từ thường hoặc PascalCase) |
-| `check-file/filename-naming-convention` (ngoài src) | error | `e2e/**`, `scripts/**`, `src/assets/**`, `public/**` = PascalCase (trừ `favicon.svg`, `robots.txt`) |
-| `vue/attribute-hyphenation`, `vue/v-on-event-hyphenation` | error, `never` | Không kebab-case trong template |
+| Rule                                                      | Mức                                                  | Lý do                                                                                               |
+| --------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `perfectionist/sort-imports`, `sort-named-imports`        | error                                                | Thứ tự import ổn định, auto-fix                                                                     |
+| `unused-imports/no-unused-imports`                        | error                                                | Xoá import thừa khi fix                                                                             |
+| `unused-imports/no-unused-vars`                           | warn (bỏ qua `_` prefix)                             |                                                                                                     |
+| `@typescript-eslint/no-explicit-any`                      | error                                                | TypeScript strict thực sự                                                                           |
+| `@typescript-eslint/consistent-type-imports`              | error                                                | `import type`, tree-shake tốt                                                                       |
+| `@typescript-eslint/no-non-null-assertion`                | warn                                                 |                                                                                                     |
+| `no-console`                                              | error, cho phép `warn`/`error`                       |                                                                                                     |
+| `no-restricted-imports`                                   | error                                                | Ranh giới feature (§B.3, whitelist), ngoài `features/` cấm mọi `../`; trong feature cấm `../../`    |
+| `vue/multi-word-component-names`                          | error                                                | Component ≥ 2 từ                                                                                    |
+| `vue/component-name-in-template-casing`                   | error, `PascalCase`                                  | `<ProductTable />`                                                                                  |
+| `vue/block-order`                                         | error, `script` → `template` → `style`               |                                                                                                     |
+| `vue/define-macros-order`                                 | error, `defineProps` → `defineEmits` → `defineModel` |                                                                                                     |
+| `vue/component-api-style`                                 | error, `script-setup`                                | Một kiểu viết duy nhất                                                                              |
+| `vue/define-props-declaration`                            | error, `type-based`                                  |                                                                                                     |
+| `vue/no-v-html`                                           | error                                                | Chỉ cho phép qua component sanitize DOMPurify                                                       |
+| `vue/require-explicit-emits`                              | error                                                |                                                                                                     |
+| `check-file/filename-naming-convention`                   | error                                                | `src/**/*.{ts,vue}` = PascalCase (bỏ qua phần hậu tố `.store`, `.api`…; ngoại lệ §B.1)              |
+| `check-file/folder-naming-convention`                     | error                                                | `src/**/`, `e2e/**/`, `scripts/**/` = `^([a-z]+                                                     | [A-Z][a-zA-Z0-9]*)$` (một từ thường hoặc PascalCase) |
+| `check-file/filename-naming-convention` (ngoài src)       | error                                                | `e2e/**`, `scripts/**`, `src/assets/**`, `public/**` = PascalCase (trừ `favicon.svg`, `robots.txt`) |
+| `vue/attribute-hyphenation`, `vue/v-on-event-hyphenation` | error, `never`                                       | Không kebab-case trong template                                                                     |
 
 Mẫu ranh giới feature (whitelist — không cần thêm block khi có feature mới):
 
@@ -183,7 +183,10 @@ const noEscapeFeature = {
   group: ['../../*', '../../**'],
   message: 'Không import tương đối ra ngoài feature; dùng alias (§N).',
 }
-const noApp = { group: ['@app/*'], message: 'Chỉ main.ts và src/test/ được import @app/* (§A, D37).' }
+const noApp = {
+  group: ['@app/*'],
+  message: 'Chỉ main.ts và src/test/ được import @app/* (§A, D37).',
+}
 const noLayouts = { group: ['@layouts/*'], message: 'features/ không import layouts/.' }
 const noUpper = {
   group: ['@app/*', '@layouts/*', '@features/*'],
@@ -217,21 +220,60 @@ const featureBoundaryForRoutes = {
  * nên dòng cụ thể đặt sau dòng chung và tự liệt kê đủ pattern của nó.
  */
 export const BOUNDARIES = [
-  { name: 'mặc định',            files: ['src/**/*.{ts,vue}'],                    forbid: [featureBoundary, noParentImport, noDto] },
-  { name: 'layouts',             files: ['src/layouts/**/*.{ts,vue}'],            forbid: [featureBoundary, noParentImport, noApp, noDto] },
-  { name: 'features',            files: ['src/features/**/*.{ts,vue}'],           forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto] },
-  { name: 'feature/components',  files: ['src/features/*/components/**/*.{ts,vue}'], forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto, presentational] },
-  { name: 'feature/api (DTO ok)', files: ['src/features/*/api/**/*.ts'],          forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts] },
-  { name: 'shared',              files: ['src/shared/**/*.{ts,vue}'],             forbid: [noUpper, noParentImport, noDto] },
-  { name: 'shared/components',   files: ['src/shared/components/**/*.{ts,vue}'],  forbid: [noUpper, noParentImport, noDto, noHttpInSharedUi] },
-  { name: 'shared/lib',          files: ['src/shared/lib/**/*.ts'],               forbid: [noUpper, noParentImport, noDto, libIsBottom] },
-  { name: 'shared/lib/api (DTO ok)', files: ['src/shared/lib/api/**/*.ts'],       forbid: [noUpper, noParentImport, libIsBottom] },
-  { name: 'Routes.ts',           files: ['src/app/router/Routes.ts'],             forbid: [featureBoundaryForRoutes, noParentImport] },
+  {
+    name: 'mặc định',
+    files: ['src/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noParentImport, noDto],
+  },
+  {
+    name: 'layouts',
+    files: ['src/layouts/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noParentImport, noApp, noDto],
+  },
+  {
+    name: 'features',
+    files: ['src/features/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto],
+  },
+  {
+    name: 'feature/components',
+    files: ['src/features/*/components/**/*.{ts,vue}'],
+    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto, presentational],
+  },
+  {
+    name: 'feature/api (DTO ok)',
+    files: ['src/features/*/api/**/*.ts'],
+    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts],
+  },
+  { name: 'shared', files: ['src/shared/**/*.{ts,vue}'], forbid: [noUpper, noParentImport, noDto] },
+  {
+    name: 'shared/components',
+    files: ['src/shared/components/**/*.{ts,vue}'],
+    forbid: [noUpper, noParentImport, noDto, noHttpInSharedUi],
+  },
+  {
+    name: 'shared/lib',
+    files: ['src/shared/lib/**/*.ts'],
+    forbid: [noUpper, noParentImport, noDto, libIsBottom],
+  },
+  {
+    name: 'shared/lib/api (DTO ok)',
+    files: ['src/shared/lib/api/**/*.ts'],
+    forbid: [noUpper, noParentImport, libIsBottom],
+  },
+  {
+    name: 'Routes.ts',
+    files: ['src/app/router/Routes.ts'],
+    forbid: [featureBoundaryForRoutes, noParentImport],
+  },
 ]
 
 /** Chuyển bảng thành các block flat config. Không chứa logic nào khác. */
 const toFlatConfig = (rows) =>
-  rows.map(({ files, forbid }) => ({ files, rules: { 'no-restricted-imports': ['error', { patterns: forbid }] } }))
+  rows.map(({ files, forbid }) => ({
+    files,
+    rules: { 'no-restricted-imports': ['error', { patterns: forbid }] },
+  }))
 
 export default [
   // ...typescript-eslint, vue, prettier, check-file, perfectionist (bảng rule ở trên)
@@ -257,20 +299,20 @@ async function isBlocked(from: string, importPath: string) {
 
 // [file đặt code, đường import, có bị chặn không] — mỗi dòng là một ca ở Step 2
 const CASES: [string, string, boolean][] = [
-  ['src/layouts/AuthLayout.vue',                 '@features/auth/stores/Auth.store', true],
-  ['src/layouts/AuthLayout.vue',                 '@features/auth/UseAuth',           false],
-  ['src/features/auth/views/LoginView.vue',      '../../products/api/X',             true],
-  ['src/features/auth/views/LoginView.vue',      '../stores/Auth.store',             false],
-  ['src/app/router/Routes.ts',                   '@features/auth/views/LoginView.vue', false],
-  ['src/test/Render.ts',                         '@app/Runtime',                     false],
-  ['src/features/auth/api/Auth.api.ts',          '@app/Runtime',                     true],
-  ['src/shared/composables/UseNotify.ts',        '@features/auth/UseAuth',           true],
-  ['src/features/auth/components/X.vue',         'vue-router',                       true],
-  ['src/features/auth/views/LoginView.vue',      '@shared/types/Api.generated',      true],
-  ['src/features/auth/api/Auth.api.ts',          '@shared/types/Api.generated',      false],
-  ['src/shared/lib/query/QueryClient.ts',        '@shared/composables/UseNotify',    true],
-  ['src/shared/lib/api/client/HttpClient.ts',    '@shared/components/confirm/UseConfirm', true],
-  ['src/shared/lib/query/QueryClient.ts',        '@shared/lib/api/errors/ErrorPolicy', false],
+  ['src/layouts/AuthLayout.vue', '@features/auth/stores/Auth.store', true],
+  ['src/layouts/AuthLayout.vue', '@features/auth/UseAuth', false],
+  ['src/features/auth/views/LoginView.vue', '../../products/api/X', true],
+  ['src/features/auth/views/LoginView.vue', '../stores/Auth.store', false],
+  ['src/app/router/Routes.ts', '@features/auth/views/LoginView.vue', false],
+  ['src/test/Render.ts', '@app/Runtime', false],
+  ['src/features/auth/api/Auth.api.ts', '@app/Runtime', true],
+  ['src/shared/composables/UseNotify.ts', '@features/auth/UseAuth', true],
+  ['src/features/auth/components/X.vue', 'vue-router', true],
+  ['src/features/auth/views/LoginView.vue', '@shared/types/Api.generated', true],
+  ['src/features/auth/api/Auth.api.ts', '@shared/types/Api.generated', false],
+  ['src/shared/lib/query/QueryClient.ts', '@shared/composables/UseNotify', true],
+  ['src/shared/lib/api/client/HttpClient.ts', '@shared/components/confirm/UseConfirm', true],
+  ['src/shared/lib/query/QueryClient.ts', '@shared/lib/api/errors/ErrorPolicy', false],
   ['src/shared/components/feedback/ErrorState.vue', '@shared/lib/api/client/HttpClient', true],
   ['src/shared/components/feedback/ErrorState.vue', '@shared/composables/UseNotify', false],
   // ... đủ các ca liệt kê ở Step 2

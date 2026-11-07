@@ -28,12 +28,14 @@ Mọi lỗi đi ra khỏi HttpClient **luôn** là `ApiError` (kể cả mất m
 // src/shared/lib/api/errors/ApiError.ts
 export class ApiError extends Error {
   constructor(
-    readonly status: number,                 // 0 = không có response (mạng / timeout)
+    readonly status: number, // 0 = không có response (mạng / timeout)
     readonly code: ErrorCodeValue | (string & {}), // mã BE (PRODUCT_SLUG_TAKEN) hoặc mã client (§O.2)
-    message: string,                          // message thô từ BE — KHÔNG hiển thị trực tiếp
+    message: string, // message thô từ BE — KHÔNG hiển thị trực tiếp
     readonly fields?: Record<string, string[]>, // details.fields → form
-    readonly requestId?: string,              // header x-request-id, để báo lỗi
-  ) { super(message) }
+    readonly requestId?: string, // header x-request-id, để báo lỗi
+  ) {
+    super(message)
+  }
 }
 export const isApiError = (e: unknown): e is ApiError => e instanceof ApiError
 ```
@@ -42,24 +44,24 @@ export const isApiError = (e: unknown): e is ApiError => e instanceof ApiError
 
 Hai nguồn mã:
 
-| Nguồn | Ví dụ | Khai báo ở |
-| --- | --- | --- |
-| Client (mặc định theo status / mạng) | `NETWORK_ERROR`, `TIMEOUT`, `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_FAILED`, `CONFLICT`, `BUSINESS_RULE`, `RATE_LIMITED`, `SERVER_ERROR`, `UNKNOWN` | `shared/lib/api/errors/ErrorCode.ts` |
-| BE nghiệp vụ | `PRODUCT_SLUG_TAKEN`, `ORDER_ALREADY_SHIPPED` | Swagger (enum trong `Api.generated.ts`) khi BE cung cấp; trước đó là string |
+| Nguồn                                | Ví dụ                                                                                                                                                             | Khai báo ở                                                                  |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Client (mặc định theo status / mạng) | `NETWORK_ERROR`, `TIMEOUT`, `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_FAILED`, `CONFLICT`, `BUSINESS_RULE`, `RATE_LIMITED`, `SERVER_ERROR`, `UNKNOWN` | `shared/lib/api/errors/ErrorCode.ts`                                        |
+| BE nghiệp vụ                         | `PRODUCT_SLUG_TAKEN`, `ORDER_ALREADY_SHIPPED`                                                                                                                     | Swagger (enum trong `Api.generated.ts`) khi BE cung cấp; trước đó là string |
 
 ```ts
 // src/shared/lib/api/errors/ErrorCode.ts
 export const ErrorCode = {
   NETWORK_ERROR: 'NETWORK_ERROR',
   TIMEOUT: 'TIMEOUT',
-  UNAUTHORIZED: 'UNAUTHORIZED',     // 401
-  FORBIDDEN: 'FORBIDDEN',           // 403
-  NOT_FOUND: 'NOT_FOUND',           // 404
-  CONFLICT: 'CONFLICT',             // 409
+  UNAUTHORIZED: 'UNAUTHORIZED', // 401
+  FORBIDDEN: 'FORBIDDEN', // 403
+  NOT_FOUND: 'NOT_FOUND', // 404
+  CONFLICT: 'CONFLICT', // 409
   VALIDATION_FAILED: 'VALIDATION_FAILED', // 400
-  BUSINESS_RULE: 'BUSINESS_RULE',   // 422
-  RATE_LIMITED: 'RATE_LIMITED',     // 429
-  SERVER_ERROR: 'SERVER_ERROR',     // 5xx
+  BUSINESS_RULE: 'BUSINESS_RULE', // 422
+  RATE_LIMITED: 'RATE_LIMITED', // 429
+  SERVER_ERROR: 'SERVER_ERROR', // 5xx
   UNKNOWN: 'UNKNOWN',
 } as const
 export type ErrorCodeValue = (typeof ErrorCode)[keyof typeof ErrorCode]
@@ -74,11 +76,11 @@ export function codeFromStatus(status: number): ErrorCodeValue
 
 Toàn bộ là **chi tiết nội bộ** trong `HttpClient.ts`; interface vẫn chỉ là `createHttpClient(deps)` (§M). Ba bước dưới là ba hàm private trong cùng file:
 
-| Thứ tự | Hàm nội bộ (trong `HttpClient.ts`) | Loại | Việc làm |
-| --- | --- | --- | --- |
-| 1 | `attachHeaders(config)` | request interceptor | Gắn `Authorization` (bỏ nếu `skipAuth`), `Accept-Language`, `X-Store-Id` (bỏ nếu null) |
-| 2 | `retryAfterRefresh(error)` | response interceptor | 401 → chờ **một** `session.refresh()` đang chạy, gắn token mới, gửi lại request; refresh trả null → ném lỗi (Session đã phát `authFailure`); bỏ qua request có `skipAuth` |
-| 3 | `toApiError(error)` | response interceptor | Mọi lỗi còn lại → `throw ApiError` (bảng dưới); đăng ký **cuối cùng** để chạy sau bước 2 |
+| Thứ tự | Hàm nội bộ (trong `HttpClient.ts`) | Loại                 | Việc làm                                                                                                                                                                  |
+| ------ | ---------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | `attachHeaders(config)`            | request interceptor  | Gắn `Authorization` (bỏ nếu `skipAuth`), `Accept-Language`, `X-Store-Id` (bỏ nếu null)                                                                                    |
+| 2      | `retryAfterRefresh(error)`         | response interceptor | 401 → chờ **một** `session.refresh()` đang chạy, gắn token mới, gửi lại request; refresh trả null → ném lỗi (Session đã phát `authFailure`); bỏ qua request có `skipAuth` |
+| 3      | `toApiError(error)`                | response interceptor | Mọi lỗi còn lại → `throw ApiError` (bảng dưới); đăng ký **cuối cùng** để chạy sau bước 2                                                                                  |
 
 Mọi ca dưới đây được test trong `HttpClient.spec.ts` qua interface (`createHttpClient({ transport: mock.adapter() })`), không test hàm private — refactor bên trong không làm vỡ test.
 
@@ -86,13 +88,13 @@ Mọi ca dưới đây được test trong `HttpClient.spec.ts` qua interface (`
 
 Bảng chuẩn hoá lỗi (`toApiError`, nội bộ):
 
-| Đầu vào | Kết quả |
-| --- | --- |
-| Có response, body `{ code, message, details }` | `ApiError(status, code, message, details.fields)` |
-| Có response, body không đúng chuẩn | `ApiError(status, codeFromStatus(status), …)` |
-| `ECONNABORTED` / timeout | `ApiError(0, TIMEOUT)` |
-| Không có response | `ApiError(0, NETWORK_ERROR)` |
-| Request bị huỷ (`AbortController`) | Ném lại nguyên lỗi huỷ — **không** coi là lỗi, không toast |
+| Đầu vào                                        | Kết quả                                                    |
+| ---------------------------------------------- | ---------------------------------------------------------- |
+| Có response, body `{ code, message, details }` | `ApiError(status, code, message, details.fields)`          |
+| Có response, body không đúng chuẩn             | `ApiError(status, codeFromStatus(status), …)`              |
+| `ECONNABORTED` / timeout                       | `ApiError(0, TIMEOUT)`                                     |
+| Không có response                              | `ApiError(0, NETWORK_ERROR)`                               |
+| Request bị huỷ (`AbortController`)             | Ném lại nguyên lỗi huỷ — **không** coi là lỗi, không toast |
 
 #### O.4. Xử lý lỗi: global hay internal
 
@@ -107,7 +109,10 @@ export function messageKeyOf(e: unknown, has: (key: string) => boolean): string
 /** Lỗi không hiển thị gì: request bị huỷ. */
 export function isSilent(e: unknown): boolean
 /** Mutation lỗi đi đâu. */
-export function routeMutationError(e: unknown, meta?: { errorHandling?: 'global' | 'local' }): 'form' | 'toast' | 'local' | 'silent'
+export function routeMutationError(
+  e: unknown,
+  meta?: { errorHandling?: 'global' | 'local' },
+): 'form' | 'toast' | 'local' | 'silent'
 ```
 
 Các module tiêu thụ chỉ là adapter mỏng:
@@ -118,26 +123,25 @@ Các module tiêu thụ chỉ là adapter mỏng:
 - `app/providers/ErrorHandling.ts` — chỉ glue Vue (`errorHandler`, `unhandledrejection`, `router.onError`), dùng `isSilent` + notifier.
 - `toApiError` trong `HttpClient.ts` là bước transport (axios → `ApiError`), không phải policy.
 
-
 Nguyên tắc: **lỗi đọc dữ liệu (query) hiển thị tại chỗ; lỗi hành động (mutation) mặc định toast global**, trừ khi màn hình tự xử lý được tốt hơn.
 
-| Tình huống | Ai xử lý | Hiển thị |
-| --- | --- | --- |
-| 401 | Global — `retryAfterRefresh` trong HttpClient + `Session.refresh()` | Refresh im lặng; thất bại → về `/login` + toast `errors.UNAUTHORIZED` |
-| Query lỗi (list, detail) | **Internal** — view | `ErrorState` + nút Retry (§21); không toast |
-| Query 404 | Internal | `ErrorState` "không tìm thấy" trong trang, hoặc `router.replace({ name: 'not-found' })` với trang detail |
-| Query 403 | Internal | `ErrorState` "không có quyền"; route bị guard chặn từ trước thì vào `ForbiddenView` |
-| Mutation 400 / 422 có `fields` | **Internal** — form | `applyApiErrorToForm()` gắn lỗi vào field; trả `false` → toast global |
-| Mutation 409 / 422 không `fields`, 403, 429, 5xx, mạng | **Global** — `MutationCache.onError` | Toast lỗi theo §O.2 |
-| Mutation cần xử lý riêng (VD dialog xác nhận khi 409) | Internal — khai báo `meta: { errorHandling: 'local' }` | Màn hình tự quyết định |
-| Lỗi JS không bắt (render, watcher, promise) | Global — `app.config.errorHandler`, `unhandledrejection` | Toast `errors.UNKNOWN` + `console.error` (sau này gửi Sentry) |
-| Lỗi tải chunk khi đổi route | Global — `router.onError` | Reload trang một lần |
+| Tình huống                                             | Ai xử lý                                                            | Hiển thị                                                                                                 |
+| ------------------------------------------------------ | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 401                                                    | Global — `retryAfterRefresh` trong HttpClient + `Session.refresh()` | Refresh im lặng; thất bại → về `/login` + toast `errors.UNAUTHORIZED`                                    |
+| Query lỗi (list, detail)                               | **Internal** — view                                                 | `ErrorState` + nút Retry (§21); không toast                                                              |
+| Query 404                                              | Internal                                                            | `ErrorState` "không tìm thấy" trong trang, hoặc `router.replace({ name: 'not-found' })` với trang detail |
+| Query 403                                              | Internal                                                            | `ErrorState` "không có quyền"; route bị guard chặn từ trước thì vào `ForbiddenView`                      |
+| Mutation 400 / 422 có `fields`                         | **Internal** — form                                                 | `applyApiErrorToForm()` gắn lỗi vào field; trả `false` → toast global                                    |
+| Mutation 409 / 422 không `fields`, 403, 429, 5xx, mạng | **Global** — `MutationCache.onError`                                | Toast lỗi theo §O.2                                                                                      |
+| Mutation cần xử lý riêng (VD dialog xác nhận khi 409)  | Internal — khai báo `meta: { errorHandling: 'local' }`              | Màn hình tự quyết định                                                                                   |
+| Lỗi JS không bắt (render, watcher, promise)            | Global — `app.config.errorHandler`, `unhandledrejection`            | Toast `errors.UNKNOWN` + `console.error` (sau này gửi Sentry)                                            |
+| Lỗi tải chunk khi đổi route                            | Global — `router.onError`                                           | Reload trang một lần                                                                                     |
 
 ```ts
 // src/shared/lib/query/QueryClient.ts
 export function createAppQueryClient(opts: {
   onMutationError: (e: unknown) => void
-  retry?: false                       // test truyền false
+  retry?: false // test truyền false
 }) {
   const { onMutationError } = opts
   return new QueryClient({
@@ -172,12 +176,12 @@ Component **không** tự `try/catch` để toast lỗi mutation (đã có globa
 
 ### P. Dialog, toast: global hay internal
 
-| Loại | Phạm vi | Đặt ở | Cách mở |
-| --- | --- | --- | --- |
-| Toast (thành công / lỗi) | Global | Nuxt UI `UApp` (đã có sẵn) | `useNotify()` → `{ success(key), error(e) }` |
-| Dialog xác nhận (xoá, huỷ đơn, bỏ thay đổi chưa lưu) | **Global**, generic | `shared/components/confirm/ConfirmDialog.vue` | `await useConfirm()({ title, description, confirmLabel?, color? })` → `boolean` |
-| Modal nghiệp vụ (sửa nhanh sản phẩm, chọn ảnh, gán role) | **Internal** của feature | `features/<x>/components/<Entity>Modal.vue` | `useOverlay().create(Comp)` của Nuxt UI hoặc `<UModal v-model:open>` trong view |
-| Slideover chi tiết (xem nhanh đơn hàng) | Internal | `features/<x>/components/<Entity>Slideover.vue` | Như trên |
+| Loại                                                     | Phạm vi                  | Đặt ở                                           | Cách mở                                                                         |
+| -------------------------------------------------------- | ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------------- |
+| Toast (thành công / lỗi)                                 | Global                   | Nuxt UI `UApp` (đã có sẵn)                      | `useNotify()` → `{ success(key), error(e) }`                                    |
+| Dialog xác nhận (xoá, huỷ đơn, bỏ thay đổi chưa lưu)     | **Global**, generic      | `shared/components/confirm/ConfirmDialog.vue`   | `await useConfirm()({ title, description, confirmLabel?, color? })` → `boolean` |
+| Modal nghiệp vụ (sửa nhanh sản phẩm, chọn ảnh, gán role) | **Internal** của feature | `features/<x>/components/<Entity>Modal.vue`     | `useOverlay().create(Comp)` của Nuxt UI hoặc `<UModal v-model:open>` trong view |
+| Slideover chi tiết (xem nhanh đơn hàng)                  | Internal                 | `features/<x>/components/<Entity>Slideover.vue` | Như trên                                                                        |
 
 Quy tắc:
 

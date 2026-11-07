@@ -49,35 +49,35 @@ NestJS REST API
 
 # 2. Technology Stack
 
-| Category | Technology | Lý do / đã cân nhắc |
-|---|---|---|
-| Framework | Vue 3 | |
-| Build tool | Vite | |
-| Language | TypeScript (strict) | |
-| Routing | Vue Router | Router chính thức của Vue |
-| Client state | Pinia | Store chính thức, thay Vuex |
-| Server state | TanStack Vue Query | Cache, dedupe, retry, loading/error có sẵn. Không chọn Pinia Colada vì còn mới |
-| HTTP Client | Axios | Team quen, interceptor refresh token rõ, có `onUploadProgress`. Không chọn openapi-fetch; đánh đổi: type response tự gắn từ `components['schemas']` |
-| i18n | vue-i18n | |
-| UI | Nuxt UI v4 (Vue + Vite mode, dựng trên Reka UI) | Dựng trên Tailwind nên không xung đột style, dễ custom; có `UTable`, `UTree`, `UFileUpload`, Dashboard layout. Không chọn Ant Design Vue (CSS-in-JS xung đột Tailwind, cập nhật chậm), shadcn-vue (phải tự dựng Table/Tree), PrimeVue (pass-through dài dòng) |
-| Styling | Tailwind CSS v4 | Đi kèm Nuxt UI, một hệ token chung |
-| Form | vee-validate + `@vee-validate/zod` | Field array (Variants), dirty state, `setErrors` map lỗi API; một pattern cho mọi form |
-| Validation | Zod | |
-| Table | `UTable` (Nuxt UI, TanStack Table bên dưới) | Server-side pagination/sort/filter |
-| Chart | ECharts + vue-echarts | Mạnh nhất cho báo cáo về sau; import theo module, lazy-load Dashboard. Không chọn Chart.js / ApexCharts |
-| Rich text | Tiptap (`@tiptap/vue-3`) + DOMPurify | Headless, style bằng Tailwind. Không chọn CKEditor 5 (license GPL), Quill (ít cập nhật) |
-| Composables | `@vueuse/core` | |
-| Date | `@internationalized/date` + dayjs | DatePicker của Nuxt UI bắt buộc dùng `@internationalized/date`; dayjs để format hiển thị |
-| Icons | Iconify — Lucide (`@iconify-json/lucide`) | Nuxt UI hỗ trợ sẵn |
-| Unit Test | Vitest | |
-| Component Test | Vue Test Utils | |
-| E2E | Playwright | |
-| Lint | ESLint + perfectionist + unused-imports | Tự sắp xếp và xoá import thừa. Không auto-import code nội bộ (chỉ component Nuxt UI) |
-| Formatter | Prettier | |
-| Git hooks | Husky + lint-staged | |
-| Package Manager | npm | |
-| API types | OpenAPI (`@nestjs/swagger`) + `openapi-typescript` | |
-| API mock | `axios-mock-adapter` (chỉ trong test) | Thay transport của HttpClient qua `deps.transport` (test dùng runtime thì truyền `createAppRuntime({ transport })`); component test mock module `*.api.ts` bằng `vi.mock`. Không dùng MSW (scaffold-plan D18, §I) |
+| Category        | Technology                                         | Lý do / đã cân nhắc                                                                                                                                                                                                                                           |
+| --------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework       | Vue 3                                              |                                                                                                                                                                                                                                                               |
+| Build tool      | Vite                                               |                                                                                                                                                                                                                                                               |
+| Language        | TypeScript (strict)                                |                                                                                                                                                                                                                                                               |
+| Routing         | Vue Router                                         | Router chính thức của Vue                                                                                                                                                                                                                                     |
+| Client state    | Pinia                                              | Store chính thức, thay Vuex                                                                                                                                                                                                                                   |
+| Server state    | TanStack Vue Query                                 | Cache, dedupe, retry, loading/error có sẵn. Không chọn Pinia Colada vì còn mới                                                                                                                                                                                |
+| HTTP Client     | Axios                                              | Team quen, interceptor refresh token rõ, có `onUploadProgress`. Không chọn openapi-fetch; đánh đổi: type response tự gắn từ `components['schemas']`                                                                                                           |
+| i18n            | vue-i18n                                           |                                                                                                                                                                                                                                                               |
+| UI              | Nuxt UI v4 (Vue + Vite mode, dựng trên Reka UI)    | Dựng trên Tailwind nên không xung đột style, dễ custom; có `UTable`, `UTree`, `UFileUpload`, Dashboard layout. Không chọn Ant Design Vue (CSS-in-JS xung đột Tailwind, cập nhật chậm), shadcn-vue (phải tự dựng Table/Tree), PrimeVue (pass-through dài dòng) |
+| Styling         | Tailwind CSS v4                                    | Đi kèm Nuxt UI, một hệ token chung                                                                                                                                                                                                                            |
+| Form            | vee-validate + `@vee-validate/zod`                 | Field array (Variants), dirty state, `setErrors` map lỗi API; một pattern cho mọi form                                                                                                                                                                        |
+| Validation      | Zod                                                |                                                                                                                                                                                                                                                               |
+| Table           | `UTable` (Nuxt UI, TanStack Table bên dưới)        | Server-side pagination/sort/filter                                                                                                                                                                                                                            |
+| Chart           | ECharts + vue-echarts                              | Mạnh nhất cho báo cáo về sau; import theo module, lazy-load Dashboard. Không chọn Chart.js / ApexCharts                                                                                                                                                       |
+| Rich text       | Tiptap (`@tiptap/vue-3`) + DOMPurify               | Headless, style bằng Tailwind. Không chọn CKEditor 5 (license GPL), Quill (ít cập nhật)                                                                                                                                                                       |
+| Composables     | `@vueuse/core`                                     |                                                                                                                                                                                                                                                               |
+| Date            | `@internationalized/date` + dayjs                  | DatePicker của Nuxt UI bắt buộc dùng `@internationalized/date`; dayjs để format hiển thị                                                                                                                                                                      |
+| Icons           | Iconify — Lucide (`@iconify-json/lucide`)          | Nuxt UI hỗ trợ sẵn                                                                                                                                                                                                                                            |
+| Unit Test       | Vitest                                             |                                                                                                                                                                                                                                                               |
+| Component Test  | Vue Test Utils                                     |                                                                                                                                                                                                                                                               |
+| E2E             | Playwright                                         |                                                                                                                                                                                                                                                               |
+| Lint            | ESLint + perfectionist + unused-imports            | Tự sắp xếp và xoá import thừa. Không auto-import code nội bộ (chỉ component Nuxt UI)                                                                                                                                                                          |
+| Formatter       | Prettier                                           |                                                                                                                                                                                                                                                               |
+| Git hooks       | Husky + lint-staged                                |                                                                                                                                                                                                                                                               |
+| Package Manager | npm                                                |                                                                                                                                                                                                                                                               |
+| API types       | OpenAPI (`@nestjs/swagger`) + `openapi-typescript` |                                                                                                                                                                                                                                                               |
+| API mock        | `axios-mock-adapter` (chỉ trong test)              | Thay transport của HttpClient qua `deps.transport` (test dùng runtime thì truyền `createAppRuntime({ transport })`); component test mock module `*.api.ts` bằng `vi.mock`. Không dùng MSW (scaffold-plan D18, §I)                                             |
 
 ---
 
@@ -202,11 +202,21 @@ const getProducts = (http: HttpClient, params: ProductListParams) =>
   http.get('/products', { query: params })
 
 // --- interface ---
-export function useProductsQuery(params: MaybeRef<ProductListParams>) { /* ... */ }
-export function useProductQuery(id: MaybeRef<string>) { /* ... */ }
-export function useCreateProduct() { /* ... invalidate productKeys.all */ }
-export function useUpdateProduct() { /* ... */ }
-export function useDeleteProduct() { /* ... */ }
+export function useProductsQuery(params: MaybeRef<ProductListParams>) {
+  /* ... */
+}
+export function useProductQuery(id: MaybeRef<string>) {
+  /* ... */
+}
+export function useCreateProduct() {
+  /* ... invalidate productKeys.all */
+}
+export function useUpdateProduct() {
+  /* ... */
+}
+export function useDeleteProduct() {
+  /* ... */
+}
 ```
 
 Quy tắc:
@@ -221,10 +231,10 @@ Quy tắc:
 
 Shared module dự kiến (ở `shared/`, không chứa tri thức nghiệp vụ). Chỉ tạo khi có nơi dùng thứ hai (scaffold-plan D33): `UseListState` tạo ở P5, `ApplyApiErrorToForm` tạo khi có form thứ hai.
 
-| Module | Interface | Giấu bên trong |
-|---|---|---|
-| `shared/composables/UseListState.ts` | `useListState(schema)` → `{ params, setFilter, setPage, setSort, reset }` | Đồng bộ URL ↔ params (§23), parse/validate query string bằng Zod, chuẩn `page/pageSize/sort=-field` (§22), reset `page` về 1 khi đổi filter/search, debounce search |
-| `shared/lib/form/ApplyApiErrorToForm.ts` | `applyApiErrorToForm(error, form): boolean` | Map `details.fields` → `setErrors`; phân biệt 400 / 422; lỗi không gắn được field → trả `false` để caller toast |
+| Module                                   | Interface                                                                 | Giấu bên trong                                                                                                                                                      |
+| ---------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `shared/composables/UseListState.ts`     | `useListState(schema)` → `{ params, setFilter, setPage, setSort, reset }` | Đồng bộ URL ↔ params (§23), parse/validate query string bằng Zod, chuẩn `page/pageSize/sort=-field` (§22), reset `page` về 1 khi đổi filter/search, debounce search |
+| `shared/lib/form/ApplyApiErrorToForm.ts` | `applyApiErrorToForm(error, form): boolean`                               | Map `details.fields` → `setErrors`; phân biệt 400 / 422; lỗi không gắn được field → trả `false` để caller toast                                                     |
 
 Ví dụ trang list:
 
@@ -584,7 +594,7 @@ Frontend cần hỗ trợ:
 type Localized<T = string> = { vi: T; en: T }
 
 // ví dụ
-name: Localized   // { vi: 'Áo thun', en: 'T-Shirts' }
+name: Localized // { vi: 'Áo thun', en: 'T-Shirts' }
 ```
 
 Backend vẫn chịu trách nhiệm kiểm tra:
@@ -1123,8 +1133,8 @@ Màu ngữ nghĩa và mặc định component chỉ khai báo ở `app/config/Ui
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.addMissingImports.ts": "explicit",
-    "source.fixAll.eslint": "explicit"
-  }
+    "source.fixAll.eslint": "explicit",
+  },
 }
 ```
 
