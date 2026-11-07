@@ -1,0 +1,59 @@
+name: PR title
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  conventional-title:
+    # Bỏ qua PR của bot (Dependabot): tiêu đề do bot sinh, thường quá 72 ký tự
+    if: github.event.pull_request.user.type != 'Bot'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            refactor
+            test
+            docs
+            chore
+            style
+            perf
+            ci
+            build
+            revert
+          # Khớp scope-enum trong commitlint.config.ts
+          scopes: |
+            auth
+            store
+            products
+            orders
+            router
+            api
+            ui
+            i18n
+            pwa
+            test
+            deps
+            config
+            ci
+            docs
+          requireScope: false
+          # Subject viết thường đầu câu; giới hạn 72 ký tự cả tiêu đề kiểm ở bước sau
+          subjectPattern: ^(?![A-Z]).+$
+          subjectPatternError: 'Subject "{subject}" phải bắt đầu bằng chữ thường.'
+      - name: Check title length (header-max-length 72)
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if (( ${#TITLE} > 72 )); then
+            echo "::error::PR title dài ${#TITLE} ký tự, tối đa 72"
+            exit 1
+          fi
