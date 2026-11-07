@@ -28,9 +28,9 @@ async function setup(initial = '/login') {
     history: createMemoryHistory(),
     routes: [
       { path: '/login', name: 'auth.login', component: Blank },
-      { path: '/admin', name: 'home', component: Blank, meta: { requiresAuth: true } },
+      { path: '/', name: 'home', component: Blank, meta: { requiresAuth: true } },
       {
-        path: '/admin/orders',
+        path: '/orders',
         name: 'orders.list',
         component: Blank,
         meta: { requiresAuth: true, permission: 'orders.read' },
@@ -54,17 +54,17 @@ describe('authGuard', () => {
   it('redirects to login when unauthenticated', async () => {
     const router = await setup()
 
-    await router.push('/admin')
+    await router.push('/')
 
     expect(router.currentRoute.value.name).toBe('auth.login')
-    expect(router.currentRoute.value.query.redirect).toBe('/admin')
+    expect(router.currentRoute.value.query.redirect).toBe('/')
   })
 
   it('lets authenticated users in', async () => {
     auth.isAuthenticated.value = true
     const router = await setup()
 
-    await router.push('/admin')
+    await router.push('/')
 
     expect(router.currentRoute.value.name).toBe('home')
   })
@@ -73,7 +73,7 @@ describe('authGuard', () => {
     auth.isAuthenticated.value = true
     const router = await setup()
 
-    await router.push('/admin/orders')
+    await router.push('/orders')
 
     expect(router.currentRoute.value.name).toBe('forbidden')
   })
@@ -83,7 +83,7 @@ describe('authGuard', () => {
     auth.permissions.value = ['orders.read']
     const router = await setup()
 
-    await router.push('/admin/orders')
+    await router.push('/orders')
 
     expect(router.currentRoute.value.name).toBe('orders.list')
   })
@@ -93,7 +93,7 @@ describe('authGuard', () => {
     auth.permissionsAfterLoad = ['orders.read']
     const router = await setup()
 
-    await router.push('/admin/orders')
+    await router.push('/orders')
 
     expect(router.currentRoute.value.name).toBe('orders.list')
   })

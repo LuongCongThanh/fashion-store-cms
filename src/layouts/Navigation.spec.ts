@@ -9,7 +9,7 @@ const View = { render: () => null }
 const ROUTES: RouteRecordRaw[] = [
   { path: '/login', name: 'auth.login', component: View, meta: { titleKey: 'auth.login.title' } },
   {
-    path: '/admin',
+    path: '/',
     component: View,
     meta: { requiresAuth: true },
     children: [
@@ -51,12 +51,12 @@ const allow = (granted: string[]) => (permission: string) => granted.includes(pe
 describe('buildNavigation', () => {
   it('lists navigate routes in the sidebar, hiding those the user cannot access', () => {
     expect(buildNavigation(ROUTES, allow([])).sidebar).toEqual([
-      { name: 'home', path: '/admin', titleKey: 'nav.dashboard', icon: 'i-lucide-home' },
+      { name: 'home', path: '/', titleKey: 'nav.dashboard', icon: 'i-lucide-home' },
     ])
 
     expect(buildNavigation(ROUTES, allow(['orders.read'])).sidebar.map((i) => i.path)).toEqual([
-      '/admin',
-      '/admin/orders',
+      '/',
+      '/orders',
     ])
   })
 
@@ -66,14 +66,14 @@ describe('buildNavigation', () => {
     expect(commands).toEqual([
       {
         name: 'home',
-        path: '/admin',
+        path: '/',
         titleKey: 'nav.dashboard',
         icon: 'i-lucide-home',
         group: 'navigate',
       },
       {
         name: 'products.create',
-        path: '/admin/products/new',
+        path: '/products/new',
         titleKey: 'products.create',
         icon: 'i-lucide-plus',
         group: 'create',
@@ -85,8 +85,8 @@ describe('buildNavigation', () => {
     const { shortcuts } = buildNavigation(ROUTES, allow(['orders.read']))
 
     expect(shortcuts).toEqual([
-      { keys: ['g', 'd'], path: '/admin', titleKey: 'nav.dashboard' },
-      { keys: ['g', 'o'], path: '/admin/orders', titleKey: 'nav.orders' },
+      { keys: ['g', 'd'], path: '/', titleKey: 'nav.dashboard' },
+      { keys: ['g', 'o'], path: '/orders', titleKey: 'nav.orders' },
     ])
   })
 

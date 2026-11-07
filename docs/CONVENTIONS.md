@@ -59,7 +59,7 @@ cms/
 │   │   │   ├── Router.ts                   # createRouter() + gắn guard
 │   │   │   └── Routes.ts                   # gộp <Feature>.routes.ts, nơi duy nhất import views/
 │   │   └── views/                          # trang cấp app không thuộc feature nào
-│   │       ├── DesignSystemView.vue        # /admin/design-system, chỉ dev (§L.10)
+│   │       ├── DesignSystemView.vue        # /design-system, chỉ dev (§L.10)
 │   │       ├── ForbiddenView.vue           # 403
 │   │       └── NotFoundView.vue            # 404
 │   ├── assets/                             # tài nguyên được Vite xử lý (bundle)
@@ -256,23 +256,23 @@ Lưu ý: tên file `UseAuth.ts` khác hoa/thường với hàm `useAuth` là có
 
 ### B.2. Trong code
 
-| Loại                     | Quy tắc                                                                                                   | Ví dụ                                           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| Biến, hàm                | camelCase                                                                                                 | `fetchProducts`, `isLoading`                    |
-| Boolean                  | tiền tố `is/has/can/should`                                                                               | `canEdit`                                       |
-| Hằng số module           | UPPER_SNAKE_CASE                                                                                          | `DEFAULT_PAGE_SIZE`                             |
-| Type / interface         | PascalCase, không tiền tố `I`                                                                             | `Product`, `ProductListQuery`                   |
-| Enum-like                | `as const` object + union type, không dùng `enum`                                                         | `OrderStatus`                                   |
-| Composable export        | `useXxx`                                                                                                  | `export function useAuth()`                     |
-| Pinia store              | `useXxxStore`, id = tên feature                                                                           | `defineStore('auth', …)`                        |
-| Zod schema               | `xxxSchema`, type suy ra `XxxInput`                                                                       | `productSchema`                                 |
-| Component trong template | PascalCase                                                                                                | `<ProductTable />`                              |
-| Props / emits            | camelCase cả script và template (`vue/attribute-hyphenation: never`, `vue/v-on-event-hyphenation: never`) | `:modelValue`, `@update:modelValue`             |
-| Route name               | `feature.action`                                                                                          | `products.list`, `products.edit`                |
-| Route path               | chữ thường, nhiều từ nối `-` (URL, không phải tên file — giữ chuẩn web), số nhiều                         | `/admin/products/:id/edit`, `/admin/audit-logs` |
-| i18n key                 | `feature.scope.key`, camelCase từng đoạn                                                                  | `products.form.titleCreate`                     |
-| Query key                | mảng bắt đầu bằng tên feature                                                                             | `['products', 'list', params]`                  |
-| Env                      | `VITE_` + UPPER_SNAKE                                                                                     | `VITE_API_BASE_URL`                             |
+| Loại                     | Quy tắc                                                                                                   | Ví dụ                               |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Biến, hàm                | camelCase                                                                                                 | `fetchProducts`, `isLoading`        |
+| Boolean                  | tiền tố `is/has/can/should`                                                                               | `canEdit`                           |
+| Hằng số module           | UPPER_SNAKE_CASE                                                                                          | `DEFAULT_PAGE_SIZE`                 |
+| Type / interface         | PascalCase, không tiền tố `I`                                                                             | `Product`, `ProductListQuery`       |
+| Enum-like                | `as const` object + union type, không dùng `enum`                                                         | `OrderStatus`                       |
+| Composable export        | `useXxx`                                                                                                  | `export function useAuth()`         |
+| Pinia store              | `useXxxStore`, id = tên feature                                                                           | `defineStore('auth', …)`            |
+| Zod schema               | `xxxSchema`, type suy ra `XxxInput`                                                                       | `productSchema`                     |
+| Component trong template | PascalCase                                                                                                | `<ProductTable />`                  |
+| Props / emits            | camelCase cả script và template (`vue/attribute-hyphenation: never`, `vue/v-on-event-hyphenation: never`) | `:modelValue`, `@update:modelValue` |
+| Route name               | `feature.action`                                                                                          | `products.list`, `products.edit`    |
+| Route path               | chữ thường, nhiều từ nối `-` (URL, không phải tên file — giữ chuẩn web), số nhiều                         | `/products/:id/edit`, `/audit-logs` |
+| i18n key                 | `feature.scope.key`, camelCase từng đoạn                                                                  | `products.form.titleCreate`         |
+| Query key                | mảng bắt đầu bằng tên feature                                                                             | `['products', 'list', params]`      |
+| Env                      | `VITE_` + UPPER_SNAKE                                                                                     | `VITE_API_BASE_URL`                 |
 
 ### B.3. Ranh giới feature
 
@@ -760,7 +760,7 @@ Map màu ngữ nghĩa (bảng §L.2) khai báo **một lần** trong `src/app/co
 ### L.10. Kiểm soát
 
 - ESLint/review: cấm mã màu hex/rgb trong `.vue` và class palette thô (`bg-rose-*`, `text-slate-*`) — thêm rule `no-restricted-syntax` cho chuỗi class khi cần, trước mắt kiểm tra trong PR checklist.
-- Trang `/admin/design-system` (chỉ chạy ở dev) hiển thị toàn bộ màu ngữ nghĩa, badge trạng thái, nút, form — dùng để duyệt token với designer.
+- Trang `/design-system` (chỉ chạy ở dev) hiển thị toàn bộ màu ngữ nghĩa, badge trạng thái, nút, form — dùng để duyệt token với designer.
 
 ### L.11. Theme
 
@@ -1226,7 +1226,7 @@ Mục tiêu cho CMS (công cụ nội bộ, dữ liệu nhạy cảm): **cài đ
 | Hạng mục         | Quyết định                                                                                                                                                                                                                                                                                                              |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Plugin           | `vite-plugin-pwa` (Workbox, `generateSW`)                                                                                                                                                                                                                                                                               |
-| Cài đặt          | Manifest `display: standalone`, `start_url: /admin`, `theme_color` = `brand-600`, `background_color` = `--ui-bg` (sáng)                                                                                                                                                                                                 |
+| Cài đặt          | Manifest `display: standalone`, `start_url: /`, `theme_color` = `brand-600`, `background_color` = `--ui-bg` (sáng)                                                                                                                                                                                                      |
 | Icon             | Sinh từ `src/assets/images/Logo.svg` (cấu hình `images` trong `pwa-assets.config.ts`) bằng `@vite-pwa/assets-generator` (`pwa-assets.config.ts`), gồm maskable + apple-touch — `pwaAssets.integration.publicDir` trỏ `src/assets/images` để icon xuất ra `dist/`; `public/favicon.svg` là bản sao logo cho thẻ link SVG |
 | Cache            | **Chỉ precache app shell** (JS/CSS/font/icon). Không cache response API (`/api/**` trong `navigateFallbackDenylist`, không có `runtimeCaching` cho API) — tránh lộ dữ liệu sau logout và tránh dữ liệu cũ                                                                                                               |
 | Cập nhật         | `registerType: 'prompt'`: có bản mới → toast "Đã có phiên bản mới" + nút **Tải lại**; không tự reload (mất dữ liệu form đang nhập)                                                                                                                                                                                      |

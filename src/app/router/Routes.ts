@@ -15,14 +15,8 @@ const devRoutes: RouteRecordRaw[] = import.meta.env.DEV
   : []
 
 export const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/admin' },
   {
     path: '/',
-    component: () => import('@layouts/AuthLayout.vue'),
-    children: authRoutes,
-  },
-  {
-    path: '/admin',
     component: () => import('@layouts/DashboardLayout.vue'),
     meta: { requiresAuth: true },
     children: [
@@ -39,6 +33,12 @@ export const routes: RouteRecordRaw[] = [
       { path: '403', name: 'forbidden', component: () => import('@app/views/ForbiddenView.vue') },
       ...devRoutes,
     ],
+  },
+  // Sau DashboardLayout: cả hai cùng path '/', '/' phải khớp vào dashboard.
+  {
+    path: '/',
+    component: () => import('@layouts/AuthLayout.vue'),
+    children: authRoutes,
   },
   {
     path: '/:pathMatch(.*)*',
