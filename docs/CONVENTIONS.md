@@ -30,8 +30,8 @@ cms/
 │   └── extensions.json                     # extension VS Code khuyến nghị
 ├── docs/                                   # tài liệu kiến trúc + quy ước
 │   ├── archive/                            # tài liệu đã xong, giữ để tra lý do
+│   │   ├── scaffold/                       # 14 plan con của scaffold (spec, plan, report) — đã xong
 │   │   └── scaffold-plan.md                # plan dựng khung: quyết định D1–D41, lý do §V
-│   ├── plan/                               # 14 plan con của scaffold (spec, plan, report)
 │   ├── CONVENTIONS.md                      # tài liệu này — quy ước kỹ thuật
 │   └── FE_architecture.md                  # kiến trúc FE (nguồn quyết định)
 ├── e2e/                                    # test end-to-end Playwright
