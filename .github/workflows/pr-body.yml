@@ -43,8 +43,12 @@ jobs:
               status=1
             fi
           done
-          if grep -Eq '^\*\*(Làm gì|Vì sao|Giải pháp|Kết quả|Module):\*\*[[:space:]]*(<!--|$)' <<< "${BODY//$'\r'/}"; then
-            echo "::error::Summary fields still hold template placeholders"
+          if grep -Eq '^(- )?\*\*[^*]+:\*\*[[:space:]]*(<!--|$)' <<< "${BODY//$'\r'/}"; then
+            echo "::error::Còn ô **...:** để trống hoặc giữ placeholder (ghi \"Không\" nếu không có)"
+            status=1
+          fi
+          if grep -Eq '^-[[:space:]]*$' <<< "${BODY//$'\r'/}"; then
+            echo "::error::Changes còn dòng '-' trống"
             status=1
           fi
           ticked=$(grep -Ec '^- \[[xX]\] (✨ Feature|🐛 Bug|♻️ Refactor|🧹 Chore|📚 Docs)[[:space:]]*$' <<< "${BODY//$'\r'/}" || true)
