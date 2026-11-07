@@ -7,6 +7,7 @@ Nguyên tắc thực hiện:
 - Làm tuần tự từng step; xong mỗi step dừng lại báo kết quả, được xác nhận mới sang step tiếp.
 - Không tạo thư mục rỗng — mỗi file có nội dung tối thiểu (§5).
 - Package manager: npm. Node 22 LTS.
+- Ký hiệu tham chiếu: `§` + chữ (§A–§V) và `Step N` là mục trong tài liệu này; `§` + số (VD §5, §21, §30) là mục trong `FE_architecture.md`.
 - Trong lúc scaffold, tài liệu này là nguồn chuẩn cho convention; khi lệch với `FE_architecture.md` thì sửa `FE_architecture.md` theo tài liệu này (Step 0).
 - Plan là tài liệu **tạm**: ở Step 7, các convention bền vững (§B–§U) được chuyển sang `docs/CONVENTIONS.md`, rồi plan chuyển vào `docs/archive/`. Sau đó chỉ còn một nguồn chuẩn cho mỗi chủ đề.
 
@@ -135,7 +136,7 @@ cms/
 │   │       ├── api/                        # hàm gọi API của feature
 │   │       │   └── StoreScope.api.ts       # danh sách Store user được truy cập
 │   │       ├── stores/                     # Pinia store nội bộ feature
-│   │       │   └── StoreScope.store.ts     # storeId hiện tại, persist localStorage
+│   │       │   └── StoreScope.store.ts     # danh sách Store; storeId nằm ở Session (D34)
 │   │       ├── types/                      # kiểu dữ liệu feature (feature khác được import)
 │   │       │   └── StoreScope.types.ts     # kiểu dữ liệu Store
 │   │       ├── UseStoreScope.ts            # useStoreScope() — bọc Session (§M.3)
@@ -198,9 +199,9 @@ cms/
 │   │   │   │   └── VueQuery.d.ts           # kiểu meta cho mutation (§O.4)
 │   │   │   ├── export/                     # (P10)
 │   │   │   │   └── ExportCsv.ts            # xuất dữ liệu ra file CSV
-│   │   │   ├── form/                       # tiện ích xử lý form
-│   │   │   │   ├── ApplyApiErrorToForm.ts  # §6.1
-│   │   │   │   └── ApplyApiErrorToForm.spec.ts # test map lỗi API vào field form
+│   │   │   ├── form/                       # (P5) tiện ích xử lý form — tạo khi có form thứ hai (D33)
+│   │   │   │   ├── ApplyApiErrorToForm.ts  # (P5) §6.1
+│   │   │   │   └── ApplyApiErrorToForm.spec.ts # (P5) test map lỗi API vào field form
 │   │   │   ├── i18n/                       # vue-i18n
 │   │   │   │   ├── I18n.ts                 # createAppI18n() (plugin sở hữu locale), useLocale()
 │   │   │   │   └── I18n.spec.ts            # test đổi/lưu locale
@@ -1348,7 +1349,7 @@ createApp(App).use(createAppRuntime().plugin).mount('#app')
 
 - `HttpClient` gắn header `X-Store-Id` từ `session.getStoreId()` vào mọi request (bỏ qua nếu null).
 - `switchStore(id)` (Session) tự persist và gọi `queryClient.clear()` → cache Store cũ bị xoá, query đang mở tự fetch lại.
-- Hệ quả: query key **không** chứa `storeId` (`['products', 'list', params]`); file `*.api.ts` không gọi `useStoreScope()`. Sửa §6 FE_architecture ở Step 0.
+- Hệ quả: query key **không** chứa `storeId` (`['products', 'list', params]`); file `*.api.ts` không gọi `useStoreScope()`.
 - **Chờ BE xác nhận** nhận header `X-Store-Id`. *Phương án dự phòng (chưa đưa vào interface, D40):* nếu BE bắt buộc `storeId` trong path (`/stores/{storeId}/products`), thêm vào `HttpClientDeps` một `getDefaultPathParams()` do runtime cấp từ `session.getStoreId()` — chỉ làm khi BE chốt.
 - `StoreSwitcher.vue` đặt ở `layouts/components/`, chỉ dùng `useStoreScope()`; composable không trả về component.
 
@@ -1682,7 +1683,7 @@ features/
 │   ├── api/
 │   │   └── StoreScope.api.ts               # Store user được truy cập
 │   ├── stores/
-│   │   └── StoreScope.store.ts             # storeId hiện tại, persist localStorage
+│   │   └── StoreScope.store.ts             # danh sách Store; storeId nằm ở Session (D34)
 │   ├── types/
 │   │   └── StoreScope.types.ts
 │   ├── UseStoreScope.ts                    # useStoreScope() — bọc Session
@@ -1801,7 +1802,9 @@ features/
     └── UseMedia.ts                         # pickImages(): Promise<Media[]>, upload(files) → { progress, cancel }
 ```
 
-### Q.3. Module dùng chung — interface
+### Q.3. Interface công khai của các module
+
+Bảng gồm shared module (`shared/`) và interface công khai của feature / `app/` mà nơi khác gọi tới. Chỉ các dòng `shared/` là shared module theo [GLOSSARY.md](../GLOSSARY.md).
 
 | Module | Interface | Giấu bên trong |
 |---|---|---|
@@ -2133,13 +2136,7 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 
 **Làm gì**
 
-- ~~Cập nhật §4, §5 `FE_architecture.md` theo cây ở §A (tên PascalCase, D3, D4).~~ (đã làm)
-- ~~§26 rút gọn, link sang tài liệu này (§B–§F).~~ (đã làm)
-- ~~Xoá MSW khỏi §2, §7, §25, §29; thay bằng chiến lược §I.~~ (đã làm)
-- ~~Thay lệnh cài đặt §29 bằng danh sách §K.~~ (đã làm)
-- ~~Bỏ `variables.css` khỏi §4; cập nhật mục "Nuxt UI + Tailwind" §29 theo §J.~~ (đã làm)
-- ~~Sửa §29 cho khớp D1 và đổi `import` mẫu sang tên file mới.~~ (đã làm)
-- ~~Sửa §6, §7, §8.1, §9 Store scope: query key bỏ `storeId`, `httpClient` thành `useHttpClient()` (§M), thêm `Session` + `createAppRuntime()` (D37).~~ (đã làm)
+- Đồng bộ `FE_architecture.md` với plan (cây thư mục, tên file, bỏ MSW, danh sách package, Store scope, `Session` + `createAppRuntime()`) — đã làm trong PR tài liệu (#1).
 - Chỉ sửa chỗ lệch; không chép lại convention của plan vào `FE_architecture.md` (tránh hai nguồn chuẩn — convention sẽ sang `CONVENTIONS.md` ở Step 7).
 
 **Kiểm tra:** review và xác nhận trước khi viết code. Step 0 đã hoàn tất trong PR tài liệu (#1).
@@ -2312,6 +2309,7 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 
 - So cây thư mục thực tế với §A, sửa chỗ lệch; `npm run lint` toàn repo pass.
 - Tách tài liệu (§ nguyên tắc): §B–§U → `docs/CONVENTIONS.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/scaffold-plan.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
+- Sửa link: `grep -n 'scaffold-plan' docs/FE_architecture.md README.md` phải về 0 kết quả — mỗi link (D-số, §B–§U) đổi sang mục tương ứng trong `CONVENTIONS.md`; link tới lý do quyết định (§V) đổi sang `docs/archive/scaffold-plan.md`.
 
 **Commit / PR (D27):** mỗi step là một nhánh + PR riêng, squash merge vào `main` (VD `chore(config): init vite project`, `chore(config): add eslint prettier husky`, `feat(api): add http client with refresh seam`…). Step 1 chưa có hook nên tự kiểm tra format commit; từ Step 2 hook tự chặn. Chỉ commit/push khi được đồng ý.
 

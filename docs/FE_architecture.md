@@ -77,7 +77,7 @@ NestJS REST API
 | Git hooks | Husky + lint-staged | |
 | Package Manager | npm | |
 | API types | OpenAPI (`@nestjs/swagger`) + `openapi-typescript` | |
-| API mock | `axios-mock-adapter` (chỉ trong test) | Thay transport của HttpClient qua `createAppRuntime({ transport })`; component test mock module `*.api.ts` bằng `vi.mock`. Không dùng MSW (scaffold-plan D18, §I) |
+| API mock | `axios-mock-adapter` (chỉ trong test) | Thay transport của HttpClient qua `deps.transport` (test dùng runtime thì truyền `createAppRuntime({ transport })`); component test mock module `*.api.ts` bằng `vi.mock`. Không dùng MSW (scaffold-plan D18, §I) |
 
 ---
 
