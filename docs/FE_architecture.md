@@ -110,7 +110,7 @@ CMS phải hỗ trợ:
 
 Feature-based architecture. Không dùng `index.ts` để re-export không cần thiết.
 
-Cây đầy đủ (kèm Phase tạo từng thư mục) là nguồn chuẩn ở `docs/scaffold-plan.md` §A; tên file/thư mục theo §B (PascalCase cho `.vue` và `.ts`, không kebab-case). Tóm tắt:
+Cây đầy đủ (kèm Phase tạo từng thư mục) là nguồn chuẩn ở `docs/plan/scaffold-plan.md` §A; tên file/thư mục theo §B (PascalCase cho `.vue` và `.ts`, không kebab-case). Tóm tắt:
 
 ```text
 src/
@@ -1024,7 +1024,7 @@ Playwright
 
 Bắt buộc: ESLint, Prettier, TypeScript strict, Husky + lint-staged, Conventional Commits. CI mỗi PR: `gen:api` (kiểm contract), lint, typecheck, test, build, e2e (critical flows).
 
-Chi tiết (Git flow trunk-based, hooks, rule ESLint, template PR/issue, tooling): `docs/scaffold-plan.md` §B–§G.
+Chi tiết (Git flow trunk-based, hooks, rule ESLint, template PR/issue, tooling): `docs/plan/scaffold-plan.md` §B–§G.
 
 ---
 
@@ -1077,7 +1077,7 @@ npm create vite@latest . -- --template vue-ts
 npm install
 ```
 
-Danh sách package và lệnh cài là nguồn chuẩn ở `docs/scaffold-plan.md` §K: K.1 (dependencies Foundation), K.2 (cài theo Phase — `echarts`, Tiptap, `dompurify`), K.3 (devDependencies), K.5 (không dùng: `msw`, `lodash`, `moment`, `sass`, `vuex`).
+Danh sách package và lệnh cài là nguồn chuẩn ở `docs/plan/scaffold-plan.md` §K: K.1 (dependencies Foundation), K.2 (cài theo Phase — `echarts`, Tiptap, `dompurify`), K.3 (devDependencies), K.5 (không dùng: `msw`, `lodash`, `moment`, `sass`, `vuex`).
 
 ## Nuxt UI + Tailwind
 

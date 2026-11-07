@@ -1,6 +1,6 @@
 # Plan — Dựng cây thư mục Fashion Store CMS
 
-Mục tiêu: dựng khung dự án (Foundation) theo [FE_architecture.md](./FE_architecture.md), **chưa** làm logic nghiệp vụ.
+Mục tiêu: dựng khung dự án (Foundation) theo [FE_architecture.md](../FE_architecture.md), **chưa** làm logic nghiệp vụ.
 
 Nguyên tắc thực hiện:
 
@@ -61,7 +61,7 @@ D24 và D32 đã bị huỷ trong quá trình review; giữ nguyên số để k
 
 ## Thuật ngữ
 
-Xem [GLOSSARY.md](../GLOSSARY.md).
+Xem [GLOSSARY.md](../../GLOSSARY.md).
 
 ## A. Cây thư mục đầy đủ
 
@@ -1822,7 +1822,7 @@ features/
 
 ### Q.3. Interface công khai của các module
 
-Bảng gồm shared module (`shared/`) và interface công khai của feature / `app/` mà nơi khác gọi tới. Chỉ các dòng `shared/` là shared module theo [GLOSSARY.md](../GLOSSARY.md).
+Bảng gồm shared module (`shared/`) và interface công khai của feature / `app/` mà nơi khác gọi tới. Chỉ các dòng `shared/` là shared module theo [GLOSSARY.md](../../GLOSSARY.md).
 
 | Module | Interface | Giấu bên trong |
 |---|---|---|
