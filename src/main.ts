@@ -1,3 +1,5 @@
+import './assets/styles/main.css'
+
 import { createApp } from 'vue'
 
 import { createAppRuntime } from '@app/Runtime'

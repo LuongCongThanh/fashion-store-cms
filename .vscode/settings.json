@@ -4,5 +4,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "eslint.validate": ["typescript", "vue"]
+  "eslint.validate": ["typescript", "vue"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
