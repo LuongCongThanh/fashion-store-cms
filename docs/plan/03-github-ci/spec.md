@@ -1,6 +1,6 @@
 # Spec 03 — GitHub template và CI
 
-Status: in-progress
+Status: done
 Blocked by: 02
 Nguồn: Step 2b · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

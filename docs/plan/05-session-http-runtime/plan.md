@@ -1,6 +1,6 @@
 # 05 — Session, HttpClient, Runtime
 
-Status: in-progress
+Status: done
 Blocked by: 04
 Nguồn: Step 3a (phần 2) trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

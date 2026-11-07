@@ -1,6 +1,6 @@
 # 01 — Khởi tạo dự án
 
-Status: in-progress
+Status: done
 Blocked by: —
 Nguồn: Step 1 trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

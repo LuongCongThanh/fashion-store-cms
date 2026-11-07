@@ -1,6 +1,6 @@
 # Spec 06 — Lỗi, toast, dialog
 
-Status: in-progress
+Status: done
 Blocked by: 05
 Nguồn: Step 3a+ · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

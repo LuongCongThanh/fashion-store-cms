@@ -1,6 +1,6 @@
 # 09 — Khung features/auth và StoreScope
 
-Status: in-progress
+Status: done
 Blocked by: 06, 07, 08
 Nguồn: Step 4 trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

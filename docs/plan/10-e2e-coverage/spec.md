@@ -1,6 +1,6 @@
 # Spec 10 — E2E và coverage
 
-Status: in-progress
+Status: done
 Blocked by: 09
 Nguồn: Step 5 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

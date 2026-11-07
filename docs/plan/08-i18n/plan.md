@@ -1,6 +1,6 @@
 # 08 — i18n
 
-Status: in-progress
+Status: done
 Blocked by: 05
 Nguồn: Step 3c trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

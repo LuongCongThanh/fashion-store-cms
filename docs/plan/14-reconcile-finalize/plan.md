@@ -1,6 +1,6 @@
 # 14 — Đối chiếu và chốt
 
-Status: in-progress
+Status: done
 Blocked by: 10, 11, 12, 13
 Nguồn: Step 7 trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
