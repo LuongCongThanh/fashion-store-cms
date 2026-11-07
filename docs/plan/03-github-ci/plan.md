@@ -26,15 +26,15 @@ Phần dùng chung (không chép lại, đọc trong [scaffold-plan.md](../scaff
 - Không có `develop`. Release bằng tag `vX.Y.Z` trên `main`.
 - Tên nhánh: `<type>/<TICKET>-<mo-ta-ngan>` (kebab-case, không dấu). Không có ticket thì bỏ phần `<TICKET>-`.
 
-| type | Dùng khi |
-| --- | --- |
-| `feature/` | Tính năng mới |
-| `fix/` | Sửa lỗi |
-| `hotfix/` | Sửa lỗi khẩn trên production |
+| type        | Dùng khi                        |
+| ----------- | ------------------------------- |
+| `feature/`  | Tính năng mới                   |
+| `fix/`      | Sửa lỗi                         |
+| `hotfix/`   | Sửa lỗi khẩn trên production    |
 | `refactor/` | Đổi cấu trúc, không đổi hành vi |
-| `chore/` | Tooling, dependency, config |
-| `docs/` | Tài liệu |
-| `test/` | Chỉ thêm/sửa test |
+| `chore/`    | Tooling, dependency, config     |
+| `docs/`     | Tài liệu                        |
+| `test/`     | Chỉ thêm/sửa test               |
 
 Ví dụ: `feature/CMS-123-product-list`, `fix/CMS-210-refresh-token-loop`.
 
@@ -79,17 +79,21 @@ Ví dụ: `feat(products): add server-side pagination to product table`.
 
 ```md
 ### Mục đích
+
 <!-- Ticket: CMS-xxx -->
 
 ### Thay đổi chính
+
 -
 
 ### Cách test
+
 -
 
 ### Ảnh chụp (nếu có UI)
 
 ### Checklist
+
 - [ ] Tiêu đề PR theo Conventional Commits
 - [ ] Đã thêm/cập nhật test
 - [ ] Đã thêm i18n key (vi + en)

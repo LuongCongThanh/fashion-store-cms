@@ -33,7 +33,16 @@ Phần dùng chung (không chép lại, đọc trong [scaffold-plan.md](../scaff
 ```ts
 // src/shared/lib/i18n/I18n.ts
 import { en as uiEn, vi as uiVi } from '@nuxt/ui/locale'
-import { computed, inject, readonly, ref, watchEffect, type App, type InjectionKey, type Ref } from 'vue'
+import {
+  computed,
+  inject,
+  readonly,
+  ref,
+  watchEffect,
+  type App,
+  type InjectionKey,
+  type Ref,
+} from 'vue'
 import { createI18n } from 'vue-i18n'
 
 import en from '@locales/en.json'
@@ -65,10 +74,15 @@ export function createAppI18n(opts: { storageKey?: string } = {}) {
     },
   })
   const locale = ref<AppLocale>('vi')
-  const state: AppLocaleState = { locale, setLocale: (next) => { locale.value = next } }
+  const state: AppLocaleState = {
+    locale,
+    setLocale: (next) => {
+      locale.value = next
+    },
+  }
 
   return {
-    getLocale: () => locale.value,          // cho HttpClient (Accept-Language)
+    getLocale: () => locale.value, // cho HttpClient (Accept-Language)
     install(app: App) {
       locale.value = (localStorage.getItem(key) as AppLocale | null) ?? 'vi'
       watchEffect(() => {

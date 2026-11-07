@@ -38,7 +38,9 @@ export const toProduct = (dto: ProductDto): Product => ({
   updatedAt: new Date(dto.updatedAt),
 })
 
-export const toProductPayload = (input: ProductInput): components['schemas']['UpsertProductDto'] => ({
+export const toProductPayload = (
+  input: ProductInput,
+): components['schemas']['UpsertProductDto'] => ({
   name: input.name.trim(),
   price: String(input.price),
   status: input.status,
@@ -53,7 +55,7 @@ export function useProductsQuery(params: MaybeRef<ProductListParams>) {
     queryKey: computed(() => productKeys.list(toValue(params))),
     queryFn: async ({ signal }) => {
       const page = await http.get('/products', { query: toValue(params), signal })
-      return { ...page, items: page.items.map(toProduct) }   // Model, không DTO
+      return { ...page, items: page.items.map(toProduct) } // Model, không DTO
     },
   })
 }
@@ -64,11 +66,17 @@ export function useProductsQuery(params: MaybeRef<ProductListParams>) {
 <script setup lang="ts">
 const { params, setPage } = useListState(productListParamsSchema)
 const { data, isPending, isError, refetch } = useProductsQuery(params)
-const { remove } = useProductActions()          // composables/: confirm + mutation
+const { remove } = useProductActions() // composables/: confirm + mutation
 </script>
 
 <template>
   <ErrorState v-if="isError" @retry="refetch" />
-  <ProductTable v-else :items="data?.items ?? []" :loading="isPending" @delete="remove" @page="setPage" />
+  <ProductTable
+    v-else
+    :items="data?.items ?? []"
+    :loading="isPending"
+    @delete="remove"
+    @page="setPage"
+  />
 </template>
 ```
