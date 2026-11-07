@@ -145,7 +145,22 @@ export default tseslint.config(
     rules: {
       'perfectionist/sort-imports': [
         'error',
-        { internalPattern: ['^@(app|assets|features|layouts|locales|shared|test)/'] },
+        {
+          internalPattern: ['^@(app|assets|features|layouts|locales|shared|test)/'],
+          // built-in → ngoài → alias nội bộ → tương đối; `import type` cuối mỗi nhóm (§N).
+          groups: [
+            'side-effect',
+            'value-builtin',
+            'type-builtin',
+            'value-external',
+            'type-external',
+            'value-internal',
+            'type-internal',
+            ['value-parent', 'value-sibling', 'value-index'],
+            ['type-parent', 'type-sibling', 'type-index'],
+            'unknown',
+          ],
+        },
       ],
       'perfectionist/sort-named-imports': 'error',
       'unused-imports/no-unused-imports': 'error',

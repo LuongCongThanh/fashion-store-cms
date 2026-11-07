@@ -1,6 +1,6 @@
 # 04 — Env và nền tảng test
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 02
 Nguồn: Step 3a (phần 1) trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
