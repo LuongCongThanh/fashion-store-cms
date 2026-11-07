@@ -5,6 +5,7 @@ import OfflineBanner from '@shared/components/feedback/OfflineBanner.vue'
 import { useNotify } from '@shared/composables/UseNotify'
 import { usePwa } from '@shared/composables/UsePwa'
 
+import AppSidebar from './components/AppSidebar.vue'
 import StoreSwitcher from './components/StoreSwitcher.vue'
 import UserMenu from './components/UserMenu.vue'
 
@@ -19,14 +20,17 @@ watch(needRefresh, (hasUpdate) => {
 </script>
 
 <template>
-  <div class="bg-default text-default min-h-screen">
-    <OfflineBanner />
-    <header class="border-default flex h-14 items-center justify-between border-b px-6">
-      <StoreSwitcher />
-      <UserMenu />
-    </header>
-    <main class="mx-auto max-w-screen-2xl p-4 lg:p-6">
-      <RouterView />
-    </main>
+  <div class="flex min-h-screen bg-default text-default">
+    <AppSidebar />
+    <div class="flex min-w-0 flex-1 flex-col">
+      <OfflineBanner />
+      <header class="flex h-14 items-center justify-between border-b border-default px-6">
+        <StoreSwitcher />
+        <UserMenu />
+      </header>
+      <main class="mx-auto w-full max-w-screen-2xl p-4 lg:p-6">
+        <RouterView />
+      </main>
+    </div>
   </div>
 </template>

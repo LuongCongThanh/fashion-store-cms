@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["e2e/**/*.spec.ts", "src/**/*.spec.ts"],
+  "project": ["src/**/*.{ts,vue}", "e2e/**/*.ts"],
+  "ignoreExportsUsedInFile": true,
+  "ignoreDependencies": [
+    "@fontsource-variable/inter",
+    "@fontsource-variable/plus-jakarta-sans",
+    "@iconify-json/lucide",
+    "@pinia/testing",
+    "openapi-typescript"
+  ]
+}

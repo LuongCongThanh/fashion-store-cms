@@ -15,7 +15,12 @@
       "en": "English"
     },
     "logout": "Đăng xuất",
-    "store": "Cửa hàng"
+    "store": "Cửa hàng",
+    "appName": "Fashion Store CMS"
+  },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "collapse": "Thu gọn menu"
   },
   "auth": {
     "login": {

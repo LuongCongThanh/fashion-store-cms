@@ -2,13 +2,14 @@ import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
+import { buildUser } from '@test/factories/User.factory'
 import { renderWithPlugins } from '@test/Render'
 
 import type { SessionSnapshot } from '@shared/lib/session/Session'
 
 import { useAuth } from './UseAuth'
 
-const USER = { id: 'u1', name: 'Lan', email: 'lan@shop.vn', permissions: ['orders.read'] }
+const USER = buildUser({ name: 'Lan', permissions: ['orders.read'] })
 
 /** Render một component dùng useAuth() và trả ra instance để gọi hành động. */
 function renderAuth(session: SessionSnapshot = {}) {

@@ -27,7 +27,15 @@ export const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     children: [
       // Dashboard thật làm ở P4.
-      { path: '', name: 'home', component: { render: () => null } },
+      {
+        path: '',
+        name: 'home',
+        component: { render: () => null },
+        meta: {
+          titleKey: 'nav.dashboard',
+          command: { icon: 'i-lucide-layout-dashboard', group: 'navigate', shortcut: ['g', 'd'] },
+        },
+      },
       { path: '403', name: 'forbidden', component: () => import('@app/views/ForbiddenView.vue') },
       ...devRoutes,
     ],

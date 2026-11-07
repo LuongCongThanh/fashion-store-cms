@@ -6,5 +6,5 @@ const { t } = useT()
 </script>
 
 <template>
-  <h1 class="font-display text-highlighted text-2xl font-semibold">{{ t('auth.login.title') }}</h1>
+  <h1 class="font-display text-2xl font-semibold text-highlighted">{{ t('auth.login.title') }}</h1>
 </template>

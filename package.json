@@ -20,11 +20,14 @@
     "format:check": "prettier --check .",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "pwa:assets": "pwa-assets-generator"
+    "pwa:assets": "pwa-assets-generator",
+    "knip": "knip",
+    "analyze": "vite build --mode analyze"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/types": "^21.2.3",
     "@faker-js/faker": "^10.6.0",
     "@pinia/testing": "^2.0.2",
     "@playwright/test": "^1.65.0",

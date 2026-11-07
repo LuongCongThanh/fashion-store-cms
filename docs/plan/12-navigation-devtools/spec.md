@@ -1,6 +1,6 @@
 # Spec 12 — Navigation và tool dev
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 09
 Nguồn: Step 5b (phần 2) · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
