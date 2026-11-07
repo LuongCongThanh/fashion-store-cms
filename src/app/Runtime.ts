@@ -1,22 +1,30 @@
 // Composition root: nơi DUY NHẤT tạo và nối mọi object dùng chung của app (D37).
 // main.ts gọi không tham số; src/test/Render.ts gọi với overrides (transport mock…).
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
+import { useToast } from '@nuxt/ui/composables'
+import ui from '@nuxt/ui/vue-plugin'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia } from 'pinia'
 
 import type { App } from 'vue'
 import type { Router } from 'vue-router'
 
 import { env } from '@app/config/Env.config'
+import { installErrorHandling } from '@app/providers/ErrorHandling'
 import { createAppRouter } from '@app/router/Router'
+import { createNotifier, NOTIFIER_KEY } from '@shared/composables/UseNotify'
 import { createHttpClient, HTTP_CLIENT_KEY } from '@shared/lib/api/client/HttpClient'
+import { createAppQueryClient } from '@shared/lib/query/QueryClient'
 import { createSession, SESSION_KEY } from '@shared/lib/session/Session'
 
+import type { Notifier } from '@shared/composables/UseNotify'
 import type { SessionSnapshot } from '@shared/lib/session/Session'
 
 /** Những thứ test được phép thay. Prod không truyền gì. */
 export interface RuntimeOverrides {
   /** Adapter axios-mock-adapter; `unknown` có chủ đích (D34). */
   transport?: unknown
+  /** Notifier giả để assert toast. */
+  notifier?: Notifier
   /** Router memory history. */
   router?: Router
   /** Trạng thái đăng nhập sẵn. */
@@ -29,8 +37,13 @@ export interface RuntimeOverrides {
 export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const pinia = createPinia()
   const router = overrides.router ?? createAppRouter()
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: overrides.retry === false ? { retry: false } : {} },
+  const notifier =
+    overrides.notifier ??
+    // Plan 08 thay t/te bằng i18n của app.
+    createNotifier({ toast: useToast(), t: (key) => key, te: () => false })
+  const queryClient = createAppQueryClient({
+    onMutationError: notifier.error,
+    retry: overrides.retry,
   })
   // Session tạo trước nhưng chỉ gọi `http` khi refresh thật sự xảy ra (lazy) → không vòng phụ thuộc.
   const session = createSession({
@@ -57,10 +70,12 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
 
   const plugin = {
     install(app: App) {
-      app.use(pinia).use(router).use(VueQueryPlugin, { queryClient })
+      app.use(pinia).use(router).use(VueQueryPlugin, { queryClient }).use(ui)
       app.provide(HTTP_CLIENT_KEY, http)
       app.provide(SESSION_KEY, session)
+      app.provide(NOTIFIER_KEY, notifier)
+      installErrorHandling(app, { router, notifier })
     },
   }
-  return { plugin, router, session, http, queryClient }
+  return { plugin, router, session, http, queryClient, notifier }
 }

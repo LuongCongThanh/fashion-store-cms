@@ -1,6 +1,6 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
 import { createAppRuntime } from './Runtime'
@@ -62,5 +62,48 @@ describe('createAppRuntime', () => {
     await new Promise((r) => setTimeout(r))
 
     expect(router.currentRoute.value.name).toBe('auth.login')
+  })
+
+  it('toasts mutation errors globally unless the mutation handles them locally', async () => {
+    const mock = new MockAdapter(axios.create())
+    const notifier = { success: vi.fn(), error: vi.fn() }
+    const runtime = createAppRuntime({
+      transport: mock.adapter(),
+      router: memoryRouter(),
+      notifier,
+      retry: false,
+    })
+    mock.onPost(/\/orders$/).reply(500, {})
+    const cache = runtime.queryClient.getMutationCache()
+    const run = (meta?: { errorHandling: 'local' }) =>
+      cache
+        .build(runtime.queryClient, { mutationFn: () => runtime.http.post('/orders', {}), meta })
+        .execute(undefined)
+        .catch(() => undefined)
+
+    await run()
+    expect(notifier.error).toHaveBeenCalledTimes(1)
+    expect(notifier.error.mock.calls[0]?.[0]).toMatchObject({ status: 500, code: 'SERVER_ERROR' })
+
+    await run({ errorHandling: 'local' })
+    expect(notifier.error).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not toast query errors (they are shown in place)', async () => {
+    const mock = new MockAdapter(axios.create())
+    const notifier = { success: vi.fn(), error: vi.fn() }
+    const runtime = createAppRuntime({
+      transport: mock.adapter(),
+      router: memoryRouter(),
+      notifier,
+      retry: false,
+    })
+    mock.onGet(/\/products$/).reply(500, {})
+
+    await runtime.queryClient
+      .fetchQuery({ queryKey: ['products'], queryFn: () => runtime.http.get('/products') })
+      .catch(() => undefined)
+
+    expect(notifier.error).not.toHaveBeenCalled()
   })
 })
