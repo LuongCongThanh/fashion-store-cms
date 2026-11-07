@@ -102,6 +102,15 @@ describe('LoginView', () => {
     expect(wrapper.text()).not.toContain('Email hoặc mật khẩu không đúng')
   })
 
+  it('disables the submit button while signing in', async () => {
+    const { wrapper, http } = await renderLogin()
+    http.onPost(/\/auth\/login$/).reply(() => new Promise(() => {}))
+
+    await fill(wrapper, 'lan@shop.vn', 'secret')
+
+    expect(wrapper.find('button[type="submit"]').attributes('disabled')).toBeDefined()
+  })
+
   it('toggles password visibility', async () => {
     const { wrapper } = await renderLogin()
     const input = () => wrapper.find('input[name="password"]')

@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { describe, expect, it } from 'vitest'
 
-import { createMockAuthTransport, MOCK_ACCOUNT } from './MockAuth'
+import { MOCK_ACCOUNT } from '@features/auth/types/MockAccount'
+
+import { createMockAuthTransport } from './MockAuth'
 
 function client() {
   return axios.create({

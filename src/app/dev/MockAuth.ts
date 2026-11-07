@@ -6,10 +6,9 @@ import MockAdapter from 'axios-mock-adapter'
 import type { RouteRecordRaw } from 'vue-router'
 
 import { routes } from '@app/router/Routes'
+import { MOCK_ACCOUNT } from '@features/auth/types/MockAccount'
 
 import type { CurrentUser } from '@features/auth/types/Auth.types'
-
-export const MOCK_ACCOUNT = { email: 'admin@cms.local', password: 'admin123' }
 
 function collectPermissions(list: readonly RouteRecordRaw[]): string[] {
   return list.flatMap((r) => [
@@ -34,7 +33,7 @@ export function createMockAuthTransport({ delayMs = 300 } = {}): unknown {
   }
 
   mock.onPost(/\/auth\/login$/).reply((config) => {
-    const body = JSON.parse(String(config.data)) as typeof MOCK_ACCOUNT
+    const body = JSON.parse(String(config.data)) as { email: string; password: string }
     return body.email === MOCK_ACCOUNT.email && body.password === MOCK_ACCOUNT.password
       ? [200, tokens()]
       : [401, { code: 'UNAUTHORIZED', message: 'Invalid credentials' }]

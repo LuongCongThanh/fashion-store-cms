@@ -140,6 +140,47 @@ describe('Session', () => {
       expect(localStorage.getItem('cms.session.accessToken')).toBeNull()
     })
 
+    it('clears tokens from both storages when refresh fails', async () => {
+      const { session } = setup({ callRefresh: async () => Promise.reject(new Error('rejected')) })
+      session.signIn({ accessToken: 'old', refreshToken: 'rt-1' }, { remember: false })
+
+      await session.refresh()
+
+      expect(sessionStorage.getItem('cms.session.accessToken')).toBeNull()
+      expect(sessionStorage.getItem('cms.session.refreshToken')).toBeNull()
+      expect(localStorage.getItem('cms.session.accessToken')).toBeNull()
+    })
+
+    it('follows tokens rotated or removed by another tab', () => {
+      const { session } = setup()
+      session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' })
+      const fromOtherTab = (key: string, newValue: string | null) =>
+        window.dispatchEvent(
+          new StorageEvent('storage', { key, newValue, storageArea: localStorage }),
+        )
+
+      fromOtherTab('cms.session.accessToken', 'at-2')
+      expect(session.getAccessToken()).toBe('at-2')
+
+      fromOtherTab('cms.session.accessToken', null)
+      expect(session.getAccessToken()).toBeNull()
+    })
+
+    it('ignores other tabs when this tab keeps a tab-only session', () => {
+      const { session } = setup()
+      session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' }, { remember: false })
+
+      window.dispatchEvent(
+        new StorageEvent('storage', {
+          key: 'cms.session.accessToken',
+          newValue: null,
+          storageArea: localStorage,
+        }),
+      )
+
+      expect(session.getAccessToken()).toBe('at-1')
+    })
+
     it('logout clears tokens from both storages', async () => {
       const { session } = setup()
       session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' }, { remember: false })

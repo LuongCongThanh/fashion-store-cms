@@ -6,7 +6,6 @@ import UFormField from '@nuxt/ui/components/FormField.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
 import ULink from '@nuxt/ui/components/Link.vue'
 import { computed, reactive, ref } from 'vue'
-import { z } from 'zod'
 
 import type { FormSubmitEvent } from '@nuxt/ui'
 
@@ -15,20 +14,22 @@ import { useNotify } from '@shared/composables/UseNotify'
 import { isApiError } from '@shared/lib/api/errors/ApiError'
 import { useT } from '@shared/lib/i18n/I18n'
 
+import { forgotPasswordSchema } from '../schemas/Login.schema'
 import { useAuth } from '../UseAuth'
+
+import type { ForgotPasswordInput } from '../schemas/Login.schema'
 
 const { t } = useT()
 const auth = useAuth()
 const notifier = useNotify()
 
-const schema = computed(() => z.object({ email: z.email(t('auth.validation.emailInvalid')) }))
-type Schema = z.infer<typeof schema.value>
+const schema = computed(() => forgotPasswordSchema(t))
 
 const state = reactive({ email: '' })
 const submitting = ref(false)
 const sent = ref(false)
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: FormSubmitEvent<ForgotPasswordInput>) {
   submitting.value = true
   try {
     await auth.requestPasswordReset(event.data.email)
@@ -69,7 +70,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           autofocus
         />
       </UFormField>
-      <UButton type="submit" block :loading="submitting">{{
+      <UButton type="submit" block :loading="submitting" :disabled="submitting">{{
         t('auth.forgotPassword.submit')
       }}</UButton>
     </UForm>
