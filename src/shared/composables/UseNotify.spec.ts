@@ -8,7 +8,7 @@ import { createNotifier } from './UseNotify'
 const MESSAGES: Record<string, string> = {
   'errors.SERVER_ERROR': 'Lỗi máy chủ',
   'errors.UNKNOWN': 'Có lỗi xảy ra',
-  'products.saved': 'Đã lưu sản phẩm',
+  'common.save': 'Đã lưu sản phẩm',
 }
 
 function setup() {
@@ -43,7 +43,7 @@ describe('createNotifier', () => {
   it('shows a translated success toast', () => {
     const { notifier, toast } = setup()
 
-    notifier.success('products.saved')
+    notifier.success('common.save')
 
     expect(toast.add).toHaveBeenCalledWith(
       expect.objectContaining({ color: 'success', title: 'Đã lưu sản phẩm' }),
@@ -54,7 +54,7 @@ describe('createNotifier', () => {
     const { notifier, toast } = setup()
     const onClick = vi.fn()
 
-    notifier.prompt('products.saved', { label: 'products.saved', onClick })
+    notifier.prompt('common.save', { label: 'common.save', onClick })
 
     const shown = toast.add.mock.calls[0]?.[0]
     expect(shown).toMatchObject({ color: 'info', title: 'Đã lưu sản phẩm', duration: 0 })

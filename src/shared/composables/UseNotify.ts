@@ -4,12 +4,14 @@ import type { InjectionKey } from 'vue'
 
 import { isSilent, messageKeyOf } from '@shared/lib/api/errors/ErrorPolicy'
 
+import type { MessageKey } from '@shared/lib/i18n/I18n'
+
 /** Hiển thị toast; key lỗi lấy từ ErrorPolicy.messageKeyOf (§O.4). */
 export interface Notifier {
-  success(key: string): void
+  success(key: MessageKey): void
   error(e: unknown): void
   /** Toast không tự tắt, có một nút hành động (VD "Đã có phiên bản mới" + Tải lại). */
-  prompt(key: string, action: { label: string; onClick: () => void }): void
+  prompt(key: MessageKey, action: { label: MessageKey; onClick: () => void }): void
 }
 
 interface ToastInput {

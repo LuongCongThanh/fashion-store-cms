@@ -85,9 +85,10 @@ export function createSession(deps: SessionDeps): Session {
   return {
     getAccessToken: () => store.accessToken,
     getStoreId: () => store.storeId,
-    async switchStore(id) {
+    switchStore(id) {
       store.storeId = id
       deps.queryClient.clear()
+      return Promise.resolve()
     },
     refresh() {
       inflight ??= doRefresh().finally(() => {
@@ -95,10 +96,11 @@ export function createSession(deps: SessionDeps): Session {
       })
       return inflight
     },
-    async logout() {
+    logout() {
       clearTokens()
       deps.queryClient.clear()
       emit('loggedOut')
+      return Promise.resolve()
     },
     on(event, fn) {
       listeners[event].add(fn)

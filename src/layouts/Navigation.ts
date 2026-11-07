@@ -50,35 +50,31 @@ export function buildNavigation(
   routes: readonly RouteRecordRaw[],
   can: (permission: string) => boolean,
 ) {
-  const commands: NavCommand[] = flatten(routes)
-    .filter((r) => !r.meta.permission || can(r.meta.permission))
-    .flatMap(({ name, path, meta }) =>
-      meta.command && meta.titleKey
-        ? [
-            {
-              name,
-              path,
-              titleKey: meta.titleKey,
-              icon: meta.command.icon,
-              group: meta.command.group,
-              shortcut: meta.command.shortcut,
-            },
-          ]
-        : [],
-    )
-    .map(({ shortcut: _shortcut, ...command }) => command)
+  const allowed = flatten(routes).filter((r) => !r.meta.permission || can(r.meta.permission))
+
+  const commands: NavCommand[] = allowed.flatMap(({ name, path, meta }) =>
+    meta.command && meta.titleKey
+      ? [
+          {
+            name,
+            path,
+            titleKey: meta.titleKey,
+            icon: meta.command.icon,
+            group: meta.command.group,
+          },
+        ]
+      : [],
+  )
 
   const sidebar: NavItem[] = commands
     .filter((c) => c.group === 'navigate')
     .map(({ group: _group, ...item }) => item)
 
-  const shortcuts: NavShortcut[] = flatten(routes)
-    .filter((r) => !r.meta.permission || can(r.meta.permission))
-    .flatMap(({ path, meta }) =>
-      meta.command?.shortcut && meta.titleKey
-        ? [{ keys: meta.command.shortcut, path, titleKey: meta.titleKey }]
-        : [],
-    )
+  const shortcuts: NavShortcut[] = allowed.flatMap(({ path, meta }) =>
+    meta.command?.shortcut && meta.titleKey
+      ? [{ keys: meta.command.shortcut, path, titleKey: meta.titleKey }]
+      : [],
+  )
 
   /** Key i18n cho <title>: titleKey của route con sâu nhất có khai báo. */
   function titleOf(route: { matched: readonly { meta: RouteMeta }[] }): string | null {
