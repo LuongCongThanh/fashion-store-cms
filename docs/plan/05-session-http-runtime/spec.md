@@ -1,6 +1,6 @@
 # Spec 05 — Session, HttpClient, Runtime
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 04
 Nguồn: Step 3a (phần 2) · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
