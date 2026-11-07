@@ -18,7 +18,7 @@ Mọi code và commit đều bị ESLint, Prettier, Husky, commitlint kiểm t�
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 2; mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 2; mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 1. ESLint flat config theo §E (bảng `BOUNDARIES` + `toFlatConfig`) và `eslint.config.spec.ts` (D41).
 2. Prettier + `.prettierignore` (bỏ `Api.generated.ts`, `dist/`, `coverage/`).

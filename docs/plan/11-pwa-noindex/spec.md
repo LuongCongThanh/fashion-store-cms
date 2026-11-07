@@ -18,7 +18,7 @@ App chặn công cụ tìm kiếm index, cài được như PWA và hoạt độ
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 5b (phần 1); mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 5b (phần 1); mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - Chặn index theo §R.1 (meta, `robots.txt`; header ghi vào checklist deploy).
 - PWA theo §R: `vite-plugin-pwa`, `pwa-assets.config.ts`, `UsePwa.ts`, `OfflineBanner.vue`.

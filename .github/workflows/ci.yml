@@ -54,3 +54,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+
+  # Tìm file/export/dependency thừa — báo cáo, không chặn merge (§S.2).
+  knip:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run knip

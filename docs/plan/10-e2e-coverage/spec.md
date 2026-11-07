@@ -18,7 +18,7 @@ Có Playwright smoke test và báo cáo coverage.
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 5; mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 5; mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - Playwright + `e2e/Smoke.spec.ts`.
 - Bật `test:coverage`; thêm job e2e vào CI khi có flow thật.

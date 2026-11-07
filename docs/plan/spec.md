@@ -1,7 +1,7 @@
 # Spec — Scaffold Foundation cho Fashion Store CMS
 
 Status: ready-for-agent
-Nguồn chuẩn chi tiết: [scaffold-plan.md](./scaffold-plan.md)
+Nguồn chuẩn chi tiết: [scaffold-plan.md](../archive/scaffold-plan.md)
 
 ## Lưu ý bắt buộc
 
@@ -70,4 +70,4 @@ Step 3a, 5b được tách đôi (phần 1/2) chỉ trong danh sách này, khôn
 
 ## Ngoài phạm vi
 
-Xem mục "Ngoài phạm vi plan này" trong [scaffold-plan.md](./scaffold-plan.md): feature nghiệp vụ, gọi API thật, generator, Storybook, theme theo Store, 3D.
+Xem mục "Ngoài phạm vi plan này" trong [scaffold-plan.md](../archive/scaffold-plan.md): feature nghiệp vụ, gọi API thật, generator, Storybook, theme theo Store, 3D.

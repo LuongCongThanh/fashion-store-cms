@@ -7,7 +7,6 @@
     "@fontsource-variable/inter",
     "@fontsource-variable/plus-jakarta-sans",
     "@iconify-json/lucide",
-    "@pinia/testing",
-    "openapi-typescript"
+    "@pinia/testing"
   ]
 }
