@@ -1,6 +1,6 @@
 # Spec 01 — Khởi tạo dự án
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: —
 Nguồn: Step 1 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
