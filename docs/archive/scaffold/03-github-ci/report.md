@@ -23,6 +23,6 @@ Ngày hoàn thành: 2026-11-07
 
 ## Việc còn tồn
 
-- **Bảo vệ `main` (§C.4) phải bật tay trên GitHub**: Require PR + 1 approval, dismiss stale approvals; status checks `lint`, `typecheck`, `test`, `build`; linear history; chỉ cho squash merge; tự xoá nhánh sau khi merge.
-- GitHub cảnh báo `actions/checkout@v4` và `setup-node@v4` đang chạy trên Node 20 (deprecated). Nên nâng lên v5 trong một PR riêng.
+- ~~**Bảo vệ `main` (§C.4) phải bật tay trên GitHub**~~ — **Đã bật 2026-11-07** (repo chuyển sang public vì gói Free không hỗ trợ branch protection cho repo private; admin được bypass): Require PR + 1 approval, dismiss stale approvals; status checks `lint`, `typecheck`, `test`, `build`; linear history; chỉ cho squash merge; tự xoá nhánh sau khi merge.
+- GitHub cảnh báo `actions/checkout@v4` và `setup-node@v4` đang chạy trên Node 20 (deprecated). Nên nâng lên v5 trong một PR riêng. — **Đã nâng lên v7 ở PR #19.**
 - Token usage: chưa điền.
