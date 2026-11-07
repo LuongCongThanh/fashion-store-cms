@@ -75,9 +75,9 @@ NestJS REST API
 | Lint | ESLint + perfectionist + unused-imports | Tự sắp xếp và xoá import thừa. Không auto-import code nội bộ (chỉ component Nuxt UI) |
 | Formatter | Prettier | |
 | Git hooks | Husky + lint-staged | |
-| Package Manager | pnpm | |
+| Package Manager | npm | |
 | API types | OpenAPI (`@nestjs/swagger`) + `openapi-typescript` | |
-| API mock | MSW — **chỉ dùng trong test** | Adapter thứ hai tại seam HTTP: component test và test refresh-token chạy qua interface thật thay vì mock axios. Chưa dùng cho dev runtime |
+| API mock | `axios-mock-adapter` (chỉ trong test) | Thay transport của HttpClient qua `deps.transport` (test dùng runtime thì truyền `createAppRuntime({ transport })`); component test mock module `*.api.ts` bằng `vi.mock`. Không dùng MSW (scaffold-plan D18, §I) |
 
 ---
 
@@ -108,141 +108,72 @@ CMS phải hỗ trợ:
 
 # 4. Recommended Project Structure
 
-Không sử dụng `index.ts` / `index.tsx` để export một cách không cần thiết.
+Feature-based architecture. Không dùng `index.ts` để re-export không cần thiết.
 
-Sử dụng feature-based architecture.
+Cây đầy đủ (kèm Phase tạo từng thư mục) là nguồn chuẩn ở `docs/plan/scaffold-plan.md` §A; tên file/thư mục theo §B (PascalCase cho `.vue` và `.ts`, không kebab-case). Tóm tắt:
 
 ```text
 src/
-├── app/
-│   ├── router/
-│   │   ├── router.ts
-│   │   └── routes.ts
-│   │
-│   ├── stores/
-│   │   └── app.store.ts        # store hiện tại, sidebar, locale
-│   │
-│   └── providers/
-│       └── query-client.ts
-│
+├── app/                 # composition root — chỉ main.ts (và src/test/) import
+│   ├── Runtime.ts       # createAppRuntime(): pinia, i18n, router, notifier, Session, HttpClient, QueryClient
+│   ├── config/          # Env.config.ts, Ui.config.ts
+│   ├── providers/       # ErrorHandling.ts
+│   ├── router/          # Router.ts, Routes.ts, Guards.ts, RouteMeta.d.ts
+│   └── views/           # NotFoundView.vue, ForbiddenView.vue
 ├── assets/
-│   ├── styles/
-│   │   ├── main.css
-│   │   └── variables.css
-│   └── icons/
-│
-├── components/
-│   ├── ui/
-│   ├── form/
-│   ├── table/
-│   ├── modal/
-│   ├── feedback/
-│   └── layout/
-│
-├── composables/                # shared modules dùng ở ≥ 3 feature (xem §6.1)
-│   ├── use-list-state.ts
-│   ├── use-media-upload.ts
-│   └── use-modal.ts
-│
-├── config/
-│   ├── app.config.ts
-│   └── env.config.ts
-│
-├── features/
-│   ├── auth/                   # toàn bộ auth + permission ở đây (xem §8.1)
-│   │   ├── api/
-│   │   │   └── auth.api.ts
-│   │   ├── components/
-│   │   ├── schemas/
-│   │   ├── stores/
-│   │   │   └── auth.store.ts   # nội bộ, không import từ ngoài feature
-│   │   ├── use-auth.ts         # interface duy nhất của feature auth
-│   │   ├── types/
-│   │   └── views/
-│   │
-│   ├── dashboard/
-│   │   ├── api/
-│   │   ├── components/
-│   │   ├── types/
-│   │   └── views/
-│   │
-│   ├── products/
-│   │   ├── api/
-│   │   │   └── products.api.ts
-│   │   ├── components/
-│   │   │   ├── product-form.vue
-│   │   │   ├── product-table.vue
-│   │   │   └── product-status.vue
-│   │   ├── schemas/
-│   │   │   └── product.schema.ts
-│   │   ├── types/
-│   │   │   └── product.types.ts
-│   │   └── views/
-│   │       ├── product-list.view.vue
-│   │       ├── product-create.view.vue
-│   │       └── product-edit.view.vue
-│   │
-│   ├── categories/
-│   ├── orders/
-│   ├── customers/
-│   ├── inventory/
-│   ├── promotions/
-│   ├── media/
-│   ├── users/
-│   ├── roles/
-│   ├── settings/
-│   └── audit-logs/
-│
-├── layouts/
-│   ├── auth-layout.vue
-│   └── dashboard-layout.vue
-│
-├── lib/
-│   ├── api/
-│   │   ├── http-client.ts
-│   │   ├── api-error.ts
-│   │   └── apply-api-error-to-form.ts
+│   ├── images/          # Logo.svg
+│   └── styles/          # main.css — file CSS duy nhất (token + Tailwind + Nuxt UI)
+├── features/            # mỗi feature theo khung scaffold-plan §Q
+│   ├── auth/            # UseAuth.ts là interface duy nhất (§8.1)
+│   ├── StoreScope/      # Store đang quản lý, bọc Session (§9)
+│   ├── products/        # (P5) xem §5
+│   └── …                # categories, orders, customers, inventory, media… theo Phase §30
+├── layouts/             # AuthLayout.vue, DashboardLayout.vue, Navigation.ts, components/
+├── locales/             # vi.json, en.json
+├── shared/              # dùng chung, KHÔNG import app/, layouts/, features/
+│   ├── components/      # confirm/, feedback/, page/, table/…
+│   ├── composables/     # UseListState.ts, UseNotify.ts, UseTheme.ts, UsePwa.ts
+│   ├── lib/             # api/client/HttpClient.ts, api/errors/, query/, i18n/, session/, form/
+│   ├── types/           # Api.generated.ts — sinh từ Swagger, KHÔNG sửa tay
 │   └── utils/
-│
-├── types/
-│   ├── api.generated.ts   # sinh từ Swagger, KHÔNG sửa tay
-│   ├── api.types.ts
-│   ├── common.types.ts
-│   └── pagination.types.ts
-│
+├── test/                # Setup.ts, Render.ts, factories/
 ├── App.vue
-└── main.ts
+└── main.ts              # createApp(App).use(createAppRuntime().plugin).mount('#app')
 ```
+
+Chiều phụ thuộc: `main.ts → app → layouts → features → shared` (chặn bằng ESLint, scaffold-plan §E).
 
 ---
 
 # 5. Feature Architecture
 
-Mỗi feature phải độc lập nhất có thể.
+Mỗi feature phải độc lập nhất có thể. Khung chuẩn và quy tắc đặt tên `<Feature>` / `<Entity>`: scaffold-plan §Q.
 
 Ví dụ `products`:
 
 ```text
 features/products/
 ├── api/
-│   └── products.api.ts
+│   └── Products.api.ts
 ├── components/
-│   ├── product-form.vue
-│   ├── product-table.vue
-│   └── product-status.vue
+│   ├── ProductForm.vue
+│   ├── ProductTable.vue
+│   └── ProductStatusBadge.vue
 ├── schemas/
-│   └── product.schema.ts
+│   └── Product.schema.ts
 ├── types/
-│   └── product.types.ts
-└── views/
-    ├── product-list.view.vue
-    ├── product-create.view.vue
-    └── product-edit.view.vue
+│   └── Product.types.ts
+├── views/
+│   ├── ProductListView.vue
+│   ├── ProductCreateView.vue
+│   └── ProductEditView.vue
+├── Products.routes.ts
+└── UseProducts.ts       # chỉ khi feature khác cần dùng
 ```
 
 Không viết toàn bộ product logic vào một file `.vue` khổng lồ.
 
-Cấu trúc trên là **tối đa**, không bắt buộc. Feature nhỏ (settings, audit-logs) có thể để phẳng; không tạo thư mục rỗng.
+Cấu trúc trên là **tối đa**, không bắt buộc. Tối thiểu `api/ + types/ + views/`; không tạo thư mục rỗng.
 
 ---
 
@@ -253,34 +184,34 @@ Mỗi feature có **một** file `api/<feature>.api.ts` chứa: hàm HTTP, query
 **Interface của file chỉ là các composable.** Hàm HTTP và query key là chi tiết nội bộ — không export ra ngoài feature.
 
 ```ts
-// features/products/api/products.api.ts
-import type { components } from '@/types/api.generated'
+// features/products/api/Products.api.ts
+import type { components } from '@shared/types/Api.generated'
 
 type Product = components['schemas']['ProductDto']
 
 // --- nội bộ ---
+// Query key KHÔNG chứa storeId: Session xoá cache khi đổi Store (§9 Store scope).
 const productKeys = {
-  all: (storeId: string) => ['store', storeId, 'products'] as const,
-  list: (storeId: string, params: ProductListParams) =>
-    [...productKeys.all(storeId), 'list', params] as const,
-  detail: (storeId: string, id: string) =>
-    [...productKeys.all(storeId), 'detail', id] as const,
+  all: ['products'] as const,
+  list: (params: ProductListParams) => [...productKeys.all, 'list', params] as const,
+  detail: (id: string) => [...productKeys.all, 'detail', id] as const,
 }
 
-const getProducts = (params: ProductListParams) =>
-  httpClient.get<Paginated<Product>>('/products', { params }).then((r) => r.data)
+// HttpClient lấy qua useHttpClient() (inject), không import singleton. Trả thẳng `data`.
+const getProducts = (http: HttpClient, params: ProductListParams) =>
+  http.get('/products', { query: params })
 
 // --- interface ---
 export function useProductsQuery(params: MaybeRef<ProductListParams>) { /* ... */ }
 export function useProductQuery(id: MaybeRef<string>) { /* ... */ }
-export function useCreateProduct() { /* ... invalidate productKeys.all(storeId) */ }
+export function useCreateProduct() { /* ... invalidate productKeys.all */ }
 export function useUpdateProduct() { /* ... */ }
 export function useDeleteProduct() { /* ... */ }
 ```
 
 Quy tắc:
 
-- Component **chỉ gọi composable** của feature, không gọi hàm HTTP, không gọi `axios` / `httpClient`.
+- Component **chỉ gọi composable** của feature, không gọi hàm HTTP, không gọi `axios` / `useHttpClient()`.
 - Quy tắc invalidate sau mutation nằm trong composable mutation, không nằm ở component.
 - Không tạo file `*.queries.ts` riêng — API và query là một module.
 
@@ -288,13 +219,12 @@ Quy tắc:
 
 # 6.1. Shared Modules
 
-Ba module dùng chung, mỗi module đã có ≥ 3 nơi dùng thực tế (không vi phạm §32):
+Shared module dự kiến (ở `shared/`, không chứa tri thức nghiệp vụ). Chỉ tạo khi có nơi dùng thứ hai (scaffold-plan D33): `UseListState` tạo ở P5, `ApplyApiErrorToForm` tạo khi có form thứ hai.
 
 | Module | Interface | Giấu bên trong |
 |---|---|---|
-| `composables/use-list-state.ts` | `useListState(schema)` → `{ params, setFilter, setPage, setSort, reset }` | Đồng bộ URL ↔ params (§23), parse/validate query string bằng Zod, chuẩn `page/pageSize/sort=-field` (§22), reset `page` về 1 khi đổi filter/search, debounce search |
-| `lib/api/apply-api-error-to-form.ts` | `applyApiErrorToForm(error, form): boolean` | Map `details.fields` → `setErrors`; phân biệt 400 / 422; lỗi không gắn được field → trả `false` để caller toast |
-| `composables/use-media-upload.ts` | `useMediaUpload()` → `{ upload(files): Promise<string[]>, progress, cancel }` | 4 bước presign → PUT → complete (§17.1), validate mime/size/số lượng, progress, huỷ, retry |
+| `shared/composables/UseListState.ts` | `useListState(schema)` → `{ params, setFilter, setPage, setSort, reset }` | Đồng bộ URL ↔ params (§23), parse/validate query string bằng Zod, chuẩn `page/pageSize/sort=-field` (§22), reset `page` về 1 khi đổi filter/search, debounce search |
+| `shared/lib/form/ApplyApiErrorToForm.ts` | `applyApiErrorToForm(error, form): boolean` | Map `details.fields` → `setErrors`; phân biệt 400 / 422; lỗi không gắn được field → trả `false` để caller toast |
 
 Ví dụ trang list:
 
@@ -307,39 +237,17 @@ const { data, isPending, isError, refetch } = useProductsQuery(params)
 
 # 7. HTTP Client
 
-Tạo một Axios instance duy nhất:
+Một module duy nhất `src/shared/lib/api/client/HttpClient.ts` (interface và chi tiết: scaffold-plan §M.1, D34, D40):
 
-```text
-src/lib/api/http-client.ts
-```
+- `createHttpClient({ baseURL, session, getLocale })` trả interface hẹp `get/post/put/patch/delete` có kiểu theo `paths` (OpenAPI). Không trả `AxiosInstance`, không export singleton.
+- Gắn `Authorization` từ `session.getAccessToken()`, `X-Store-Id` từ `session.getStoreId()`, `Accept-Language` từ locale hiện tại.
+- Mọi lỗi chuẩn hoá thành `ApiError`; timeout mặc định 15s.
+- `*.api.ts` lấy client bằng `useHttpClient()` trong composable.
+- Object được dựng một lần trong composition root `createAppRuntime()` (`src/app/Runtime.ts`, D37); `main.ts` và `src/test/Render.ts` gọi cùng hàm.
 
-Responsibility:
+Request 401 đồng thời được **gom vào một lần** `session.refresh()`; request refresh đi qua HttpClient với `skipAuth: true`. Refresh thất bại → Session phát `authFailure` → runtime điều hướng về login.
 
-- Base URL
-- Access token
-- Refresh token
-- Common headers
-- Error handling
-- Request interceptor
-- Response interceptor
-
-Ví dụ:
-
-```ts
-import axios from 'axios'
-
-export const httpClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 15000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-```
-
-Interceptor refresh token phải **gom các request 401 đồng thời** vào một lần gọi `/auth/refresh` duy nhất, các request còn lại chờ rồi retry.
-
-Đây là phần logic khó nhất của HTTP client — bắt buộc có test qua MSW: N request 401 đồng thời → đúng 1 lần `/auth/refresh` → N request retry thành công; refresh thất bại → logout.
+Đây là phần logic khó nhất — bắt buộc test trong `HttpClient.spec.ts` bằng `axios-mock-adapter` (qua `deps.transport`): N request 401 đồng thời → đúng 1 lần refresh → N request retry thành công; refresh thất bại → `authFailure`.
 
 ---
 
@@ -372,12 +280,12 @@ Quy tắc:
 
 - **Không viết tay** type cho request/response — lấy từ `api.generated.ts`.
 - `api.generated.ts` được commit để build/CI không phụ thuộc BE đang chạy.
-- Khi BE đổi contract → chạy `pnpm gen:api` → `pnpm typecheck` sẽ báo chỗ FE bị ảnh hưởng.
+- Khi BE đổi contract → chạy `npm run gen:api` → `npm run typecheck` sẽ báo chỗ FE bị ảnh hưởng.
 - CI kiểm tra file generated khớp với Swagger của môi trường dev/staging.
 - `features/*/types/` chỉ chứa type riêng của UI (form model, view model), alias từ type generated:
 
 ```ts
-import type { components } from '@/types/api.generated'
+import type { components } from '@shared/types/Api.generated'
 
 export type Product = components['schemas']['ProductDto']
 ```
@@ -430,12 +338,12 @@ Authentication layer phải xử lý:
 
 ## 8.1. Auth module interface
 
-Toàn bộ auth và permission nằm trong `features/auth`. Không có `use-auth.ts` / `use-permission.ts` / `permission.store.ts` ở chỗ khác.
+Toàn bộ auth và permission nằm trong `features/auth`. Không có `UseAuth.ts` / `UsePermission.ts` / `Permission.store.ts` ở chỗ khác.
 
 Interface duy nhất:
 
 ```ts
-// features/auth/use-auth.ts
+// features/auth/UseAuth.ts
 useAuth() → {
   user,                       // Ref<CurrentUser | null>
   isAuthenticated,            // ComputedRef<boolean>
@@ -447,7 +355,8 @@ useAuth() → {
 
 - Permission **tính từ** `user.permissions` của `/auth/me`, không lưu thêm bản sao ở store khác.
 - Route guard, `v-if` ẩn button, sidebar menu đều dùng cùng `can()`.
-- `auth.store.ts` là chi tiết nội bộ; code ngoài feature không import trực tiếp.
+- `Auth.store.ts` là chi tiết nội bộ; code ngoài feature không import trực tiếp.
+- Token và Store hiện tại do `Session` (`shared/lib/session/Session.ts`) sở hữu; `useAuth()` bọc Session: `login()` gọi API rồi `session.signIn()`, `logout()` = `session.logout()` (scaffold-plan §M.2).
 
 ---
 
@@ -507,11 +416,10 @@ Mapping role → permission do BE quản lý; FE không hard-code.
 
 Master Store Manager có thể làm việc với nhiều store, Store Manager / Order Staff gắn với store của mình.
 
-- Store hiện tại lưu ở `app.store.ts` và đồng bộ URL.
-- Mọi request gửi header `X-Store-Id`.
+- Store hiện tại do `Session` sở hữu; feature `StoreScope` bọc lại qua `useStoreScope()`.
+- Mọi request gửi header `X-Store-Id` (HttpClient lấy từ `session.getStoreId()`) — chờ BE xác nhận.
 - BE kiểm tra user có quyền trên store đó.
-- **Mọi query key phải bắt đầu bằng `['store', storeId, ...]`**, nếu không cache của store cũ sẽ hiển thị cho store mới.
-- Khi đổi store: `queryClient.removeQueries({ queryKey: ['store', oldStoreId] })`.
+- Query key **không** chứa `storeId`. Khi đổi store, `session.switchStore(id)` gọi `queryClient.clear()` → cache store cũ bị xoá, query đang mở fetch lại. Xoá cache chỉ xảy ra trong Session (scaffold-plan §M.3).
 
 Không chỉ ẩn UI.
 
@@ -788,7 +696,12 @@ Upload trực tiếp lên object storage qua presigned URL:
 
 FE validate trước khi upload: mime type, dung lượng tối đa, số lượng file. BE vẫn validate lại.
 
-Toàn bộ flow gói trong `useMediaUpload()` (§6.1); component chỉ gọi `upload(files)` và nhận `mediaId[]`.
+Toàn bộ flow nằm trong `features/media` — là nghiệp vụ nên không ở `shared/` (scaffold-plan D33). Feature khác chỉ dùng interface công khai `useMedia()`:
+
+- `useMedia().upload(files)` → `Promise<string[]>` (`mediaId[]`), kèm `progress`, `cancel`.
+- `useMedia().pickImages()` → mở `MediaPickerModal`, trả `Promise<Media[]>`.
+
+Bên trong (`MediaUpload.ts`): 4 bước presign → PUT → complete, validate mime/size/số lượng, progress, huỷ, retry. PUT lên S3 dùng `fetch` riêng, không qua HttpClient (khác origin, không gắn token).
 
 ---
 
@@ -808,38 +721,39 @@ Server state
 └── TanStack Vue Query
 ```
 
-Mỗi feature định nghĩa query key và composable trong `api/<feature>.api.ts` (xem §6):
+Mỗi feature định nghĩa query key và composable trong `api/<Feature>.api.ts` (xem §6):
 
 ```ts
-// features/products/api/products.api.ts
+// features/products/api/Products.api.ts
 export function useProductsQuery(params: MaybeRef<ProductListParams>) {
-  const app = useAppStore()
+  const http = useHttpClient()
   return useQuery({
-    queryKey: computed(() => productKeys.list(app.storeId, unref(params))),
-    queryFn: () => getProducts(unref(params)),
+    queryKey: computed(() => productKeys.list(unref(params))),
+    queryFn: () => getProducts(http, unref(params)),
   })
 }
 ```
 
-Query key **luôn chứa `storeId`** (xem §9 Store scope).
+Query key **không** chứa `storeId` — Session xoá cache khi đổi Store (xem §9 Store scope).
 
 Mutation xong thì `invalidateQueries` theo key, không tự cập nhật Pinia.
 
 Ví dụ Pinia:
 
 ```text
-auth.store.ts   (nội bộ features/auth)
-app.store.ts
+Auth.store.ts         (nội bộ features/auth)
+StoreScope.store.ts   (nội bộ features/StoreScope)
+Session.store.ts      (nội bộ shared/lib/session — token + storeId)
 ```
 
-Không có `permission.store.ts` — permission tính từ `auth.store` qua `useAuth().can()`.
+Không có `App.store.ts` / `Permission.store.ts` — locale do `createAppI18n()` sở hữu, theme do `useTheme()`, sidebar dùng `useLocalStorage`; permission tính từ `Auth.store` qua `useAuth().can()`.
 
 Không tạo:
 
 ```text
-product.store.ts
-category.store.ts
-order.store.ts
+Product.store.ts
+Category.store.ts
+Order.store.ts
 ...
 ```
 
@@ -1078,10 +992,10 @@ Vue Test Utils
 +
 Vitest
 +
-MSW (fake backend tại seam HTTP)
+vi.mock (module *.api.ts) / axios-mock-adapter (HttpClient)
 ```
 
-Test đi qua interface: render component thật + composable thật + MSW. Không mock `axios` hay module `*.api.ts`.
+Component test render qua `renderWithPlugins()` (gọi chính `createAppRuntime()` với override) và mock module `*.api.ts` bằng `vi.mock`. Test của HttpClient thay transport bằng `axios-mock-adapter`. Không dùng MSW (scaffold-plan §I).
 
 Bắt buộc test cho shared modules (§6.1) và refresh-token single-flight (§7).
 
@@ -1108,42 +1022,9 @@ Playwright
 
 # 26. Code Quality
 
-Bắt buộc:
+Bắt buộc: ESLint, Prettier, TypeScript strict, Husky + lint-staged, Conventional Commits. CI mỗi PR: `gen:api` (kiểm contract), lint, typecheck, test, build, e2e (critical flows).
 
-```text
-ESLint
-Prettier
-TypeScript strict
-Husky
-lint-staged
-```
-
-Git workflow:
-
-```text
-feature/*
-fix/*
-refactor/*
-chore/*
-```
-
-Pre-commit (nhanh, chỉ file staged):
-
-```text
-lint
-format
-```
-
-CI (mỗi pull request):
-
-```text
-pnpm gen:api (kiểm tra contract khớp)
-lint
-typecheck (vue-tsc)
-test
-build
-test:e2e (critical flows)
-```
+Chi tiết (Git flow trunk-based, hooks, rule ESLint, template PR/issue, tooling): `docs/plan/scaffold-plan.md` §B–§G.
 
 ---
 
@@ -1174,65 +1055,29 @@ Không đặt secret backend vào frontend environment.
 # 28. Development Commands
 
 ```bash
-pnpm install
-pnpm dev
-pnpm build
-pnpm preview
-pnpm lint
-pnpm typecheck
-pnpm gen:api
-pnpm test
-pnpm test:e2e
+npm install
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm run typecheck
+npm run gen:api
+npm test
+npm run test:e2e
 ```
 
 ---
 
 # 29. Initial Setup
 
-```bash
-pnpm create vite fashion-store-cms --template vue-ts
-
-cd fashion-store-cms
-
-pnpm install
-```
-
-Install core dependencies:
+Scaffold thẳng vào thư mục gốc repo (scaffold-plan D1), Node 22 LTS:
 
 ```bash
-pnpm add vue-router pinia axios zod @tanstack/vue-query vue-i18n
+npm create vite@latest . -- --template vue-ts
+npm install
 ```
 
-Install UI & libs:
-
-```bash
-pnpm add @nuxt/ui tailwindcss @iconify-json/lucide \
-  vee-validate @vee-validate/zod \
-  echarts vue-echarts \
-  @tiptap/vue-3 @tiptap/pm @tiptap/starter-kit dompurify \
-  @vueuse/core dayjs @internationalized/date
-```
-
-Install development dependencies:
-
-```bash
-pnpm add -D \
-  eslint \
-  eslint-plugin-perfectionist \
-  eslint-plugin-unused-imports \
-  eslint-plugin-vue \
-  typescript-eslint \
-  prettier \
-  vue-tsc \
-  vitest \
-  jsdom \
-  @vue/test-utils \
-  @playwright/test \
-  msw \
-  openapi-typescript \
-  husky \
-  lint-staged
-```
+Danh sách package và lệnh cài là nguồn chuẩn ở `docs/plan/scaffold-plan.md` §K: K.1 (dependencies Foundation), K.2 (cài theo Phase — `echarts`, Tiptap, `dompurify`), K.3 (devDependencies), K.5 (không dùng: `msw`, `lodash`, `moment`, `sass`, `vuex`).
 
 ## Nuxt UI + Tailwind
 
@@ -1249,16 +1094,13 @@ export default defineConfig({
 })
 ```
 
-```ts
-// main.ts
-import ui from '@nuxt/ui/vue-plugin'
-app.use(router).use(ui)
-```
+Plugin `ui` được `app.use()` trong `createAppRuntime()` (`app/Runtime.ts`, scaffold-plan §M.2); `main.ts` không tự cài plugin.
 
 ```css
-/* main.css */
+/* src/assets/styles/main.css — file CSS duy nhất, không variables.css (scaffold-plan §J, §L.9) */
 @import 'tailwindcss';
 @import '@nuxt/ui';
+/* token @theme … */
 ```
 
 ```vue
@@ -1266,7 +1108,7 @@ app.use(router).use(ui)
 <UApp><RouterView /></UApp>
 ```
 
-Theme (màu primary, neutral...) cấu hình qua `ui({ ui: { colors: {...} } })` và CSS variables của Tailwind.
+Màu ngữ nghĩa và mặc định component chỉ khai báo ở `app/config/Ui.config.ts` (truyền vào `ui()` trong `vite.config.ts`); token CSS ở `main.css` (scaffold-plan §J, §L).
 
 ## Import convention
 
