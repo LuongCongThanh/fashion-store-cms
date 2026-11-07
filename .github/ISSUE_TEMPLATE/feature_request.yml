@@ -1,0 +1,56 @@
+name: Đề xuất tính năng
+description: Đề xuất tính năng hoặc cải tiến
+title: 'feat: '
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: Khớp scope trong commitlint.config.ts
+      options:
+        - auth
+        - store
+        - products
+        - orders
+        - router
+        - api
+        - ui
+        - i18n
+        - pwa
+        - test
+        - deps
+        - config
+        - ci
+        - docs
+    validations:
+      required: true
+  - type: input
+    id: phase
+    attributes:
+      label: Phase
+      description: Theo FE_architecture §30, ví dụ P2
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề cần giải quyết
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Giải pháp đề xuất
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Tiêu chí hoàn thành
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Ngoài phạm vi
