@@ -8,4 +8,4 @@ Issues and specs are tracked as local markdown files under `.scratch/<feature>/`
 
 ### Domain docs
 
-Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+Single-context: one `GLOSSARY.md` at the repo root. See `docs/agents/domain.md`.

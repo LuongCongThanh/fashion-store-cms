@@ -8,7 +8,7 @@ Nguyên tắc thực hiện:
 - Không tạo thư mục rỗng — mỗi file có nội dung tối thiểu (§5).
 - Package manager: npm. Node 22 LTS.
 - Trong lúc scaffold, tài liệu này là nguồn chuẩn cho convention; khi lệch với `FE_architecture.md` thì sửa `FE_architecture.md` theo tài liệu này (Step 0).
-- Plan là tài liệu **tạm**: ở Step 7, các convention bền vững (§B–§U) được chuyển sang `docs/CONVENTIONS.md`, quyết định lớn thành ADR trong `docs/adr/`, rồi plan chuyển vào `docs/archive/`. Sau đó chỉ còn một nguồn chuẩn cho mỗi chủ đề.
+- Plan là tài liệu **tạm**: ở Step 7, các convention bền vững (§B–§U) được chuyển sang `docs/CONVENTIONS.md`, rồi plan chuyển vào `docs/archive/`. Sau đó chỉ còn một nguồn chuẩn cho mỗi chủ đề.
 
 ## Quyết định đã chốt
 
@@ -60,12 +60,7 @@ D24 và D32 đã bị huỷ trong quá trình review; giữ nguyên số để k
 
 ## Thuật ngữ
 
-| Thuật ngữ | Nghĩa |
-|---|---|
-| **Session** | Ai đang đăng nhập (token) và đang quản lý Store nào, cùng hệ quả khi chúng đổi (refresh, xoá cache, điều hướng login). Module `shared/lib/session/`. Không phải "thông tin user" — cái đó ở `features/auth`. |
-| **App runtime** | Toàn bộ object dựng một lần cho app (pinia, i18n, router, notifier, Session, HttpClient, QueryClient), do `createAppRuntime()` tạo. Prod và test dùng cùng hàm, khác nhau ở override. |
-| **Store** | Cửa hàng mà người dùng CMS đang quản lý (StoreScope) — không nhầm với Pinia store. |
-| **Shared module** | Code dùng lại nằm trong `shared/`: có ít nhất 2 nơi dùng thật và không chứa tri thức nghiệp vụ. Code nghiệp vụ được nhiều feature dùng (VD upload media) không phải shared module — nó là interface công khai của feature đó (`useMedia()`). |
+Xem [GLOSSARY.md](../GLOSSARY.md).
 
 ## A. Cây thư mục đầy đủ
 
@@ -73,124 +68,124 @@ Ký hiệu: không đánh dấu = tạo ở Foundation (Step 1–6) · `(P2)`, `
 
 ```text
 cms/
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── bug_report.md
-│   │   └── feature_request.md
-│   ├── workflows/
-│   │   └── ci.yml
-│   ├── dependabot.yml
-│   └── pull_request_template.md
-├── .husky/
-│   ├── pre-commit
-│   ├── commit-msg
-│   └── pre-push
-├── .vscode/
-│   ├── settings.json
-│   └── extensions.json
-├── docs/
-│   ├── FE_architecture.md
-│   └── scaffold-plan.md
-├── e2e/
-│   └── Smoke.spec.ts
-├── public/
-│   ├── favicon.svg
+├── .github/                                # cấu hình GitHub
+│   ├── ISSUE_TEMPLATE/                     # mẫu tạo issue
+│   │   ├── bug_report.md                   # mẫu báo lỗi
+│   │   └── feature_request.md              # mẫu đề xuất tính năng
+│   ├── workflows/                          # GitHub Actions
+│   │   └── ci.yml                          # CI: lint, type-check, test, build, e2e cho mỗi PR
+│   ├── dependabot.yml                      # tự động mở PR cập nhật dependency
+│   └── pull_request_template.md            # checklist mô tả PR
+├── .husky/                                 # git hooks
+│   ├── pre-commit                          # chạy lint-staged trên file đã stage
+│   ├── commit-msg                          # kiểm tra message theo Conventional Commits (commitlint)
+│   └── pre-push                            # chạy type-check + unit test trước khi push
+├── .vscode/                                # cấu hình editor dùng chung cho team
+│   ├── settings.json                       # format on save, ESLint/Prettier làm mặc định
+│   └── extensions.json                     # extension VS Code khuyến nghị
+├── docs/                                   # tài liệu kiến trúc + kế hoạch
+│   ├── FE_architecture.md                  # kiến trúc FE (nguồn quyết định)
+│   └── scaffold-plan.md                    # tài liệu này — kế hoạch dựng khung
+├── e2e/                                    # test end-to-end Playwright
+│   └── Smoke.spec.ts                       # smoke test: mở app, đăng nhập, vào dashboard
+├── public/                                 # file tĩnh copy nguyên trạng vào bản build
+│   ├── favicon.svg                         # icon tab trình duyệt
 │   └── robots.txt                          # Disallow: / (§R.1)
-├── scripts/
+├── scripts/                                # script tiện ích cho dev
 │   └── GenApi.ts                           # chạy bằng tsx
-├── src/
+├── src/                                    # mã nguồn ứng dụng
 │   ├── app/                                # composition root — CHỈ main.ts (và src/test/) import
 │   │   ├── Runtime.ts                      # createAppRuntime() — dựng toàn bộ runtime (D37)
 │   │   ├── Runtime.spec.ts                 # test wiring prod
-│   │   ├── config/
+│   │   ├── config/                         # cấu hình đọc lúc khởi động
 │   │   │   ├── Env.config.ts               # validate VITE_* bằng Zod
 │   │   │   └── Ui.config.ts                # nguồn duy nhất màu + mặc định component (vite.config.ts import)
-│   │   ├── providers/
+│   │   ├── providers/                      # cài đặt plugin/handler toàn cục
 │   │   │   ├── ErrorHandling.ts            # installErrorHandling() — lỗi global (§O.4)
-│   │   │   ├── ErrorHandling.spec.ts
-│   │   ├── router/
-│   │   │   ├── Guards.ts
-│   │   │   ├── Guards.spec.ts
+│   │   │   └── ErrorHandling.spec.ts       # test bắt lỗi global
+│   │   ├── router/                         # cấu hình vue-router
+│   │   │   ├── Guards.ts                   # navigation guard: yêu cầu đăng nhập, kiểm tra quyền, chọn Store
+│   │   │   ├── Guards.spec.ts              # test các guard
 │   │   │   ├── RouteMeta.d.ts              # RouteMeta (§S.1)
-│   │   │   ├── Router.ts
+│   │   │   ├── Router.ts                   # createRouter() + gắn guard
 │   │   │   └── Routes.ts                   # gộp <Feature>.routes.ts, nơi duy nhất import views/
-│   │   └── views/
+│   │   └── views/                          # trang cấp app không thuộc feature nào
 │   │       ├── DesignSystemView.vue        # /admin/design-system, chỉ dev (§L.10)
 │   │       ├── ForbiddenView.vue           # 403
 │   │       └── NotFoundView.vue            # 404
-│   ├── assets/
-│   │   ├── images/
+│   ├── assets/                             # tài nguyên được Vite xử lý (bundle)
+│   │   ├── images/                         # ảnh dùng trong app
 │   │   │   └── Logo.svg                    # bản logo duy nhất, PWA cũng sinh icon từ đây (§R)
-│   │   └── styles/
+│   │   └── styles/                         # CSS toàn cục
 │   │       └── main.css                    # tailwind + nuxt ui + token (§L.9)
 │   ├── features/                           # cấu trúc chi tiết: §Q
-│   │   ├── auth/
-│   │   │   ├── api/
-│   │   │   │   └── Auth.api.ts
-│   │   │   ├── stores/
-│   │   │   │   └── Auth.store.ts
-│   │   │   ├── types/
-│   │   │   │   └── Auth.types.ts
-│   │   │   ├── views/
-│   │   │   │   └── LoginView.vue
-│   │   │   ├── Auth.routes.ts
+│   │   ├── auth/                           # feature đăng nhập / đăng xuất / thông tin user
+│   │   │   ├── api/                        # hàm gọi API của feature
+│   │   │   │   └── Auth.api.ts             # gọi API login, logout, me
+│   │   │   ├── stores/                     # Pinia store nội bộ feature
+│   │   │   │   └── Auth.store.ts           # Pinia store thông tin user hiện tại, nội bộ feature
+│   │   │   ├── types/                      # kiểu dữ liệu feature (feature khác được import)
+│   │   │   │   └── Auth.types.ts           # kiểu dữ liệu của auth (User, LoginPayload…)
+│   │   │   ├── views/                      # trang (route component) của feature
+│   │   │   │   └── LoginView.vue           # trang đăng nhập
+│   │   │   ├── Auth.routes.ts              # khai báo route /login của feature
 │   │   │   ├── UseAuth.ts                  # interface công khai duy nhất
-│   │   │   └── UseAuth.spec.ts
+│   │   │   └── UseAuth.spec.ts             # test interface useAuth()
 │   │   └── StoreScope/                     # Store đang quản lý — mọi feature cần storeId
-│   │       ├── api/
+│   │       ├── api/                        # hàm gọi API của feature
 │   │       │   └── StoreScope.api.ts       # danh sách Store user được truy cập
-│   │       ├── stores/
+│   │       ├── stores/                     # Pinia store nội bộ feature
 │   │       │   └── StoreScope.store.ts     # storeId hiện tại, persist localStorage
-│   │       ├── types/
-│   │       │   └── StoreScope.types.ts
+│   │       ├── types/                      # kiểu dữ liệu feature (feature khác được import)
+│   │       │   └── StoreScope.types.ts     # kiểu dữ liệu Store
 │   │       ├── UseStoreScope.ts            # useStoreScope() — bọc Session (§M.3)
-│   │       └── UseStoreScope.spec.ts
-│   ├── layouts/
+│   │       └── UseStoreScope.spec.ts       # test useStoreScope()
+│   ├── layouts/                            # khung trang bọc quanh view
 │   │   ├── components/                     # chỉ layout dùng
-│   │   │   ├── AppHeader.vue
+│   │   │   ├── AppHeader.vue               # thanh trên: StoreSwitcher, UserMenu
 │   │   │   ├── AppSidebar.vue              # trạng thái thu gọn: useLocalStorage
 │   │   │   ├── CommandPalette.vue          # (P5) Ctrl/⌘+K — render useNavigation().commands (§S.1)
 │   │   │   ├── ShortcutsHelpModal.vue      # (P5) render useNavigation().shortcuts
 │   │   │   ├── StoreSwitcher.vue           # dùng useStoreScope() (§M.3)
 │   │   │   └── UserMenu.vue                # đổi theme + ngôn ngữ + logout
-│   │   ├── AuthLayout.vue
-│   │   ├── DashboardLayout.vue
+│   │   ├── AuthLayout.vue                  # layout trang chưa đăng nhập (login)
+│   │   ├── DashboardLayout.vue             # layout chính sau đăng nhập: header + sidebar + nội dung
 │   │   ├── Navigation.ts                   # buildNavigation(routes, can) + useNavigation() (§S.1, D38)
-│   │   └── Navigation.spec.ts
-│   ├── locales/
-│   │   ├── en.json
-│   │   └── vi.json
+│   │   └── Navigation.spec.ts              # test buildNavigation theo quyền
+│   ├── locales/                            # bản dịch i18n
+│   │   ├── en.json                         # tiếng Anh
+│   │   └── vi.json                         # tiếng Việt
 │   ├── shared/                             # tái sử dụng; KHÔNG import app/, layouts/, features/
 │   │   ├── components/                     # UI dùng chung, KHÔNG gọi API, KHÔNG biết nghiệp vụ
 │   │   │   ├── confirm/                    # module: interface duy nhất là useConfirm()
-│   │   │   │   ├── ConfirmDialog.vue
+│   │   │   │   ├── ConfirmDialog.vue       # modal xác nhận, chỉ dùng qua useConfirm()
 │   │   │   │   ├── UseConfirm.ts           # trả Promise<boolean>
-│   │   │   │   └── UseConfirm.spec.ts
+│   │   │   │   └── UseConfirm.spec.ts      # test useConfirm()
 │   │   │   ├── display/                    # (P5)
-│   │   │   │   ├── CopyText.vue
-│   │   │   │   └── RelativeTime.vue
-│   │   │   ├── feedback/
+│   │   │   │   ├── CopyText.vue            # hiển thị text kèm nút copy
+│   │   │   │   └── RelativeTime.vue        # hiển thị thời gian tương đối ("3 phút trước")
+│   │   │   ├── feedback/                   # trạng thái rỗng / lỗi / offline
 │   │   │   │   ├── EmptyState.vue          # §21
 │   │   │   │   ├── ErrorState.vue          # §21, có nút Retry
-│   │   │   │   ├── ErrorState.spec.ts
+│   │   │   │   ├── ErrorState.spec.ts      # test hiển thị lỗi + nút Retry
 │   │   │   │   └── OfflineBanner.vue       # §R
 │   │   │   ├── form/                       # (P5)
-│   │   │   │   └── FormActions.vue
-│   │   │   ├── page/
+│   │   │   │   └── FormActions.vue         # cụm nút Lưu / Huỷ chuẩn ở cuối form
+│   │   │   ├── page/                       # khung chung của một trang
 │   │   │   │   └── PageHeader.vue          # tiêu đề trang, font-display (§L.5)
 │   │   │   └── table/                      # (P5)
 │   │   │       ├── DataTable.vue           # §22
-│   │   │       └── DataTable.spec.ts
+│   │   │       └── DataTable.spec.ts       # (P5) test bảng: sort, phân trang, chọn dòng
 │   │   ├── composables/                    # ≥ 2 nơi dùng, không nghiệp vụ
 │   │   │   ├── UseListState.ts             # (P5) §6.1
 │   │   │   ├── UseListState.spec.ts        # (P5)
 │   │   │   ├── UseNotify.ts                # toast thành công / lỗi theo ApiError
-│   │   │   ├── UseNotify.spec.ts
+│   │   │   ├── UseNotify.spec.ts           # test useNotify()
 │   │   │   ├── UsePwa.ts                   # báo bản mới (§R)
 │   │   │   └── UseTheme.ts                 # color mode, key cms.colorMode
 │   │   ├── lib/                            # hạ tầng thuần, không import components/, composables/
-│   │   │   ├── api/
-│   │   │   │   ├── client/
+│   │   │   ├── api/                        # giao tiếp HTTP
+│   │   │   │   ├── client/                 # HTTP client duy nhất của app
 │   │   │   │   │   ├── HttpClient.ts       # createHttpClient, useHttpClient, HTTP_CLIENT_KEY; bên trong: header, gom 401, chuẩn hoá lỗi (§M.1, §O.3)
 │   │   │   │   │   └── HttpClient.spec.ts  # test MỌI hành vi qua interface, gồm các ca §O.3
 │   │   │   │   └── errors/                 # kiểu lỗi + chính sách lỗi công khai
@@ -198,52 +193,56 @@ cms/
 │   │   │   │       ├── ErrorCode.ts        # mã lỗi phía client (§O.2)
 │   │   │   │       ├── ErrorPolicy.ts      # isRetryable, messageKeyOf, isSilent, routeMutationError (§O.4, D39)
 │   │   │   │       └── ErrorPolicy.spec.ts # phủ toàn bộ bảng §O.4
-│   │   │   ├── query/
+│   │   │   ├── query/                      # TanStack Vue Query
 │   │   │   │   ├── QueryClient.ts          # createAppQueryClient() — dùng ErrorPolicy
 │   │   │   │   └── VueQuery.d.ts           # kiểu meta cho mutation (§O.4)
 │   │   │   ├── export/                     # (P10)
-│   │   │   │   └── ExportCsv.ts
-│   │   │   ├── form/
+│   │   │   │   └── ExportCsv.ts            # xuất dữ liệu ra file CSV
+│   │   │   ├── form/                       # tiện ích xử lý form
 │   │   │   │   ├── ApplyApiErrorToForm.ts  # §6.1
-│   │   │   │   └── ApplyApiErrorToForm.spec.ts
-│   │   │   ├── i18n/
+│   │   │   │   └── ApplyApiErrorToForm.spec.ts # test map lỗi API vào field form
+│   │   │   ├── i18n/                       # vue-i18n
 │   │   │   │   ├── I18n.ts                 # createAppI18n() (plugin sở hữu locale), useLocale()
-│   │   │   │   └── I18n.spec.ts
-│   │   │   └── session/
+│   │   │   │   └── I18n.spec.ts            # test đổi/lưu locale
+│   │   │   └── session/                    # Session (xem GLOSSARY.md)
 │   │   │       ├── Session.ts              # createSession(), useSession(), SESSION_KEY (§M.2)
 │   │   │       ├── Session.store.ts        # useSessionStore — token + storeId, nội bộ
-│   │   │       └── Session.spec.ts
-│   │   ├── types/
+│   │   │       └── Session.spec.ts         # test refresh token, đổi Store, logout
+│   │   ├── types/                          # kiểu dùng chung
 │   │   │   └── Api.generated.ts            # sinh từ Swagger, KHÔNG sửa tay
 │   │   └── utils/                          # hàm thuần, tạo khi có hàm đầu tiên
 │   │       └── Money.ts                    # (P5) ví dụ
-│   ├── test/
+│   ├── test/                               # hạ tầng test dùng chung (không phải test của module)
 │   │   ├── factories/                      # dữ liệu giả bằng faker (§S.2)
-│   │   │   └── User.factory.ts
+│   │   │   └── User.factory.ts             # sinh User giả
 │   │   ├── Render.ts                       # renderWithPlugins() — gọi createAppRuntime() với fake
-│   │   ├── Setup.ts
-│   ├── App.vue
+│   │   └── Setup.ts                        # vitest setupFiles: matcher, mock toàn cục, reset giữa các test
+│   ├── App.vue                             # component gốc: <RouterView/> + UApp
 │   ├── env.d.ts                            # ImportMetaEnv
 │   └── main.ts                             # entry: createApp(App).use(createAppRuntime().plugin).mount()
-├── .editorconfig
-├── .env.example
-├── .gitignore
-├── .nvmrc
-├── .prettierignore
-├── .prettierrc.json
-├── commitlint.config.ts
+├── .editorconfig                           # indent, xuống dòng thống nhất giữa editor
+├── .env.example                            # mẫu biến môi trường VITE_*, copy thành .env.local
+├── .gitignore                              # file không đưa vào git
+├── .nvmrc                                  # phiên bản Node cố định
+├── .prettierignore                         # file Prettier bỏ qua
+├── .prettierrc.json                        # cấu hình Prettier
+├── AGENTS.md                               # trỏ sang CLAUDE.md (cho agent không phải Claude)
+├── CLAUDE.md                               # hướng dẫn cho agent: issue tracker, domain docs
+├── GLOSSARY.md                             # thuật ngữ kỹ thuật dùng chung
+├── README.md                               # giới thiệu dự án, cách cài và chạy
+├── commitlint.config.ts                    # quy tắc commit message
 ├── eslint.config.ts                        # gồm bảng BOUNDARIES (D41)
 ├── eslint.config.spec.ts                   # test tự động bảng ranh giới
-├── index.html
-├── lint-staged.config.ts
-├── package.json
-├── playwright.config.ts
-├── pwa-assets.config.ts
-├── tsconfig.app.json
-├── tsconfig.json
-├── tsconfig.node.json
-├── vite.config.ts
-└── vitest.config.ts
+├── index.html                              # HTML gốc Vite nạp main.ts
+├── lint-staged.config.ts                   # lệnh chạy cho file staged (eslint --fix, prettier)
+├── package.json                            # dependency + scripts (dev, build, test, lint, gen:api)
+├── playwright.config.ts                    # cấu hình e2e (trình duyệt, baseURL, webServer)
+├── pwa-assets.config.ts                    # sinh icon PWA từ Logo.svg
+├── tsconfig.app.json                       # TS cho src/ (alias @app, @shared…)
+├── tsconfig.json                           # tsconfig gốc, tham chiếu app + node
+├── tsconfig.node.json                      # TS cho file config chạy trên Node
+├── vite.config.ts                          # Vite: plugin Vue, Nuxt UI, PWA, alias
+└── vitest.config.ts                        # Vitest: môi trường jsdom, setup, coverage
 ```
 
 Quy tắc phụ thuộc giữa các thư mục (chiều mũi tên = được import), một đường thẳng, không ngoại lệ:
@@ -2070,7 +2069,7 @@ const { remove } = useProductActions()          // composables/: confirm + mutat
 
 ## V. Lý do các quyết định D25, D34, D37–D41
 
-Ghi lại **vì sao** plan cũ được sửa (review kiến trúc 2026-11-07). Phần "làm gì" đã nằm ở các mục được dẫn; mục này chỉ giữ vấn đề, hướng sửa và các lỗi cần tránh. Ở Step 7, D34, D37, D40 chuyển thành ADR.
+Ghi lại **vì sao** plan cũ được sửa (review kiến trúc 2026-11-07). Phần "làm gì" đã nằm ở các mục được dẫn; mục này chỉ giữ vấn đề, hướng sửa và các lỗi cần tránh.
 
 ### V.1. Composition root + Session (D37, D34 — §M.2)
 
@@ -2312,7 +2311,7 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 **Làm gì**
 
 - So cây thư mục thực tế với §A, sửa chỗ lệch; `npm run lint` toàn repo pass.
-- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/CONVENTIONS.md` (bỏ phần lịch sử/lý do dài); D-quyết định quan trọng (D7, D18, D28, D33–D35, D37, D40; lý do lấy từ §V) → `docs/adr/NNNN-*.md`; plan → `docs/archive/scaffold-plan.md`. Thuật ngữ (§Thuật ngữ) → `GLOSSARY.md` ở gốc repo. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
+- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/CONVENTIONS.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/scaffold-plan.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
 
 **Commit / PR (D27):** mỗi step là một nhánh + PR riêng, squash merge vào `main` (VD `chore(config): init vite project`, `chore(config): add eslint prettier husky`, `feat(api): add http client with refresh seam`…). Step 1 chưa có hook nên tự kiểm tra format commit; từ Step 2 hook tự chặn. Chỉ commit/push khi được đồng ý.
 
