@@ -1,7 +1,8 @@
 import { z } from 'zod'
 
 const envSchema = z.object({
-  VITE_API_BASE_URL: z.url(),
+  /** URL tuyệt đối, hoặc path cùng origin (`/api`) khi chạy sau reverse proxy. */
+  VITE_API_BASE_URL: z.union([z.url(), z.string().regex(/^\/\S*$/)]),
 })
 
 export type Env = z.infer<typeof envSchema>

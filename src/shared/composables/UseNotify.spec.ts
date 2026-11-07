@@ -49,4 +49,16 @@ describe('createNotifier', () => {
       expect.objectContaining({ color: 'success', title: 'Đã lưu sản phẩm' }),
     )
   })
+
+  it('shows a persistent prompt with a translated action', () => {
+    const { notifier, toast } = setup()
+    const onClick = vi.fn()
+
+    notifier.prompt('products.saved', { label: 'products.saved', onClick })
+
+    const shown = toast.add.mock.calls[0]?.[0]
+    expect(shown).toMatchObject({ color: 'info', title: 'Đã lưu sản phẩm', duration: 0 })
+    shown.actions[0].onClick()
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
 })

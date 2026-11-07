@@ -19,7 +19,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "pwa:assets": "pwa-assets-generator"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",

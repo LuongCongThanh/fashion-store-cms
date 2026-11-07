@@ -4,10 +4,12 @@ import { describe, expect, it, vi } from 'vitest'
 import { createApp } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
+import { createFakeNotifier } from '@test/Render'
+
 import { installErrorHandling } from './ErrorHandling'
 
 function setup() {
-  const notifier = { success: vi.fn(), error: vi.fn() }
+  const notifier = createFakeNotifier()
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [{ path: '/', component: { render: () => null } }],
