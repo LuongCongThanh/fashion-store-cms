@@ -22,11 +22,22 @@ Mỗi plan con nằm trong `docs/plan/NN-<slug>/`. Số thứ tự là thứ t�
 | --- | --- |
 | `spec.md` | Spec riêng của plan con: mục tiêu, phạm vi, tiêu chí hoàn thành, phụ thuộc. Mỗi mục có chú thích giải thích. |
 | `plan.md` | Việc cần làm, tiêu chí kiểm tra, và các phần tham chiếu chép nguyên văn từ plan gốc. Có dòng `Status:` và `Blocked by:` ở đầu. |
-| `guide.md` | Các bước thực hiện plan, từ tạo nhánh đến merge. |
 | `report.md` | Ghi kết quả sau khi làm: đã làm gì, kết quả kiểm tra, chỗ lệch so với plan, việc còn tồn. |
-| `metric.md` | Ghi số token đã tốn cho mỗi phiên làm việc. |
+
+Số token của mọi plan ghi chung trong [token-usage.md](./token-usage.md).
 
 Giá trị của `Status`: `ready-for-agent` → `in-progress` → `done`.
+
+## Quy trình thực hiện mỗi plan
+
+1. Kiểm tra mọi plan trong `Blocked by` đã `Status: done`.
+2. Tạo nhánh riêng từ `main` (D27), ví dụ `chore/<slug>`.
+3. Đổi `Status:` trong `plan.md` thành `in-progress`.
+4. Làm theo mục **Làm gì** trong `plan.md`; tra phần tham chiếu ngay trong file đó.
+5. Chạy hết mục **Kiểm tra**, ghi kết quả vào `report.md`.
+6. Ghi token đã dùng vào [token-usage.md](./token-usage.md).
+7. Commit theo Conventional Commits (§C.2), tuân thủ [Lưu ý bắt buộc](#lưu-ý-bắt-buộc).
+8. Mở PR, squash merge sau khi được duyệt; đổi `Status:` thành `done`.
 
 ## Danh sách plan con
 
@@ -47,14 +58,14 @@ Giá trị của `Status`: `ready-for-agent` → `in-progress` → `done`.
 | 13 | [Script sinh API types](./13-gen-api-types/plan.md) | Step 6 | 05 |
 | 14 | [Đối chiếu và chốt](./14-reconcile-finalize/plan.md) | Step 7 | 10, 11, 12, 13 |
 
-Step 0 (chốt tài liệu) đã xong trong PR #1 nên không có plan con.
+Step 3a, 5b được tách đôi (phần 1/2) chỉ trong danh sách này, không có heading riêng trong scaffold-plan. Step 0 (chốt tài liệu) đã xong trong PR #1 nên không có plan con.
 
 ## Tiêu chí hoàn thành
 
 - Cả 14 plan có `Status: done`, và `report.md` của từng plan ghi kết quả pass cho mọi mục kiểm tra.
 - `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:coverage`, `npm run test:e2e` và `npm run build` đều pass; CI xanh.
 - Cây thư mục thực tế khớp với §A; các convention đã được chuyển sang `docs/CONVENTIONS.md` (plan 14).
-- [metric.md](./metric.md) tổng có đủ số token của 14 plan.
+- [token-usage.md](./token-usage.md) có đủ số token của 14 plan.
 - Không có commit nào trên `main` mang tên hoặc attribution của Claude.
 
 ## Ngoài phạm vi

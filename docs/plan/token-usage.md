@@ -1,6 +1,6 @@
-# Metric tổng — Token đã dùng
+# Token đã dùng
 
-Sau khi xong mỗi plan, chép dòng "Tổng cộng" trong `NN-*/metric.md` sang bảng dưới. Số liệu lấy từ `/cost` hoặc thống kê usage của Claude Code ở cuối phiên.
+Cuối mỗi phiên làm plan, cộng số token (lấy từ `/cost` hoặc usage của Claude Code) vào dòng của plan đó.
 
 | # | Plan | Số phiên | Input | Output | Cache read | Tổng tokens | Chi phí (USD) |
 | --- | --- | --- | --- | --- | --- | --- | --- |

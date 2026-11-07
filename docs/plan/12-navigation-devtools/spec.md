@@ -4,12 +4,11 @@ Status: ready-for-agent
 Blocked by: 09
 Nguồn: Step 5b (phần 2) · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
-> **Chú thích:** spec trả lời câu hỏi *làm gì và thế nào là xong*. Cách làm và phần tham chiếu kỹ thuật nằm trong `plan.md`, các bước thực hiện nằm trong `guide.md`.
+> **Chú thích:** spec trả lời câu hỏi *làm gì và thế nào là xong*. Cách làm và phần tham chiếu kỹ thuật nằm trong `plan.md`, các bước thực hiện nằm trong [Quy trình](../spec.md#quy-trình-thực-hiện-mỗi-plan) của spec tổng.
 
 ## Lưu ý bắt buộc
 
-- **Không commit hoặc mở PR dưới tên Claude.** Không thêm `Co-Authored-By: Claude …`, không ghi "Generated with Claude Code", không đặt author/committer là Claude.
-- Dùng một nhánh và một PR riêng, squash merge; chỉ commit hoặc push khi được đồng ý.
+Xem [Lưu ý bắt buộc](../spec.md#lưu-ý-bắt-buộc) trong spec tổng.
 
 ## Mục tiêu
 
@@ -45,4 +44,4 @@ sidebar chỉ hiện route có quyền; `Navigation.spec.ts` pass; chỉ `Naviga
 
 ## Ghi nhận
 
-> **Chú thích:** sau khi làm xong, điền kết quả vào [report.md](./report.md) và số token vào [metric.md](./metric.md).
+> **Chú thích:** sau khi làm xong, điền kết quả vào [report.md](./report.md) và số token vào [token-usage.md](../token-usage.md).
