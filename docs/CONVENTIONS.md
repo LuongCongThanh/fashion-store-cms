@@ -288,8 +288,24 @@ Lưu ý: tên file `UseAuth.ts` khác hoa/thường với hàm `useAuth` là có
 
 ### C.1. Nhánh
 
-- Trunk-based: mọi nhánh tách từ `main`, sống ngắn (≤ 3 ngày), merge lại `main` qua PR.
-- Không có `develop`. Release bằng tag `vX.Y.Z` trên `main`.
+Hai nhánh dài hạn:
+
+| Nhánh  | Vai trò                                                                    |
+| ------ | -------------------------------------------------------------------------- |
+| `main` | Bản đã phát hành. Chỉ nhận PR release từ `dev`. Release bằng tag `vX.Y.Z`. |
+| `dev`  | Nhánh tích hợp. Mọi nhánh tính năng tách từ đây và merge về đây.           |
+
+```text
+main ──────────────●──────────────●──── (tag v0.1.0, v0.2.0…)
+                  ╱              ╱
+dev ──●──●──●──●─┴──●──●──●──●──┴──
+       ╲  ╱  ╲  ╱
+        feature/…  fix/…
+```
+
+- Nhánh tính năng tách từ `dev`, sống ngắn (≤ 3 ngày), merge lại `dev` qua PR.
+- Release: mở PR `dev → main` (tiêu đề `chore(release): vX.Y.Z`), merge xong gắn tag trên `main`. PR release được miễn kiểm body (`pr-body.yml`).
+- `hotfix/` tách từ `main`, merge vào `main`, rồi merge `main` ngược về `dev` để hai nhánh không lệch.
 - Tên nhánh: `<type>/<TICKET>-<mo-ta-ngan>` (kebab-case, không dấu). Không có ticket thì bỏ phần `<TICKET>-`.
 
 | type        | Dùng khi                        |
@@ -327,15 +343,17 @@ Ví dụ: `feat(products): add server-side pagination to product table`.
 - Tiêu đề PR theo format commit (vì squash merge dùng tiêu đề PR làm commit message).
 - ≤ ~400 dòng thay đổi (không tính file generated / lock); lớn hơn thì tách.
 - Bắt buộc: CI xanh + ≥ 1 approve; resolve hết conversation.
-- **Squash merge** duy nhất; xoá nhánh sau khi merge.
-- Rebase lên `main` khi bị lệch, không merge `main` vào nhánh.
+- PR vào `dev`: **squash merge**; xoá nhánh sau khi merge.
+- PR release `dev → main`: **merge commit** (không squash) để lịch sử của `dev` có trong `main`. Nếu squash thì `dev` và `main` lệch nhau sau mỗi lần release.
+- Nhánh tính năng bị lệch thì rebase lên `dev`, không merge `dev` vào nhánh.
 
-### C.4. Bảo vệ `main` (làm tay trên GitHub)
+### C.4. Bảo vệ `main` và `dev` (làm tay trên GitHub)
 
-- Require PR, 1 approval, dismiss stale approvals.
-- Require status checks: `lint`, `typecheck`, `test`, `build`.
-- Require linear history; chặn force push và xoá nhánh.
-- Settings → chỉ bật "Allow squash merging", bật "Automatically delete head branches".
+- Cả hai nhánh: require PR, 1 approval, dismiss stale approvals; chặn force push và xoá nhánh.
+- Require status checks: `lint`, `typecheck`, `test`, `build` (và `conventional-title`, `template-sections` khi đã có `pr-title.yml`, `pr-body.yml`).
+- `dev`: require linear history (chỉ squash merge).
+- `main`: không bật linear history, vì PR release dùng merge commit.
+- Settings → bật "Allow squash merging" và "Allow merge commits", tắt "Allow rebase merging"; bật "Automatically delete head branches". Không xoá được `dev` vì đã chặn xoá nhánh.
 
 ---
 
