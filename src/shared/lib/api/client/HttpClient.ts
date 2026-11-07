@@ -61,7 +61,7 @@ export interface RequestOpts<P, M extends Method> {
   path?: PathParamsOf<P, M>
   query?: QueryOf<P, M>
   signal?: AbortSignal
-  /** true = không gắn token, không vào hàng đợi refresh. Chỉ Session dùng cho chính request refresh. */
+  /** true = không gắn token, không vào hàng đợi refresh. Dùng cho request refresh của Session và cho login (401 = sai thông tin, không phải hết phiên). */
   skipAuth?: boolean
 }
 
