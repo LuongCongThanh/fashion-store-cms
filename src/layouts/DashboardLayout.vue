@@ -5,9 +5,8 @@ import OfflineBanner from '@shared/components/feedback/OfflineBanner.vue'
 import { useNotify } from '@shared/composables/UseNotify'
 import { usePwa } from '@shared/composables/UsePwa'
 
+import AppHeader from './components/AppHeader.vue'
 import AppSidebar from './components/AppSidebar.vue'
-import StoreSwitcher from './components/StoreSwitcher.vue'
-import UserMenu from './components/UserMenu.vue'
 
 const notify = useNotify()
 const { needRefresh, reload } = usePwa()
@@ -24,10 +23,7 @@ watch(needRefresh, (hasUpdate) => {
     <AppSidebar />
     <div class="flex min-w-0 flex-1 flex-col">
       <OfflineBanner />
-      <header class="flex h-14 items-center justify-between border-b border-default px-6">
-        <StoreSwitcher />
-        <UserMenu />
-      </header>
+      <AppHeader />
       <main class="mx-auto w-full max-w-screen-2xl p-4 lg:p-6">
         <RouterView />
       </main>

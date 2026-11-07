@@ -18,7 +18,7 @@ Có i18n vi/en, plugin sở hữu locale, đổi ngôn ngữ đồng bộ UI, <h
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 3c; mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 3c; mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - `I18n.ts` theo §H: `createAppI18n()` (plugin sở hữu locale), `useLocale()`; không singleton; `vi.json`/`en.json` có nhóm `common`.
 - `App.vue` dùng `uiLocale` từ `useLocale()`.

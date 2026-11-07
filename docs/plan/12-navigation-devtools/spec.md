@@ -18,7 +18,7 @@ Sidebar và document.title sinh từ route meta qua một module Navigation; có
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 5b (phần 2); mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 5b (phần 2); mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - `RouteMeta.d.ts`, `layouts/Navigation.ts` + `Navigation.spec.ts` (sidebar lọc theo `can()`, title, commands/shortcuts sinh đúng từ meta), `AppSidebar` render từ Navigation, `document.title` theo §S.1. Command palette và phím tắt **hoãn tới P5** (D38).
 - Tool dev theo §S.2 (checker, query devtools, dependabot, knip, `analyze`).

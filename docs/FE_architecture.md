@@ -49,35 +49,35 @@ NestJS REST API
 
 # 2. Technology Stack
 
-| Category        | Technology                                         | Lý do / đã cân nhắc                                                                                                                                                                                                                                           |
-| --------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Framework       | Vue 3                                              |                                                                                                                                                                                                                                                               |
-| Build tool      | Vite                                               |                                                                                                                                                                                                                                                               |
-| Language        | TypeScript (strict)                                |                                                                                                                                                                                                                                                               |
-| Routing         | Vue Router                                         | Router chính thức của Vue                                                                                                                                                                                                                                     |
-| Client state    | Pinia                                              | Store chính thức, thay Vuex                                                                                                                                                                                                                                   |
-| Server state    | TanStack Vue Query                                 | Cache, dedupe, retry, loading/error có sẵn. Không chọn Pinia Colada vì còn mới                                                                                                                                                                                |
-| HTTP Client     | Axios                                              | Team quen, interceptor refresh token rõ, có `onUploadProgress`. Không chọn openapi-fetch; đánh đổi: type response tự gắn từ `components['schemas']`                                                                                                           |
-| i18n            | vue-i18n                                           |                                                                                                                                                                                                                                                               |
-| UI              | Nuxt UI v4 (Vue + Vite mode, dựng trên Reka UI)    | Dựng trên Tailwind nên không xung đột style, dễ custom; có `UTable`, `UTree`, `UFileUpload`, Dashboard layout. Không chọn Ant Design Vue (CSS-in-JS xung đột Tailwind, cập nhật chậm), shadcn-vue (phải tự dựng Table/Tree), PrimeVue (pass-through dài dòng) |
-| Styling         | Tailwind CSS v4                                    | Đi kèm Nuxt UI, một hệ token chung                                                                                                                                                                                                                            |
-| Form            | vee-validate + `@vee-validate/zod`                 | Field array (Variants), dirty state, `setErrors` map lỗi API; một pattern cho mọi form                                                                                                                                                                        |
-| Validation      | Zod                                                |                                                                                                                                                                                                                                                               |
-| Table           | `UTable` (Nuxt UI, TanStack Table bên dưới)        | Server-side pagination/sort/filter                                                                                                                                                                                                                            |
-| Chart           | ECharts + vue-echarts                              | Mạnh nhất cho báo cáo về sau; import theo module, lazy-load Dashboard. Không chọn Chart.js / ApexCharts                                                                                                                                                       |
-| Rich text       | Tiptap (`@tiptap/vue-3`) + DOMPurify               | Headless, style bằng Tailwind. Không chọn CKEditor 5 (license GPL), Quill (ít cập nhật)                                                                                                                                                                       |
-| Composables     | `@vueuse/core`                                     |                                                                                                                                                                                                                                                               |
-| Date            | `@internationalized/date` + dayjs                  | DatePicker của Nuxt UI bắt buộc dùng `@internationalized/date`; dayjs để format hiển thị                                                                                                                                                                      |
-| Icons           | Iconify — Lucide (`@iconify-json/lucide`)          | Nuxt UI hỗ trợ sẵn                                                                                                                                                                                                                                            |
-| Unit Test       | Vitest                                             |                                                                                                                                                                                                                                                               |
-| Component Test  | Vue Test Utils                                     |                                                                                                                                                                                                                                                               |
-| E2E             | Playwright                                         |                                                                                                                                                                                                                                                               |
-| Lint            | ESLint + perfectionist + unused-imports            | Tự sắp xếp và xoá import thừa. Không auto-import code nội bộ (chỉ component Nuxt UI)                                                                                                                                                                          |
-| Formatter       | Prettier                                           |                                                                                                                                                                                                                                                               |
-| Git hooks       | Husky + lint-staged                                |                                                                                                                                                                                                                                                               |
-| Package Manager | npm                                                |                                                                                                                                                                                                                                                               |
-| API types       | OpenAPI (`@nestjs/swagger`) + `openapi-typescript` |                                                                                                                                                                                                                                                               |
-| API mock        | `axios-mock-adapter` (chỉ trong test)              | Thay transport của HttpClient qua `deps.transport` (test dùng runtime thì truyền `createAppRuntime({ transport })`); component test mock module `*.api.ts` bằng `vi.mock`. Không dùng MSW (scaffold-plan D18, §I)                                             |
+| Category        | Technology                                         | Lý do / đã cân nhắc                                                                                                                                                                                                                                                |
+| --------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Framework       | Vue 3                                              |                                                                                                                                                                                                                                                                    |
+| Build tool      | Vite                                               |                                                                                                                                                                                                                                                                    |
+| Language        | TypeScript (strict)                                |                                                                                                                                                                                                                                                                    |
+| Routing         | Vue Router                                         | Router chính thức của Vue                                                                                                                                                                                                                                          |
+| Client state    | Pinia                                              | Store chính thức, thay Vuex                                                                                                                                                                                                                                        |
+| Server state    | TanStack Vue Query                                 | Cache, dedupe, retry, loading/error có sẵn. Không chọn Pinia Colada vì còn mới                                                                                                                                                                                     |
+| HTTP Client     | Axios                                              | Team quen, interceptor refresh token rõ, có `onUploadProgress`. Không chọn openapi-fetch; đánh đổi: type response tự gắn từ `components['schemas']`                                                                                                                |
+| i18n            | vue-i18n                                           |                                                                                                                                                                                                                                                                    |
+| UI              | Nuxt UI v4 (Vue + Vite mode, dựng trên Reka UI)    | Dựng trên Tailwind nên không xung đột style, dễ custom; có `UTable`, `UTree`, `UFileUpload`, Dashboard layout. Không chọn Ant Design Vue (CSS-in-JS xung đột Tailwind, cập nhật chậm), shadcn-vue (phải tự dựng Table/Tree), PrimeVue (pass-through dài dòng)      |
+| Styling         | Tailwind CSS v4                                    | Đi kèm Nuxt UI, một hệ token chung                                                                                                                                                                                                                                 |
+| Form            | vee-validate + `@vee-validate/zod`                 | Field array (Variants), dirty state, `setErrors` map lỗi API; một pattern cho mọi form                                                                                                                                                                             |
+| Validation      | Zod                                                |                                                                                                                                                                                                                                                                    |
+| Table           | `UTable` (Nuxt UI, TanStack Table bên dưới)        | Server-side pagination/sort/filter                                                                                                                                                                                                                                 |
+| Chart           | ECharts + vue-echarts                              | Mạnh nhất cho báo cáo về sau; import theo module, lazy-load Dashboard. Không chọn Chart.js / ApexCharts                                                                                                                                                            |
+| Rich text       | Tiptap (`@tiptap/vue-3`) + DOMPurify               | Headless, style bằng Tailwind. Không chọn CKEditor 5 (license GPL), Quill (ít cập nhật)                                                                                                                                                                            |
+| Composables     | `@vueuse/core`                                     |                                                                                                                                                                                                                                                                    |
+| Date            | `@internationalized/date` + dayjs                  | DatePicker của Nuxt UI bắt buộc dùng `@internationalized/date`; dayjs để format hiển thị                                                                                                                                                                           |
+| Icons           | Iconify — Lucide (`@iconify-json/lucide`)          | Nuxt UI hỗ trợ sẵn                                                                                                                                                                                                                                                 |
+| Unit Test       | Vitest                                             |                                                                                                                                                                                                                                                                    |
+| Component Test  | Vue Test Utils                                     |                                                                                                                                                                                                                                                                    |
+| E2E             | Playwright                                         |                                                                                                                                                                                                                                                                    |
+| Lint            | ESLint + perfectionist + unused-imports            | Tự sắp xếp và xoá import thừa. Không auto-import code nội bộ (chỉ component Nuxt UI)                                                                                                                                                                               |
+| Formatter       | Prettier                                           |                                                                                                                                                                                                                                                                    |
+| Git hooks       | Husky + lint-staged                                |                                                                                                                                                                                                                                                                    |
+| Package Manager | npm                                                |                                                                                                                                                                                                                                                                    |
+| API types       | OpenAPI (`@nestjs/swagger`) + `openapi-typescript` |                                                                                                                                                                                                                                                                    |
+| API mock        | `axios-mock-adapter` (chỉ trong test)              | Thay transport của HttpClient qua `deps.transport` (test dùng runtime thì truyền `createAppRuntime({ transport })`); component test mock module `*.api.ts` bằng `vi.mock`. Không dùng MSW ([quyết định](./CONVENTIONS.md) D18; [CONVENTIONS](./CONVENTIONS.md) §I) |
 
 ---
 
@@ -110,7 +110,7 @@ CMS phải hỗ trợ:
 
 Feature-based architecture. Không dùng `index.ts` để re-export không cần thiết.
 
-Cây đầy đủ (kèm Phase tạo từng thư mục) là nguồn chuẩn ở `docs/plan/scaffold-plan.md` §A; tên file/thư mục theo §B (PascalCase cho `.vue` và `.ts`, không kebab-case). Tóm tắt:
+Cây đầy đủ (kèm Phase tạo từng thư mục) là nguồn chuẩn ở [CONVENTIONS.md](./CONVENTIONS.md) §A; tên file/thư mục theo §B (PascalCase cho `.vue` và `.ts`, không kebab-case). Tóm tắt:
 
 ```text
 src/
@@ -123,7 +123,7 @@ src/
 ├── assets/
 │   ├── images/          # Logo.svg
 │   └── styles/          # main.css — file CSS duy nhất (token + Tailwind + Nuxt UI)
-├── features/            # mỗi feature theo khung scaffold-plan §Q
+├── features/            # mỗi feature theo khung [CONVENTIONS](./CONVENTIONS.md) §Q
 │   ├── auth/            # UseAuth.ts là interface duy nhất (§8.1)
 │   ├── StoreScope/      # Store đang quản lý, bọc Session (§9)
 │   ├── products/        # (P5) xem §5
@@ -141,13 +141,13 @@ src/
 └── main.ts              # createApp(App).use(createAppRuntime().plugin).mount('#app')
 ```
 
-Chiều phụ thuộc: `main.ts → app → layouts → features → shared` (chặn bằng ESLint, scaffold-plan §E).
+Chiều phụ thuộc: `main.ts → app → layouts → features → shared` (chặn bằng ESLint, [CONVENTIONS](./CONVENTIONS.md) §E).
 
 ---
 
 # 5. Feature Architecture
 
-Mỗi feature phải độc lập nhất có thể. Khung chuẩn và quy tắc đặt tên `<Feature>` / `<Entity>`: scaffold-plan §Q.
+Mỗi feature phải độc lập nhất có thể. Khung chuẩn và quy tắc đặt tên `<Feature>` / `<Entity>`: [CONVENTIONS](./CONVENTIONS.md) §Q.
 
 Ví dụ `products`:
 
@@ -229,7 +229,7 @@ Quy tắc:
 
 # 6.1. Shared Modules
 
-Shared module dự kiến (ở `shared/`, không chứa tri thức nghiệp vụ). Chỉ tạo khi có nơi dùng thứ hai (scaffold-plan D33): `UseListState` tạo ở P5, `ApplyApiErrorToForm` tạo khi có form thứ hai.
+Shared module dự kiến (ở `shared/`, không chứa tri thức nghiệp vụ). Chỉ tạo khi có nơi dùng thứ hai ([quyết định](./CONVENTIONS.md) D33): `UseListState` tạo ở P5, `ApplyApiErrorToForm` tạo khi có form thứ hai.
 
 | Module                                   | Interface                                                                 | Giấu bên trong                                                                                                                                                      |
 | ---------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -247,7 +247,7 @@ const { data, isPending, isError, refetch } = useProductsQuery(params)
 
 # 7. HTTP Client
 
-Một module duy nhất `src/shared/lib/api/client/HttpClient.ts` (interface và chi tiết: scaffold-plan §M.1, D34, D40):
+Một module duy nhất `src/shared/lib/api/client/HttpClient.ts` (interface và chi tiết: [CONVENTIONS](./CONVENTIONS.md) §M.1; [quyết định](./CONVENTIONS.md) D34, D40):
 
 - `createHttpClient({ baseURL, session, getLocale })` trả interface hẹp `get/post/put/patch/delete` có kiểu theo `paths` (OpenAPI). Không trả `AxiosInstance`, không export singleton.
 - Gắn `Authorization` từ `session.getAccessToken()`, `X-Store-Id` từ `session.getStoreId()`, `Accept-Language` từ locale hiện tại.
@@ -366,7 +366,7 @@ useAuth() → {
 - Permission **tính từ** `user.permissions` của `/auth/me`, không lưu thêm bản sao ở store khác.
 - Route guard, `v-if` ẩn button, sidebar menu đều dùng cùng `can()`.
 - `Auth.store.ts` là chi tiết nội bộ; code ngoài feature không import trực tiếp.
-- Token và Store hiện tại do `Session` (`shared/lib/session/Session.ts`) sở hữu; `useAuth()` bọc Session: `login()` gọi API rồi `session.signIn()`, `logout()` = `session.logout()` (scaffold-plan §M.2).
+- Token và Store hiện tại do `Session` (`shared/lib/session/Session.ts`) sở hữu; `useAuth()` bọc Session: `login()` gọi API rồi `session.signIn()`, `logout()` = `session.logout()` ([CONVENTIONS](./CONVENTIONS.md) §M.2).
 
 ---
 
@@ -429,7 +429,7 @@ Master Store Manager có thể làm việc với nhiều store, Store Manager / 
 - Store hiện tại do `Session` sở hữu; feature `StoreScope` bọc lại qua `useStoreScope()`.
 - Mọi request gửi header `X-Store-Id` (HttpClient lấy từ `session.getStoreId()`) — chờ BE xác nhận.
 - BE kiểm tra user có quyền trên store đó.
-- Query key **không** chứa `storeId`. Khi đổi store, `session.switchStore(id)` gọi `queryClient.clear()` → cache store cũ bị xoá, query đang mở fetch lại. Xoá cache chỉ xảy ra trong Session (scaffold-plan §M.3).
+- Query key **không** chứa `storeId`. Khi đổi store, `session.switchStore(id)` gọi `queryClient.clear()` → cache store cũ bị xoá, query đang mở fetch lại. Xoá cache chỉ xảy ra trong Session ([CONVENTIONS](./CONVENTIONS.md) §M.3).
 
 Không chỉ ẩn UI.
 
@@ -706,7 +706,7 @@ Upload trực tiếp lên object storage qua presigned URL:
 
 FE validate trước khi upload: mime type, dung lượng tối đa, số lượng file. BE vẫn validate lại.
 
-Toàn bộ flow nằm trong `features/media` — là nghiệp vụ nên không ở `shared/` (scaffold-plan D33). Feature khác chỉ dùng interface công khai `useMedia()`:
+Toàn bộ flow nằm trong `features/media` — là nghiệp vụ nên không ở `shared/` ([quyết định](./CONVENTIONS.md) D33). Feature khác chỉ dùng interface công khai `useMedia()`:
 
 - `useMedia().upload(files)` → `Promise<string[]>` (`mediaId[]`), kèm `progress`, `cancel`.
 - `useMedia().pickImages()` → mở `MediaPickerModal`, trả `Promise<Media[]>`.
@@ -1005,7 +1005,7 @@ Vitest
 vi.mock (module *.api.ts) / axios-mock-adapter (HttpClient)
 ```
 
-Component test render qua `renderWithPlugins()` (gọi chính `createAppRuntime()` với override) và mock module `*.api.ts` bằng `vi.mock`. Test của HttpClient thay transport bằng `axios-mock-adapter`. Không dùng MSW (scaffold-plan §I).
+Component test render qua `renderWithPlugins()` (gọi chính `createAppRuntime()` với override) và mock module `*.api.ts` bằng `vi.mock`. Test của HttpClient thay transport bằng `axios-mock-adapter`. Không dùng MSW ([CONVENTIONS](./CONVENTIONS.md) §I).
 
 Bắt buộc test cho shared modules (§6.1) và refresh-token single-flight (§7).
 
@@ -1034,7 +1034,7 @@ Playwright
 
 Bắt buộc: ESLint, Prettier, TypeScript strict, Husky + lint-staged, Conventional Commits. CI mỗi PR: `gen:api` (kiểm contract), lint, typecheck, test, build, e2e (critical flows).
 
-Chi tiết (Git flow trunk-based, hooks, rule ESLint, template PR/issue, tooling): `docs/plan/scaffold-plan.md` §B–§G.
+Chi tiết (Git flow trunk-based, hooks, rule ESLint, template PR/issue, tooling): [CONVENTIONS.md](./CONVENTIONS.md) §B–§G.
 
 ---
 
@@ -1080,14 +1080,14 @@ npm run test:e2e
 
 # 29. Initial Setup
 
-Scaffold thẳng vào thư mục gốc repo (scaffold-plan D1), Node 22 LTS:
+Scaffold thẳng vào thư mục gốc repo ([quyết định](./CONVENTIONS.md) D1), Node 22 LTS:
 
 ```bash
 npm create vite@latest . -- --template vue-ts
 npm install
 ```
 
-Danh sách package và lệnh cài là nguồn chuẩn ở `docs/plan/scaffold-plan.md` §K: K.1 (dependencies Foundation), K.2 (cài theo Phase — `echarts`, Tiptap, `dompurify`), K.3 (devDependencies), K.5 (không dùng: `msw`, `lodash`, `moment`, `sass`, `vuex`).
+Danh sách package và lệnh cài là nguồn chuẩn ở [CONVENTIONS.md](./CONVENTIONS.md) §K: K.1 (dependencies Foundation), K.2 (cài theo Phase — `echarts`, Tiptap, `dompurify`), K.3 (devDependencies), K.5 (không dùng: `msw`, `lodash`, `moment`, `sass`, `vuex`).
 
 ## Nuxt UI + Tailwind
 
@@ -1104,10 +1104,10 @@ export default defineConfig({
 })
 ```
 
-Plugin `ui` được `app.use()` trong `createAppRuntime()` (`app/Runtime.ts`, scaffold-plan §M.2); `main.ts` không tự cài plugin.
+Plugin `ui` được `app.use()` trong `createAppRuntime()` (`app/Runtime.ts`, [CONVENTIONS](./CONVENTIONS.md) §M.2); `main.ts` không tự cài plugin.
 
 ```css
-/* src/assets/styles/main.css — file CSS duy nhất, không variables.css (scaffold-plan §J, §L.9) */
+/* src/assets/styles/main.css — file CSS duy nhất, không variables.css ([CONVENTIONS](./CONVENTIONS.md) §J, §L.9) */
 @import 'tailwindcss';
 @import '@nuxt/ui';
 /* token @theme … */
@@ -1118,7 +1118,7 @@ Plugin `ui` được `app.use()` trong `createAppRuntime()` (`app/Runtime.ts`, s
 <UApp><RouterView /></UApp>
 ```
 
-Màu ngữ nghĩa và mặc định component chỉ khai báo ở `app/config/Ui.config.ts` (truyền vào `ui()` trong `vite.config.ts`); token CSS ở `main.css` (scaffold-plan §J, §L).
+Màu ngữ nghĩa và mặc định component chỉ khai báo ở `app/config/Ui.config.ts` (truyền vào `ui()` trong `vite.config.ts`); token CSS ở `main.css` ([CONVENTIONS](./CONVENTIONS.md) §J, §L).
 
 ## Import convention
 

@@ -2,9 +2,9 @@
 
 Status: in-progress
 Blocked by: 06, 07, 08
-Nguồn: Step 4 trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
+Nguồn: Step 4 trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
-Phần dùng chung (không chép lại, đọc trong [scaffold-plan.md](../scaffold-plan.md)): Quyết định đã chốt (D1–D41, trong đó D24, D32 đã huỷ), Thuật ngữ, §A cây thư mục, §B đặt tên, §N alias, §T luồng dữ liệu, §U SOLID, §V lý do quyết định.
+Phần dùng chung (không chép lại, đọc trong [scaffold-plan.md](../../archive/scaffold-plan.md)): Quyết định đã chốt (D1–D41, trong đó D24, D32 đã huỷ), Thuật ngữ, §A cây thư mục, §B đặt tên, §N alias, §T luồng dữ liệu, §U SOLID, §V lý do quyết định.
 
 ### Step 4 — Khung `features/auth`
 
@@ -244,7 +244,7 @@ features/
 
 #### Q.3. Interface công khai của các module
 
-Bảng gồm shared module (`shared/`) và interface công khai của feature / `app/` mà nơi khác gọi tới. Chỉ các dòng `shared/` là shared module theo [GLOSSARY.md](../../GLOSSARY.md).
+Bảng gồm shared module (`shared/`) và interface công khai của feature / `app/` mà nơi khác gọi tới. Chỉ các dòng `shared/` là shared module theo [GLOSSARY.md](../../../GLOSSARY.md).
 
 | Module                                               | Interface                                                                                                                   | Giấu bên trong                                                                                            |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |

@@ -4,6 +4,7 @@ import UButton from '@nuxt/ui/components/Button.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
 
 import { uiConfig } from '@app/config/Ui.config'
+import PageHeader from '@shared/components/page/PageHeader.vue'
 
 /** Trang duyệt token với designer (§L.10) — chỉ đăng ký route ở dev. */
 type Color = keyof typeof uiConfig.colors
@@ -19,7 +20,7 @@ const TEXTS = ['text-highlighted', 'text-default', 'text-muted', 'text-dimmed'] 
 
 <template>
   <div class="flex flex-col gap-8 p-6">
-    <h1 class="font-display text-2xl font-semibold text-highlighted">Design system</h1>
+    <PageHeader title="Design system" />
 
     <section class="flex flex-col gap-3">
       <h2 class="font-display text-lg font-semibold">Màu ngữ nghĩa</h2>

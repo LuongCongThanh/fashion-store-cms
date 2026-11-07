@@ -18,7 +18,7 @@ PR có template, CI chạy lint → typecheck → test → build cho mọi PR.
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 2b; mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 2b; mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - PR template, issue templates theo §F.1.
 - `.github/workflows/ci.yml`: `npm ci` → `lint` → `typecheck` → `test` → `build` (e2e thêm khi có flow thật).

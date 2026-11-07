@@ -18,7 +18,7 @@ Có Env validate bằng Zod và Vitest sẵn sàng để các plan sau viết te
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 3a (phần 1); mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 3a (phần 1); mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - Tạo `app/`, `config/Env.config.ts`, `layouts/`, `App.vue`, `main.ts` với nội dung tối thiểu.
 - `Env.config.ts`: đọc và validate `VITE_*` bằng Zod.

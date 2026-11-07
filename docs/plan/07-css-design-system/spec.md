@@ -18,7 +18,7 @@ Có design system token CSS, Ui.config.ts là nguồn màu duy nhất, theme Sá
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 3b; mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 3b; mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - CSS theo §J và §L: token, font, `main.css` (§L.9).
 - `Ui.config.ts` là nguồn duy nhất map màu + mặc định component (D26).

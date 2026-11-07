@@ -1,6 +1,6 @@
 # Spec 14 — Đối chiếu và chốt
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 10, 11, 12, 13
 Nguồn: Step 7 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
@@ -18,7 +18,7 @@ Cây thư mục khớp §A, convention chuyển sang CONVENTIONS.md, plan đư�
 
 ## Phạm vi (Làm gì)
 
-> **Chú thích:** chép từ mục "Làm gì" của Step 7; mã § và D trỏ vào [scaffold-plan.md](../scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
+> **Chú thích:** chép từ mục "Làm gì" của Step 7; mã § và D trỏ vào [scaffold-plan.md](../../archive/scaffold-plan.md) hoặc phần tham chiếu trong `plan.md`.
 
 - So cây thư mục thực tế với §A, sửa chỗ lệch; `npm run lint` toàn repo pass.
 - Tách tài liệu (§ nguyên tắc): §B–§U → `docs/CONVENTIONS.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/scaffold-plan.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.

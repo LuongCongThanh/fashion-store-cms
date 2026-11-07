@@ -2,9 +2,9 @@
 
 Status: in-progress
 Blocked by: 05
-Nguồn: Step 3a+ trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
+Nguồn: Step 3a+ trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
-Phần dùng chung (không chép lại, đọc trong [scaffold-plan.md](../scaffold-plan.md)): Quyết định đã chốt (D1–D41, trong đó D24, D32 đã huỷ), Thuật ngữ, §A cây thư mục, §B đặt tên, §N alias, §T luồng dữ liệu, §U SOLID, §V lý do quyết định.
+Phần dùng chung (không chép lại, đọc trong [scaffold-plan.md](../../archive/scaffold-plan.md)): Quyết định đã chốt (D1–D41, trong đó D24, D32 đã huỷ), Thuật ngữ, §A cây thư mục, §B đặt tên, §N alias, §T luồng dữ liệu, §U SOLID, §V lý do quyết định.
 
 ### Step 3a+ — Lỗi, toast, dialog, alias
 
