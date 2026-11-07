@@ -1,6 +1,6 @@
 # 13 — Script sinh API types
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 05
 Nguồn: Step 6 trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
