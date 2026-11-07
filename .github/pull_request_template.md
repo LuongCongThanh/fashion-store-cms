@@ -1,6 +1,6 @@
 # 🏷️ Type
 
-<!-- Chọn một. Tiêu đề PR theo Conventional Commits: feat(ordering): add COD checkout -->
+<!-- Chọn một. Tiêu đề PR theo Conventional Commits: feat(products): add server-side pagination -->
 
 - [ ] ✨ Feature
 - [ ] 🐛 Bug
@@ -10,17 +10,17 @@
 
 ## 📌 Summary
 
-**Làm gì:** <!-- Tóm tắt thay đổi trong 1–2 câu, theo hành vi mà người dùng hoặc hệ thống nhận thấy. Không liệt kê file (đã có ở Changes) -->
+**Làm gì:** <!-- Tóm tắt thay đổi trong 1–2 câu, theo hành vi người dùng CMS nhìn thấy. Không liệt kê file (đã có ở Changes) -->
 
-**Vì sao:** <!-- Vấn đề PR giải quyết: lỗi gì, thiếu gì, ticket yêu cầu gì, và hậu quả nếu không sửa. Người đọc không cần mở ticket vẫn hiểu -->
+**Vì sao:** <!-- Vấn đề PR giải quyết: lỗi gì, thiếu gì, ticket yêu cầu gì, hậu quả nếu không làm. Người đọc không cần mở ticket vẫn hiểu -->
 
-**Giải pháp:** <!-- Cách làm và lý do chọn cách đó thay vì phương án khác. Minh hoạ bằng pseudocode, call tree hoặc diff-sketch ngắn nhất đủ hiểu -->
+**Giải pháp:** <!-- Cách làm và lý do chọn thay vì phương án khác. Tầng nào bị đụng: view → composable → api → types (CONVENTIONS §T) -->
 
-**Kết quả:** <!-- Những gì đạt được sau PR so với trước, dạng Before → After: hành vi, số test, thời gian, lỗi. Bằng chứng ghi ở Cách kiểm; phần chưa đạt ghi ở Gap và lưu ý -->
+**Kết quả:** <!-- Before → After: hành vi, số test, kích thước bundle, lỗi. Bằng chứng ghi ở Cách kiểm; phần chưa đạt ghi ở Gap và lưu ý -->
 
-**Module:** <!-- identity, catalog, pricing, cart, inventory, ordering, payments, refunds-returns, fulfillment, notifications, compliance, admin-config, common, ci, docs -->
+**Module:** <!-- auth, store, products, orders, router, api, ui, i18n, pwa, test, deps, config, ci, docs (khớp scope trong commitlint.config.ts) -->
 
-**📋 Task:** docs/plan/tasks/NN-xxx · **User story:** US-XXX · **Quy tắc:** BR-XXX · **ADR:** XXXX
+**📋 Task:** CMS-xxx · **Phase:** P? (FE_architecture §30) · **ADR:** —
 
 ---
 
@@ -36,14 +36,14 @@
 
 <!-- Ghi "Không" cho mục không có -->
 
-- **Endpoint:** <!-- thêm / đổi / bỏ, kèm method và path -->
-- **Migration:** <!-- tên file, có đảo ngược được không -->
-- **Biến môi trường, npm script:** <!-- tên mới, giá trị mặc định, đã thêm vào `.env.example` và `src/config/env.validation.ts` chưa -->
+- **Endpoint:** <!-- endpoint BE mới dùng tới (method + path); đã chạy `npm run gen:api` chưa -->
+- **Migration:** <!-- dữ liệu phía client đổi format: key localStorage (`cms.*`), cache PWA; hoặc "Không" -->
+- **Biến môi trường, npm script:** <!-- tên mới, giá trị mặc định; đã thêm vào `.env.example` và `src/app/config/Env.config.ts` chưa -->
 
 ## 🧪 Cách kiểm
 
 - **Tự động:** <!-- test chứng minh từng acceptance criterion: `file::test`; số test, coverage -->
-- **Kiểm tay:** <!-- bước tái hiện và kết quả; "Không" nếu chỉ cần test tự động -->
+- **Kiểm tay:** <!-- bước tái hiện, ảnh chụp nếu có UI (sáng + tối, vi + en); "Không" nếu chỉ cần test tự động -->
 
 ---
 
@@ -52,32 +52,32 @@
 <!-- Bắt buộc. Mục nào không có thì ghi "Không", đừng xoá mục -->
 
 - **Chưa làm:** <!-- phần của ticket còn thiếu, lý do; acceptance criterion chưa kiểm được -->
-- **Gap / rủi ro:** <!-- chỗ tài liệu hoặc ticket sau phải xử lý, trường hợp biên chưa phủ, giới hạn đã biết -->
+- **Gap / rủi ro:** <!-- trường hợp biên chưa phủ, giới hạn đã biết, chỗ chờ BE -->
 - **Quyết định tạm:** <!-- cách làm tạm thời, khi nào cần quay lại -->
-- **Ticket mới:** <!-- việc ngoài phạm vi phát hiện được, đường dẫn ticket `needs-triage` -->
-- **Reviewer cần chú ý:** <!-- đoạn code khó, chỗ lệch tài liệu có lý do, thay đổi trong `common/` -->
-- **Sau khi merge:** <!-- việc phải làm ở môi trường: `prisma migrate deploy`, seed, đặt biến môi trường, cấu hình GitHub; hoặc "Không" -->
+- **Ticket mới:** <!-- việc ngoài phạm vi phát hiện được -->
+- **Reviewer cần chú ý:** <!-- đoạn code khó, chỗ lệch CONVENTIONS có lý do, thay đổi trong `shared/` -->
+- **Sau khi merge:** <!-- việc phải làm ở môi trường: biến env khi build, header server, cấu hình GitHub; hoặc "Không" -->
 
 ---
 
 ## ✅ Checklist
 
-- [ ] 🔨 Build pass: `npm run lint`, `npm run typecheck`, `npm run test` (và `npm run test:e2e` nếu đụng DB/API) đều xanh
-- [ ] 🧱 Ranh giới module: chỉ gọi module khác qua service public, không đọc/ghi bảng của module khác (`docs/architecture/02-modules.md`)
-- [ ] 🧪 Tested: có test cho service, handler hoặc API, kể cả trường hợp biên
-- [ ] 🗄️ Migration: đã tạo nếu đổi `prisma/schema`, an toàn với dữ liệu thật (`docs/convention/prisma-conventions.md`) (hoặc N/A)
-- [ ] 📑 API: Swagger đầy đủ (DTO, response, mã lỗi), đã `npm run postman:sync` nếu đổi hợp đồng (hoặc N/A)
-- [ ] 🔒 Security: không lộ secret, token, dữ liệu cá nhân thật trong code, log, test
-- [ ] ⚡ Performance: không có N+1 query (dùng `include`/`select` hoặc gom truy vấn), có phân trang cho danh sách
-- [ ] 📚 Docs: đã cập nhật GLOSSARY, business rules hoặc ADR nếu cần (hoặc N/A)
+- [ ] 🔨 Build pass: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` (và `npm run test:e2e` nếu đổi luồng chính) đều xanh
+- [ ] 🧱 Ranh giới: không import chéo feature (chỉ `Use*.ts`, `types/`); DTO chỉ trong `api/`; component không gọi API (CONVENTIONS §B.3, §T)
+- [ ] 🧪 Tested: có test ở seam công khai (composable, view qua `renderWithPlugins()`), kể cả trường hợp lỗi API
+- [ ] 🌐 i18n: không hard-code text; đã thêm key vào cả `vi.json` và `en.json`
+- [ ] 🎨 UI: chỉ dùng màu ngữ nghĩa (`primary`, `error`…), không mã màu / palette thô; đúng ở dark mode (CONVENTIONS §L)
+- [ ] 🔐 Quyền: route mới có `meta.permission`, nút ẩn bằng `useAuth().can()` (hoặc N/A)
+- [ ] 🔒 Security: không lộ secret, token, dữ liệu cá nhân thật; không `v-html` khi chưa sanitize
+- [ ] 📚 Docs: đã cập nhật CONVENTIONS, GLOSSARY hoặc FE_architecture nếu đổi quy ước (hoặc N/A)
 - [ ] 💥 Breaking change: ghi rõ trong _Gap và lưu ý_ và thêm `!` vào tiêu đề PR (hoặc N/A)
 
 ---
 
 ## 💬 Notes
 
-<!-- Thêm nếu có: kết luận review, bảng commit → task, link liên quan -->
+<!-- Thêm nếu có: kết luận review, link liên quan -->
 
 ---
 
-📖 [Tài liệu dự án](../blob/dev/README.md) · [Quy ước Git](../blob/dev/docs/convention/git-workflow.md) · [Definition of Done](../blob/dev/docs/convention/api-rules.md)
+📖 [README](../blob/dev/README.md) · [Quy ước (CONVENTIONS)](../blob/dev/docs/CONVENTIONS.md) · [Kiến trúc FE](../blob/dev/docs/FE_architecture.md)

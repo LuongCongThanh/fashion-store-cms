@@ -17,12 +17,12 @@ jobs:
           HEAD_REF: ${{ github.head_ref }}
           AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
         run: |
-          # Release PRs (dev -> main) and bot PRs (Dependabot/Renovate) are exempt
+          # PR release (dev -> main) và PR của bot (Dependabot) được miễn kiểm
           if [[ "$HEAD_REF" == "dev" || "$AUTHOR_TYPE" == "Bot" ]]; then
             echo "Exempt: head=$HEAD_REF author=$AUTHOR_TYPE"
             exit 0
           fi
-          # Keep in sync with .claude/hooks/enforce-pr-template.sh
+          # Danh sách heading phải khớp .github/pull_request_template.md
           required=(
             "# 🏷️ Type"
             "## 📌 Summary"
