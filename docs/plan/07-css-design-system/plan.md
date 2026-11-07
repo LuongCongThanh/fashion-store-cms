@@ -1,6 +1,6 @@
 # 07 — CSS, design system, theme
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 05
 Nguồn: Step 3b trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
