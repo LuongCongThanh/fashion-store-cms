@@ -1,10 +1,14 @@
 # 🏷️ Type
 
-<!-- Chọn một. Tiêu đề PR theo Conventional Commits: feat(products): add server-side pagination -->
+<!-- Chọn một, khớp type ở tiêu đề PR (Conventional Commits: feat(products): add server-side pagination).
+     feat → Feature · fix → Bug · refactor → Refactor · perf → Perf · test → Test · docs → Docs
+     ci, build, style, chore, revert → Chore -->
 
 - [ ] ✨ Feature
 - [ ] 🐛 Bug
 - [ ] ♻️ Refactor
+- [ ] ⚡ Perf
+- [ ] 🧪 Test
 - [ ] 🧹 Chore
 - [ ] 📚 Docs
 

@@ -11,6 +11,10 @@ jobs:
   template-sections:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/pull_request_template.md
+          sparse-checkout-cone-mode: false
       - name: Check body follows .github/pull_request_template.md
         env:
           BODY: ${{ github.event.pull_request.body }}
@@ -22,19 +26,11 @@ jobs:
             echo "Exempt: head=$HEAD_REF author=$AUTHOR_TYPE"
             exit 0
           fi
-          # Danh sách heading phải khớp .github/pull_request_template.md
-          required=(
-            "# 🏷️ Type"
-            "## 📌 Summary"
-            "**Làm gì:**"
-            "**Vì sao:**"
-            "**Giải pháp:**"
-            "**Kết quả:**"
-            "## 📋 Changes"
-            "## 🔌 API / Migration / Cấu hình"
-            "## 🧪 Cách kiểm"
-            "## ⚠️ Gap và lưu ý"
-            "## ✅ Checklist"
+          # Heading và ô **...:** bắt buộc lấy thẳng từ template (một nguồn duy nhất)
+          tpl=.github/pull_request_template.md
+          mapfile -t required < <(
+            grep -E '^#{1,3} ' "$tpl"
+            grep -oE '^(- )?\*\*[^*]+:\*\*' "$tpl" | sed 's/^- //'
           )
           status=0
           for h in "${required[@]}"; do
@@ -51,7 +47,7 @@ jobs:
             echo "::error::Changes còn dòng '-' trống"
             status=1
           fi
-          ticked=$(grep -Ec '^- \[[xX]\] (✨ Feature|🐛 Bug|♻️ Refactor|🧹 Chore|📚 Docs)[[:space:]]*$' <<< "${BODY//$'\r'/}" || true)
+          ticked=$(grep -Ec '^- \[[xX]\] (✨ Feature|🐛 Bug|♻️ Refactor|⚡ Perf|🧪 Test|🧹 Chore|📚 Docs)[[:space:]]*$' <<< "${BODY//$'\r'/}" || true)
           if [[ "$ticked" != 1 ]]; then
             echo "::error::Tick exactly one Type checkbox (found $ticked)"
             status=1
