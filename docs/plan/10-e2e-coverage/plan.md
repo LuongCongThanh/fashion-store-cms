@@ -1,6 +1,6 @@
 # 10 — E2E và coverage
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 09
 Nguồn: Step 5 trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
