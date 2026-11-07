@@ -1,6 +1,6 @@
 # 01 — Khởi tạo dự án
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: —
 Nguồn: Step 1 trong [scaffold-plan.md](../scaffold-plan.md) · Spec: [spec.md](../spec.md)
 
