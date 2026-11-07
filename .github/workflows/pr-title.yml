@@ -9,6 +9,8 @@ permissions:
 
 jobs:
   conventional-title:
+    # Bỏ qua PR của bot (Dependabot): tiêu đề do bot sinh, thường quá 72 ký tự
+    if: github.event.pull_request.user.type != 'Bot'
     runs-on: ubuntu-latest
     steps:
       - uses: amannn/action-semantic-pull-request@v5
