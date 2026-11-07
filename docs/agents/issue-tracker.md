@@ -2,6 +2,8 @@
 
 Issues and specs for this repo live as markdown files in `.scratch/`.
 
+**Exception — scaffold plan:** the scaffold effort (Steps 1–7) is tracked in `docs/plan/` instead: `docs/plan/spec.md` is the parent spec, and each `docs/plan/NN-<slug>/` folder is one ticket (`spec.md` carries `Status:` / `Blocked by:`). New features after the scaffold use `.scratch/` as below.
+
 ## Conventions
 
 - One feature per directory: `.scratch/<feature-slug>/`
