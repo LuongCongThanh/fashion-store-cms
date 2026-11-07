@@ -13,6 +13,13 @@
     "language": {
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "logout": "Sign out",
+    "store": "Store"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in"
     }
   },
   "errors": {

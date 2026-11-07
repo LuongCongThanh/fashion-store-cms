@@ -13,6 +13,13 @@
     "language": {
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "logout": "Đăng xuất",
+    "store": "Cửa hàng"
+  },
+  "auth": {
+    "login": {
+      "title": "Đăng nhập"
     }
   },
   "errors": {

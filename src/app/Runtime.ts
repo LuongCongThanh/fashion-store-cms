@@ -13,6 +13,8 @@ import { installErrorHandling } from '@app/providers/ErrorHandling'
 import { createAppRouter } from '@app/router/Router'
 import { createNotifier, NOTIFIER_KEY } from '@shared/composables/UseNotify'
 import { createHttpClient, HTTP_CLIENT_KEY } from '@shared/lib/api/client/HttpClient'
+import { ApiError } from '@shared/lib/api/errors/ApiError'
+import { ErrorCode } from '@shared/lib/api/errors/ErrorCode'
 import { createAppI18n } from '@shared/lib/i18n/I18n'
 import { createAppQueryClient } from '@shared/lib/query/QueryClient'
 import { createSession, SESSION_KEY } from '@shared/lib/session/Session'
@@ -64,7 +66,10 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   })
 
   const toLogin = () => void router.push({ name: 'auth.login' })
-  session.on('authFailure', toLogin)
+  session.on('authFailure', () => {
+    notifier.error(new ApiError(401, ErrorCode.UNAUTHORIZED, 'Session expired'))
+    toLogin()
+  })
   session.on('loggedOut', toLogin)
 
   const plugin = {

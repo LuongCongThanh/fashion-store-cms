@@ -106,4 +106,20 @@ describe('createAppRuntime', () => {
 
     expect(notifier.error).not.toHaveBeenCalled()
   })
+
+  it('tells the user their session expired when refresh fails', async () => {
+    const mock = new MockAdapter(axios.create())
+    const notifier = { success: vi.fn(), error: vi.fn() }
+    const runtime = createAppRuntime({
+      transport: mock.adapter(),
+      router: memoryRouter(),
+      notifier,
+      session: { accessToken: 'expired' },
+    })
+    mock.onGet(/\/me$/).reply(401, {})
+
+    await runtime.http.get('/me').catch(() => undefined)
+
+    expect(notifier.error).toHaveBeenCalledWith(expect.objectContaining({ code: 'UNAUTHORIZED' }))
+  })
 })
