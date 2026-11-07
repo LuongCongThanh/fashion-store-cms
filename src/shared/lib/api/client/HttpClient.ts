@@ -52,7 +52,7 @@ export interface HttpClientDeps {
   session: Session
   /** Trả locale hiện tại để gắn header Accept-Language. */
   getLocale: () => string
-  /** CHỈ dành cho test: adapter của axios-mock-adapter. `unknown` có chủ đích → không lộ kiểu axios. */
+  /** CHỈ dành cho test và Mock auth ở DEV: adapter của axios-mock-adapter. `unknown` có chủ đích → không lộ kiểu axios. */
   transport?: unknown
 }
 

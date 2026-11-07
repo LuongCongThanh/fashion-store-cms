@@ -30,12 +30,17 @@ export interface Session {
    * Thất bại → xoá token, phát 'authFailure', trả null.
    */
   refresh(): Promise<string | null>
-  /** Lưu token sau khi login thành công. */
-  signIn(tokens: AuthTokens): void
+  /** Lưu token sau khi login thành công. `remember: false` → chỉ giữ trong tab hiện tại. */
+  signIn(tokens: AuthTokens, opts?: SignInOptions): void
   /** Xoá token + queryClient.clear() + phát 'loggedOut'. */
   logout(): Promise<void>
   /** Đăng ký nghe sự kiện; trả hàm huỷ đăng ký. Runtime dùng để điều hướng về login. */
   on(event: SessionEvent, fn: () => void): () => void
+}
+
+export interface SignInOptions {
+  /** Mặc định true: giữ Session sau khi đóng trình duyệt. */
+  remember?: boolean
 }
 
 export type SessionEvent = 'authFailure' | 'loggedOut'
@@ -106,7 +111,8 @@ export function createSession(deps: SessionDeps): Session {
       listeners[event].add(fn)
       return () => listeners[event].delete(fn)
     },
-    signIn(tokens) {
+    signIn(tokens, opts = {}) {
+      store.remember = opts.remember ?? true
       store.accessToken = tokens.accessToken
       store.refreshToken = tokens.refreshToken
     },

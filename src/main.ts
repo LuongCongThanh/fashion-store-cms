@@ -6,4 +6,10 @@ import { createAppRuntime } from '@app/Runtime'
 
 import App from './App.vue'
 
-createApp(App).use(createAppRuntime().plugin).mount('#app')
+// Mock auth (GLOSSARY): điều kiện DEV đứng trước → Vite loại bỏ cả nhánh import khi build production.
+const transport =
+  import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === 'true'
+    ? (await import('@app/dev/MockAuth')).createMockAuthTransport()
+    : undefined
+
+createApp(App).use(createAppRuntime({ transport }).plugin).mount('#app')

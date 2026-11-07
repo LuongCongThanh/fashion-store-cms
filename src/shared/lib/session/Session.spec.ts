@@ -103,4 +103,51 @@ describe('Session', () => {
     expect(after.session.getAccessToken()).toBe('at-1')
     expect(after.session.getStoreId()).toBe('store-9')
   })
+
+  describe('remember me', () => {
+    it('keeps tokens in localStorage by default', () => {
+      const { session } = setup()
+
+      session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' })
+
+      expect(localStorage.getItem('cms.session.accessToken')).toBe('at-1')
+      expect(sessionStorage.getItem('cms.session.accessToken')).toBeNull()
+    })
+
+    it('keeps tokens only in sessionStorage when remember is false', () => {
+      const { session } = setup()
+
+      session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' }, { remember: false })
+
+      expect(sessionStorage.getItem('cms.session.accessToken')).toBe('at-1')
+      expect(sessionStorage.getItem('cms.session.refreshToken')).toBe('rt-1')
+      expect(localStorage.getItem('cms.session.accessToken')).toBeNull()
+    })
+
+    it('restores a tab-only session after reload', () => {
+      setup().session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' }, { remember: false })
+
+      expect(setup().session.getAccessToken()).toBe('at-1')
+    })
+
+    it('writes refreshed tokens to the storage already in use', async () => {
+      const { session } = setup()
+      session.signIn({ accessToken: 'old', refreshToken: 'rt-1' }, { remember: false })
+
+      await session.refresh()
+
+      expect(sessionStorage.getItem('cms.session.accessToken')).toBe('new-at')
+      expect(localStorage.getItem('cms.session.accessToken')).toBeNull()
+    })
+
+    it('logout clears tokens from both storages', async () => {
+      const { session } = setup()
+      session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' }, { remember: false })
+
+      await session.logout()
+
+      expect(sessionStorage.getItem('cms.session.accessToken')).toBeNull()
+      expect(localStorage.getItem('cms.session.accessToken')).toBeNull()
+    })
+  })
 })

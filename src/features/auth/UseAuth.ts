@@ -2,6 +2,8 @@ import { computed, readonly } from 'vue'
 
 import { useSession } from '@shared/lib/session/Session'
 
+import type { SignInOptions } from '@shared/lib/session/Session'
+
 import { useAuthApi } from './api/Auth.api'
 import { useAuthStore } from './stores/Auth.store'
 
@@ -20,8 +22,8 @@ export function useAuth() {
     return store.user?.permissions.includes(permission) ?? false
   }
 
-  async function login(payload: LoginPayload) {
-    session.signIn(await api.login(payload))
+  async function login(payload: LoginPayload, opts: SignInOptions = {}) {
+    session.signIn(await api.login(payload), opts)
     await store.loadUser(api.me)
   }
 
@@ -29,6 +31,11 @@ export function useAuth() {
   async function ensureUser() {
     if (!isAuthenticated.value || store.user) return
     await store.loadUser(api.me)
+  }
+
+  /** Gửi email đặt lại mật khẩu. Không cho biết email có tồn tại hay không. */
+  async function requestPasswordReset(email: string) {
+    await api.forgotPassword(email)
   }
 
   async function logout() {
@@ -43,5 +50,6 @@ export function useAuth() {
     ensureUser,
     login,
     logout,
+    requestPasswordReset,
   }
 }
