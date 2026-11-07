@@ -44,15 +44,17 @@ Nguyên tắc thực hiện:
 | D29 | Lỗi | Mọi lỗi HTTP → `ApiError`; query lỗi hiển thị tại chỗ, mutation lỗi toast global; dialog xác nhận global, modal nghiệp vụ internal (§O, §P) |
 | D30 | PWA | Cài được + báo bản mới; chỉ cache app shell, không cache API (§R) |
 | D31 | Bổ trợ | Command palette, phím tắt, title theo route ở Foundation; tool dev theo §S |
-| D33 | Phân tầng + shared | Code tái sử dụng gom vào `src/shared/` (một alias `@shared/*`), chỉ đưa vào khi ≥ 2 feature dùng, không chứa tri thức nghiệp vụ. Một chiều `main.ts → app → layouts → features → shared`; `app/` chỉ `main.ts` import; locale/theme/PWA ở `shared/`; Store đang quản lý là feature `StoreScope`; upload media ở `features/media` (§A) |
+| D33 | Phân tầng + shared | Code tái sử dụng gom vào `src/shared/` (một alias `@shared/*`), chỉ đưa vào khi ≥ 2 feature dùng, không chứa tri thức nghiệp vụ. Một chiều `main.ts → app → layouts → features → shared`; `app/` chỉ `main.ts` import (ngoại lệ: `vite.config.ts`, test của `app/`, `src/test/` — §A, D37); locale/theme/PWA ở `shared/`; Store đang quản lý là feature `StoreScope`; upload media ở `features/media` (§A) |
 | D34 | Seam HTTP | `HttpClient` không import feature nào, interface hẹp có kiểu theo Swagger (không lộ axios, kể cả trong `HttpClientDeps`); HttpClient chỉ nhận `{ baseURL, session, getLocale }`; `Session` (`shared/lib/session/`) sở hữu token + Store hiện tại + xoá cache khi logout/đổi Store; `storeId` qua header `X-Store-Id` — chờ BE xác nhận (§M) |
 | D35 | Luồng dữ liệu | View (container) → [composable] → api (server state) → [mapper, chỉ khi DTO lệch Model] → HttpClient; component chỉ props/emits; DTO không ra khỏi `api/`; server state chỉ ở Vue Query (§T) |
+| D36 | SOLID | Áp dụng ở mức module, không class/DI container; composition root là `createAppRuntime()` trong `app/Runtime.ts` (D37, §U) |
 | D37 | Composition root | Một module `createAppRuntime(overrides)` ở `app/Runtime.ts` dựng toàn bộ runtime (pinia, i18n, router, notifier, session, http, queryClient); `main.ts` gọi rồi mount, `src/test/Render.ts` gọi cùng hàm với fake — test chạy qua wiring thật (§M.2) |
 | D38 | Navigation | Một module `layouts/Navigation.ts` (`buildNavigation(routes, can)` thuần + `useNavigation()`) là nơi duy nhất đọc route meta cho sidebar, palette, phím tắt, title. Palette + phím tắt + bảng phím tắt hoãn tới P5 (§S.1) |
 | D39 | Error policy | Quy tắc lỗi (retry, key i18n, im lặng, mutation lỗi đi đâu) tập trung ở `shared/lib/api/errors/ErrorPolicy.ts`; QueryClient chuyển sang `shared/lib/query/`; `UseNotify` chỉ hiển thị; `app/providers` chỉ glue Vue (§O.4) |
 | D40 | HttpClient một file | `client/` chỉ còn `HttpClient.ts` (+ spec); bỏ `noClientInternals`, `createHttpClientWithAdapter`, `TestHttpClient.ts`; test thay transport qua `deps.transport`. Refresh đi qua HttpClient với `skipAuth`. Bỏ `getDefaultPathParams` tới khi BE chốt (§M) |
 | D41 | Ranh giới import | `no-restricted-imports` khai báo bằng một bảng `BOUNDARIES` + `toFlatConfig()`; `eslint.config.spec.ts` kiểm tự động mọi ca ở Step 2. Giữ Model độc lập DTO (§T.3); feature tối thiểu `api/ + types/ + views/` (§E, §Q.1) |
-| D36 | SOLID | Áp dụng ở mức module, không class/DI container; composition root là `createAppRuntime()` trong `app/Runtime.ts` (D37, §U) |
+
+D24 và D32 đã bị huỷ trong quá trình review; giữ nguyên số để không đổi tham chiếu.
 
 ---
 
@@ -1250,6 +1252,13 @@ export interface Session {
   on(event: 'authFailure' | 'loggedOut', fn: () => void): () => void
 }
 
+/** Trạng thái Session có thể khởi tạo sẵn (test) — dùng chung cho createSession, RuntimeOverrides, Render.ts. */
+export interface SessionSnapshot {
+  accessToken?: string
+  refreshToken?: string
+  storeId?: string
+}
+
 export function createSession(deps: {
   /** Pinia của app — state (token, storeId) nằm trong useSessionStore, có persist. */
   pinia: Pinia
@@ -1261,7 +1270,7 @@ export function createSession(deps: {
    */
   callRefresh: (refreshToken: string) => Promise<AuthTokens>
   /** Trạng thái ban đầu — chỉ test dùng (VD đã đăng nhập sẵn). */
-  initial?: { accessToken?: string; refreshToken?: string; storeId?: string }
+  initial?: SessionSnapshot
 }): Session
 
 /** Composable: lấy Session đã provide bởi runtime. Chỉ feature auth / StoreScope nên gọi. */
@@ -1280,13 +1289,17 @@ export const SESSION_KEY: InjectionKey<Session>
 // src/app/Runtime.ts
 // Composition root: nơi DUY NHẤT tạo và nối mọi object dùng chung của app.
 // main.ts gọi không tham số; src/test/Render.ts gọi với overrides (transport mock, notifier giả…).
+import ui from '@nuxt/ui/vue-plugin'
+import { env } from '@app/config/Env.config'
+// (các import createPinia, createAppI18n, createAppRouter, createNotifier, createAppQueryClient,
+//  createSession, createHttpClient, installErrorHandling… lược bớt)
 
 /** Những thứ test được phép thay. Prod không truyền gì. */
 export interface RuntimeOverrides {
-  transport?: unknown                    // adapter axios-mock-adapter
+  transport?: unknown                    // adapter axios-mock-adapter; `unknown` có chủ đích (D34)
   notifier?: Notifier                    // notifier giả để assert toast
   router?: Router                        // router memory history
-  session?: { accessToken?: string; refreshToken?: string; storeId?: string }
+  session?: SessionSnapshot              // trạng thái đăng nhập sẵn
   retry?: false                          // tắt retry query trong test
 }
 
@@ -2120,16 +2133,16 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 
 **Làm gì**
 
-- Cập nhật §4, §5 `FE_architecture.md` theo cây ở §A (tên PascalCase, D3, D4).
-- §26 rút gọn, link sang tài liệu này (§B–§F).
-- Xoá MSW khỏi §2, §7, §25, §29; thay bằng chiến lược §I.
-- Thay lệnh cài đặt §29 bằng danh sách §K.
-- Bỏ `variables.css` khỏi §4; cập nhật mục "Nuxt UI + Tailwind" §29 theo §J.
-- Sửa §29 cho khớp D1 và đổi `import` mẫu sang tên file mới.
-- Sửa §6, §7, §8.1: query key bỏ `storeId`, `httpClient` thành `useHttpClient()` (§M), thêm `Session` + `createAppRuntime()` (D37).
+- ~~Cập nhật §4, §5 `FE_architecture.md` theo cây ở §A (tên PascalCase, D3, D4).~~ (đã làm)
+- ~~§26 rút gọn, link sang tài liệu này (§B–§F).~~ (đã làm)
+- ~~Xoá MSW khỏi §2, §7, §25, §29; thay bằng chiến lược §I.~~ (đã làm)
+- ~~Thay lệnh cài đặt §29 bằng danh sách §K.~~ (đã làm)
+- ~~Bỏ `variables.css` khỏi §4; cập nhật mục "Nuxt UI + Tailwind" §29 theo §J.~~ (đã làm)
+- ~~Sửa §29 cho khớp D1 và đổi `import` mẫu sang tên file mới.~~ (đã làm)
+- ~~Sửa §6, §7, §8.1, §9 Store scope: query key bỏ `storeId`, `httpClient` thành `useHttpClient()` (§M), thêm `Session` + `createAppRuntime()` (D37).~~ (đã làm)
 - Chỉ sửa chỗ lệch; không chép lại convention của plan vào `FE_architecture.md` (tránh hai nguồn chuẩn — convention sẽ sang `CONVENTIONS.md` ở Step 7).
 
-**Kiểm tra:** review và xác nhận trước khi viết code.
+**Kiểm tra:** review và xác nhận trước khi viết code. Step 0 đã hoàn tất trong PR tài liệu (#1).
 
 ---
 
@@ -2197,11 +2210,12 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 
 - Tạo `app/`, `config/Env.config.ts`, `shared/lib/api/`, `layouts/`, `App.vue`, `main.ts` với nội dung tối thiểu.
 - `Env.config.ts`: đọc và validate `VITE_*` bằng Zod.
+- `shared/lib/session/Session.ts` theo §M.2 (tạo **trước** HttpClient vì HttpClient phụ thuộc Session) + `Session.spec.ts`: N lời gọi `refresh()` đồng thời → 1 lần `callRefresh`; refresh thất bại → xoá token + phát `authFailure`; `logout()`/`switchStore()` gọi `queryClient.clear()`.
 - `HttpClient.ts` (một file) theo §M.1 (interface hẹp, có kiểu theo `paths`, deps không có kiểu axios) + `HttpClient.spec.ts`: N request 401 → 1 lần `session.refresh()`; request `skipAuth` không có `Authorization`; refresh thất bại → Session phát `authFailure`; mọi request có `X-Store-Id`, `Accept-Language`; lỗi luôn là `ApiError`.
 - Vitest theo §I: `vitest.config.ts`, `src/test/Setup.ts`, `src/test/Render.ts`(cài sớm để các step sau viết test ngay).
-- `main.ts` tạm nối deps giả (`getAccessToken: () => null`, `getStoreId: () => null`) cho tới Step 4.
+- `app/Runtime.ts` theo §M.2 (`createAppRuntime()`) + `Runtime.spec.ts`; `main.ts` chỉ một dòng `createApp(App).use(createAppRuntime().plugin).mount('#app')`. Chưa có `features/auth` nên Session bắt đầu ở trạng thái chưa đăng nhập.
 
-**Kiểm tra:** app chạy thấy `DashboardLayout.vue` rỗng (sidebar thật làm ở Step 4/5b); `npm test` pass; `shared/lib/` không import `features/` (ESLint); `client/` chỉ có `HttpClient.ts` + spec, refresh dùng `skipAuth` (§V.5).
+**Kiểm tra:** app chạy thấy `DashboardLayout.vue` rỗng (sidebar thật làm ở Step 4/5b); `npm test` pass; `shared/lib/` không import `features/` (ESLint); `client/` chỉ có `HttpClient.ts` + spec, refresh dùng `skipAuth` (§V.5); `Session.spec.ts` pass; `Runtime.spec.ts` pass: request có token + `X-Store-Id` + `Accept-Language`, `authFailure` điều hướng về `auth.login` (§V.1); `queryClient.clear()` chỉ xuất hiện trong `Session.ts`.
 
 ---
 
@@ -2250,10 +2264,10 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 - `LoginView.vue` rỗng.
 - `Guards.ts` kiểm tra `meta.requiresAuth`, chỉ dùng `useAuth()` (không import store).
 - `features/StoreScope/` stub: `useStoreScope()` bọc Session, `stores` cố định; `layouts/components/StoreSwitcher.vue` hiện tên Store.
-- `useAuth()` bọc Session theo §M.2; `Session.spec.ts` + `Runtime.spec.ts` pass.
+- `useAuth()` bọc Session theo §M.2 (`login()` gọi API rồi `session.signIn()`, `logout()` = `session.logout()`); `Session.spec.ts` + `Runtime.spec.ts` (từ Step 3a) vẫn pass.
 - `Guards.spec.ts` viết cùng step này (mock `@features/auth/UseAuth` theo §I).
 
-**Kiểm tra:** truy cập `/admin` khi chưa đăng nhập → chuyển về `/login`; `Guards.spec.ts` pass; `main.ts` chỉ một dòng; không còn `queryClient.clear()` ngoài `Session.ts` (§V.1).
+**Kiểm tra:** truy cập `/admin` khi chưa đăng nhập → chuyển về `/login`; `Guards.spec.ts` pass; `main.ts` chỉ một dòng; không còn `queryClient.clear()` ngoài `Session.ts` — kể cả trong `UseAuth.ts`, `UseStoreScope.ts` (§V.1).
 
 ---
 
@@ -2306,7 +2320,7 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 ## Ngoài phạm vi plan này
 
 - Feature nghiệp vụ: Product, Category, Order, Customer, Inventory, Media…
-- Domain model và glossary (Store, Order status, đơn vị tồn kho…).
+- Domain model và glossary nghiệp vụ (Order status, đơn vị tồn kho…). Mục §Thuật ngữ chỉ gồm thuật ngữ kỹ thuật cần cho scaffold.
 - Gọi API thật, script generator cho feature, Storybook.
 - Theme theo Store, tuỳ chỉnh màu/mật độ theo người dùng.
 - 3D (three.js, xem trước model sản phẩm): tạm bỏ qua; nếu storefront cần thì cân nhắc `@google/model-viewer` cho Media.
