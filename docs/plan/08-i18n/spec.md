@@ -1,6 +1,6 @@
 # Spec 08 — i18n
 
-Status: in-progress
+Status: done
 Blocked by: 05
 Nguồn: Step 3c · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

@@ -51,3 +51,16 @@ Ngày hoàn thành: 2026-11-07
 - Thêm job e2e vào CI khi có login thật (P2). Nâng `actions/*` lên v5 (cảnh báo Node 20).
 - Điền token usage (`token-usage.md`) cho các plan 01–14.
 - Đổi `Status:` sang `done` sau khi từng PR được merge.
+
+## Lệch spec đã chấp nhận (review PR #2–#15)
+
+Những hành vi dưới đây nằm ngoài chữ của spec nhưng được giữ lại có chủ đích:
+
+| Plan    | Hành vi                                                                                | Lý do giữ                                                                                                    |
+| ------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| 03      | CI có thêm `format:check`, job `knip` (không chặn merge), job `e2e` và `test:coverage` | Bắt lỗi format/code thừa sớm; e2e đã có flow thật (redirect khi chưa đăng nhập).                             |
+| 05      | `authFailure` vừa điều hướng về `auth.login` vừa hiện toast "Session expired"          | Người dùng cần biết vì sao bị đẩy ra màn đăng nhập.                                                          |
+| 05      | `/auth/login` gửi với `skipAuth`                                                       | 401 khi login là sai thông tin, không được kích hoạt refresh/`authFailure`.                                  |
+| 06      | `ErrorHandling` tải lại trang một lần khi lỗi tải chunk                                | Deploy mới xoá chunk cũ; cờ `sessionStorage` chặn vòng lặp.                                                  |
+| 07      | `localStorage` có thêm `cms.locale`, `cms.sidebarCollapsed` và key session             | Tiêu chí "chỉ có `cms.colorMode`" viết trước khi có i18n, sidebar, session; mọi key vẫn dùng tiền tố `cms.`. |
+| 09 / 12 | `Guards.ts` đọc thêm `meta.permission`, gọi `ensureUser()`, có route `forbidden`       | Guard quyền cần user đã nạp; ngoại lệ §V.3 mở rộng thành `requiresAuth` + `permission`.                      |

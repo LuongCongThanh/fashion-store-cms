@@ -1,6 +1,6 @@
 # 07 — CSS, design system, theme
 
-Status: in-progress
+Status: done
 Blocked by: 05
 Nguồn: Step 3b trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

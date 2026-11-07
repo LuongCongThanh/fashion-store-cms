@@ -1,6 +1,6 @@
 # 12 — Navigation và tool dev
 
-Status: in-progress
+Status: done
 Blocked by: 09
 Nguồn: Step 5b (phần 2) trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

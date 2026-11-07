@@ -1,6 +1,6 @@
 # 02 — Lint, format, hooks
 
-Status: in-progress
+Status: done
 Blocked by: 01
 Nguồn: Step 2 trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

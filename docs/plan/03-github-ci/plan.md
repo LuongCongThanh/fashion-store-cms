@@ -1,6 +1,6 @@
 # 03 — GitHub template và CI
 
-Status: in-progress
+Status: done
 Blocked by: 02
 Nguồn: Step 2b trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

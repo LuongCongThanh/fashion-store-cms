@@ -1,6 +1,6 @@
 # Spec 04 — Env và nền tảng test
 
-Status: in-progress
+Status: done
 Blocked by: 02
 Nguồn: Step 3a (phần 1) · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

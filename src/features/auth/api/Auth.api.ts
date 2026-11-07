@@ -8,7 +8,8 @@ import type { CurrentUser, LoginPayload } from '../types/Auth.types'
 export function useAuthApi() {
   const http = useHttpClient()
   return {
-    login: (payload: LoginPayload) => http.post('/auth/login', payload) as Promise<AuthTokens>,
+    login: (payload: LoginPayload) =>
+      http.post('/auth/login', payload, { skipAuth: true }) as Promise<AuthTokens>,
     me: () => http.get('/auth/me') as Promise<CurrentUser>,
   }
 }

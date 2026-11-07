@@ -1,6 +1,6 @@
 # Spec 13 — Script sinh API types
 
-Status: in-progress
+Status: done
 Blocked by: 05
 Nguồn: Step 6 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

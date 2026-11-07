@@ -1,6 +1,6 @@
 # Spec 02 — Lint, format, hooks
 
-Status: in-progress
+Status: done
 Blocked by: 01
 Nguồn: Step 2 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

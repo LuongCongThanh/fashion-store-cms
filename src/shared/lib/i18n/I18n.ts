@@ -87,7 +87,7 @@ export function useT() {
   const { t, te, n, d } = useI18n()
   return {
     t: (key: MessageKey, named?: Record<string, unknown>) => (named ? t(key, named) : t(key)),
-    te: (key: string) => te(key),
+    te,
     n,
     d,
   }

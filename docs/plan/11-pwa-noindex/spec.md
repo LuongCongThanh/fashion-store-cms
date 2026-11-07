@@ -1,6 +1,6 @@
 # Spec 11 — Chặn index và PWA
 
-Status: in-progress
+Status: done
 Blocked by: 09
 Nguồn: Step 5b (phần 1) · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

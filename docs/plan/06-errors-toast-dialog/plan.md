@@ -1,6 +1,6 @@
 # 06 — Lỗi, toast, dialog
 
-Status: in-progress
+Status: done
 Blocked by: 05
 Nguồn: Step 3a+ trong [scaffold-plan.md](../../archive/scaffold-plan.md) · Spec: [spec.md](../spec.md)
 

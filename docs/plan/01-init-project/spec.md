@@ -1,6 +1,6 @@
 # Spec 01 — Khởi tạo dự án
 
-Status: in-progress
+Status: done
 Blocked by: —
 Nguồn: Step 1 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

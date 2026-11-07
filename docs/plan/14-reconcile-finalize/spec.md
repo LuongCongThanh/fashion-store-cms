@@ -1,6 +1,6 @@
 # Spec 14 — Đối chiếu và chốt
 
-Status: in-progress
+Status: done
 Blocked by: 10, 11, 12, 13
 Nguồn: Step 7 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
