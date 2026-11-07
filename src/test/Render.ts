@@ -1,6 +1,8 @@
+import UApp from '@nuxt/ui/components/App.vue'
 import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+import { defineComponent, h } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
 import type { Component } from 'vue'
@@ -17,6 +19,8 @@ export interface RenderOptions {
   session?: SessionSnapshot
   /** Router riêng; mặc định memory history với route `auth.login`. */
   router?: Router
+  /** Props cho component được render. */
+  props?: Record<string, unknown>
   mount?: MountOptions
 }
 
@@ -43,6 +47,10 @@ export function renderWithPlugins(component: Component, options: RenderOptions =
     retry: false,
     router: options.router ?? defaultRouter(),
   })
-  const wrapper = mount(component, { ...options.mount, global: { plugins: [runtime.plugin] } })
+  // Bọc UApp như App.vue ở prod: toast, overlay (useConfirm) cần nó.
+  const Root = defineComponent({
+    render: () => h(UApp, null, { default: () => h(component, options.props) }),
+  })
+  const wrapper = mount(Root, { ...options.mount, global: { plugins: [runtime.plugin] } })
   return { wrapper, http, runtime }
 }

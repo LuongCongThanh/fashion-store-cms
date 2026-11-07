@@ -223,6 +223,11 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // Component host nhỏ trong test là bình thường.
+    files: ['**/*.spec.ts'],
+    rules: { 'vue/one-component-per-file': 'off' },
+  },
   ...toFlatConfig(BOUNDARIES),
   prettier,
 )
