@@ -2,13 +2,16 @@ import { fileURLToPath } from 'node:url'
 
 import ui from '@nuxt/ui/vite'
 import vue from '@vitejs/plugin-vue'
+import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig } from 'vite'
+import checker from 'vite-plugin-checker'
 import { VitePWA } from 'vite-plugin-pwa'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { uiConfig } from './src/app/config/Ui.config.ts'
 
-export default defineConfig({
+export default defineConfig(({ command, mode }) => ({
   plugins: [
     tsconfigPaths({ loose: true }),
     vue(),
@@ -48,5 +51,15 @@ export default defineConfig({
       },
       devOptions: { enabled: false },
     }),
+    // Chỉ khi dev server: devtools + overlay lỗi vue-tsc/ESLint (§S.2). Không chạy trong Vitest.
+    command === 'serve' && mode !== 'test' && vueDevTools(),
+    command === 'serve' &&
+      mode !== 'test' &&
+      checker({
+        vueTsc: { tsconfigPath: 'tsconfig.app.json' },
+        eslint: { lintCommand: 'eslint "./src/**/*.{ts,vue}"', useFlatConfig: true },
+      }),
+    // `npm run analyze` → dist/stats.html
+    mode === 'analyze' && visualizer({ filename: 'dist/stats.html', gzipSize: true, open: false }),
   ],
-})
+}))

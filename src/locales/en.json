@@ -15,7 +15,12 @@
       "en": "English"
     },
     "logout": "Sign out",
-    "store": "Store"
+    "store": "Store",
+    "appName": "Fashion Store CMS"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "collapse": "Collapse menu"
   },
   "auth": {
     "login": {
