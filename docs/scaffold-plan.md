@@ -45,7 +45,7 @@ Nguyên tắc thực hiện:
 | D29 | Lỗi | Mọi lỗi HTTP → `ApiError`; query lỗi hiển thị tại chỗ, mutation lỗi toast global; dialog xác nhận global, modal nghiệp vụ internal (§O, §P) |
 | D30 | PWA | Cài được + báo bản mới; chỉ cache app shell, không cache API (§R) |
 | D31 | Bổ trợ | Command palette, phím tắt, title theo route ở Foundation; tool dev theo §S |
-| D33 | Phân tầng + shared | Code tái sử dụng gom vào `src/shared/` (một alias `@shared/*`), chỉ đưa vào khi ≥ 2 feature dùng, không chứa tri thức nghiệp vụ. Một chiều `main.ts → app → layouts → features → shared`; `app/` chỉ `main.ts` import (ngoại lệ: `vite.config.ts`, test của `app/`, `src/test/` — §A, D37); locale/theme/PWA ở `shared/`; Store đang quản lý là feature `StoreScope`; upload media ở `features/media` (§A) |
+| D33 | Phân tầng + shared | Phân tầng một chiều `main.ts → app → layouts → features → shared`, chi tiết và ngoại lệ ở §A, ESLint ở §E. Code vào `src/shared/` (alias `@shared/*`) chỉ khi ≥ 2 nơi dùng và không chứa nghiệp vụ; Store đang quản lý là feature `StoreScope`; upload media ở `features/media` |
 | D34 | Seam HTTP | `HttpClient` không import feature nào, interface hẹp có kiểu theo Swagger (không lộ axios, kể cả trong `HttpClientDeps`); HttpClient chỉ nhận `{ baseURL, session, getLocale }`; `Session` (`shared/lib/session/`) sở hữu token + Store hiện tại + xoá cache khi logout/đổi Store; `storeId` qua header `X-Store-Id` — chờ BE xác nhận (§M) |
 | D35 | Luồng dữ liệu | View (container) → [composable] → api (server state) → [mapper, chỉ khi DTO lệch Model] → HttpClient; component chỉ props/emits; DTO không ra khỏi `api/`; server state chỉ ở Vue Query (§T) |
 | D36 | SOLID | Áp dụng ở mức module, không class/DI container; composition root là `createAppRuntime()` trong `app/Runtime.ts` (D37, §U) |
@@ -265,6 +265,8 @@ trong shared/:  components/ ──► composables/ ──► lib/ ──► type
 - `shared/types/Common.types.ts`, `Pagination.types.ts` chỉ tạo khi có type dùng chung thật, không tạo file chỉ re-export `Api.generated.ts`.
 - `locales/` giữ một file mỗi ngôn ngữ; khi > ~500 dòng mới tách theo feature (§H).
 
+Mục này là bản cho người đọc; bảng `BOUNDARIES` (§E) là bản được ESLint kiểm. Mỗi quy tắc import ở đây phải có dòng tương ứng trong `BOUNDARIES` và ít nhất một ca trong `eslint.config.spec.ts` — sửa một bên thì sửa cả bên kia.
+
 ---
 
 ## B. Quy tắc đặt tên
@@ -466,6 +468,14 @@ const presentational = {
   group: ['../api/*', '../stores/*', '../composables/*', 'vue-router'],
   message: 'components/ là presentational: chỉ props/emits, không gọi API/store/router (§T.1).',
 }
+const libIsBottom = {
+  group: ['@shared/components/*', '@shared/components/**', '@shared/composables/*'],
+  message: 'shared/lib/ là tầng dưới: không import components/, composables/ (§A).',
+}
+const noHttpInSharedUi = {
+  group: ['@shared/lib/api/client/*'],
+  message: 'shared/components/ không gọi API (§A).',
+}
 const featureBoundaryForRoutes = {
   ...featureBoundary,
   group: [...featureBoundary.group, '!@features/*/views/*', '!@features/*/*.routes'],
@@ -484,7 +494,9 @@ export const BOUNDARIES = [
   { name: 'feature/components',  files: ['src/features/*/components/**/*.{ts,vue}'], forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto, presentational] },
   { name: 'feature/api (DTO ok)', files: ['src/features/*/api/**/*.ts'],          forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts] },
   { name: 'shared',              files: ['src/shared/**/*.{ts,vue}'],             forbid: [noUpper, noParentImport, noDto] },
-  { name: 'shared/lib/api (DTO ok)', files: ['src/shared/lib/api/**/*.ts'],       forbid: [noUpper, noParentImport] },
+  { name: 'shared/components',   files: ['src/shared/components/**/*.{ts,vue}'],  forbid: [noUpper, noParentImport, noDto, noHttpInSharedUi] },
+  { name: 'shared/lib',          files: ['src/shared/lib/**/*.ts'],               forbid: [noUpper, noParentImport, noDto, libIsBottom] },
+  { name: 'shared/lib/api (DTO ok)', files: ['src/shared/lib/api/**/*.ts'],       forbid: [noUpper, noParentImport, libIsBottom] },
   { name: 'Routes.ts',           files: ['src/app/router/Routes.ts'],             forbid: [featureBoundaryForRoutes, noParentImport] },
 ]
 
@@ -527,6 +539,11 @@ const CASES: [string, string, boolean][] = [
   ['src/features/auth/components/X.vue',         'vue-router',                       true],
   ['src/features/auth/views/LoginView.vue',      '@shared/types/Api.generated',      true],
   ['src/features/auth/api/Auth.api.ts',          '@shared/types/Api.generated',      false],
+  ['src/shared/lib/query/QueryClient.ts',        '@shared/composables/UseNotify',    true],
+  ['src/shared/lib/api/client/HttpClient.ts',    '@shared/components/confirm/UseConfirm', true],
+  ['src/shared/lib/query/QueryClient.ts',        '@shared/lib/api/errors/ErrorPolicy', false],
+  ['src/shared/components/feedback/ErrorState.vue', '@shared/lib/api/client/HttpClient', true],
+  ['src/shared/components/feedback/ErrorState.vue', '@shared/composables/UseNotify', false],
   // ... đủ các ca liệt kê ở Step 2
 ]
 
@@ -870,16 +887,14 @@ Nguyên tắc: chỉ cài khi có step/feature dùng đến; khoá version bằn
 | i18n | `vue-i18n` | Đa ngôn ngữ (§H) |
 | UI | `@nuxt/ui`, `tailwindcss` | Component + styling (§J) |
 | Icon | `@iconify-json/lucide` | Bộ icon offline cho Nuxt UI |
-| Validation | `zod` | Schema env, form, API |
-| Form | `vee-validate`, `@vee-validate/zod` | Form + map lỗi API |
+| Validation | `zod` | Schema env (`Env.config.ts`, Step 3a); sau này cả form, list params |
 | Tiện ích | `@vueuse/core` | Composable dùng chung (debounce, storage…) |
-| Ngày giờ | `dayjs`, `@internationalized/date` | Format hiển thị; DatePicker Nuxt UI |
 | Font | `@fontsource-variable/inter`, `@fontsource-variable/plus-jakarta-sans` | Font self-host (§L.5) |
 
 ```bash
 npm i vue-router pinia @tanstack/vue-query axios vue-i18n zod \
   @nuxt/ui tailwindcss @iconify-json/lucide \
-  vee-validate @vee-validate/zod @vueuse/core dayjs @internationalized/date \
+  @vueuse/core \
   @fontsource-variable/inter @fontsource-variable/plus-jakarta-sans
 ```
 
@@ -890,6 +905,9 @@ npm i vue-router pinia @tanstack/vue-query axios vue-i18n zod \
 | `echarts`, `vue-echarts` | Phase 4 — Dashboard | Biểu đồ, import theo module, lazy-load |
 | `@tiptap/vue-3`, `@tiptap/pm`, `@tiptap/starter-kit` | Phase 5 — Product (mô tả) | Rich text editor |
 | `dompurify` | Cùng lúc Tiptap | Sanitize HTML trước khi render (`vue/no-v-html`) |
+| `vee-validate`, `@vee-validate/zod` | Form có validate đầu tiên (login thật / P5) | Form + map lỗi API; field array cho Variants (lý do chọn: FE_architecture §2) |
+| `dayjs` | P5 — `RelativeTime.vue` | Format ngày giờ, thời gian tương đối |
+| `@internationalized/date` | DatePicker đầu tiên | Kiểu ngày cho DatePicker Nuxt UI (có thể đã có sẵn qua `@nuxt/ui` — chỉ thêm khi import trực tiếp) |
 
 ### K.3. DevDependencies
 
@@ -2183,6 +2201,8 @@ Upload S3 dùng `fetch` riêng là **đúng**, nên giữ: khác origin và khô
 - `layouts/components/UserMenu.vue` import `@app/Runtime` → báo lỗi; `@shared/composables/UseTheme` → qua.
 - `features/auth/UseAuth.ts` import `@layouts/DashboardLayout.vue` → báo lỗi.
 - `shared/composables/UseNotify.ts` import `@features/auth/UseAuth` → báo lỗi.
+- `shared/lib/` import `@shared/composables/*` hoặc `@shared/components/*` → báo lỗi; import `@shared/lib/...` khác → qua.
+- `shared/components/` import `@shared/lib/api/client/HttpClient` → báo lỗi; `@shared/composables/*` → qua.
 - `features/auth/components/X.vue` import `../api/Auth.api` hoặc `vue-router` → báo lỗi (presentational).
 - `features/auth/views/LoginView.vue` import `@shared/types/Api.generated` → báo lỗi; trong `features/auth/api/` → qua.
 - Push khi có lỗi type → bị chặn.
