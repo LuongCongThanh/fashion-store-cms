@@ -8,7 +8,7 @@ Phần dùng chung (không chép lại): quy tắc đặt component (nguồn §1
 
 ### Làm gì
 
-- Routes `users`, `users/new`, `users/:id/edit`, `roles`, `roles/new`, `roles/:id/edit`.
+- Routes: `users` (`user:read`), `users/new` và `users/:id/edit` (`user:write`); `roles` (`role:read`), `roles/new` và `roles/:id/edit` (`role:write`).
 - Components: `UserTable`, `UserFilters`, `UserForm`, `UserRoleSelector`, `UserStoreSelector`, `RoleTable`, `RoleForm`, `PermissionMatrix` (hàng = resource, cột = action).
 - Danh sách permission lấy từ BE, không hard-code.
 
@@ -27,4 +27,6 @@ Nguyên tắc chung:
 
 - `PermissionMatrix` chọn/bỏ cả hàng/cột đúng.
 - Không có so sánh tên role trong code.
+- Route read/write bị chặn đúng theo permission đã khai báo.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng tạo/sửa user, gán role/Store và sửa role permission pass.

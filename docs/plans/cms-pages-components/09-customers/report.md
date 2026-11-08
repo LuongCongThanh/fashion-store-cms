@@ -15,6 +15,7 @@ Ngày hoàn thành: —
 | Reload giữ đúng tab.                                                 |         |         |
 | Không import nội bộ của `features/orders` ngoài interface công khai. |         |         |
 | `typecheck`, `lint`, `test` pass.                                    |         |         |
+| E2E danh sách khách hàng, mở chi tiết và giữ tab trên URL pass.      |         |         |
 
 ## Số liệu
 

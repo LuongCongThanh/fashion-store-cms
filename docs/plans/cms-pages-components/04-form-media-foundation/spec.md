@@ -33,6 +33,7 @@ Có khung form thống nhất (validate, map lỗi API) và upload ảnh dùng l
 - Upload báo lỗi đúng khi file sai định dạng/quá dung lượng.
 - Lỗi 422 từ API hiển thị đúng field.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng upload ảnh: chọn, validate, preview và báo lỗi pass.
 
 ## Phụ thuộc
 

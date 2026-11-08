@@ -10,12 +10,13 @@ Ngày hoàn thành: —
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md)                 | Kết quả | Ghi chú |
-| ------------------------------------------- | ------- | ------- |
-| Sinh tổ hợp variant đúng, không trùng SKU.  |         |         |
-| Save draft không bắt buộc đủ field publish. |         |         |
-| HTML mô tả được sanitize trước khi render.  |         |         |
-| `typecheck`, `lint`, `test` pass.           |         |         |
+| Mục kiểm tra (theo plan.md)                            | Kết quả | Ghi chú |
+| ------------------------------------------------------ | ------- | ------- |
+| Sinh tổ hợp variant đúng, không trùng SKU.             |         |         |
+| Save draft không bắt buộc đủ field publish.            |         |         |
+| HTML mô tả được sanitize trước khi render.             |         |         |
+| `typecheck`, `lint`, `test` pass.                      |         |         |
+| E2E tạo/sửa sản phẩm, biến thể, ảnh và lưu draft pass. |         |         |
 
 ## Số liệu
 

@@ -8,7 +8,7 @@ Phần dùng chung (không chép lại): quy tắc đặt component (nguồn §1
 
 ### Làm gì
 
-- Routes `settings` → redirect `settings/store`, `settings/store`, `settings/localization`.
+- Routes: `settings` (`settings:read`) redirect đến `settings/store`; `settings/store` và `settings/localization` (`settings:write`).
 - Store: name, logo (`ImageUploader`), description, contact email, phone, address.
 - Localization: languages, default language, timezone, currency, date/number format.
 
@@ -27,3 +27,4 @@ Nguyên tắc chung:
 
 - Redirect đúng; không có `settings:write` thì form read-only hoặc bị chặn theo route meta.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng redirect settings và lưu Store/localization pass.

@@ -20,7 +20,7 @@ Quản lý cây danh mục và cung cấp `CategorySelector` cho Product form.
 
 > **Chú thích:** tóm tắt; chi tiết từng bước trong `plan.md`.
 
-- Routes `categories`, `categories/new`, `categories/:id/edit`.
+- Routes: `categories` (`category:read`); `categories/new` và `categories/:id/edit` (`category:write`).
 - Views: `CategoryListView`, `CategoryCreateView`, `CategoryEditView`.
 - Components: `CategoryTree` (kéo thả để move), `CategoryTreeToolbar`, `CategoryForm` (SEO, localization theo FE_architecture), `CategorySelector` (interface công khai cho products).
 
@@ -30,7 +30,9 @@ Quản lý cây danh mục và cung cấp `CategorySelector` cho Product form.
 
 - Move bằng kéo thả gọi API và cập nhật cây; lỗi thì rollback.
 - `CategorySelector` import được từ feature khác qua interface công khai.
+- Route read/write bị chặn đúng theo `category:read` / `category:write`.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng category tree: tạo hoặc sửa, kéo thả và lưu pass.
 
 ## Phụ thuộc
 

@@ -14,6 +14,7 @@ Ngày hoàn thành: —
 | ----------------------------------------------------------------------------------------- | ------- | ------- |
 | Redirect đúng; không có `settings:write` thì form read-only hoặc bị chặn theo route meta. |         |         |
 | `typecheck`, `lint`, `test` pass.                                                         |         |         |
+| E2E redirect settings và lưu Store/localization pass.                                     |         |         |
 
 ## Số liệu
 

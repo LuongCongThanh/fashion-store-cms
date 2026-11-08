@@ -34,6 +34,7 @@ Trang chủ hiển thị số liệu kinh doanh, mỗi widget tự ẩn khi thi�
 - Lỗi một widget không làm hỏng các widget khác.
 - Chart chỉ nằm trong chunk lazy (kiểm bằng `npm run analyze`).
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng dashboard chính, gồm widget bị ẩn theo permission, pass.
 
 ## Phụ thuộc
 

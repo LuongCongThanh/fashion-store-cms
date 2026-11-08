@@ -32,3 +32,4 @@ Nguyên tắc chung:
 - Save draft không bắt buộc đủ field publish.
 - HTML mô tả được sanitize trước khi render.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng tạo/sửa sản phẩm, biến thể, ảnh và lưu draft pass.

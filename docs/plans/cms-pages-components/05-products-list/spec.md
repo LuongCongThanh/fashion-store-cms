@@ -33,6 +33,7 @@ Quản lý xem, tìm, lọc, thao tác hàng loạt trên danh sách sản phẩ
 - Filter/sort/page nằm trên URL, chia sẻ link mở đúng trạng thái.
 - Bulk action ẩn khi thiếu `product:write`.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng danh sách sản phẩm: tìm, lọc, sort, phân trang và bulk action pass.
 
 ## Phụ thuộc
 

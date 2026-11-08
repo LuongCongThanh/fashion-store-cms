@@ -8,7 +8,7 @@ Phần dùng chung (không chép lại): quy tắc đặt component (nguồn §1
 
 ### Làm gì
 
-- Routes `promotions`, `promotions/new`, `promotions/:id/edit`.
+- Routes: `promotions` (`promotion:read`); `promotions/new` và `promotions/:id/edit` (`promotion:write`).
 - Form: Type (coupon / auto) · Code · Discount type & value · Minimum order · Usage limit · Start/End · Status.
 - Components: `PromotionTable`, `PromotionFilters`, `PromotionForm`, `PromotionStatusBadge`.
 - Cài `@internationalized/date` nếu DatePicker cần import trực tiếp.
@@ -27,4 +27,6 @@ Nguyên tắc chung:
 **Kiểm tra:**
 
 - Code bắt buộc khi type = coupon; End > Start; % ≤ 100.
+- Route read/write bị chặn đúng theo `promotion:read` / `promotion:write`.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng tạo coupon/automatic promotion và validate input pass.

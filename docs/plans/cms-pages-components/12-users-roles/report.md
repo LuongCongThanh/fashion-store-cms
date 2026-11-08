@@ -10,11 +10,13 @@ Ngày hoàn thành: —
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md)                  | Kết quả | Ghi chú |
-| -------------------------------------------- | ------- | ------- |
-| `PermissionMatrix` chọn/bỏ cả hàng/cột đúng. |         |         |
-| Không có so sánh tên role trong code.        |         |         |
-| `typecheck`, `lint`, `test` pass.            |         |         |
+| Mục kiểm tra (theo plan.md)                                   | Kết quả | Ghi chú |
+| ------------------------------------------------------------- | ------- | ------- |
+| `PermissionMatrix` chọn/bỏ cả hàng/cột đúng.                  |         |         |
+| Không có so sánh tên role trong code.                         |         |         |
+| Route read/write bị chặn đúng theo permission đã khai báo.    |         |         |
+| `typecheck`, `lint`, `test` pass.                             |         |         |
+| E2E tạo/sửa user, gán role/Store và sửa role permission pass. |         |         |
 
 ## Số liệu
 

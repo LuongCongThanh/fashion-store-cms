@@ -8,7 +8,7 @@ Phần dùng chung (không chép lại): quy tắc đặt component (nguồn §1
 
 ### Làm gì
 
-- Routes `categories`, `categories/new`, `categories/:id/edit`.
+- Routes: `categories` (`category:read`); `categories/new` và `categories/:id/edit` (`category:write`).
 - Views: `CategoryListView`, `CategoryCreateView`, `CategoryEditView`.
 - Components: `CategoryTree` (kéo thả để move), `CategoryTreeToolbar`, `CategoryForm` (SEO, localization theo FE_architecture), `CategorySelector` (interface công khai cho products).
 
@@ -27,4 +27,6 @@ Nguyên tắc chung:
 
 - Move bằng kéo thả gọi API và cập nhật cây; lỗi thì rollback.
 - `CategorySelector` import được từ feature khác qua interface công khai.
+- Route read/write bị chặn đúng theo `category:read` / `category:write`.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng category tree: tạo hoặc sửa, kéo thả và lưu pass.

@@ -33,3 +33,4 @@ Nguyên tắc chung:
 - Theme System theo `prefers-color-scheme`.
 - Sidebar ẩn item khi thiếu permission.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng breadcrumb, đổi locale/theme và sidebar theo permission pass.

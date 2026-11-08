@@ -31,6 +31,7 @@ Theo dõi tồn kho, điều chỉnh và lịch sử biến động.
 
 - Adjust bắt buộc có reason, cập nhật list sau khi lưu.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng xem tồn kho, điều chỉnh có reason và kiểm tra lịch sử movement pass.
 
 ## Phụ thuộc
 

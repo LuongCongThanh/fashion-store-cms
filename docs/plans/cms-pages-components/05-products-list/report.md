@@ -10,11 +10,12 @@ Ngày hoàn thành: —
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md)                                     | Kết quả | Ghi chú |
-| --------------------------------------------------------------- | ------- | ------- |
-| Filter/sort/page nằm trên URL, chia sẻ link mở đúng trạng thái. |         |         |
-| Bulk action ẩn khi thiếu `product:write`.                       |         |         |
-| `typecheck`, `lint`, `test` pass.                               |         |         |
+| Mục kiểm tra (theo plan.md)                                             | Kết quả | Ghi chú |
+| ----------------------------------------------------------------------- | ------- | ------- |
+| Filter/sort/page nằm trên URL, chia sẻ link mở đúng trạng thái.         |         |         |
+| Bulk action ẩn khi thiếu `product:write`.                               |         |         |
+| `typecheck`, `lint`, `test` pass.                                       |         |         |
+| E2E danh sách sản phẩm: tìm, lọc, sort, phân trang và bulk action pass. |         |         |
 
 ## Số liệu
 

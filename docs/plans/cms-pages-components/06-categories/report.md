@@ -14,7 +14,9 @@ Ngày hoàn thành: —
 | ----------------------------------------------------------------------- | ------- | ------- |
 | Move bằng kéo thả gọi API và cập nhật cây; lỗi thì rollback.            |         |         |
 | `CategorySelector` import được từ feature khác qua interface công khai. |         |         |
+| Route read/write bị chặn đúng theo `category:read` / `category:write`.  |         |         |
 | `typecheck`, `lint`, `test` pass.                                       |         |         |
+| E2E category tree: tạo hoặc sửa, kéo thả và lưu pass.                   |         |         |
 
 ## Số liệu
 

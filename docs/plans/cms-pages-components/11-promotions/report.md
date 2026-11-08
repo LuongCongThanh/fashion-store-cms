@@ -10,10 +10,12 @@ Ngày hoàn thành: —
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md)                            | Kết quả | Ghi chú |
-| ------------------------------------------------------ | ------- | ------- |
-| Code bắt buộc khi type = coupon; End > Start; % ≤ 100. |         |         |
-| `typecheck`, `lint`, `test` pass.                      |         |         |
+| Mục kiểm tra (theo plan.md)                                              | Kết quả | Ghi chú |
+| ------------------------------------------------------------------------ | ------- | ------- |
+| Code bắt buộc khi type = coupon; End > Start; % ≤ 100.                   |         |         |
+| Route read/write bị chặn đúng theo `promotion:read` / `promotion:write`. |         |         |
+| `typecheck`, `lint`, `test` pass.                                        |         |         |
+| E2E tạo coupon/automatic promotion và validate input pass.               |         |         |
 
 ## Số liệu
 

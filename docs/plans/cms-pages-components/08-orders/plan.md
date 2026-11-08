@@ -31,3 +31,4 @@ Nguyên tắc chung:
 - Chỉ hiện action chuyển status hợp lệ theo trạng thái hiện tại.
 - Huỷ đơn có confirm.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng danh sách, mở chi tiết và đổi hoặc huỷ trạng thái đơn hàng pass.

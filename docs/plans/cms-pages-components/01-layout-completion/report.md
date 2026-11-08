@@ -10,13 +10,14 @@ Ngày hoàn thành: —
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md)                            | Kết quả | Ghi chú |
-| ------------------------------------------------------ | ------- | ------- |
-| Breadcrumb đúng với route lồng nhau, dịch theo locale. |         |         |
-| Đổi ngôn ngữ giữ nguyên URL, reload vẫn giữ locale.    |         |         |
-| Theme System theo `prefers-color-scheme`.              |         |         |
-| Sidebar ẩn item khi thiếu permission.                  |         |         |
-| `typecheck`, `lint`, `test` pass.                      |         |         |
+| Mục kiểm tra (theo plan.md)                                       | Kết quả | Ghi chú |
+| ----------------------------------------------------------------- | ------- | ------- |
+| Breadcrumb đúng với route lồng nhau, dịch theo locale.            |         |         |
+| Đổi ngôn ngữ giữ nguyên URL, reload vẫn giữ locale.               |         |         |
+| Theme System theo `prefers-color-scheme`.                         |         |         |
+| Sidebar ẩn item khi thiếu permission.                             |         |         |
+| `typecheck`, `lint`, `test` pass.                                 |         |         |
+| E2E breadcrumb, đổi locale/theme và sidebar theo permission pass. |         |         |
 
 ## Số liệu
 

@@ -31,3 +31,4 @@ Nguyên tắc chung:
 - `DataTable` không giữ state sort/page riêng (lấy từ `useListState`).
 - Shared component không import từ `features/`.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng list: filter, sort, phân trang và back/forward giữ state URL pass.

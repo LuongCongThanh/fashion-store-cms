@@ -32,6 +32,7 @@ Xem khách hàng, địa chỉ, lịch sử đơn và hoạt động.
 - Reload giữ đúng tab.
 - Không import nội bộ của `features/orders` ngoài interface công khai.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng danh sách khách hàng, mở chi tiết và giữ tab trên URL pass.
 
 ## Phụ thuộc
 

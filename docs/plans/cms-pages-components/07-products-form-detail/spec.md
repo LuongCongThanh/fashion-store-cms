@@ -35,6 +35,7 @@ Tạo, sửa và xem chi tiết sản phẩm với variants, ảnh, SEO.
 - Save draft không bắt buộc đủ field publish.
 - HTML mô tả được sanitize trước khi render.
 - `typecheck`, `lint`, `test` pass.
+- E2E (Playwright) cho luồng tạo/sửa sản phẩm, biến thể, ảnh và lưu draft pass.
 
 ## Phụ thuộc
 
