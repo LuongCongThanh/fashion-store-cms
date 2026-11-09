@@ -1,6 +1,6 @@
 # 12 — Báo cáo: Users & Roles
 
-Status: in-progress
+Status: on-hold
 Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
 Nhánh: `feat/cms-12-users-roles`
 PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/35
@@ -48,3 +48,30 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 - API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
 - E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
 - Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #35.
+
+### Đã làm (giữ nguyên)
+
+- `PermissionMatrix` (bật/tắt theo hàng/cột), `RoleForm`, `RoleTable`, `UserForm`, `UserTable`, `UserFilters`, `UserRoleSelector`, `UserStoreSelector`.
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `roles/api/Roles.api.ts`, `users/api/Users.api.ts`, `roles/UseRoles.ts`, type `Role`/`User`, `UseRoleEditor`, `UseUserEditor`.
+- 6 test view dùng HTTP giả.
+
+### Chưa làm — chờ API / BE
+
+- Spec yêu cầu 'Danh sách permission lấy từ BE' — chỉ hoàn thành được khi có API.
+- BE phải chặn leo thang đặc quyền (gán role cao hơn quyền của người sửa).
+- Làm mới quyền của user hiện tại sau khi sửa role; E2E user/role.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- **Ưu tiên cao:** UI cho người có `user:write` gán mọi role, kể cả cho chính mình.
+- **Ưu tiên cao:** tự vô hiệu hóa tài khoản / tự gỡ `role:write` khỏi role mình đang giữ mà không cảnh báo.
+- Form user luôn gọi `/roles`, `/stores` — thiếu `role:read` thì cả form thành ErrorState.
+- `pageSize: 100` cắt bớt role; `UserTable` hiện ID thay vì tên; lọc role phải gõ ID.
+- Action/resource trong ma trận chưa dịch; email sai báo 'Required'; query key không bắt đầu bằng tên feature; hai selector trùng nhau.
