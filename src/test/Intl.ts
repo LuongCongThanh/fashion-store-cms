@@ -1,0 +1,33 @@
+import { defineComponent, h } from 'vue'
+
+import type { VNodeChild } from 'vue'
+
+import { useLocale } from '@shared/lib/i18n/I18n'
+
+/** Intl dùng khoảng trắng không ngắt (U+00A0 / U+202F); đổi về khoảng trắng thường để so sánh. */
+export function plainSpaces(value: string): string {
+  return value.replace(/[  ]/g, ' ')
+}
+
+/**
+ * Bọc nội dung kèm nút `[data-action="locale-en"]` để test đổi sang tiếng Anh.
+ * `setupRender` chạy trong `setup` (được gọi composable) và trả về hàm render.
+ */
+export function withLocaleSwitch(setupRender: () => () => VNodeChild) {
+  return defineComponent({
+    setup() {
+      const { setLocale } = useLocale()
+      const render = setupRender()
+      return () =>
+        h('div', [
+          h('button', {
+            'data-action': 'locale-en',
+            onClick: () => {
+              setLocale('en')
+            },
+          }),
+          render(),
+        ])
+    },
+  })
+}

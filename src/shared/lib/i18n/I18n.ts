@@ -88,9 +88,9 @@ export function useT() {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { t, te, n, d } = useI18n()
   return {
-    /** `plural`: số để chọn dạng số ít/số nhiều (`a | b` trong file locale). */
-    t: (key: MessageKey, named?: Record<string, unknown>, plural?: number) =>
-      plural === undefined ? (named ? t(key, named) : t(key)) : t(key, named ?? {}, plural),
+    t: (key: MessageKey, named?: Record<string, unknown>) => (named ? t(key, named) : t(key)),
+    /** Số ít / số nhiều: `count` chọn dạng (`a | b` trong file locale), `named` điền biến (VD `{n}` đã format). */
+    tn: (key: MessageKey, count: number, named: Record<string, unknown> = {}) => t(key, named, count),
     te,
     n,
     d,

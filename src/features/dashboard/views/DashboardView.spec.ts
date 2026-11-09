@@ -4,6 +4,7 @@ import { defineComponent, h, onMounted } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { buildUser } from '@test/factories/User.factory'
+import { plainSpaces } from '@test/Intl'
 import { renderWithPlugins } from '@test/Render'
 
 import DashboardView from './DashboardView.vue'
@@ -71,11 +72,7 @@ it('formats revenue as money and counts with the locale separator', async () => 
   http.onGet(/\/dashboard\/top-products$/).reply(200, { items: [{ id: 'p1', label: 'Áo blazer', value: 312 }] })
   http.onGet(/\/dashboard\//).reply(200, { value: 0, points: [], items: [] })
   await flushPromises()
-  const shown = (key: string) =>
-    wrapper
-      .find(`[data-widget="${key}"]`)
-      .text()
-      .replace(/[\u00a0\u202f]/g, ' ')
+  const shown = (key: string) => plainSpaces(wrapper.find(`[data-widget="${key}"]`).text())
   expect(shown('revenue')).toContain('1.284.560.000 ₫')
   expect(shown('orders')).toContain('1.842')
   expect(shown('recent-orders')).toContain('12.350.000 ₫')

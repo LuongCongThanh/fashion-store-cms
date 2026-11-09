@@ -3,10 +3,8 @@ import { computed, defineAsyncComponent, onMounted, ref } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { useDashboardQuery } from '@features/dashboard/api/Dashboard.api'
-import LowStockList from '@features/dashboard/components/LowStockList.vue'
-import RecentOrders from '@features/dashboard/components/RecentOrders.vue'
+import DashboardList from '@features/dashboard/components/DashboardList.vue'
 import StatCard from '@features/dashboard/components/StatCard.vue'
-import TopProducts from '@features/dashboard/components/TopProducts.vue'
 import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
@@ -31,7 +29,7 @@ onMounted(async () => {
 const RevenueChart = defineAsyncComponent(() => import('@features/dashboard/components/RevenueChart.vue'))
 const OrderChart = defineAsyncComponent(() => import('@features/dashboard/components/OrderChart.vue'))
 const definitions: DashboardWidget[] = [
-  { key: 'revenue', title: 'dashboard.revenue', kind: 'stat', permission: 'order:read' },
+  { key: 'revenue', title: 'dashboard.revenue', kind: 'stat', permission: 'order:read', format: 'money' },
   { key: 'orders', title: 'nav.orders', kind: 'stat', permission: 'order:read' },
   { key: 'customers', title: 'dashboard.customers', kind: 'stat', permission: 'customer:read' },
   { key: 'products', title: 'dashboard.products', kind: 'stat', permission: 'product:read' },
@@ -42,18 +40,32 @@ const definitions: DashboardWidget[] = [
     permission: 'order:read',
   },
   { key: 'order-chart', title: 'dashboard.orderChart', kind: 'chart', permission: 'order:read' },
-  { key: 'recent-orders', title: 'dashboard.recentOrders', kind: 'list', permission: 'order:read' },
-  { key: 'top-products', title: 'dashboard.topProducts', kind: 'list', permission: 'product:read' },
-  { key: 'low-stock', title: 'dashboard.lowStock', kind: 'list', permission: 'inventory:read' },
+  {
+    key: 'recent-orders',
+    title: 'dashboard.recentOrders',
+    kind: 'list',
+    permission: 'order:read',
+    format: 'money',
+    link: (item) => `/orders/${encodeURIComponent(item.id)}`,
+  },
+  {
+    key: 'top-products',
+    title: 'dashboard.topProducts',
+    kind: 'list',
+    permission: 'product:read',
+    link: (item) => `/products/${encodeURIComponent(item.id)}`,
+  },
+  {
+    key: 'low-stock',
+    title: 'dashboard.lowStock',
+    kind: 'list',
+    permission: 'inventory:read',
+    link: (item) => `/inventory?search=${encodeURIComponent(item.label)}`,
+  },
 ]
 const widgets = computed(() => definitions.filter((widget) => can(widget.permission)))
 const results = useDashboardQuery(widgets)
 const cards = computed(() => widgets.value.map((widget, index) => ({ ...widget, result: results.value[index] })))
-const lists = {
-  'recent-orders': RecentOrders,
-  'top-products': TopProducts,
-  'low-stock': LowStockList,
-}
 </script>
 
 <template>
@@ -74,7 +86,7 @@ const lists = {
         <StatCard
           v-else-if="card.kind === 'stat' && card.result?.data?.value !== undefined"
           :value="card.result.data.value"
-          :money="card.key === 'revenue'"
+          :format="card.format ?? 'number'"
         />
         <component
           :is="card.key === 'revenue-chart' ? RevenueChart : OrderChart"
@@ -82,10 +94,11 @@ const lists = {
           :points="card.result.data.points"
           :title="t(card.title as MessageKey)"
         />
-        <component
-          :is="lists[card.key as keyof typeof lists]"
-          v-else-if="card.result?.data?.items?.length"
+        <DashboardList
+          v-else-if="card.link && card.result?.data?.items?.length"
           :items="card.result.data.items"
+          :format="card.format ?? 'number'"
+          :linkTo="card.link"
         />
         <EmptyState v-else :title="t('common.empty')" />
       </section>

@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest'
 
+import { plainSpaces } from '@test/Intl'
 import { renderFeature } from '@test/RenderFeature'
 
 import ProductDetailView from './ProductDetailView.vue'
@@ -42,5 +43,5 @@ it('shows the product price as money', async () => {
       })
     },
   })
-  expect(wrapper.text().replace(/[\u00a0\u202f]/g, ' ')).toContain('1.890.000 ₫')
+  expect(plainSpaces(wrapper.text())).toContain('1.890.000 ₫')
 })

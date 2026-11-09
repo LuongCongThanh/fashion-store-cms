@@ -7,13 +7,13 @@ import { useT } from '@shared/lib/i18n/I18n'
 import type { Paginated } from '@shared/types/Pagination.types'
 defineProps<{ meta?: Paginated<unknown>['meta'] }>()
 const emit = defineEmits<{ page: [page: number]; pageSize: [size: number] }>()
-const { t } = useT()
+const { t, tn } = useT()
 const format = useFormat()
 </script>
 
 <template>
   <nav v-if="meta" :aria-label="t('common.pagination')" class="flex items-center justify-end gap-3">
-    <span data-total>{{ t('common.results', { n: format.number(meta.total) }, meta.total) }}</span>
+    <span data-total>{{ tn('common.results', meta.total, { n: format.number(meta.total) }) }}</span>
     <select
       name="pageSize"
       :value="meta.pageSize"

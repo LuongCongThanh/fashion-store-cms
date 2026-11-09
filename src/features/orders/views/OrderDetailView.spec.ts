@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { plainSpaces } from '@test/Intl'
 import { renderFeature } from '@test/RenderFeature'
 
 import OrderDetailView from './OrderDetailView.vue'
@@ -89,7 +90,7 @@ it('shows money and timeline dates formatted in the app locale', async () => {
       })
     },
   })
-  const shown = wrapper.text().replace(/[\u00a0\u202f]/g, ' ')
+  const shown = plainSpaces(wrapper.text())
   expect(shown).toContain('1.890.000 ₫')
   expect(shown).toContain('3.437.000 ₫')
   expect(shown).toContain('08:42 9/11/2026')

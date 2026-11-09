@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
+import { plainSpaces } from '@test/Intl'
 import { renderWithPlugins } from '@test/Render'
 
 import ProductListView from './ProductListView.vue'
@@ -92,6 +93,6 @@ it('shows product prices as money, right-aligned', async () => {
   })
   await flushPromises()
   const price = wrapper.find('[data-cell="price"]')
-  expect(price.text().replace(/[\u00a0\u202f]/g, ' ')).toBe('15.500.000 ₫')
+  expect(plainSpaces(price.text())).toBe('15.500.000 ₫')
   expect(price.classes()).toContain('text-right')
 })

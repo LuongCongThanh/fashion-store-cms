@@ -12,7 +12,7 @@ const format = useFormat()
   <dl>
     <template v-for="key in ['subtotal', 'discount', 'shippingCost', 'total'] as const" :key="key">
       <dt>{{ t(`orders.${key}`) }}</dt>
-      <dd>{{ format.money(order[key]) }}</dd>
+      <dd class="tabular-nums">{{ format.money(order[key]) }}</dd>
     </template>
   </dl>
 </template>

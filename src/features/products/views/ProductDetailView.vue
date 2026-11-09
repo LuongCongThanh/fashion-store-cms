@@ -34,7 +34,9 @@ const description = computed(() => DOMPurify.sanitize(query.data.value?.descript
       </template>
     </PageHeader>
     <ProductStatusBadge :status="query.data.value.status" />
-    <p>{{ t('products.price') }}: {{ format.money(query.data.value.price) }}</p>
+    <p>
+      {{ t('products.price') }}: <span class="tabular-nums">{{ format.money(query.data.value.price) }}</span>
+    </p>
     <!-- eslint-disable-next-line vue/no-v-html -- Sanitized through DOMPurify immediately above. -->
     <div data-description v-html="description" />
     <div class="flex gap-3">
