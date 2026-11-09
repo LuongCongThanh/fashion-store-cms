@@ -7,15 +7,18 @@ import LowStockList from '@features/dashboard/components/LowStockList.vue'
 import RecentOrders from '@features/dashboard/components/RecentOrders.vue'
 import StatCard from '@features/dashboard/components/StatCard.vue'
 import TopProducts from '@features/dashboard/components/TopProducts.vue'
+import DashboardPrototype from '@features/dashboard/prototype/DashboardPrototype.vue'
 import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useNotify } from '@shared/composables/UseNotify'
+import { usePrototypeVariant } from '@shared/composables/UsePrototypeVariant'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { DashboardWidget } from '@features/dashboard/types/Dashboard.types'
 import type { MessageKey } from '@shared/lib/i18n/I18n'
 const { t } = useT()
+const variant = usePrototypeVariant(['A', 'B', 'C'])
 const { can, ensureUser } = useAuth()
 const notify = useNotify()
 const loadingUser = ref(true)
@@ -57,7 +60,8 @@ const lists = {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <DashboardPrototype v-if="variant" :variant="variant" />
+  <div v-else class="space-y-6">
     <PageHeader :title="t('nav.dashboard')" />
     <p v-if="loadingUser" role="status">{{ t('common.loading') }}</p>
     <EmptyState v-else-if="!cards.length" :title="t('common.empty')" />
