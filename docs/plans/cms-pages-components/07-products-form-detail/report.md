@@ -1,6 +1,6 @@
 # 07 — Báo cáo: Products — Create / Edit / Detail
 
-Status: in-progress
+Status: on-hold
 Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
 Nhánh: `feat/cms-07-products-form-detail`
 PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/30
@@ -49,3 +49,29 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 - API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
 - E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
 - Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #30.
+
+### Đã làm (giữ nguyên)
+
+- `ProductForm`, `ProductVariantTable`, `ProductSeoFields`, `ProductDescriptionEditor` (Tiptap), generator biến thể `Variants.ts` (+ spec), markup `ProductDetailView`.
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `api/ProductEditor.api.ts`, `composables/UseProductEditor.ts` (gồm upload qua `useMedia`).
+- 3 test view dùng HTTP giả.
+
+### Chưa làm — chờ API / BE
+
+- E2E tạo/sửa/xem sản phẩm; luồng upload ảnh trong form với storage thật.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- **Ưu tiên cao:** nhấn Enter trong ô bất kỳ là publish sản phẩm (`ProductForm.vue:40`).
+- **Ưu tiên cao:** 'Lưu nháp' trên sản phẩm đã publish gửi `status: 'draft'`, gỡ publish không báo.
+- **Ưu tiên cao:** 'Generate' thay toàn bộ biến thể, tồn kho về 0, không hỏi xác nhận.
+- **Bảo mật:** `v-html` mô tả không qua DOMPurify (CONVENTIONS §E).
+- SKU trùng chỉ chặn khi publish; `Number('')` thành 0; giá chưa ép số nguyên VND; chưa so `comparePrice` với `price`; `:key` theo SKU có thể trùng.
+- Giá dùng `toLocaleString()`; 'SKU' hard-code; thiếu `@tiptap/pm`; view Create/Edit giống hệt nhau.

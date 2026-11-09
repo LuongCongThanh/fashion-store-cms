@@ -1,6 +1,6 @@
 # 07 — Products — Create / Edit / Detail
 
-Status: in-progress
+Status: on-hold
 Blocked by: 04, 05, 06
 Nguồn: §4.3 (Form, Detail) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P5 · Spec: [spec.md](./spec.md)
 
@@ -33,3 +33,22 @@ Nguyên tắc chung:
 - HTML mô tả được sanitize trước khi render.
 - `typecheck`, `lint`, `test` pass.
 - E2E (Playwright) cho luồng tạo/sửa sản phẩm, biến thể, ảnh và lưu draft pass.
+
+### Tiếp tục khi có API
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+**Sửa được ngay, không cần API** (từ review 2026-11-09):
+
+- [ ] **Ưu tiên cao:** nhấn Enter trong ô bất kỳ là publish sản phẩm (`ProductForm.vue:40`).
+- [ ] **Ưu tiên cao:** 'Lưu nháp' trên sản phẩm đã publish gửi `status: 'draft'`, gỡ publish không báo.
+- [ ] **Ưu tiên cao:** 'Generate' thay toàn bộ biến thể, tồn kho về 0, không hỏi xác nhận.
+- [ ] **Bảo mật:** `v-html` mô tả không qua DOMPurify (CONVENTIONS §E).
+- [ ] SKU trùng chỉ chặn khi publish; `Number('')` thành 0; giá chưa ép số nguyên VND; chưa so `comparePrice` với `price`; `:key` theo SKU có thể trùng.
+- [ ] Giá dùng `toLocaleString()`; 'SKU' hard-code; thiếu `@tiptap/pm`; view Create/Edit giống hệt nhau.
+
+**Chờ API / BE:**
+
+- [ ] E2E tạo/sửa/xem sản phẩm; luồng upload ảnh trong form với storage thật.
+
+**Khi có API:** thay type viết tay bằng type sinh từ Swagger, nối lại lớp dữ liệu tạm với endpoint thật, chạy E2E, rồi kiểm lại các tiêu chí hoàn thành trong [spec.md](./spec.md).
