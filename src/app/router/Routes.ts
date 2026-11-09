@@ -4,6 +4,7 @@ import { authRoutes } from '@features/auth/Auth.routes'
 import { categoryRoutes } from '@features/categories/Categories.routes'
 // Nơi DUY NHẤT gộp <Feature>.routes.ts và import views/ (§B.3).
 import { dashboardRoutes } from '@features/dashboard/Dashboard.routes'
+import { orderRoutes } from '@features/orders/Orders.routes'
 import { productRoutes } from '@features/products/Products.routes'
 
 /** Trang chỉ dùng ở dev (§L.10). */
@@ -24,6 +25,7 @@ export const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     children: [
       ...dashboardRoutes,
+      ...orderRoutes,
       ...categoryRoutes,
       ...productRoutes,
       { path: '403', name: 'forbidden', component: () => import('@app/views/ForbiddenView.vue') },

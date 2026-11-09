@@ -1,6 +1,6 @@
 # 08 — Orders
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 03
 Nguồn: §4.5, §3 (`FilterDateRange`, `ActiveFilterTags`) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P7 · Spec: [spec.md](./spec.md)
 

@@ -40,7 +40,11 @@
     "saveDraft": "Save draft",
     "unsaved": "Discard unsaved changes?",
     "delete": "Delete",
-    "none": "None"
+    "none": "None",
+    "from": "From date",
+    "to": "To date",
+    "clearAll": "Clear filters",
+    "createdAt": "Created at"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -152,5 +156,37 @@
     "description": "Description",
     "parent": "Parent category",
     "invalidParent": "Parent creates a cycle or does not exist"
+  },
+  "orders": {
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    },
+    "paymentStatus": {
+      "unpaid": "Unpaid",
+      "paid": "Paid",
+      "refunded": "Refunded"
+    },
+    "quantity": "Quantity",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shippingCost": "Shipping cost",
+    "total": "Total",
+    "cancelConfirm": "Cancel this order?",
+    "shipping": "Shipping",
+    "payment": "Payment",
+    "timeline": "Timeline",
+    "customerId": "Customer",
+    "minAmount": "Minimum total",
+    "maxAmount": "Maximum total",
+    "paymentStatusLabel": "Payment",
+    "customerIdLabel": "Customer",
+    "minAmountLabel": "Minimum total",
+    "maxAmountLabel": "Maximum total"
   }
 }
