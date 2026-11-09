@@ -1,6 +1,6 @@
 # 14 — Báo cáo: Đối chiếu và chốt
 
-Status: in-progress
+Status: on-hold
 Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
 Nhánh: `feat/cms-14-reconcile-finalize`
 PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/37
@@ -61,3 +61,29 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 - Token task tại snapshot `2026-11-09T00:29:01.527Z`: **45,363,631**, trong đó cached input là 44,854,144 (đã nằm trong input).
 - Không có số token triển khai độc lập từng plan hoặc hóa đơn USD; không ước lượng thay dữ liệu thật.
 - Backend chưa có, E2E hoãn, PR chưa merge: giữ in-progress và chưa archive.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #37.
+
+### Đã làm (giữ nguyên)
+
+- `src/app/views/CmsRouting.spec.ts` (7 case chặn route ghi, redirect, breadcrumb, unsaved form).
+- Đối chiếu tài liệu: `reconciliation.md`, `code-review.md`, `api-contracts.md`, bổ sung GLOSSARY; script `metrics:tokens` (`scripts/CodexUsage.ts`).
+- Ghi trạng thái on-hold và kết quả review ngày 2026-11-09 vào spec/plan/report của 14 plan và `metrics.md`.
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `api-contracts.md` mô tả contract tạm; thay bằng Swagger khi có API.
+
+### Chưa làm — chờ API / BE
+
+- `test:e2e` toàn bộ; Definition of Done §31 cho từng feature.
+- Chuyển folder sang `docs/archive/` sau khi chuỗi PR được duyệt.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- PR gắn type `docs` nhưng có test và script — nên tách hoặc đổi type.
+- `CodexUsage.ts` đọc mọi `*.jsonl` cùng thư mục session, `JSON.parse` không có guard, so sánh timestamp dạng chuỗi (`--since` có offset sẽ sai).
+- `code-review.md` ghi 'không phát hiện scope creep' và thiếu bug của settings — xem kết quả review trong report từng plan.
+- CONVENTIONS ghi model nằm trong `features/*/types` nhưng settings không có `types/`; `@vee-validate/zod` còn được liệt kê ở FE_architecture §2 và CONVENTIONS K.2 dù chưa cài.

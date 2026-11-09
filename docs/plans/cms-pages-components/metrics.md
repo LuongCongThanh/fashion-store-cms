@@ -58,14 +58,6 @@ npm run metrics:tokens -- --session "$HOME/.codex/sessions/2026/11/09/rollout-20
 
 Script chỉ xuất counters/ID và phương pháp tính; không đưa prompt, tool output, access token hoặc transcript vào repo.
 
-mỗi session, trừ checkpoint trước task cho phiên chính; cộng riêng từng child session đúng parent ID. Không cộng tất cả event cumulative, không cộng cached input lần thứ hai. Bản ghi trước task (cài skill) được loại khỏi số task. Snapshot chưa gồm event usage chưa được Codex phát tại thời điểm chạy.
-
-| Phiên                                            | Input trong task | Cached input |  Output |  Tổng task |
-| ------------------------------------------------ | ---------------: | -----------: | ------: | ---------: |
-| `01a1bc84-28f7-7690-b41f-c9794f943eaa` (primary) |       43,946,617 |   43,720,832 | 196,379 | 44,142,996 |
-| `01a1bcad-d133-7973-9be0-d3bb7604b2a5` (review)  |          490,427 |      448,256 |   1,659 |    492,086 |
-| `01a1bcad-fa56-7cd3-9a1f-0eef6b2ba314` (review)  |          726,509 |      685,056 |   2,040 |    728,549 |
-
 ## Đọc số liệu bundle và coverage
 
 JS gzip là tổng các chunk JavaScript của toàn nhánh, bao gồm chunk tải động; không phải tải ban đầu của riêng feature. Coverage của mỗi checkpoint có thể thay đổi khi nền tảng chưa được feature sau sử dụng; giá trị được ghi nguyên số đo, không loại file để tăng điểm. Chi tiết statements/branches/functions nằm trong report và [validation-metrics.json](./validation-metrics.json).
@@ -73,3 +65,26 @@ JS gzip là tổng các chunk JavaScript của toàn nhánh, bao gồm chunk t�
 Knip là kiểm tra bắt buộc ở plan 14; CI đặt job knip không chặn merge. Ở PR nền trước khi feature sau sử dụng các export, knip có thể báo phần chưa có consumer; không tắt rule để làm xanh giả. CI sẵn có cũng tự chạy smoke E2E khi mở PR; E2E nghiệp vụ mới vẫn hoãn theo lựa chọn đã chốt.
 
 Không có ngày merge vì các PR đang draft. Archive chỉ thực hiện sau khi chuỗi PR đã được duyệt và các phần DoD hoãn đã được chốt; không đổi `done` để che phần backend/E2E chưa kiểm.
+
+## Tiến độ 2026-11-09
+
+Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+| Plan | Nội dung                          | UI component | Lớp dữ liệu tạm | Việc chờ API | Vấn đề review cần sửa | Status  | PR  |
+| ---- | --------------------------------- | ------------ | --------------- | ------------ | --------------------- | ------- | --- |
+| 01   | Hoàn thiện Layout                 | Xong         | Không           | 1            | 5                     | on-hold | #24 |
+| 02   | Dashboard                         | Xong         | Có              | 3            | 5                     | on-hold | #25 |
+| 03   | Nền tảng List & Table             | Xong         | Không           | 1            | 6                     | on-hold | #26 |
+| 04   | Nền tảng Form & Media             | Xong         | Có              | 2            | 6                     | on-hold | #27 |
+| 05   | Products — List                   | Xong         | Có              | 1            | 4                     | on-hold | #28 |
+| 06   | Categories                        | Xong         | Có              | 2            | 4                     | on-hold | #29 |
+| 07   | Products — Create / Edit / Detail | Xong         | Có              | 1            | 6                     | on-hold | #30 |
+| 08   | Orders                            | Xong         | Có              | 2            | 4                     | on-hold | #31 |
+| 09   | Customers                         | Xong         | Có              | 3            | 4                     | on-hold | #32 |
+| 10   | Inventory                         | Xong         | Có              | 4            | 4                     | on-hold | #33 |
+| 11   | Promotions                        | Xong         | Có              | 2            | 5                     | on-hold | #34 |
+| 12   | Users & Roles                     | Xong         | Có              | 3            | 5                     | on-hold | #35 |
+| 13   | Settings                          | Xong         | Có              | 2            | 4                     | on-hold | #36 |
+| 14   | Đối chiếu và chốt                 | Xong         | Có              | 2            | 4                     | on-hold | #37 |
+
+Số mục lấy từ phần "Review 2026-11-09" trong `report.md` của từng plan. Chưa có số token cho lần review và cập nhật tài liệu này.
