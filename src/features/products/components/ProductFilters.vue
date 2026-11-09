@@ -3,8 +3,9 @@ import FilterBar from '@shared/components/list/FilterBar.vue'
 import ListSearch from '@shared/components/list/ListSearch.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
+import type { Category } from '@features/categories/types/Category.types'
+
 import type { ProductListParams } from '../schemas/ProductList.schema'
-import type { ProductCategoryOption as Category } from '../types/Product.types'
 defineProps<{ params: ProductListParams; categories: Category[] }>()
 const emit = defineEmits<{ filter: [key: string, value: unknown] }>()
 const { t } = useT()

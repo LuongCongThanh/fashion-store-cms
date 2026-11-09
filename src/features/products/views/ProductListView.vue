@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useCategoriesQuery } from '@features/categories/UseCategories'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTableBulkActions from '@shared/components/table/DataTableBulkActions.vue'
@@ -13,7 +14,6 @@ import DataTablePagination from '@shared/components/table/DataTablePagination.vu
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useProductCategoriesQuery as useCategoriesQuery } from '../api/ProductCategories.api'
 import { useProductBulkMutation, useProductsQuery } from '../api/Products.api'
 import ProductFilters from '../components/ProductFilters.vue'
 import ProductTable from '../components/ProductTable.vue'

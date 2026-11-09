@@ -39,7 +39,8 @@
     "view": "Xem",
     "saveDraft": "Lưu nháp",
     "unsaved": "Bỏ thay đổi chưa lưu?",
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "none": "Không có"
   },
   "nav": {
     "dashboard": "Tổng quan",
@@ -132,5 +133,15 @@
     "publish": "Xuất bản",
     "unpublish": "Ẩn",
     "delete": "Xóa"
+  },
+  "categories": {
+    "root": "Kéo vào đây để chuyển về gốc",
+    "name": "Tên",
+    "slug": "Đường dẫn",
+    "metaTitle": "Tiêu đề SEO",
+    "metaDescription": "Mô tả SEO",
+    "description": "Mô tả",
+    "parent": "Danh mục cha",
+    "invalidParent": "Danh mục cha tạo vòng lặp hoặc không tồn tại"
   }
 }

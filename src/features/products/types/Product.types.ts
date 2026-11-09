@@ -6,9 +6,3 @@ export interface Product {
   categoryId?: string
   updatedAt?: string
 }
-
-export interface ProductCategoryOption {
-  id: string
-  name: string
-  parentId: string | null
-}

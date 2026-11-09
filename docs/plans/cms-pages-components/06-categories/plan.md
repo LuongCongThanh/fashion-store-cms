@@ -1,6 +1,6 @@
 # 06 — Categories
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 03, 04
 Nguồn: §4.4 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P6 · Spec: [spec.md](./spec.md)
 

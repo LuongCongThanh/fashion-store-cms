@@ -39,7 +39,8 @@
     "view": "View",
     "saveDraft": "Save draft",
     "unsaved": "Discard unsaved changes?",
-    "delete": "Delete"
+    "delete": "Delete",
+    "none": "None"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -132,5 +133,15 @@
     "publish": "Publish",
     "unpublish": "Unpublish",
     "delete": "Delete"
+  },
+  "categories": {
+    "root": "Drop here to move to root",
+    "name": "Name",
+    "slug": "Slug",
+    "metaTitle": "Meta title",
+    "metaDescription": "Meta description",
+    "description": "Description",
+    "parent": "Parent category",
+    "invalidParent": "Parent creates a cycle or does not exist"
   }
 }
