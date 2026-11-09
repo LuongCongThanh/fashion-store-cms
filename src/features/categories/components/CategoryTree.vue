@@ -35,6 +35,17 @@ function drop(event: DragEvent, parentId: string | null) {
   }
   emit('move', id, parentId)
 }
+function moveWithKeyboard(event: KeyboardEvent, id: string) {
+  if (!props.canWrite || props.pending || !event.altKey) return
+  const index = rows.value.findIndex((row) => row.item.id === id)
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault()
+    emit('move', id, null)
+  } else if (event.key === 'ArrowRight' && index > 0) {
+    event.preventDefault()
+    emit('move', id, rows.value[index - 1]!.item.id)
+  }
+}
 </script>
 
 <template>
@@ -50,11 +61,13 @@ function drop(event: DragEvent, parentId: string | null) {
       :data-category="row.item.id"
       :data-parent="row.item.parentId ?? ''"
       :draggable="canWrite && !pending"
+      :tabindex="0"
       :style="{ paddingLeft: `${row.depth * 24 + 12}px` }"
       class="border-b border-default p-3"
       @dragstart="$event.dataTransfer?.setData('text/plain', row.item.id)"
       @dragover.prevent
       @drop.prevent.stop="drop($event, row.item.id)"
+      @keydown="moveWithKeyboard($event, row.item.id)"
     >
       <span>{{ row.item.name }}</span>
       <RouterLink

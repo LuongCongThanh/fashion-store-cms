@@ -26,10 +26,33 @@ function toggle(keys: string[], checked: boolean) {
     else values.delete(key)
   emit('update:modelValue', [...values])
 }
+function moveFocus(event: KeyboardEvent) {
+  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return
+  const input = event.currentTarget as HTMLInputElement
+  const cell = input.closest('td')
+  const row = input.closest('tr')
+  if (!cell || !row) return
+  const table = row.closest('table')
+  const rows = [...(table?.querySelectorAll('tbody tr') ?? [])]
+  const cells = [...row.querySelectorAll('td')]
+  const rowIndex = rows.indexOf(row)
+  const columnIndex = cells.indexOf(cell)
+  const target = event.key === 'ArrowLeft'
+    ? cells[columnIndex - 1]
+    : event.key === 'ArrowRight'
+      ? cells[columnIndex + 1]
+      : rows[rowIndex + (event.key === 'ArrowUp' ? -1 : 1)]?.querySelectorAll('td')[columnIndex]
+  const targetInput = target?.querySelector<HTMLInputElement>('input')
+  if (targetInput) {
+    event.preventDefault()
+    targetInput.focus()
+  }
+}
 </script>
 
 <template>
-  <table class="w-full border-collapse">
+  <div class="max-w-full overflow-auto rounded-lg border border-default">
+  <table class="min-w-max border-collapse">
     <caption>
       {{
         t('roles.permissions')
@@ -37,8 +60,8 @@ function toggle(keys: string[], checked: boolean) {
     </caption>
     <thead>
       <tr>
-        <th>{{ t('roles.resource') }}</th>
-        <th v-for="action in actions" :key="action">
+        <th class="sticky left-0 top-0 z-20 bg-elevated p-3 text-left">{{ t('roles.resource') }}</th>
+        <th v-for="action in actions" :key="action" class="sticky top-0 z-10 bg-elevated p-3">
           <label>
             <input
               type="checkbox"
@@ -52,7 +75,7 @@ function toggle(keys: string[], checked: boolean) {
     </thead>
     <tbody>
       <tr v-for="resource in resources" :key="resource">
-        <th>
+        <th class="sticky left-0 z-10 bg-default p-3 text-left">
           <label>
             <input
               type="checkbox"
@@ -62,7 +85,7 @@ function toggle(keys: string[], checked: boolean) {
             />{{ resource }}</label
           >
         </th>
-        <td v-for="action in actions" :key="action">
+        <td v-for="action in actions" :key="action" class="p-3 text-center">
           <input
             v-if="keys(resource, action).length"
             type="checkbox"
@@ -70,9 +93,11 @@ function toggle(keys: string[], checked: boolean) {
             :aria-label="`${resource}:${action}`"
             :checked="selected(keys(resource, action))"
             @change="toggle(keys(resource, action), ($event.target as HTMLInputElement).checked)"
+            @keydown="moveFocus"
           />
         </td>
       </tr>
     </tbody>
   </table>
+  </div>
 </template>

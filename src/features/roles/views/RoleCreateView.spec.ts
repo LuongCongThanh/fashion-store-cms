@@ -24,6 +24,9 @@ it('builds the permission matrix from backend resources/actions and toggles rows
   await wrapper.find('input[name="column:read"]').setValue(true)
   await wrapper.find('input[name="row:product"]').setValue(false)
   await wrapper.find('input[name="permission:report:export"]').setValue(true)
+  const firstPermission = wrapper.get('input[name="permission:product:read"]')
+  await firstPermission.trigger('keydown', { key: 'ArrowRight' })
+  expect(document.activeElement).toHaveProperty('name', 'permission:product:write')
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   expect(JSON.parse(http.history.post[0]?.data as string)).toEqual({

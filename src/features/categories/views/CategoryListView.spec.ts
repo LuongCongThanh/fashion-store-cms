@@ -35,3 +35,20 @@ it('shows the category tree and rolls back a failed drag move', async () => {
   expect(JSON.parse(http.history.patch[0]?.data as string)).toEqual({ parentId: 'a' })
   expect(wrapper.find('[data-category="b"]').attributes('data-parent')).toBe('')
 })
+
+it('moves a category under the previous category with the keyboard', async () => {
+  const { wrapper, http } = await renderFeature(CategoryListView, {
+    path: '/categories',
+    permissions: ['category:write'],
+    mock(http) {
+      http.onGet(/\/categories$/).reply(200, [
+        { id: 'a', name: 'Áo', parentId: null },
+        { id: 'b', name: 'Linen', parentId: null },
+      ])
+      http.onPatch(/\/categories\/b\/move$/).reply(200, {})
+    },
+  })
+  await wrapper.get('[data-category="b"]').trigger('keydown', { key: 'ArrowRight', altKey: true })
+  await flushPromises()
+  expect(JSON.parse(http.history.patch[0]?.data as string)).toEqual({ parentId: 'a' })
+})
