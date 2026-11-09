@@ -7,6 +7,5 @@
   "eslint.validate": ["typescript", "vue"],
   "files.associations": {
     "*.css": "tailwindcss"
-  },
-  "i18n-ally.localesPaths": ["src/locales", "src/shared/lib/i18n"]
+  }
 }
