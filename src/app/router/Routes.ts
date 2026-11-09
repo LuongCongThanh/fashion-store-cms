@@ -2,6 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 import { authRoutes } from '@features/auth/Auth.routes'
 import { categoryRoutes } from '@features/categories/Categories.routes'
+import { customerRoutes } from '@features/customers/Customers.routes'
 // Nơi DUY NHẤT gộp <Feature>.routes.ts và import views/ (§B.3).
 import { dashboardRoutes } from '@features/dashboard/Dashboard.routes'
 import { orderRoutes } from '@features/orders/Orders.routes'
@@ -25,6 +26,7 @@ export const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     children: [
       ...dashboardRoutes,
+      ...customerRoutes,
       ...orderRoutes,
       ...categoryRoutes,
       ...productRoutes,
