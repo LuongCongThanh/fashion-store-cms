@@ -1,6 +1,6 @@
 # 08 — Báo cáo: Orders
 
-Status: in-progress
+Status: on-hold
 Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
 Nhánh: `feat/cms-08-orders`
 PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/31
@@ -45,3 +45,29 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 - API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
 - E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
 - Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #31.
+
+### Đã làm (giữ nguyên)
+
+- `OrderTable`, `OrderFilters`, `OrderStatusBadge`, `PaymentStatusBadge`, `OrderItems`, `OrderSummary`, `OrderCustomerInfo`, `OrderShippingInfo`, `OrderPaymentInfo`, `OrderTimeline`, `OrderStatusAction`; bảng chuyển trạng thái `OrderStatus.ts`.
+- Shared: `FilterDateRange`, `ActiveFilterTags`.
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `api/Orders.api.ts`, `UseOrders.ts`; `types/Order.types.ts` (giữ làm type cho props).
+- 2 test view dùng HTTP giả.
+
+### Chưa làm — chờ API / BE
+
+- BE xác nhận quy tắc hủy/hoàn tiền theo trạng thái thanh toán.
+- E2E danh sách và chi tiết đơn.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- `delivered → refunded` và hủy đơn đã thanh toán không xét payment status.
+- `minAmount ≤ maxAmount`, `from ≤ to` chỉ chặn bằng thuộc tính HTML, chưa có trong schema.
+- Danh sách trạng thái lặp 5 nơi (§B.2 yêu cầu `as const` object); tiền/ngày hiển thị thô; chip filter chưa dịch.
+- Chi tiết thiếu Empty state; chưa test ẩn action khi thiếu `order:write`; chưa unit test bảng chuyển trạng thái; không toast thành công.
