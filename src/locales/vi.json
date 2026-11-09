@@ -24,6 +24,8 @@
     "search": "Tìm kiếm",
     "pagination": "Phân trang",
     "results": "{n} kết quả",
+    "sections": "Các phần biểu mẫu",
+    "validationErrors": "Vui lòng sửa các lỗi sau",
     "pageSize": "Số dòng",
     "previous": "Trang trước",
     "next": "Trang sau",

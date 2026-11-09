@@ -24,6 +24,8 @@
     "search": "Search",
     "pagination": "Pagination",
     "results": "{n} result | {n} results",
+    "sections": "Form sections",
+    "validationErrors": "Please fix the following errors",
     "pageSize": "Page size",
     "previous": "Previous page",
     "next": "Next page",

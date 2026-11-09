@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, nextTick, ref, watch } from 'vue'
 
 import { CategorySelector } from '@features/categories/UseCategories'
 import { ImageGallery, ImageUploader } from '@features/media/UseMediaComponents'
@@ -13,7 +13,7 @@ import type { ProductInput } from '@features/products/schemas/Product.schema'
 
 import ProductSeoFields from './ProductSeoFields.vue'
 import ProductVariantTable from './ProductVariantTable.vue'
-defineProps<{
+const props = defineProps<{
   modelValue: ProductInput
   errors: Record<string, string | undefined>
   pending: boolean
@@ -34,11 +34,39 @@ const emit = defineEmits<{
 }>()
 const { t } = useT()
 const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptionEditor.vue'))
+const form = ref<HTMLFormElement>()
+const errorEntries = computed(() => Object.entries(props.errors).filter((entry): entry is [string, string] => !!entry[1]))
+const fieldLabel = (key: string) => {
+  if (key === 'price') return t('products.price')
+  if (key === 'slug') return 'Slug'
+  if (key === 'name') return t('common.name')
+  if (key.includes('.sku')) return 'SKU'
+  return key
+}
+watch(
+  () => props.errors,
+  async () => {
+    if (!errorEntries.value.length) return
+    await nextTick()
+    const name = CSS.escape(errorEntries.value[0]![0])
+    form.value?.querySelector<HTMLElement>(`[name="${name}"]`)?.focus()
+  },
+  { deep: true },
+)
 </script>
 
 <template>
-  <form class="space-y-6" @submit.prevent="emit('submit', 'published')">
-    <FormSection :title="t('dashboard.products')">
+  <form ref="form" class="space-y-6" @submit.prevent="emit('submit', 'published')">
+    <nav class="sticky top-0 z-10 flex gap-1 overflow-x-auto border-b border-default bg-default py-2" :aria-label="t('common.sections')">
+      <a v-for="section in [['basic', t('dashboard.products')], ['pricing', t('products.price')], ['categories', t('products.category')], ['images', t('media.upload')], ['variants', t('products.variant')], ['seo', t('products.seo')]]" :key="section[0]" :href="`#product-${section[0]}`" class="whitespace-nowrap rounded-md px-3 py-2 text-sm text-muted hover:text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{{ section[1] }}</a>
+    </nav>
+    <div v-if="errorEntries.length" role="alert" data-validation-summary class="rounded-lg border border-error p-4" tabindex="-1">
+      <p class="font-semibold text-highlighted">{{ t('common.validationErrors') }}</p>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
+        <li v-for="([key, message]) in errorEntries" :key="key">{{ fieldLabel(key) }}: {{ message }}</li>
+      </ul>
+    </div>
+    <FormSection id="product-basic" :title="t('dashboard.products')">
       <label
         >{{ t('common.name')
         }}<input
@@ -72,7 +100,7 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
         @update:modelValue="emit('update:modelValue', { ...modelValue, description: $event })"
       />
     </FormSection>
-    <FormSection :title="t('products.price')">
+    <FormSection id="product-pricing" :title="t('products.price')">
       <label v-for="key in ['price', 'comparePrice', 'cost'] as const" :key="key"
         >{{ t(`products.${key}`)
         }}<input
@@ -90,14 +118,14 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
         <span v-if="errors[key]" role="alert">{{ errors[key] }}</span>
       </label>
     </FormSection>
-    <FormSection :title="t('products.category')">
+    <FormSection id="product-categories" :title="t('products.category')">
       <CategorySelector
         :options="categories"
         :modelValue="modelValue.categoryIds"
         @update:modelValue="emit('update:modelValue', { ...modelValue, categoryIds: $event })"
       />
     </FormSection>
-    <FormSection :title="t('media.upload')">
+    <FormSection id="product-images" :title="t('media.upload')">
       <ImageUploader
         :uploading="uploading"
         :error="uploadError"
@@ -135,7 +163,7 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
         "
       />
     </FormSection>
-    <FormSection :title="t('products.variant')">
+    <FormSection id="product-variants" :title="t('products.variant')">
       <ProductVariantTable
         :modelValue="modelValue.variants"
         :price="modelValue.price"
@@ -143,7 +171,7 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
         @update:modelValue="emit('update:modelValue', { ...modelValue, variants: $event })"
       />
     </FormSection>
-    <FormSection :title="t('products.seo')">
+    <FormSection id="product-seo" :title="t('products.seo')">
       <ProductSeoFields
         :modelValue="modelValue"
         :errors="errors"

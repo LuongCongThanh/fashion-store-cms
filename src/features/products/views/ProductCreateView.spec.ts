@@ -36,6 +36,8 @@ it('rejects publishing a product with incomplete variants and SEO', async () => 
   await flushPromises()
   expect(http.history.post).toHaveLength(0)
   expect(wrapper.find('[data-error="slug"]').exists()).toBe(true)
+  expect(wrapper.get('[role="alert"][data-validation-summary]').text()).toContain('Giá')
+  expect(document.activeElement).toHaveProperty('name', 'slug')
 })
 
 it('publishes a categorized product with pricing, SEO and generated size/color variants', async () => {
