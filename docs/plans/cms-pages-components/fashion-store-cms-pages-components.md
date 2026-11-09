@@ -4,10 +4,10 @@ File gợi ý: **page (view) nào và component nào cần tạo**, đặt ở �
 
 Không lặp lại kiến trúc. Nguồn chuẩn:
 
-- Cấu trúc thư mục, tên file, chiều import: [CONVENTIONS.md](../CONVENTIONS.md) §A, §B, §E, §Q
-- API layer, `useListState`, RBAC, Store scope, Table, URL state: [FE_architecture.md](../FE_architecture.md) §5, §6, §9, §22, §23
-- Thứ tự Phase: [FE_architecture.md](../FE_architecture.md) §30
-- Thuật ngữ: [GLOSSARY.md](../../GLOSSARY.md)
+- Cấu trúc thư mục, tên file, chiều import: [CONVENTIONS.md](../../CONVENTIONS.md) §A, §B, §E, §Q
+- API layer, `useListState`, RBAC, Store scope, Table, URL state: [FE_architecture.md](../../FE_architecture.md) §5, §6, §9, §22, §23
+- Thứ tự Phase: [FE_architecture.md](../../FE_architecture.md) §30
+- Thuật ngữ: [GLOSSARY.md](../../../GLOSSARY.md)
 
 Stack: Vite + Vue 3 + vue-router + `@nuxt/ui` (chỉ thư viện component, **không phải Nuxt** — không có `pages/` file-based routing, không auto-import component).
 

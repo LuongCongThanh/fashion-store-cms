@@ -21,10 +21,22 @@ Widget thống kê, chart tải động và lỗi/retry riêng từng widget.
 | Coverage dòng                              | 83.64% (toàn nhánh tại checkpoint)           |
 | Coverage statements / branches / functions | 82.0% / 82.31% / 77.73%                      |
 | Production build                           | PASS                                         |
-| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Prettier format check                      | PASS                                         |
+| E2E nghiệp vụ mới                          | HOÃN theo lựa chọn của người phụ trách       |
 | Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
+
+## Hành vi đã kiểm qua seam được duyệt
+
+- `src/features/dashboard/views/DashboardView.spec.ts` — DashboardView keeps other widgets visible when one fails and can retry it (**passed**)
+- `src/features/dashboard/views/DashboardView.spec.ts` — DashboardView hides restricted widgets and never requests their data (**passed**)
+- `src/features/dashboard/views/DashboardView.spec.ts` — loads the current user when opening the dashboard directly after a reload (**passed**)
+- `src/features/dashboard/views/DashboardView.spec.ts` — links a recent order directly to its detail page (**passed**)
+
+## Bundle
+
+Tổng JavaScript gzip của toàn bộ nhánh (gồm các chunk tải động): 447.04 kB. Đây không phải kích thước tải ban đầu của riêng feature.
 
 ## Token
 

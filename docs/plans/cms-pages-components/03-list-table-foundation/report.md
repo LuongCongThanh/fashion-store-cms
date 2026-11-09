@@ -21,7 +21,8 @@ URL là nguồn state list; bảng server-side, selection, pagination và patter
 | Coverage dòng                              | 84.8% (toàn nhánh tại checkpoint)            |
 | Coverage statements / branches / functions | 83.11% / 83.5% / 78.44%                      |
 | Production build                           | PASS                                         |
-| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Prettier format check                      | PASS                                         |
+| E2E nghiệp vụ mới                          | HOÃN theo lựa chọn của người phụ trách       |
 | Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).

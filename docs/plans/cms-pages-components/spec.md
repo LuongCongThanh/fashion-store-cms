@@ -1,14 +1,14 @@
 # Spec — Page & Component cho Fashion Store CMS
 
-Status: ready-for-agent
-Nguồn chuẩn chi tiết: [fashion-store-cms-pages-components.md](../fashion-store-cms-pages-components.md)
+Status: on-hold
+Nguồn chuẩn chi tiết: [fashion-store-cms-pages-components.md](./fashion-store-cms-pages-components.md)
 
 ## Lưu ý bắt buộc
 
 - **Không commit hoặc mở PR dưới tên Claude.** Không thêm `Co-Authored-By: Claude …`, không ghi "Generated with Claude Code". Commit theo Conventional Commits bằng git user của người làm.
 - Chỉ commit hoặc push khi người phụ trách đồng ý.
-- Mỗi plan con một nhánh, một PR vào `dev`, squash merge (QA/UAT/main tách riêng).
-- Làm tuần tự theo `Blocked by`: xong một plan thì dừng, báo kết quả trong `report.md`, được xác nhận mới làm tiếp. Plan không phụ thuộc nhau có thể làm song song.
+- Mỗi plan con một nhánh, một draft PR nối tiếp theo lựa chọn đã xác nhận của người phụ trách. PR đến lượt merge đổi base về `dev`, squash merge; QA/UAT/main tách riêng.
+- `Blocked by` là thứ tự phụ thuộc để review/merge. Người phụ trách đã yêu cầu chuẩn bị đủ 14 PR nối tiếp; mỗi plan có report/metrics riêng, không tự merge hoặc đánh dấu done.
 
 ## Problem Statement
 
@@ -26,7 +26,7 @@ Mỗi folder gồm:
 | `plan.md`   | Việc cần làm, output, mục kiểm tra. Có `Status:` và `Blocked by:` ở đầu.   |
 | `report.md` | Kết quả sau khi làm: đã làm, kết quả kiểm tra, lệch so với plan, việc tồn. |
 
-Số liệu (token, test, coverage, bundle) ghi chung trong [metrics.md](./metrics.md). Giá trị `Status`: `ready-for-agent` → `in-progress` → `done`.
+Số liệu (token, test, coverage, bundle) ghi chung trong [metrics.md](./metrics.md). Giá trị `Status`: `ready-for-agent` → `in-progress` → `done`; `on-hold` khi tạm dừng chờ phụ thuộc bên ngoài (vd. API backend).
 
 ## User Stories
 
@@ -110,14 +110,14 @@ Actor: **Master Store Manager** (toàn quyền nhiều Store), **Store Manager**
 
 ## Quy trình thực hiện mỗi plan
 
-1. Kiểm tra mọi plan trong `Blocked by` đã `Status: done`.
-2. Tạo nhánh từ `dev`, ví dụ `feat/<slug>`.
+1. Kiểm tra phần triển khai ở các PR phụ thuộc đã được kiểm; merge chỉ sau khi các phụ thuộc đã được duyệt.
+2. Tạo nhánh của plan từ PR base trước nó (plan 01 từ dev), xem [chuỗi PR](./pr-stack.md).
 3. Đổi `Status:` trong `plan.md` và `spec.md` thành `in-progress`.
 4. Làm theo mục **Làm gì** trong `plan.md`.
 5. Chạy hết mục **Kiểm tra**, ghi kết quả vào `report.md`.
 6. Ghi token và số liệu chất lượng vào [metrics.md](./metrics.md).
 7. Commit theo Conventional Commits, tuân thủ [Lưu ý bắt buộc](#lưu-ý-bắt-buộc).
-8. Mở PR vào `dev`, squash merge sau khi được duyệt; đổi `Status:` thành `done`.
+8. Mở draft PR nối tiếp. Khi đến lượt, restack/đổi base về dev, squash merge sau khi được duyệt; chỉ đổi Status thành done khi thực sự chốt.
 
 ## Danh sách plan con
 
@@ -149,3 +149,17 @@ Actor: **Master Store Manager** (toàn quyền nhiều Store), **Store Manager**
 - Plan 06 cần BE xác nhận format localized data trước khi làm phần localization.
 - Nếu API của một feature chưa có, dùng dev mock tương tự mock auth và ghi vào "Việc còn tồn" của report.
 - Khi plan 14 xong, chuyển folder này vào `docs/archive/`.
+
+## Ghi nhận thực hiện
+
+[Quyết định đã xác nhận](./execution-decisions.md), [chuỗi 14 PR](./pr-stack.md), [đối chiếu](./reconciliation.md), [token và chất lượng](./metrics.md). Backend chưa có; E2E hoãn.
+
+## Trạng thái 2026-11-09: tạm dừng chờ API
+
+Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+- Cả 14 plan chuyển `Status: on-hold`. Code và 14 draft PR giữ nguyên, không gỡ lớp dữ liệu tạm.
+- Mỗi plan ghi rõ đã làm / lớp dữ liệu tạm / chờ API / vấn đề review cần sửa trong `report.md`, việc còn lại trong `plan.md`.
+- Tiêu chí còn mở do thiếu API: type từ Swagger, tích hợp backend thật, E2E nghiệp vụ, user story 46 (permission lấy từ BE).
+- Nhiều vấn đề review sửa được không cần API; ưu tiên cao: plan 07 (Enter publish, lưu nháp gỡ publish, Generate xóa biến thể, `v-html` chưa sanitize), plan 10 (tồn âm), plan 11 (lệch múi giờ), plan 12 (gán role / tự khóa tài khoản), plan 01 (guard không nạp user).
+- Tổng hợp theo plan: [metrics.md](./metrics.md#tiến-độ-2026-11-09).

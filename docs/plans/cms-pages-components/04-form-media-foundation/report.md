@@ -23,7 +23,8 @@ Storage PUT dùng XHR riêng để có byte progress/hủy, không gắn Session
 | Coverage dòng                              | 80.19% (toàn nhánh tại checkpoint)           |
 | Coverage statements / branches / functions | 78.44% / 76.7% / 73.21%                      |
 | Production build                           | PASS                                         |
-| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Prettier format check                      | PASS                                         |
+| E2E nghiệp vụ mới                          | HOÃN theo lựa chọn của người phụ trách       |
 | Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).

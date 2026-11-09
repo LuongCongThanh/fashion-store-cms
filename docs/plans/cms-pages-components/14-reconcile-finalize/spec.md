@@ -1,8 +1,8 @@
 # Spec 14 — Đối chiếu và chốt
 
-Status: ready-for-agent
+Status: on-hold
 Blocked by: 01–13
-Nguồn: §6 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: — · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
+Nguồn: §6 trong [danh mục page & component](../fashion-store-cms-pages-components.md) · Phase: — · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
 > **Chú thích:** spec trả lời câu hỏi _làm gì và thế nào là xong_. Cách làm nằm trong `plan.md`, các bước thực hiện nằm trong [Quy trình](../spec.md#quy-trình-thực-hiện-mỗi-plan) của spec tổng.
 
@@ -48,3 +48,16 @@ Mọi page/component trong danh mục đã có hoặc có lý do bỏ; tài li�
 ## Ghi nhận
 
 > **Chú thích:** sau khi làm xong, điền kết quả vào [report.md](./report.md) và số liệu vào [metrics.md](../metrics.md).
+
+## Trạng thái 2026-11-09
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+| Hạng mục                                        | Tình trạng                    |
+| ----------------------------------------------- | ----------------------------- |
+| UI component và logic thuần                     | Đã làm, giữ nguyên            |
+| Lớp dữ liệu tạm (API/model/HTTP giả trong test) | Có, giữ nguyên đến khi có API |
+| Việc chờ API / BE                               | 2 mục                         |
+| Vấn đề review cần sửa (không cần API)           | 4 mục                         |
+
+Chi tiết: [report.md](./report.md#review-2026-11-09--đã-làm-và-chưa-làm). Việc còn lại: [plan.md](./plan.md#tiếp-tục-khi-có-api).

@@ -2,7 +2,7 @@
 
 Status: on-hold
 Blocked by: 03, 04
-Nguồn: §4.4 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P6 · Spec: [spec.md](./spec.md)
+Nguồn: §4.4 trong [danh mục page & component](../fashion-store-cms-pages-components.md) · Phase P6 · Spec: [spec.md](./spec.md)
 
 Phần dùng chung (không chép lại): quy tắc đặt component (nguồn §1), [CONVENTIONS.md](../../../CONVENTIONS.md) §A, §B, §E, §Q; [FE_architecture.md](../../../FE_architecture.md) §5, §6, §9, §22, §23, §31; [GLOSSARY.md](../../../../GLOSSARY.md).
 

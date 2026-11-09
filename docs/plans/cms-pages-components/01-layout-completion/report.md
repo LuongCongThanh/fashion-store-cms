@@ -21,10 +21,22 @@ Breadcrumb theo route, đổi locale/theme và sidebar theo quyền.
 | Coverage dòng                              | 85.25% (toàn nhánh tại checkpoint)           |
 | Coverage statements / branches / functions | 83.84% / 81.9% / 80.63%                      |
 | Production build                           | PASS                                         |
-| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Prettier format check                      | PASS                                         |
+| E2E nghiệp vụ mới                          | HOÃN theo lựa chọn của người phụ trách       |
 | Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
+
+## Hành vi đã kiểm qua seam được duyệt
+
+- `src/app/views/Layout.spec.ts` — Layout navigation shows translated ancestor breadcrumbs and switches language without changing the URL (**passed**)
+- `src/app/views/Layout.spec.ts` — Layout navigation keeps system as a selectable persisted theme (**passed**)
+- `src/app/views/Layout.spec.ts` — Layout navigation groups permitted links under their domain (**passed**)
+- `src/app/views/Layout.spec.ts` — Layout navigation hides sidebar links when the current user lacks permission (**passed**)
+
+## Bundle
+
+Tổng JavaScript gzip của toàn bộ nhánh (gồm các chunk tải động): 259.8 kB. Đây không phải kích thước tải ban đầu của riêng feature.
 
 ## Token
 

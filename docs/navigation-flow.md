@@ -1,61 +1,60 @@
-# Sơ đồ điều hướng (Navigation flow)
+# Sơ đồ điều hướng CMS
 
-Nguồn: [`src/app/router/Routes.ts`](../src/app/router/Routes.ts), [`src/app/router/Guards.ts`](../src/app/router/Guards.ts), [`src/features/auth/Auth.routes.ts`](../src/features/auth/Auth.routes.ts).
-
-## Luồng chạy
+Nguồn route: [`Routes.ts`](../src/app/router/Routes.ts). Guard: [`Guards.ts`](../src/app/router/Guards.ts). Sidebar, breadcrumb và title lấy từ [`Navigation.ts`](../src/layouts/Navigation.ts).
 
 ```mermaid
 flowchart TD
-    U([Người dùng mở web]) --> ROOT["/"]
-    ROOT --> G{authGuard:<br/>đã đăng nhập?}
-    G -->|Chưa| LOGIN["/login?redirect=/<br/>(AuthLayout → LoginView)"]
-    G -->|Rồi| P{Route có<br/>meta.permission?}
-    P -->|Không| HOME["/ = home<br/>(DashboardLayout)"]
-    P -->|Có → ensureUser rồi can()| OK{Có quyền?}
-    OK -->|Có| PAGE[Trang feature]
-    OK -->|Không| F403["/403 (ForbiddenView)"]
-
-    LOGIN -->|login thành công → safeRedirect(redirect)| ROOT
-    LOGIN -->|Quên mật khẩu?| FORGOT["/forgot-password"]
-    FORGOT -->|Quay lại| LOGIN
-    HOME -->|UserMenu → Đăng xuất ❓| LOGIN
-
-    ANY["URL không khớp"] --> NF["NotFoundView (404)"]
+    URL[URL] --> Auth{Đã đăng nhập?}
+    Auth -->|Không, route cần Session| Login[Login + safe redirect]
+    Auth -->|Có| Permission{Có permission của route?}
+    Permission -->|Không| Forbidden[403]
+    Permission -->|Có hoặc route không yêu cầu quyền| Layout[DashboardLayout]
+    Layout --> Home[Dashboard: widget theo quyền]
+    Layout --> List[List: URL filter/sort/page]
+    List --> Detail[Detail / tabs theo URL]
+    List --> Form[Create / Edit: quyền write]
+    Detail --> Form
+    Form --> Dirty{Chưa lưu?}
+    Dirty -->|Có, rời trang hoặc đổi record| Confirm[Xác nhận bỏ thay đổi]
+    Dirty -->|Đã lưu| List
+    URL -->|Không khớp route| NotFound[404]
 ```
 
-❓ = chưa thấy code thực hiện, xem [Câu hỏi mở](#câu-hỏi-mở).
+## Routes
 
-## Cây route
+Các route dưới đây nằm trong DashboardLayout và cần Session. AuthLayout chứa `/login` và `/forgot-password` (guestOnly). `/design-system` chỉ có ở DEV; 404 đứng ngoài layout.
 
-```
-/
-├── AuthLayout                 (không cần đăng nhập)
-│   ├── /login                 auth.login            (guestOnly)
-│   └── /forgot-password       auth.forgot-password  (guestOnly)
-├── DashboardLayout            / — meta.requiresAuth (khai báo TRƯỚC AuthLayout)
-│   ├── /                      home          (dashboard thật làm ở P4)
-│   ├── /403                   forbidden
-│   └── /design-system         design-system (chỉ DEV)
-└── /:pathMatch(.*)*           not-found     (không có layout)
-```
+| Đường dẫn                                   | Quyền                                | View                                         |
+| ------------------------------------------- | ------------------------------------ | -------------------------------------------- |
+| `/`                                         | Widget tự kiểm quyền                 | DashboardView                                |
+| `/products`                                 | product:read                         | ProductListView                              |
+| `/products/new`                             | product:write                        | ProductCreateView                            |
+| `/products/:id`                             | product:read                         | ProductDetailView                            |
+| `/products/:id/edit`                        | product:write                        | ProductEditView                              |
+| `/categories`                               | category:read                        | CategoryListView                             |
+| `/categories/new`, `/categories/:id/edit`   | category:write                       | CategoryCreateView / CategoryEditView        |
+| `/orders`, `/orders/:id`                    | order:read                           | OrderListView / OrderDetailView              |
+| `/customers`, `/customers/:id`              | customer:read                        | CustomerListView / CustomerDetailView        |
+| `/inventory`, `/inventory/movements`        | inventory:read                       | InventoryListView / StockMovementListView    |
+| `/promotions`                               | promotion:read                       | PromotionListView                            |
+| `/promotions/new`, `/promotions/:id/edit`   | promotion:write                      | PromotionCreateView / PromotionEditView      |
+| `/users`                                    | user:read                            | UserListView                                 |
+| `/users/new`, `/users/:id/edit`             | user:write                           | UserCreateView / UserEditView                |
+| `/roles`                                    | role:read                            | RoleListView                                 |
+| `/roles/new`, `/roles/:id/edit`             | role:write                           | RoleCreateView / RoleEditView                |
+| `/settings`                                 | settings:read trên khai báo redirect | Redirect `/settings/store`                   |
+| `/settings/store`, `/settings/localization` | settings:write ở route đích          | StoreSettingsView / LocalizationSettingsView |
 
-## Trang nào chạy trước
+Guard tải current user trước khi kiểm quyền. Dashboard cũng tải user khi mở trực tiếp sau reload để quyền widget và sidebar sẵn sàng. Các action bulk, đổi/hủy trạng thái đơn, điều chỉnh tồn kho kiểm quyền write ở View; backend tương lai vẫn phải kiểm quyền độc lập.
 
-1. `authGuard` kiểm tra `meta.requiresAuth`: chưa đăng nhập → `/login?redirect=<đích>`.
-2. Đã đăng nhập: nếu route có `meta.permission` thì gọi `ensureUser()` (tải lại user sau F5), rồi `can()`; không đủ quyền → `forbidden`.
+## URL và Session
 
-→ Người dùng mới luôn thấy **Login** đầu tiên; người đã đăng nhập thấy **home**.
+- List filter/sort/page: `useListState`, Zod parse từng field, debounce search, reset page khi đổi filter. Back/forward khôi phục list.
+- Customer tabs: `?tab=profile|addresses|orders|activity`; tab Orders cần `order:read`, phân trang cũng ở URL và query bị giới hạn theo customer ID.
+- Đổi locale/theme không đổi URL. Locale CMS tách khỏi cấu hình ngôn ngữ storefront trong Settings.
+- Đăng nhập về safe redirect hoặc `/`; logout phát sự kiện Session và App runtime điều hướng `/login`.
+- Session xoá cache khi đổi Store. Query key không lặp Store ID.
 
-## Trang nào ngang hàng
+## Trạng thái tích hợp
 
-| Cấp                     | Các trang ngang nhau                                                  | Ghi chú                                |
-| ----------------------- | --------------------------------------------------------------------- | -------------------------------------- |
-| Layout gốc              | `AuthLayout`, `DashboardLayout`, `not-found`                          | 404 không bọc layout                   |
-| Trong `DashboardLayout` | `home`, `forbidden`, `design-system` (+ feature sau này, vd `orders`) | Dùng chung sidebar/header              |
-| Trong `AuthLayout`      | `auth.login`, `auth.forgot-password`                                  | Nhánh riêng, không ngang với dashboard |
-
-## Câu hỏi mở
-
-1. ~~**Sau login đi đâu?**~~ Đã chốt: về `query.redirect` nếu là path nội bộ và không phải trang `guestOnly`, ngược lại về `/` ([`SafeRedirect.ts`](../src/features/auth/SafeRedirect.ts)). Người đã đăng nhập mở trang `guestOnly` → về `/`.
-2. **Sau logout đi đâu?** `logout()` chỉ xoá user + `session.logout()`; chưa xác nhận có về `/login` không.
-3. **404 không có layout:** người đã đăng nhập gõ sai URL sẽ mất sidebar — có chủ ý không?
+Người phụ trách xác nhận backend chưa có. Các View test dùng HTTP giả tại boundary; các endpoint/model hiện là [hợp đồng tạm](./plans/cms-pages-components/api-contracts.md). Mock auth ở DEV chỉ giả lập auth; nó không tạo dữ liệu giả cho các feature CMS. E2E được hoãn theo lựa chọn của người phụ trách.

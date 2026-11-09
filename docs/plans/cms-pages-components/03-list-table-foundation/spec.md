@@ -2,7 +2,7 @@
 
 Status: on-hold
 Blocked by: 01
-Nguồn: §1, §3 (`list/`, `table/`, `feedback/`) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: P5 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
+Nguồn: §1, §3 (`list/`, `table/`, `feedback/`) trong [danh mục page & component](../fashion-store-cms-pages-components.md) · Phase: P5 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
 > **Chú thích:** spec trả lời câu hỏi _làm gì và thế nào là xong_. Cách làm nằm trong `plan.md`, các bước thực hiện nằm trong [Quy trình](../spec.md#quy-trình-thực-hiện-mỗi-plan) của spec tổng.
 
