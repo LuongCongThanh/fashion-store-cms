@@ -54,7 +54,7 @@ it('asks for confirmation before deleting selected products', async () => {
   expect(http.history.post).toHaveLength(0)
   const dialog = document.querySelector('[role="dialog"]')
   const confirm = [...(dialog?.querySelectorAll('button') ?? [])].find(
-    (button) => button.textContent?.trim() === 'Xác nhận',
+    (button) => button.textContent.trim() === 'Xác nhận',
   )
   expect(confirm).toBeDefined()
   confirm?.click()
@@ -71,9 +71,7 @@ it('filters products using category options from the category feature', async ()
     path: '/products',
     mock(http) {
       http.onGet(/\/categories$/).reply(200, [{ id: 'linen', name: 'Linen', parentId: null }])
-      http
-        .onGet(/\/products$/)
-        .reply(200, { data: [], meta: { page: 1, pageSize: 20, total: 0, totalPages: 0 } })
+      http.onGet(/\/products$/).reply(200, { data: [], meta: { page: 1, pageSize: 20, total: 0, totalPages: 0 } })
     },
   })
   await wrapper.find('select[name="categoryId"]').setValue('linen')

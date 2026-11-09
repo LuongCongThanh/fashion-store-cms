@@ -33,8 +33,7 @@ interface FlatRoute {
 function flatten(routes: readonly RouteRecordRaw[], parent = ''): FlatRoute[] {
   return routes.flatMap((route) => {
     const path = joinPath(parent, route.path)
-    const self =
-      typeof route.name === 'string' ? [{ name: route.name, path, meta: route.meta ?? {} }] : []
+    const self = typeof route.name === 'string' ? [{ name: route.name, path, meta: route.meta ?? {} }] : []
     return [...self, ...flatten(route.children ?? [], path)]
   })
 }
@@ -46,10 +45,7 @@ function joinPath(parent: string, child: string) {
 }
 
 /** Hàm thuần: route + quyền → sidebar, commands, shortcuts, titleOf. */
-export function buildNavigation(
-  routes: readonly RouteRecordRaw[],
-  can: (permission: string) => boolean,
-) {
+export function buildNavigation(routes: readonly RouteRecordRaw[], can: (permission: string) => boolean) {
   const allowed = flatten(routes).filter((r) => !r.meta.permission || can(r.meta.permission))
 
   const commands: NavCommand[] = allowed.flatMap(({ name, path, meta }) =>
@@ -66,26 +62,20 @@ export function buildNavigation(
       : [],
   )
 
-  const sidebar: NavItem[] = commands
-    .filter((c) => c.group === 'navigate')
-    .map(({ group: _group, ...item }) => item)
+  const sidebar: NavItem[] = commands.filter((c) => c.group === 'navigate').map(({ group: _group, ...item }) => item)
 
   const shortcuts: NavShortcut[] = allowed.flatMap(({ path, meta }) =>
-    meta.command?.shortcut && meta.titleKey
-      ? [{ keys: meta.command.shortcut, path, titleKey: meta.titleKey }]
-      : [],
+    meta.command?.shortcut && meta.titleKey ? [{ keys: meta.command.shortcut, path, titleKey: meta.titleKey }] : [],
   )
 
   /** Key i18n cho <title>: titleKey của route con sâu nhất có khai báo. */
   function titleOf(route: { matched: readonly { meta: RouteMeta }[] }): string | null {
-    return (
-      [...route.matched].reverse().find((record) => record.meta.titleKey)?.meta.titleKey ?? null
-    )
+    return [...route.matched].reverse().find((record) => record.meta.titleKey)?.meta.titleKey ?? null
   }
 
   function breadcrumbs(route: {
     path?: string
-    params?: Record<string, unknown>
+    params?: Record<string, string | string[] | undefined>
     matched: readonly { path: string; meta: RouteMeta }[]
   }) {
     const ancestors = allowed.flatMap((record) =>
@@ -121,9 +111,7 @@ export function buildNavigation(
   const sidebarGroups = ([undefined, 'store', 'customers', 'marketing', 'system'] as const)
     .map((group) => ({
       titleKey: group ? `nav.groups.${group}` : null,
-      items: sidebar.filter(
-        (item) => allowed.find((route) => route.name === item.name)?.meta.sidebarGroup === group,
-      ),
+      items: sidebar.filter((item) => allowed.find((route) => route.name === item.name)?.meta.sidebarGroup === group),
     }))
     .filter((group) => group.items.length)
   return { sidebar, sidebarGroups, commands, shortcuts, titleOf, breadcrumbs }

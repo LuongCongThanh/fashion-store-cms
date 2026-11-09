@@ -4,19 +4,16 @@ import FilterDateRange from '@shared/components/list/FilterDateRange.vue'
 import ListSearch from '@shared/components/list/ListSearch.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { OrderListParams } from '../schemas/OrderList.schema'
+import type { OrderListParams } from '@features/orders/schemas/OrderList.schema'
 defineProps<{ params: OrderListParams }>()
 const emit = defineEmits<{ filter: [key: string, value: unknown] }>()
 const { t } = useT()
 </script>
+
 <template>
   <FilterBar>
     <ListSearch :modelValue="params.search" @update:modelValue="emit('filter', 'search', $event)" />
-    <FilterDateRange
-      :from="params.from"
-      :to="params.to"
-      @filter="(key, value) => emit('filter', key, value)"
-    />
+    <FilterDateRange :from="params.from" :to="params.to" @filter="(key, value) => emit('filter', key, value)" />
     <label
       >{{ t('common.status')
       }}<select
@@ -50,11 +47,7 @@ const { t } = useT()
         @change="emit('filter', 'paymentStatus', ($event.target as HTMLSelectElement).value)"
       >
         <option value="">{{ t('common.all') }}</option>
-        <option
-          v-for="status in ['paid', 'unpaid', 'refunded'] as const"
-          :key="status"
-          :value="status"
-        >
+        <option v-for="status in ['paid', 'unpaid', 'refunded'] as const" :key="status" :value="status">
           {{ t(`orders.paymentStatus.${status}`) }}
         </option>
       </select>

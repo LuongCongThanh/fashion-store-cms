@@ -31,9 +31,7 @@ export const useSessionStore = defineStore('session', () => {
   watch(
     [accessToken, refreshToken, remember],
     () => {
-      const [keep, drop] = remember.value
-        ? [localStorage, sessionStorage]
-        : [sessionStorage, localStorage]
+      const [keep, drop] = remember.value ? [localStorage, sessionStorage] : [sessionStorage, localStorage]
       writeToken(ACCESS_KEY, accessToken.value, keep, drop)
       writeToken(REFRESH_KEY, refreshToken.value, keep, drop)
     },

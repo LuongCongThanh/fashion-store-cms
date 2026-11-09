@@ -1,11 +1,13 @@
+import { RuleConfigSeverity } from '@commitlint/types'
+
 import type { UserConfig } from '@commitlint/types'
 
 const config: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'header-max-length': [2, 'always', 72],
+    'header-max-length': [RuleConfigSeverity.Error, 'always', 72],
     'scope-enum': [
-      2,
+      RuleConfigSeverity.Error,
       'always',
       [
         'auth',

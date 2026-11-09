@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { Order } from '../types/Order.types'
+import type { Order } from '@features/orders/types/Order.types'
 defineProps<{ order: Order }>()
 const { t } = useT()
 </script>
+
 <template>
   <dl>
     <template v-for="key in ['subtotal', 'discount', 'shippingCost', 'total'] as const" :key="key">

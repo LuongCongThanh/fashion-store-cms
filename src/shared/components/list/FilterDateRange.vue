@@ -4,6 +4,7 @@ defineProps<{ from?: string; to?: string }>()
 const emit = defineEmits<{ filter: [key: string, value: string] }>()
 const { t } = useT()
 </script>
+
 <template>
   <label
     >{{ t('common.from')

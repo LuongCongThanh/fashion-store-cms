@@ -1,4 +1,4 @@
-import type { Category } from '../types/Category.types'
+import type { Category } from '@features/categories/types/Category.types'
 
 export function categoryParentOptions(categories: Category[], id: string) {
   const excluded = new Set([id])

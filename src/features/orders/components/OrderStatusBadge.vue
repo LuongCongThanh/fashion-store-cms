@@ -2,7 +2,7 @@
 import StatusBadge from '@shared/components/feedback/StatusBadge.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { OrderStatus } from '../types/Order.types'
+import type { OrderStatus } from '@features/orders/types/Order.types'
 defineProps<{ status: OrderStatus }>()
 const { t } = useT()
 const colors = {
@@ -15,6 +15,7 @@ const colors = {
   refunded: 'neutral',
 } as const
 </script>
+
 <template>
   <StatusBadge :label="t(`orders.status.${status}`)" :color="colors[status]" />
 </template>

@@ -2,11 +2,10 @@
 import UButton from '@nuxt/ui/components/Button.vue'
 import { ref } from 'vue'
 
+import { generateVariants } from '@features/products/schemas/Variants'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { generateVariants } from '../schemas/Variants'
-
-import type { ProductInput } from '../schemas/Product.schema'
+import type { ProductInput } from '@features/products/schemas/Product.schema'
 const props = defineProps<{
   modelValue: ProductInput['variants']
   price: number
@@ -27,6 +26,7 @@ function update(index: number, key: 'sku' | 'price' | 'stock', event: Event) {
   )
 }
 </script>
+
 <template>
   <div class="space-y-3">
     <div class="flex flex-wrap gap-3">
@@ -35,12 +35,7 @@ function update(index: number, key: 'sku' | 'price' | 'stock', event: Event) {
       <label>SKU<input v-model="prefix" name="skuPrefix" /> </label>
       <UButton
         type="button"
-        @click="
-          emit(
-            'update:modelValue',
-            generateVariants(sizes.split(','), colors.split(','), prefix, price, 0),
-          )
-        "
+        @click="emit('update:modelValue', generateVariants(sizes.split(','), colors.split(','), prefix, price, 0))"
         >{{ t('products.generate') }}</UButton
       >
     </div>
@@ -64,9 +59,7 @@ function update(index: number, key: 'sku' | 'price' | 'stock', event: Event) {
               :value="variant[key]"
               @input="update(index, key, $event)"
             />
-            <span v-if="errors[`variants.${index}.${key}`]" role="alert">{{
-              errors[`variants.${index}.${key}`]
-            }}</span>
+            <span v-if="errors[`variants.${index}.${key}`]" role="alert">{{ errors[`variants.${index}.${key}`] }}</span>
           </td>
         </tr>
       </tbody>

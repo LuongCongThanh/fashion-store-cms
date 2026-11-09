@@ -1,17 +1,17 @@
 <script setup lang="ts">
+import { useCustomersQuery } from '@features/customers/api/Customers.api'
+import CustomerFilters from '@features/customers/components/CustomerFilters.vue'
+import CustomerTable from '@features/customers/components/CustomerTable.vue'
+import { customerListSchema } from '@features/customers/schemas/CustomerList.schema'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import { useCustomersQuery } from '../api/Customers.api'
-import CustomerFilters from '../components/CustomerFilters.vue'
-import CustomerTable from '../components/CustomerTable.vue'
-import { customerListSchema } from '../schemas/CustomerList.schema'
 const { t } = useT()
 const { params, setFilter, setPage, setSort } = useListState(customerListSchema)
 const query = useCustomersQuery(params)
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('dashboard.customers')" />
@@ -24,10 +24,6 @@ const query = useCustomersQuery(params)
       @sort="setSort"
       @retry="query.refetch()"
     />
-    <DataTablePagination
-      :meta="query.data.value?.meta"
-      @page="setPage"
-      @pageSize="setFilter('pageSize', $event)"
-    />
+    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
   </div>
 </template>

@@ -4,6 +4,7 @@ import { useT } from '@shared/lib/i18n/I18n'
 const { mode } = useTheme()
 const { t } = useT()
 </script>
+
 <template>
   <select
     v-model="mode"

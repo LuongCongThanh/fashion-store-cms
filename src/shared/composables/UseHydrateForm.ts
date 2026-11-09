@@ -13,9 +13,7 @@ export function useHydrateForm<T>(
 ) {
   const route = useRoute()
   const session = useSession()
-  const context = computed(() =>
-    JSON.stringify([session.getStoreId(), route.name ?? route.path, route.params]),
-  )
+  const context = computed(() => JSON.stringify([session.getStoreId(), route.name ?? route.path, route.params]))
   let hydratedContext: string | undefined
   watch(
     [() => toValue(data), context],

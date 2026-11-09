@@ -25,12 +25,7 @@ describe('ErrorPolicy.isRetryable', () => {
 })
 
 describe('ErrorPolicy.messageKeyOf', () => {
-  const known = new Set([
-    'errors.PRODUCT_SLUG_TAKEN',
-    'errors.CONFLICT',
-    'errors.SERVER_ERROR',
-    'errors.UNKNOWN',
-  ])
+  const known = new Set(['errors.PRODUCT_SLUG_TAKEN', 'errors.CONFLICT', 'errors.SERVER_ERROR', 'errors.UNKNOWN'])
   const has = (key: string) => known.has(key)
 
   it('uses the BE code when a translation exists', () => {

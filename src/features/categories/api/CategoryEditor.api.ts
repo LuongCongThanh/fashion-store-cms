@@ -5,8 +5,8 @@ import type { MaybeRefOrGetter } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
-import type { CategoryInput } from '../schemas/Category.schema'
-import type { Category } from '../types/Category.types'
+import type { CategoryInput } from '@features/categories/schemas/Category.schema'
+import type { Category } from '@features/categories/types/Category.types'
 export function useCategoryDetailQuery(id: MaybeRefOrGetter<string>) {
   const http = useHttpClient()
   return useQuery({
@@ -22,9 +22,7 @@ export function useSaveCategoryMutation(id: MaybeRefOrGetter<string>) {
   return useMutation({
     meta: { errorHandling: 'local' },
     mutationFn: (input: CategoryInput) =>
-      toValue(id)
-        ? http.put(`/categories/${encodeURIComponent(toValue(id))}`, input)
-        : http.post('/categories', input),
+      toValue(id) ? http.put(`/categories/${encodeURIComponent(toValue(id))}`, input) : http.post('/categories', input),
     onSuccess: () => client.invalidateQueries({ queryKey: ['categories'] }),
   })
 }

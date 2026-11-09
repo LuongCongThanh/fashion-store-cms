@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 import { useLocale } from '@shared/lib/i18n/I18n'
 
-import type { Category } from '../types/Category.types'
+import type { Category } from '@features/categories/types/Category.types'
 export function useCategoriesQuery() {
   const http = useHttpClient()
   const { locale } = useLocale()

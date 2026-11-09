@@ -5,6 +5,7 @@ defineProps<{
   color: 'error' | 'info' | 'neutral' | 'primary' | 'success' | 'warning'
 }>()
 </script>
+
 <template>
   <UBadge :color="color" variant="subtle">{{ label }}</UBadge>
 </template>

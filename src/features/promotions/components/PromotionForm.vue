@@ -3,7 +3,7 @@ import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { PromotionInput } from '../schemas/Promotion.schema'
+import type { PromotionInput } from '@features/promotions/schemas/Promotion.schema'
 defineProps<{
   modelValue: PromotionInput
   errors: Record<string, string | undefined>
@@ -12,6 +12,7 @@ defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [value: PromotionInput]; submit: []; cancel: [] }>()
 const { t } = useT()
 </script>
+
 <template>
   <form class="space-y-4" @submit.prevent="emit('submit')">
     <FormSection :title="t('promotions.title')">
@@ -114,11 +115,7 @@ const { t } = useT()
             })
           "
         >
-          <option
-            v-for="status in ['draft', 'active', 'inactive'] as const"
-            :key="status"
-            :value="status"
-          >
+          <option v-for="status in ['draft', 'active', 'inactive'] as const" :key="status" :value="status">
             {{ t(`promotions.status.${status}`) }}
           </option>
         </select>

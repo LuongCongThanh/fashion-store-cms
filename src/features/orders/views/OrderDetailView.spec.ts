@@ -59,7 +59,7 @@ it('requires confirmation before cancelling an order', async () => {
   await flushPromises()
   expect(http.history.patch).toHaveLength(0)
   const confirm = [...document.querySelectorAll('[role="dialog"] button')].find(
-    (button) => button.textContent?.trim() === 'Xác nhận',
+    (button) => button.textContent.trim() === 'Xác nhận',
   ) as HTMLButtonElement | undefined
   expect(confirm).toBeDefined()
   confirm?.click()

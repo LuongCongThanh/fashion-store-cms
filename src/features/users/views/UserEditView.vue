@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import UserForm from '@features/users/components/UserForm.vue'
+import { useUserEditor } from '@features/users/composables/UseUserEditor'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import UserForm from '../components/UserForm.vue'
-import { useUserEditor } from '../composables/UseUserEditor'
 const editor = useUserEditor()
 const { t } = useT()
 function retry() {
@@ -14,6 +13,7 @@ function retry() {
   void editor.stores.refetch()
 }
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('users.title')" />
@@ -25,9 +25,7 @@ function retry() {
       "
     />
     <ErrorState
-      v-else-if="
-        editor.query.isError.value || editor.roles.isError.value || editor.stores.isError.value
-      "
+      v-else-if="editor.query.isError.value || editor.roles.isError.value || editor.stores.isError.value"
       :error="editor.query.error.value ?? editor.roles.error.value ?? editor.stores.error.value"
       @retry="retry"
     />

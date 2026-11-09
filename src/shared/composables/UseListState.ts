@@ -24,12 +24,17 @@ export function useListState<S extends z.ZodObject>(schema: S) {
     const query: LocationQueryRaw = { ...route.query }
     for (const [key, value] of Object.entries(values)) {
       if (value === undefined || value === null || value === '') query[key] = undefined
-      else query[key] = String(value)
+      else if (Array.isArray(value)) query[key] = value.join(',')
+      else if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')
+        query[key] = String(value)
+      else query[key] = JSON.stringify(value)
     }
     return router.push({ query })
   }
   let timer: ReturnType<typeof setTimeout> | undefined
-  onScopeDispose(() => clearTimeout(timer))
+  onScopeDispose(() => {
+    clearTimeout(timer)
+  })
   function setFilter(key: string, value: unknown) {
     if (key === 'search') {
       clearTimeout(timer)
@@ -46,9 +51,7 @@ export function useListState<S extends z.ZodObject>(schema: S) {
     reset: () => {
       clearTimeout(timer)
       return router.push({
-        query: Object.fromEntries(
-          Object.entries(route.query).filter(([key]) => !(key in schema.shape)),
-        ),
+        query: Object.fromEntries(Object.entries(route.query).filter(([key]) => !(key in schema.shape))),
       })
     },
   }

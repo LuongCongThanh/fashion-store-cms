@@ -10,15 +10,17 @@ const { t } = useT()
 const items = computed(() =>
   props.actions
     .filter((action) => action.allowed)
-    .map((action) => ({ label: action.label, onSelect: () => emit('action', action.id) })),
+    .map((action) => ({
+      label: action.label,
+      onSelect: () => {
+        emit('action', action.id)
+      },
+    })),
 )
 </script>
+
 <template>
   <UDropdownMenu v-if="items.length" :items="items"
-    ><UButton
-      data-action="row-actions"
-      icon="i-lucide-ellipsis"
-      :aria-label="t('common.actions')"
-      variant="ghost"
+    ><UButton data-action="row-actions" icon="i-lucide-ellipsis" :aria-label="t('common.actions')" variant="ghost"
   /></UDropdownMenu>
 </template>

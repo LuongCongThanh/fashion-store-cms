@@ -8,9 +8,9 @@ import DataTable from '@shared/components/table/DataTable.vue'
 import RowActions from '@shared/components/table/RowActions.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import ProductStatusBadge from './ProductStatusBadge.vue'
+import type { Product } from '@features/products/types/Product.types'
 
-import type { Product } from '../types/Product.types'
+import ProductStatusBadge from './ProductStatusBadge.vue'
 const props = defineProps<{
   data: Product[]
   loading: boolean
@@ -34,26 +34,47 @@ const columns = computed<TableColumn<Product>[]>(() => [
       h(UCheckbox, {
         modelValue: table.getIsAllPageRowsSelected(),
         'aria-label': t('common.selectAll'),
-        'onUpdate:modelValue': (value) => table.toggleAllPageRowsSelected(!!value),
+        'onUpdate:modelValue': (value) => {
+          table.toggleAllPageRowsSelected(!!value)
+        },
       }),
     cell: ({ row }) =>
       h(UCheckbox, {
         modelValue: row.getIsSelected(),
         'aria-label': row.original.name,
-        'onUpdate:modelValue': (value) => row.toggleSelected(!!value),
+        'onUpdate:modelValue': (value) => {
+          row.toggleSelected(!!value)
+        },
       }),
   },
   {
     accessorKey: 'name',
     header: ({ column }) =>
-      h('button', { onClick: () => column.toggleSorting(), type: 'button' }, t('common.name')),
-    cell: ({ row }) =>
-      h('a', { href: `/products/${encodeURIComponent(row.original.id)}` }, row.original.name),
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+          type: 'button',
+        },
+        t('common.name'),
+      ),
+    cell: ({ row }) => h('a', { href: `/products/${encodeURIComponent(row.original.id)}` }, row.original.name),
   },
   {
     accessorKey: 'price',
     header: ({ column }) =>
-      h('button', { onClick: () => column.toggleSorting(), type: 'button' }, t('products.price')),
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+          type: 'button',
+        },
+        t('products.price'),
+      ),
   },
   {
     accessorKey: 'status',
@@ -70,11 +91,14 @@ const columns = computed<TableColumn<Product>[]>(() => [
           { id: 'edit', label: t('common.edit'), allowed: props.canWrite },
           { id: 'delete', label: t('products.delete'), allowed: props.canWrite },
         ],
-        onAction: (action) => emit('action', action, row.original.id),
+        onAction: (action: string) => {
+          emit('action', action, row.original.id)
+        },
       }),
   },
 ])
 </script>
+
 <template>
   <DataTable
     :data="data"

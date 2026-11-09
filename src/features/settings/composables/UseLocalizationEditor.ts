@@ -2,16 +2,15 @@ import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useLocalizationQuery, useSaveLocalizationMutation } from '@features/settings/api/Settings.api'
+import { localizationSchema } from '@features/settings/schemas/Settings.schema'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useUnsavedGuard } from '@shared/composables/UseUnsavedGuard'
 import { applyApiErrorToForm } from '@shared/lib/form/ApplyApiErrorToForm'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useLocalizationQuery, useSaveLocalizationMutation } from '../api/Settings.api'
-import { localizationSchema } from '../schemas/Settings.schema'
-
-import type { LocalizationInput } from '../schemas/Settings.schema'
+import type { LocalizationInput } from '@features/settings/schemas/Settings.schema'
 export function useLocalizationEditor() {
   const { can } = useAuth()
   const { t } = useT()
@@ -29,7 +28,12 @@ export function useLocalizationEditor() {
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: initial,
   })
-  const model = computed({ get: () => values, set: (value: LocalizationInput) => setValues(value) })
+  const model = computed({
+    get: () => values,
+    set: (value: LocalizationInput) => {
+      setValues(value)
+    },
+  })
   useHydrateForm(
     query.data,
     () => meta.value.dirty,
@@ -42,11 +46,7 @@ export function useLocalizationEditor() {
     if (!can('settings:write') || mutation.isPending.value) return
     const parsed = localizationSchema.safeParse(values)
     if (!parsed.success) {
-      setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join('.'), t('settings.invalid')]),
-        ),
-      )
+      setErrors(Object.fromEntries(parsed.error.issues.map((issue) => [issue.path.join('.'), t('settings.invalid')])))
       return
     }
     try {
@@ -64,6 +64,8 @@ export function useLocalizationEditor() {
     mutation,
     submit,
     canWrite: computed(() => can('settings:write')),
-    cancel: () => resetForm(),
+    cancel: () => {
+      resetForm()
+    },
   }
 }

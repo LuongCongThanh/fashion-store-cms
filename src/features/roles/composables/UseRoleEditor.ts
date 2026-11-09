@@ -3,16 +3,15 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { usePermissionsQuery, useRoleQuery, useSaveRoleMutation } from '@features/roles/api/Roles.api'
+import { roleSchema } from '@features/roles/schemas/Role.schema'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useUnsavedGuard } from '@shared/composables/UseUnsavedGuard'
 import { applyApiErrorToForm } from '@shared/lib/form/ApplyApiErrorToForm'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { usePermissionsQuery, useRoleQuery, useSaveRoleMutation } from '../api/Roles.api'
-import { roleSchema } from '../schemas/Role.schema'
-
-import type { RoleInput } from '../schemas/Role.schema'
+import type { RoleInput } from '@features/roles/schemas/Role.schema'
 export function useRoleEditor() {
   const route = useRoute()
   const router = useRouter()
@@ -26,7 +25,12 @@ export function useRoleEditor() {
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: { name: '', permissions: [] as string[] },
   })
-  const model = computed({ get: () => values, set: (value: RoleInput) => setValues(value) })
+  const model = computed({
+    get: () => values,
+    set: (value: RoleInput) => {
+      setValues(value)
+    },
+  })
   useHydrateForm(
     query.data,
     () => meta.value.dirty,
@@ -36,12 +40,7 @@ export function useRoleEditor() {
   )
   useUnsavedGuard(() => meta.value.dirty)
   async function submit() {
-    if (
-      !can('role:write') ||
-      mutation.isPending.value ||
-      permissions.isError.value ||
-      permissions.isPending.value
-    )
+    if (!can('role:write') || mutation.isPending.value || permissions.isError.value || permissions.isPending.value)
       return
     const parsed = roleSchema.safeParse(values)
     if (!parsed.success) {

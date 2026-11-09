@@ -61,8 +61,7 @@ export function renderWithPlugins(component: Component, options: RenderOptions =
   const Root = defineComponent({
     setup() {
       const { uiLocale } = useLocale()
-      return () =>
-        h(UApp, { locale: uiLocale.value }, { default: () => h(component, options.props) })
+      return () => h(UApp, { locale: uiLocale.value }, { default: () => h(component, options.props) })
     },
   })
   const wrapper = mount(Root, { ...options.mount, global: { plugins: [runtime.plugin] } })

@@ -8,6 +8,7 @@ defineProps<{ meta?: Paginated<unknown>['meta'] }>()
 const emit = defineEmits<{ page: [page: number]; pageSize: [size: number] }>()
 const { t } = useT()
 </script>
+
 <template>
   <nav v-if="meta" :aria-label="t('common.pagination')" class="flex items-center justify-end gap-3">
     <span>{{ meta.total }} {{ t('common.results') }}</span>

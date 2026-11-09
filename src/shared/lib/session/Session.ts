@@ -65,7 +65,11 @@ export function createSession(deps: SessionDeps): Session {
     authFailure: new Set(),
     loggedOut: new Set(),
   }
-  const emit = (event: SessionEvent) => listeners[event].forEach((fn) => fn())
+  const emit = (event: SessionEvent) => {
+    listeners[event].forEach((fn) => {
+      fn()
+    })
+  }
 
   function clearTokens() {
     store.accessToken = null

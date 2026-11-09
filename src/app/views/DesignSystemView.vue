@@ -35,11 +35,7 @@ const TEXTS = ['text-highlighted', 'text-default', 'text-muted', 'text-dimmed'] 
     <section class="flex flex-col gap-3">
       <h2 class="font-display text-lg font-semibold">Nền / chữ</h2>
       <div class="flex gap-3">
-        <div
-          v-for="s in SURFACES"
-          :key="s.label"
-          :class="[s.cls, 'rounded-lg border border-default p-4 text-sm']"
-        >
+        <div v-for="s in SURFACES" :key="s.label" :class="[s.cls, 'rounded-lg border border-default p-4 text-sm']">
           {{ s.label }}
         </div>
       </div>

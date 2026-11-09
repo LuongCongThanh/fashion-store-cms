@@ -4,7 +4,7 @@ import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { StoreSettingsInput } from '../schemas/Settings.schema'
+import type { StoreSettingsInput } from '@features/settings/schemas/Settings.schema'
 defineProps<{
   modelValue: StoreSettingsInput
   errors: Record<string, string | undefined>
@@ -25,6 +25,7 @@ const emit = defineEmits<{
 }>()
 const { t } = useT()
 </script>
+
 <template>
   <form class="space-y-5" @submit.prevent="emit('submit')">
     <fieldset :disabled="!canWrite || pending">

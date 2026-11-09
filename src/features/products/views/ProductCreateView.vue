@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import ProductForm from '@features/products/components/ProductForm.vue'
+import { useProductEditor } from '@features/products/composables/UseProductEditor'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import ProductForm from '../components/ProductForm.vue'
-import { useProductEditor } from '../composables/UseProductEditor'
 const editor = useProductEditor()
 const { t } = useT()
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('dashboard.products')" />

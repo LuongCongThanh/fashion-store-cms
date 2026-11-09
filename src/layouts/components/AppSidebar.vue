@@ -32,9 +32,7 @@ const groups = computed(() =>
     :class="isCollapsed ? 'w-16' : 'w-64'"
   >
     <div class="flex h-14 items-center justify-between px-4">
-      <span v-if="!isCollapsed" class="font-display text-base font-bold">{{
-        t('common.appName')
-      }}</span>
+      <span v-if="!isCollapsed" class="font-display text-base font-bold">{{ t('common.appName') }}</span>
       <UButton
         :icon="isCollapsed ? 'i-lucide-panel-left-open' : 'i-lucide-panel-left-close'"
         color="neutral"
@@ -47,12 +45,7 @@ const groups = computed(() =>
       <p v-if="group.title && !isCollapsed" class="px-4 text-xs font-semibold text-muted">
         {{ group.title }}
       </p>
-      <UNavigationMenu
-        :items="group.items"
-        orientation="vertical"
-        :collapsed="isCollapsed"
-        class="px-2"
-      />
+      <UNavigationMenu :items="group.items" orientation="vertical" :collapsed="isCollapsed" class="px-2" />
     </div>
   </aside>
 </template>

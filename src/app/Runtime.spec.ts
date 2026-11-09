@@ -103,7 +103,7 @@ describe('createAppRuntime', () => {
     mock.onGet(/\/products$/).reply(500, {})
 
     await runtime.queryClient
-      .fetchQuery({ queryKey: ['products'], queryFn: () => runtime.http.get('/products') })
+      .query({ queryKey: ['products'], queryFn: () => runtime.http.get('/products') })
       .catch(() => undefined)
 
     expect(notifier.error).not.toHaveBeenCalled()

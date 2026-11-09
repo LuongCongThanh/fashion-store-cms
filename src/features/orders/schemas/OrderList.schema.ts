@@ -4,9 +4,7 @@ export const orderListSchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
   search: z.string().default(''),
   sort: z.enum(['-createdAt', 'createdAt', 'total', '-total']).default('-createdAt'),
-  status: z
-    .enum(['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'])
-    .optional(),
+  status: z.enum(['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded']).optional(),
   paymentStatus: z.enum(['paid', 'unpaid', 'refunded']).optional(),
   from: z.iso.date().optional(),
   to: z.iso.date().optional(),

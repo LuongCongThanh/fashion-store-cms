@@ -62,7 +62,7 @@ it('warns before switching records and then hydrates the newly chosen product', 
   await flushPromises()
   expect(router.currentRoute.value.path).toBe('/products/p1/edit')
   const confirm = [...document.querySelectorAll('[role="dialog"] button')].find(
-    (button) => button.textContent?.trim() === 'Xác nhận',
+    (button) => button.textContent.trim() === 'Xác nhận',
   ) as HTMLButtonElement | undefined
   expect(confirm).toBeDefined()
   confirm?.click()

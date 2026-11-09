@@ -1,25 +1,21 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { useOrdersQuery } from '@features/orders/api/Orders.api'
+import OrderFilters from '@features/orders/components/OrderFilters.vue'
+import OrderTable from '@features/orders/components/OrderTable.vue'
+import { orderListSchema } from '@features/orders/schemas/OrderList.schema'
 import ActiveFilterTags from '@shared/components/list/ActiveFilterTags.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import { useOrdersQuery } from '../api/Orders.api'
-import OrderFilters from '../components/OrderFilters.vue'
-import OrderTable from '../components/OrderTable.vue'
-import { orderListSchema } from '../schemas/OrderList.schema'
 const { t } = useT()
 const { params, setFilter, setPage, setSort, reset } = useListState(orderListSchema)
 const query = useOrdersQuery(params)
 const filters = computed(() =>
   Object.entries(params.value)
-    .filter(
-      ([key, value]) =>
-        !['page', 'pageSize', 'sort'].includes(key) && value !== '' && value !== undefined,
-    )
+    .filter(([key, value]) => !['page', 'pageSize', 'sort'].includes(key) && value !== '')
     .map(([key, value]) => ({
       key,
       label:
@@ -29,13 +25,12 @@ const filters = computed(() =>
             ? t('common.search')
             : key === 'from' || key === 'to'
               ? t(`common.${key}`)
-              : t(
-                  `orders.${key as 'paymentStatus' | 'customerId' | 'minAmount' | 'maxAmount'}Label`,
-                ),
+              : t(`orders.${key as 'paymentStatus' | 'customerId' | 'minAmount' | 'maxAmount'}Label`),
       value: String(value),
     })),
 )
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('nav.orders')" />
@@ -49,10 +44,6 @@ const filters = computed(() =>
       @sort="setSort"
       @retry="query.refetch()"
     />
-    <DataTablePagination
-      :meta="query.data.value?.meta"
-      @page="setPage"
-      @pageSize="setFilter('pageSize', $event)"
-    />
+    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
   </div>
 </template>

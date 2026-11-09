@@ -4,6 +4,7 @@ defineProps<{ columns: { id: string; label: string }[]; modelValue: Record<strin
 const emit = defineEmits<{ 'update:modelValue': [value: Record<string, boolean>] }>()
 const { t } = useT()
 </script>
+
 <template>
   <details>
     <summary>{{ t('common.columns') }}</summary>

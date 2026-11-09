@@ -24,9 +24,7 @@ function renderHost(options: ConfirmOptions) {
 }
 
 function buttonByText(text: string) {
-  const button = [...document.body.querySelectorAll('button')].find(
-    (b) => b.textContent?.trim() === text,
-  )
+  const button = [...document.body.querySelectorAll('button')].find((b) => b.textContent.trim() === text)
   if (!button) throw new Error(`No button "${text}" in: ${document.body.innerHTML}`)
   return button
 }

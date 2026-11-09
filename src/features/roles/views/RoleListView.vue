@@ -2,21 +2,21 @@
 import UButton from '@nuxt/ui/components/Button.vue'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useRolesQuery } from '@features/roles/api/Roles.api'
+import RoleTable from '@features/roles/components/RoleTable.vue'
+import { roleListSchema } from '@features/roles/schemas/Role.schema'
 import FilterBar from '@shared/components/list/FilterBar.vue'
 import ListSearch from '@shared/components/list/ListSearch.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import { useRolesQuery } from '../api/Roles.api'
-import RoleTable from '../components/RoleTable.vue'
-import { roleListSchema } from '../schemas/Role.schema'
 const { t } = useT()
 const { can } = useAuth()
 const { params, setFilter, setPage, setSort } = useListState(roleListSchema)
 const query = useRolesQuery(params)
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('roles.title')">
@@ -36,10 +36,6 @@ const query = useRolesQuery(params)
       @sort="setSort"
       @retry="query.refetch()"
     />
-    <DataTablePagination
-      :meta="query.data.value?.meta"
-      @page="setPage"
-      @pageSize="setFilter('pageSize', $event)"
-    />
+    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
   </div>
 </template>

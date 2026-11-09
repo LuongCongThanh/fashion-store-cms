@@ -9,3 +9,11 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+// Cho typescript-eslint (projectService không hiểu .vue). vue-tsc vẫn resolve file .vue thật trước.
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+
+  const component: DefineComponent
+  export default component
+}

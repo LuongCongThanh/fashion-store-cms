@@ -15,6 +15,8 @@ export function useUnsavedGuard(dirty: MaybeRefOrGetter<boolean>) {
   useEventListener(window, 'beforeunload', (event) => {
     if (toValue(dirty)) {
       event.preventDefault()
+      // Chrome/Edge cũ vẫn cần returnValue để hiện hộp thoại rời trang.
+      // eslint-disable-next-line @typescript-eslint/no-deprecated
       event.returnValue = ''
     }
   })

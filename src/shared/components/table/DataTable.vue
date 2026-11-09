@@ -36,17 +36,24 @@ const sorting = computed<SortingState>({
     )
       ? [{ id: props.sort.replace(/^-/, ''), desc: props.sort.startsWith('-') }]
       : [],
-  set: (value) => emit('sort', value[0] ? `${value[0].desc ? '-' : ''}${value[0].id}` : ''),
+  set: (value) => {
+    emit('sort', value[0] ? `${value[0].desc ? '-' : ''}${value[0].id}` : '')
+  },
 })
 const selected = computed({
   get: () => props.selection ?? {},
-  set: (value) => emit('update:selection', value),
+  set: (value) => {
+    emit('update:selection', value)
+  },
 })
 const visible = computed({
   get: () => props.visibility ?? {},
-  set: (value) => emit('update:visibility', value),
+  set: (value) => {
+    emit('update:visibility', value)
+  },
 })
 </script>
+
 <template>
   <ErrorState v-if="error" :error="error" @retry="emit('retry')" />
   <UTable

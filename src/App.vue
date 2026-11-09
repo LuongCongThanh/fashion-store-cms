@@ -8,9 +8,7 @@ const { uiLocale } = useLocale()
 
 // Xem cache query — chỉ tải khi dev (§S.2), không vào bundle production.
 const VueQueryDevtools = import.meta.env.DEV
-  ? defineAsyncComponent(() =>
-      import('@tanstack/vue-query-devtools').then((m) => m.VueQueryDevtools),
-    )
+  ? defineAsyncComponent(() => import('@tanstack/vue-query-devtools').then((m) => m.VueQueryDevtools))
   : null
 </script>
 

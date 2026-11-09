@@ -3,16 +3,15 @@ import { computed, watch } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { useMedia } from '@features/media/UseMedia'
+import { useSaveStoreSettingsMutation, useStoreSettingsQuery } from '@features/settings/api/Settings.api'
+import { storeSettingsSchema } from '@features/settings/schemas/Settings.schema'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useUnsavedGuard } from '@shared/composables/UseUnsavedGuard'
 import { applyApiErrorToForm } from '@shared/lib/form/ApplyApiErrorToForm'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useSaveStoreSettingsMutation, useStoreSettingsQuery } from '../api/Settings.api'
-import { storeSettingsSchema } from '../schemas/Settings.schema'
-
-import type { StoreSettingsInput } from '../schemas/Settings.schema'
+import type { StoreSettingsInput } from '@features/settings/schemas/Settings.schema'
 export function useStoreSettingsEditor() {
   const { can } = useAuth()
   const { t } = useT()
@@ -33,7 +32,9 @@ export function useStoreSettingsEditor() {
   })
   const model = computed({
     get: () => values,
-    set: (value: StoreSettingsInput) => setValues(value),
+    set: (value: StoreSettingsInput) => {
+      setValues(value)
+    },
   })
   useHydrateForm(
     query.data,
@@ -48,9 +49,7 @@ export function useStoreSettingsEditor() {
     const parsed = storeSettingsSchema.safeParse(values)
     if (!parsed.success) {
       setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')]),
-        ),
+        Object.fromEntries(parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')])),
       )
       return
     }
@@ -78,6 +77,8 @@ export function useStoreSettingsEditor() {
     submit,
     upload,
     canWrite: computed(() => can('settings:write')),
-    cancel: () => resetForm(),
+    cancel: () => {
+      resetForm()
+    },
   }
 }

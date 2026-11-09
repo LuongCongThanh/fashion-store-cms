@@ -70,7 +70,7 @@ it('keeps an unsaved product form open when the user cancels leaving', async () 
   const navigation = router.push('/products')
   await flushPromises()
   const cancel = [...document.querySelectorAll('[role="dialog"] button')].find(
-    (button) => button.textContent?.trim() === 'Huỷ',
+    (button) => button.textContent.trim() === 'Huỷ',
   ) as HTMLButtonElement | undefined
   expect(cancel).toBeDefined()
   cancel?.click()

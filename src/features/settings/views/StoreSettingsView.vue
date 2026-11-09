@@ -1,14 +1,14 @@
 <script setup lang="ts">
+import StoreSettingsForm from '@features/settings/components/StoreSettingsForm.vue'
+import { useStoreSettingsEditor } from '@features/settings/composables/UseStoreSettingsEditor'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import StoreSettingsForm from '../components/StoreSettingsForm.vue'
-import { useStoreSettingsEditor } from '../composables/UseStoreSettingsEditor'
 const { t } = useT()
 const editor = useStoreSettingsEditor()
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('settings.store')" />

@@ -6,7 +6,7 @@ import type { ComputedRef } from 'vue'
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 import { useLocale } from '@shared/lib/i18n/I18n'
 
-import type { DashboardPayload, DashboardWidget } from '../types/Dashboard.types'
+import type { DashboardPayload, DashboardWidget } from '@features/dashboard/types/Dashboard.types'
 
 export function useDashboardQuery(widgets: ComputedRef<DashboardWidget[]>) {
   const http = useHttpClient()

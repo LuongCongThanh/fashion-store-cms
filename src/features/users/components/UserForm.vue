@@ -5,11 +5,10 @@ import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Role } from '@features/roles/types/Role.types'
 import type { StoreSummary } from '@features/StoreScope/types/StoreScope.types'
+import type { UserInput } from '@features/users/schemas/User.schema'
 
 import UserRoleSelector from './UserRoleSelector.vue'
 import UserStoreSelector from './UserStoreSelector.vue'
-
-import type { UserInput } from '../schemas/User.schema'
 defineProps<{
   modelValue: UserInput
   roles: Role[]
@@ -20,6 +19,7 @@ defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [value: UserInput]; submit: []; cancel: [] }>()
 const { t } = useT()
 </script>
+
 <template>
   <form class="space-y-5" @submit.prevent="emit('submit')">
     <FormSection :title="t('users.title')">

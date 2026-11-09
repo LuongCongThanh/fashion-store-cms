@@ -38,8 +38,6 @@ describe('createMockAuthTransport', () => {
     await expect(client().post('/auth/refresh', { refreshToken: 'x' })).resolves.toMatchObject({
       status: 200,
     })
-    await expect(client().post('/auth/forgot-password', { email: 'a@b.c' })).resolves.toMatchObject(
-      { status: 204 },
-    )
+    await expect(client().post('/auth/forgot-password', { email: 'a@b.c' })).resolves.toMatchObject({ status: 204 })
   })
 })

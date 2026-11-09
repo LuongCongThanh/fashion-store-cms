@@ -5,10 +5,9 @@ import type { MaybeRefOrGetter } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
+import type { PromotionInput } from '@features/promotions/schemas/Promotion.schema'
+import type { Promotion } from '@features/promotions/types/Promotion.types'
 import type { Paginated } from '@shared/types/Pagination.types'
-
-import type { PromotionInput } from '../schemas/Promotion.schema'
-import type { Promotion } from '../types/Promotion.types'
 export function usePromotionsQuery(params: MaybeRefOrGetter<Record<string, unknown>>) {
   const http = useHttpClient()
   return useQuery({
@@ -32,9 +31,7 @@ export function useSavePromotionMutation(id: MaybeRefOrGetter<string>) {
   return useMutation({
     meta: { errorHandling: 'local' },
     mutationFn: (input: PromotionInput) =>
-      toValue(id)
-        ? http.put(`/promotions/${encodeURIComponent(toValue(id))}`, input)
-        : http.post('/promotions', input),
+      toValue(id) ? http.put(`/promotions/${encodeURIComponent(toValue(id))}`, input) : http.post('/promotions', input),
     onSuccess: () => client.invalidateQueries({ queryKey: ['promotions'] }),
   })
 }

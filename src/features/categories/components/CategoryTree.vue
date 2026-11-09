@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { Category } from '../types/Category.types'
+import type { Category } from '@features/categories/types/Category.types'
 const props = defineProps<{ items: Category[]; canWrite: boolean; pending?: boolean }>()
 const emit = defineEmits<{ move: [id: string, parentId: string | null] }>()
 const { t } = useT()
@@ -36,14 +36,10 @@ function drop(event: DragEvent, parentId: string | null) {
   emit('move', id, parentId)
 }
 </script>
+
 <template>
   <div role="tree" :aria-label="t('products.category')">
-    <div
-      v-if="canWrite"
-      class="rounded border border-dashed p-3"
-      @dragover.prevent
-      @drop.prevent="drop($event, null)"
-    >
+    <div v-if="canWrite" class="rounded border border-dashed p-3" @dragover.prevent @drop.prevent="drop($event, null)">
       {{ t('categories.root') }}
     </div>
     <div

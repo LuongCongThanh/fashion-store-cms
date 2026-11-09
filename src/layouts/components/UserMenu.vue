@@ -38,7 +38,9 @@ const items = computed(() => [
     icon: 'i-lucide-languages',
     type: 'checkbox' as const,
     checked: locale.value === lang,
-    onSelect: (): void => setLocale(lang),
+    onSelect: (): void => {
+      setLocale(lang)
+    },
   })),
   [{ label: t('common.logout'), icon: 'i-lucide-log-out', onSelect: (): void => void logout() }],
 ])
@@ -46,11 +48,6 @@ const items = computed(() => [
 
 <template>
   <UDropdownMenu :items="items">
-    <UButton
-      icon="i-lucide-user-round"
-      color="neutral"
-      variant="ghost"
-      :aria-label="t('common.userMenu')"
-    />
+    <UButton icon="i-lucide-user-round" color="neutral" variant="ghost" :aria-label="t('common.userMenu')" />
   </UDropdownMenu>
 </template>
