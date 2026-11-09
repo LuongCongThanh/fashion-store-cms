@@ -8,6 +8,8 @@ import vue from 'eslint-plugin-vue'
 import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
 
+import type { Linter } from 'eslint'
+
 type Restriction = ({ group: string[]; message: string } | { message: string; regex: string }) & {
   importNamePattern?: string
 }
@@ -31,7 +33,7 @@ const featureBoundaryFor = (feature: string): Restriction => ({
 })
 // Cấm MỌI import lên thư mục cha (../ hoặc ..) ở toàn bộ src/; chỉ cho ./ cùng thư mục.
 const noParentImport: Restriction = {
-  regex: '^\\.\\.(/|$)',
+  regex: String.raw`^\.\.(/|$)`,
   message: 'Relative parent imports (../) are not allowed; use an alias such as @features/... (§N).',
 }
 const noApp: Restriction = {
@@ -74,7 +76,7 @@ const noHttpInSharedUi: Restriction = {
 }
 const featureBoundaryForRoutes: Restriction = {
   ...featureBoundary,
-  regex: `^@features/[^/]+/(?!(?:${FEATURE_PUBLIC}|views/[^/]+|[^/]+\\.routes)$).+`,
+  regex: String.raw`^@features/[^/]+/(?!(?:${FEATURE_PUBLIC}|views/[^/]+|[^/]+\.routes)$).+`,
 }
 
 type Boundary = { files: string[]; forbid: Restriction[]; name: string }
@@ -139,11 +141,11 @@ export const BOUNDARIES: Boundary[] = [
 ]
 
 /** Chuyển bảng thành các block flat config. Không chứa logic nào khác. */
-const toFlatConfig = (rows: typeof BOUNDARIES) =>
+const toFlatConfig = (rows: typeof BOUNDARIES): Linter.Config[] =>
   rows.map(({ files, forbid, name }) => ({
     name: `boundaries/${name}`,
     files,
-    rules: { 'no-restricted-imports': ['error', { patterns: forbid }] as const },
+    rules: { 'no-restricted-imports': ['error', { patterns: forbid }] },
   }))
 
 const SUFFIX = '?(.api|.mapper|.routes|.store|.schema|.types|.config|.factory|.generated|.d)?(.spec)'
@@ -245,11 +247,11 @@ export default defineConfig(
       'no-restricted-syntax': [
         'error',
         {
-          selector: 'ImportExpression[source.value=/^\\.\\./]',
+          selector: String.raw`ImportExpression[source.value=/^\.\./]`,
           message: 'Relative parent imports (../) are not allowed; use an alias (§N).',
         },
         {
-          selector: "CallExpression[callee.object.name='vi'][arguments.0.value=/^\\.\\./]",
+          selector: String.raw`CallExpression[callee.object.name='vi'][arguments.0.value=/^\.\./]`,
           message: 'Relative parent paths (../) are not allowed in vi.*; use an alias (§N).',
         },
       ],
