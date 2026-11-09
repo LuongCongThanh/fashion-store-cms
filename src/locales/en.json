@@ -36,7 +36,10 @@
     "selectAll": "Select all",
     "create": "Create",
     "edit": "Edit",
-    "view": "View"
+    "view": "View",
+    "saveDraft": "Save draft",
+    "unsaved": "Discard unsaved changes?",
+    "delete": "Delete"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -102,5 +105,18 @@
     "lowStock": "Low stock",
     "revenueChart": "Revenue chart",
     "orderChart": "Order chart"
+  },
+  "media": {
+    "invalidType": "Invalid image type (JPEG, PNG, WebP)",
+    "tooLarge": "Image exceeds 5 MB",
+    "failed": "Upload failed",
+    "upload": "Upload image",
+    "uploading": "Uploading",
+    "preview": "Preview",
+    "main": "Set main image",
+    "moveLeft": "Move left",
+    "moveRight": "Move right",
+    "tooMany": "Maximum 10 images",
+    "cancelled": "Upload cancelled"
   }
 }
