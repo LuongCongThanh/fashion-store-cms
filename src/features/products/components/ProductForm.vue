@@ -37,7 +37,7 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
 </script>
 
 <template>
-  <form class="space-y-5" @submit.prevent="emit('submit', 'published')">
+  <form class="space-y-6" @submit.prevent="emit('submit', 'published')">
     <FormSection :title="t('dashboard.products')">
       <label
         >{{ t('common.name')

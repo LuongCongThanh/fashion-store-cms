@@ -6,6 +6,6 @@ defineProps<{ payment: Order['payment'] }>()
 <template>
   <div class="space-y-2">
     <p>{{ payment.method }}</p>
-    <p>{{ payment.reference }}</p>
+    <p class="font-mono break-all">{{ payment.reference }}</p>
   </div>
 </template>

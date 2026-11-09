@@ -161,6 +161,7 @@
     "invalidParent": "Parent creates a cycle or does not exist"
   },
   "orders": {
+    "noItems": "This order has no items",
     "status": {
       "pending": "Pending",
       "confirmed": "Confirmed",

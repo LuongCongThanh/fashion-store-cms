@@ -161,6 +161,7 @@
     "invalidParent": "Danh mục cha tạo vòng lặp hoặc không tồn tại"
   },
   "orders": {
+    "noItems": "Đơn hàng chưa có sản phẩm",
     "status": {
       "pending": "Chờ xác nhận",
       "confirmed": "Đã xác nhận",

@@ -19,7 +19,7 @@ const { t } = useT()
 </script>
 
 <template>
-  <form class="space-y-5" @submit.prevent="emit('submit')">
+  <form class="space-y-6" @submit.prevent="emit('submit')">
     <fieldset :disabled="!canWrite || pending">
       <FormSection :title="t('settings.localization')">
         <label

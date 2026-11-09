@@ -6,6 +6,6 @@ defineProps<{ customer: Order['customer'] }>()
 <template>
   <div class="space-y-2">
     <p>{{ customer.name }}</p>
-    <p>{{ customer.email }}</p>
+    <p class="break-all">{{ customer.email }}</p>
   </div>
 </template>

@@ -37,7 +37,7 @@ async function change(status: OrderStatus) {
 <template>
   <LoadingState v-if="query.isPending.value" />
   <ErrorState v-else-if="query.isError.value" :error="query.error.value" @retry="query.refetch()" />
-  <div v-else-if="query.data.value" class="space-y-5">
+  <div v-else-if="query.data.value" class="space-y-6">
     <PageHeader :title="query.data.value.number" />
     <div class="flex gap-3">
       <OrderStatusBadge :status="query.data.value.status" />

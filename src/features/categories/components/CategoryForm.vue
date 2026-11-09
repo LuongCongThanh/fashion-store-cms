@@ -35,7 +35,7 @@ function localized(lang: 'vi' | 'en', key: 'name' | 'description', event: Event)
 </script>
 
 <template>
-  <form class="space-y-5" @submit.prevent="emit('submit')">
+  <form class="space-y-6" @submit.prevent="emit('submit')">
     <FormSection :title="t('products.category')">
       <label v-for="key in ['name', 'slug', 'metaTitle', 'metaDescription'] as const" :key="key" class="block"
         >{{ t(`categories.${key}`)

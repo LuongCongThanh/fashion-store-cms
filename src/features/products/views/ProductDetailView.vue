@@ -25,7 +25,7 @@ const description = computed(() => DOMPurify.sanitize(query.data.value?.descript
 <template>
   <LoadingState v-if="query.isPending.value" />
   <ErrorState v-else-if="query.isError.value" :error="query.error.value" @retry="query.refetch()" />
-  <div v-else-if="query.data.value" class="space-y-5">
+  <div v-else-if="query.data.value" class="space-y-6">
     <PageHeader :title="query.data.value.name">
       <template #actions>
         <UButton v-if="can('product:write')" :to="`/products/${encodeURIComponent(query.data.value.id)}/edit`">{{

@@ -7,6 +7,7 @@ import DashboardList from '@features/dashboard/components/DashboardList.vue'
 import StatCard from '@features/dashboard/components/StatCard.vue'
 import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
+import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useT } from '@shared/lib/i18n/I18n'
@@ -71,17 +72,17 @@ const cards = computed(() => widgets.value.map((widget, index) => ({ ...widget, 
 <template>
   <div class="space-y-6">
     <PageHeader :title="t('nav.dashboard')" />
-    <p v-if="loadingUser" role="status">{{ t('common.loading') }}</p>
+    <LoadingState v-if="loadingUser" />
     <EmptyState v-else-if="!cards.length" :title="t('common.empty')" />
     <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <section
         v-for="card in cards"
         :key="card.key"
         :data-widget="card.key"
-        class="space-y-3 rounded-xl border border-default bg-default p-5"
+        class="space-y-3 rounded-lg border border-default bg-default p-5"
       >
         <h2 class="font-semibold">{{ t(card.title as MessageKey) }}</h2>
-        <p v-if="card.result?.isPending" role="status">{{ t('common.loading') }}</p>
+        <LoadingState v-if="card.result?.isPending" />
         <ErrorState v-else-if="card.result?.isError" :error="card.result.error" @retry="card.result.refetch()" />
         <StatCard
           v-else-if="card.kind === 'stat' && card.result?.data?.value !== undefined"

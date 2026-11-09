@@ -26,6 +26,20 @@ async function renderDashboard(permissions: string[], failRevenue = false) {
 }
 
 describe('DashboardView', () => {
+  it('shows a labelled skeleton, not loading text, while the user and widgets load', () => {
+    const Host = defineComponent({
+      setup() {
+        const { ensureUser } = useAuth()
+        onMounted(() => void ensureUser())
+        return () => h(DashboardView)
+      },
+    })
+    const { wrapper, http } = renderWithPlugins(Host)
+    http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
+    expect(wrapper.find('[role="status"][aria-label="Đang tải…"]').exists()).toBe(true)
+    expect(wrapper.text()).not.toContain('Đang tải…')
+  })
+
   it('keeps other widgets visible when one fails and can retry it', async () => {
     const { wrapper, http } = await renderDashboard(['order:read'], true)
     expect(wrapper.find('[data-widget="revenue"]').text()).toContain('Máy chủ gặp lỗi')
