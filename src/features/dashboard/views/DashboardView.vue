@@ -30,6 +30,7 @@ onMounted(async () => {
 const RevenueChart = defineAsyncComponent(() => import('@features/dashboard/components/RevenueChart.vue'))
 const OrderChart = defineAsyncComponent(() => import('@features/dashboard/components/OrderChart.vue'))
 const definitions: DashboardWidget[] = [
+  { key: 'pending-orders', title: 'dashboard.pendingOrders', kind: 'queue', permission: 'order:read', to: '/orders?status=pending' },
   { key: 'revenue', title: 'dashboard.revenue', kind: 'stat', permission: 'order:read', format: 'money' },
   { key: 'orders', title: 'nav.orders', kind: 'stat', permission: 'order:read' },
   { key: 'customers', title: 'dashboard.customers', kind: 'stat', permission: 'customer:read' },
@@ -66,20 +67,32 @@ const definitions: DashboardWidget[] = [
 ]
 const widgets = computed(() => definitions.filter((widget) => can(widget.permission)))
 const results = useDashboardQuery(widgets)
-const cards = computed(() => widgets.value.map((widget, index) => ({ ...widget, result: results.value[index] })))
+const resolved = computed(() => widgets.value.map((widget, index) => ({ ...widget, result: results.value[index] })))
+const queues = computed(() => resolved.value.filter((widget) => widget.kind === 'queue'))
+const cards = computed(() => resolved.value.filter((widget) => widget.kind !== 'queue'))
 </script>
 
 <template>
   <div class="space-y-6">
-    <PageHeader :title="t('nav.dashboard')" />
+    <PageHeader :title="t('nav.dashboard')" :description="t('dashboard.summary')" />
     <LoadingState v-if="loadingUser" />
     <EmptyState v-else-if="!cards.length" :title="t('common.empty')" />
-    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <section v-if="queues.length" aria-labelledby="dashboard-queue-title">
+      <h2 id="dashboard-queue-title" class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">{{ t('dashboard.needsAttention') }}</h2>
+      <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <RouterLink v-for="queue in queues" :key="queue.key" :to="queue.to!" class="flex items-center justify-between rounded-lg border border-default bg-default px-4 py-3 transition-colors duration-150 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none">
+          <span class="text-sm">{{ t(queue.title as MessageKey) }}</span>
+          <span class="tabular-nums">{{ queue.result?.isPending ? '…' : (queue.result?.data?.value ?? 0) }} <span aria-hidden="true">›</span></span>
+        </RouterLink>
+      </div>
+    </section>
+    <div class="grid gap-4 lg:grid-cols-3">
       <section
         v-for="card in cards"
         :key="card.key"
         :data-widget="card.key"
         class="space-y-3 rounded-lg border border-default bg-default p-5"
+        :class="card.key === 'revenue-chart' ? 'lg:col-span-2' : ''"
       >
         <h2 class="font-semibold">{{ t(card.title as MessageKey) }}</h2>
         <LoadingState v-if="card.result?.isPending" />
@@ -100,6 +113,7 @@ const cards = computed(() => widgets.value.map((widget, index) => ({ ...widget, 
           :items="card.result.data.items"
           :format="card.format ?? 'number'"
           :linkTo="card.link"
+          :soldOutLabel="card.key === 'low-stock' ? t('dashboard.soldOut') : undefined"
         />
         <EmptyState v-else :title="t('common.empty')" />
       </section>

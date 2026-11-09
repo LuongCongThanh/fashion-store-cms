@@ -109,6 +109,10 @@
     "UNKNOWN": "Something went wrong. Please try again."
   },
   "dashboard": {
+    "summary": "Store operations and tasks that need attention.",
+    "needsAttention": "Needs attention",
+    "pendingOrders": "Pending orders",
+    "soldOut": "Sold out",
     "revenue": "Revenue",
     "customers": "Customers",
     "products": "Products",

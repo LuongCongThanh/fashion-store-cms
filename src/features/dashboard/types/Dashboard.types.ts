@@ -13,7 +13,8 @@ export interface DashboardPayload {
 export interface DashboardWidget {
   key: string
   title: string
-  kind: 'stat' | 'chart' | 'list'
+  kind: 'stat' | 'chart' | 'list' | 'queue'
+  to?: string
   permission: string
   /** Cách hiển thị giá trị của stat/list; mặc định là số đếm. */
   format?: ValueFormat

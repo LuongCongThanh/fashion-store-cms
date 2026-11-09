@@ -109,6 +109,10 @@
     "UNKNOWN": "Có lỗi xảy ra. Vui lòng thử lại."
   },
   "dashboard": {
+    "summary": "Tổng quan vận hành cửa hàng và các việc cần xử lý.",
+    "needsAttention": "Cần xử lý",
+    "pendingOrders": "Đơn chờ xác nhận",
+    "soldOut": "Hết",
     "revenue": "Doanh thu",
     "customers": "Khách hàng",
     "products": "Sản phẩm",

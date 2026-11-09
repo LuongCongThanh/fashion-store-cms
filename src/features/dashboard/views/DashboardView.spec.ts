@@ -92,3 +92,14 @@ it('formats revenue as money and counts with the locale separator', async () => 
   expect(shown('recent-orders')).toContain('12.350.000 ₫')
   expect(shown('top-products')).toContain('312')
 })
+
+it('links the action queue to a filtered list and labels zero stock as sold out', async () => {
+  const { wrapper, http } = renderWithPlugins(DashboardView)
+  http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read', 'inventory:read'] }))
+  http.onGet(/\/dashboard\/pending-orders$/).reply(200, { value: 3 })
+  http.onGet(/\/dashboard\/low-stock$/).reply(200, { items: [{ id: 'v1', label: 'Áo Linen', value: 0 }] })
+  http.onGet(/\/dashboard\//).reply(200, { value: 0, points: [], items: [] })
+  await flushPromises()
+  expect(wrapper.get('a[href="/orders?status=pending"]').text()).toContain('3')
+  expect(wrapper.get('[data-widget="low-stock"]').text()).toContain('Hết')
+})
