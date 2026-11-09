@@ -1,6 +1,6 @@
 # 04 — Nền tảng Form & Media
 
-Status: in-progress
+Status: on-hold
 Blocked by: 01
 Nguồn: §3 (`form/`), §4.10 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P5 · Spec: [spec.md](./spec.md)
 
@@ -31,3 +31,23 @@ Nguyên tắc chung:
 - Lỗi 422 từ API hiển thị đúng field.
 - `typecheck`, `lint`, `test` pass.
 - E2E (Playwright) cho luồng upload ảnh: chọn, validate, preview và báo lỗi pass.
+
+### Tiếp tục khi có API
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+**Sửa được ngay, không cần API** (từ review 2026-11-09):
+
+- [ ] Coverage dòng giảm từ 84.8% xuống 80.19% (vi phạm 'coverage không giảm so với dev').
+- [ ] `@vee-validate/zod` chưa cài; `vee-validate` đã thêm nhưng chưa import ở đâu.
+- [ ] `ImageUploader` chỉ nhận 1 file; chọn rỗng báo 'Tối đa 10 ảnh'; preview ảnh lỗi vẫn còn.
+- [ ] `retry()` làm mất id của các file đã upload thành công trước đó.
+- [ ] `UseMediaComponents.ts` re-export component (barrel, §B.3); MIME và giới hạn 5 MB lặp ở nhiều nơi; `ImageGallery` thiếu tên truy cập riêng cho từng ảnh.
+- [ ] `UseUnsavedGuard` cho qua khi chỉ đổi query dù form đang dirty.
+
+**Chờ API / BE:**
+
+- [ ] Kiểm upload với storage thật; test lỗi 422 hiện đúng field; E2E upload.
+- [ ] Retry sau khi `complete` lỗi đang upload lại cả file, có thể để lại object mồ côi — cần BE xác nhận cách xử lý.
+
+**Khi có API:** thay type viết tay bằng type sinh từ Swagger, nối lại lớp dữ liệu tạm với endpoint thật, chạy E2E, rồi kiểm lại các tiêu chí hoàn thành trong [spec.md](./spec.md).
