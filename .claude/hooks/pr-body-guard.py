@@ -6,23 +6,38 @@
   `gh pr create` không có body đều bị chặn. `gh pr edit` không đổi body thì cho qua.
 - `gh api .../pulls...` có field `body`: phải là `body=@<file>` và file phải pass.
 """
-import json, os, shlex, subprocess, sys
+import json, os, shlex, shutil, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CHECK = os.path.join(ROOT, "scripts", "check-pr-body.sh")
 
 
+def _git_bash_from_git():
+    """Git Bash nằm cạnh git.exe: <Git>/{cmd,bin,mingw64/bin}/git.exe → <Git>/bin/bash.exe."""
+    git = shutil.which("git")
+    if not git:
+        return None
+    folder = os.path.dirname(os.path.realpath(git))
+    for _ in range(3):
+        bash_path = os.path.join(folder, "bin", "bash.exe")
+        if os.path.isfile(bash_path):
+            return bash_path
+        folder = os.path.dirname(folder)
+    return None
+
+
 def find_bash():
-    """Trên Windows, `bash` trong PATH có thể là WSL (System32\\bash.exe) và không chạy được
-    script của repo. Ưu tiên Git Bash; các hệ khác dùng `bash` trong PATH."""
-    if os.name == "nt":
-        for base in (os.environ.get("ProgramFiles"), os.environ.get("ProgramW6432"),
-                     os.environ.get("LOCALAPPDATA") and os.path.join(os.environ["LOCALAPPDATA"], "Programs")):
-            if base:
-                p = os.path.join(base, "Git", "bin", "bash.exe")
-                if os.path.isfile(p):
-                    return p
-    return "bash"
+    """Đường dẫn bash chạy được script của repo, hoặc None nếu không có.
+
+    Trên Windows, `bash` trong PATH có thể là WSL (System32\\bash.exe) và không chạy được
+    script của repo, nên chỉ dùng Git Bash: tìm theo vị trí của git rồi các thư mục cài mặc định.
+    Các hệ khác dùng `bash` trong PATH."""
+    if os.name != "nt":
+        return shutil.which("bash")
+    bases = (os.environ.get("ProgramFiles"),
+             os.environ.get("LOCALAPPDATA") and os.path.join(os.environ["LOCALAPPDATA"], "Programs"))
+    defaults = (os.path.join(b, "Git", "bin", "bash.exe") for b in bases if b)
+    return _git_bash_from_git() or next((d for d in defaults if os.path.isfile(d)), None)
 
 
 def deny(reason):
@@ -38,11 +53,23 @@ def check_file(path, cwd):
     p = p if os.path.isabs(p) else os.path.join(cwd, p)
     if not os.path.isfile(p):
         deny(f"PR body file không tồn tại: {path}")
-    r = subprocess.run([find_bash(), CHECK, p], capture_output=True, text=True,
-                       encoding="utf-8", errors="replace")
-    if r.returncode != 0:
-        deny("PR body không theo .github/pull_request_template.md:\n"
-             + (r.stdout.strip() or r.stderr.strip()) + "\nSửa file rồi chạy lại.")
+    bash = find_bash()
+    if not bash:
+        deny("Không tìm thấy bash để chạy scripts/check-pr-body.sh (trên Windows cần Git Bash). "
+             "Lỗi môi trường, không phải lỗi PR body.")
+    try:
+        r = subprocess.run([bash, CHECK, p], capture_output=True, text=True,
+                           encoding="utf-8", errors="replace")
+    except OSError as e:
+        deny(f"Không chạy được {bash}: {e}. Lỗi môi trường, không phải lỗi PR body.")
+    if r.returncode == 0:
+        return
+    if "::error::" not in r.stdout:  # script không chạy tới bước kiểm → lỗi môi trường
+        detail = (r.stdout.strip() or r.stderr.strip() or "không có output")
+        deny(f"scripts/check-pr-body.sh lỗi (exit {r.returncode}) qua {bash}: {detail}. "
+             "Lỗi môi trường, không phải lỗi PR body.")
+    deny("PR body không theo .github/pull_request_template.md:\n"
+         + r.stdout.strip() + "\nSửa file rồi chạy lại.")
 
 
 def opt(tokens, *names):
