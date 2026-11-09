@@ -4,6 +4,7 @@
   "baseline_line_coverage": 78.09,
   "e2e": "deferred by user",
   "backend": "does not exist, confirmed by user",
+  "head_note": "Recorded heads are validation/format checkpoints before this metrics-only documentation refresh.",
   "plans": {
     "1": {
       "branch": "feat/cms-01-layout-completion",
@@ -659,7 +660,9 @@
       "lint": true,
       "typecheck": true,
       "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/37",
-      "head": "658157248831d3140132c2598e56d3927da411ea"
+      "head": "4fa617f6e0ebb2ef52574be3c428f5f6fdb83ca7",
+      "pre_format_head": "658157248831d3140132c2598e56d3927da411ea",
+      "format_check": true
     }
   }
 }

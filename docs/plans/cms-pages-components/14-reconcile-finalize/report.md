@@ -21,7 +21,8 @@ Ngày kiểm: 2026-11-09. Chưa merge; không đánh dấu done thay cho reviewe
 | Coverage dòng                              | 85.67% (toàn nhánh tại checkpoint)            |
 | Coverage statements / branches / functions | 83.54% / 81.04% / 74.35%                      |
 | Production build                           | PASS                                          |
-| E2E                                        | HOÃN theo lựa chọn của người phụ trách        |
+| Prettier format check                      | PASS                                          |
+| E2E nghiệp vụ mới                          | HOÃN theo lựa chọn của người phụ trách        |
 | Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận     |
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
@@ -57,6 +58,6 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 
 - Knip và analyze: PASS. Các chart và Tiptap nằm trong chunk tải động; số đo bundle ở validation-metrics.json.
 - Đã đối chiếu danh mục, cập nhật FE_architecture, CONVENTIONS, GLOSSARY, navigation flow, report của 14 plan và chuỗi PR.
-- Token task tại snapshot `2026-11-09T00:01:40.894Z`: **40,618,102**, trong đó cached input là 40,133,760 (đã nằm trong input).
+- Token task tại snapshot `2026-11-09T00:29:01.527Z`: **45,363,631**, trong đó cached input là 44,854,144 (đã nằm trong input).
 - Không có số token triển khai độc lập từng plan hoặc hóa đơn USD; không ước lượng thay dữ liệu thật.
 - Backend chưa có, E2E hoãn, PR chưa merge: giữ in-progress và chưa archive.

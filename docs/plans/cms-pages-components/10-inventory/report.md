@@ -21,7 +21,8 @@ Tồn kho theo Variant/SKU, điều chỉnh bắt buộc lý do và lịch sử 
 | Coverage dòng                              | 85.25% (toàn nhánh tại checkpoint)           |
 | Coverage statements / branches / functions | 83.02% / 81.26% / 73.97%                     |
 | Production build                           | PASS                                         |
-| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Prettier format check                      | PASS                                         |
+| E2E nghiệp vụ mới                          | HOÃN theo lựa chọn của người phụ trách       |
 | Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).

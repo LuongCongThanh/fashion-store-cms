@@ -21,7 +21,8 @@ List và form coupon/auto; kiểm code, phần trăm và khoảng thời gian.
 | Coverage dòng                              | 85.36% (toàn nhánh tại checkpoint)           |
 | Coverage statements / branches / functions | 83.13% / 81.48% / 74.02%                     |
 | Production build                           | PASS                                         |
-| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Prettier format check                      | PASS                                         |
+| E2E nghiệp vụ mới                          | HOÃN theo lựa chọn của người phụ trách       |
 | Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
