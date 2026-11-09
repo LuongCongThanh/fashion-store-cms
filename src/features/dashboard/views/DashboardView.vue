@@ -74,6 +74,7 @@ const lists = {
         <StatCard
           v-else-if="card.kind === 'stat' && card.result?.data?.value !== undefined"
           :value="card.result.data.value"
+          :money="card.key === 'revenue'"
         />
         <component
           :is="card.key === 'revenue-chart' ? RevenueChart : OrderChart"

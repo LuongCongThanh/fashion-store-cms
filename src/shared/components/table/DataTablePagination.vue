@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import UButton from '@nuxt/ui/components/Button.vue'
 
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Paginated } from '@shared/types/Pagination.types'
 defineProps<{ meta?: Paginated<unknown>['meta'] }>()
 const emit = defineEmits<{ page: [page: number]; pageSize: [size: number] }>()
 const { t } = useT()
+const format = useFormat()
 </script>
 
 <template>
   <nav v-if="meta" :aria-label="t('common.pagination')" class="flex items-center justify-end gap-3">
-    <span>{{ meta.total }} {{ t('common.results') }}</span>
+    <span data-total>{{ t('common.results', { n: format.number(meta.total) }, meta.total) }}</span>
     <select
       name="pageSize"
       :value="meta.pageSize"

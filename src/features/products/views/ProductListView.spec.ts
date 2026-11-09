@@ -78,3 +78,20 @@ it('filters products using category options from the category feature', async ()
   await flushPromises()
   expect(router.currentRoute.value.query.categoryId).toBe('linen')
 })
+
+it('shows product prices as money, right-aligned', async () => {
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: '/products', component: { render: () => null } }],
+  })
+  await router.push('/products')
+  const { wrapper, http } = renderWithPlugins(ProductListView, { router })
+  http.onGet(/\/products$/).reply(200, {
+    data: [{ id: 'p4', name: 'Túi tote da thật Atelier', status: 'published', price: 15_500_000 }],
+    meta: { page: 1, pageSize: 20, total: 1, totalPages: 1 },
+  })
+  await flushPromises()
+  const price = wrapper.find('[data-cell="price"]')
+  expect(price.text().replace(/[\u00a0\u202f]/g, ' ')).toBe('15.500.000 ₫')
+  expect(price.classes()).toContain('text-right')
+})

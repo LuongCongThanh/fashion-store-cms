@@ -23,7 +23,7 @@
     "empty": "No data",
     "search": "Search",
     "pagination": "Pagination",
-    "results": "results",
+    "results": "{n} result | {n} results",
     "pageSize": "Page size",
     "previous": "Previous page",
     "next": "Next page",

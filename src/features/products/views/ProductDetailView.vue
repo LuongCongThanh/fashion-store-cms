@@ -11,11 +11,13 @@ import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
 const route = useRoute()
 const { can } = useAuth()
 const { t } = useT()
+const format = useFormat()
 const query = useProductQuery(() => String(route.params.id ?? ''))
 const description = computed(() => DOMPurify.sanitize(query.data.value?.description ?? ''))
 </script>
@@ -32,7 +34,7 @@ const description = computed(() => DOMPurify.sanitize(query.data.value?.descript
       </template>
     </PageHeader>
     <ProductStatusBadge :status="query.data.value.status" />
-    <p>{{ t('products.price') }}: {{ query.data.value.price.toLocaleString() }}</p>
+    <p>{{ t('products.price') }}: {{ format.money(query.data.value.price) }}</p>
     <!-- eslint-disable-next-line vue/no-v-html -- Sanitized through DOMPurify immediately above. -->
     <div data-description v-html="description" />
     <div class="flex gap-3">

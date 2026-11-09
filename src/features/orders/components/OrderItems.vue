@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Order } from '@features/orders/types/Order.types'
 defineProps<{ items: Order['items'] }>()
 const { t } = useT()
+const format = useFormat()
 </script>
 
 <template>
@@ -21,7 +23,7 @@ const { t } = useT()
         <td>{{ item.name }}</td>
         <td>{{ item.sku }}</td>
         <td>{{ item.quantity }}</td>
-        <td>{{ item.price }}</td>
+        <td class="text-right tabular-nums">{{ format.money(item.price) }}</td>
       </tr>
     </tbody>
   </table>
