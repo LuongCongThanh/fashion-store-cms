@@ -40,7 +40,11 @@
     "saveDraft": "Lưu nháp",
     "unsaved": "Bỏ thay đổi chưa lưu?",
     "delete": "Xóa",
-    "none": "Không có"
+    "none": "Không có",
+    "from": "Từ ngày",
+    "to": "Đến ngày",
+    "clearAll": "Xóa bộ lọc",
+    "createdAt": "Ngày tạo"
   },
   "nav": {
     "dashboard": "Tổng quan",
@@ -152,5 +156,37 @@
     "description": "Mô tả",
     "parent": "Danh mục cha",
     "invalidParent": "Danh mục cha tạo vòng lặp hoặc không tồn tại"
+  },
+  "orders": {
+    "status": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "processing": "Đang xử lý",
+      "shipped": "Đã gửi",
+      "delivered": "Đã giao",
+      "cancelled": "Đã hủy",
+      "refunded": "Đã hoàn tiền"
+    },
+    "paymentStatus": {
+      "unpaid": "Chưa thanh toán",
+      "paid": "Đã thanh toán",
+      "refunded": "Đã hoàn tiền"
+    },
+    "quantity": "Số lượng",
+    "subtotal": "Tạm tính",
+    "discount": "Giảm giá",
+    "shippingCost": "Phí giao hàng",
+    "total": "Tổng cộng",
+    "cancelConfirm": "Hủy đơn hàng này?",
+    "shipping": "Giao hàng",
+    "payment": "Thanh toán",
+    "timeline": "Lịch sử",
+    "customerId": "Khách hàng",
+    "minAmount": "Tổng tối thiểu",
+    "maxAmount": "Tổng tối đa",
+    "paymentStatusLabel": "Thanh toán",
+    "customerIdLabel": "Khách hàng",
+    "minAmountLabel": "Tổng tối thiểu",
+    "maxAmountLabel": "Tổng tối đa"
   }
 }
