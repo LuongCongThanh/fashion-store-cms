@@ -4,22 +4,22 @@ Ngày đo: 2026-11-09. Mỗi dòng là kết quả đo trên đúng nhánh PR n�
 
 ## Chất lượng theo PR
 
-| Plan | Nội dung                          | Test mới | Tổng test ở checkpoint | Coverage dòng (%) | Typecheck / lint / build | PR                                                          |
-| ---- | --------------------------------- | -------- | ---------------------- | ----------------- | ------------------------ | ----------------------------------------------------------- |
-| 01   | Hoàn thiện Layout                 | 4        | 169                    | 85.25             | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/24 |
-| 02   | Dashboard                         | 4        | 173                    | 83.64             | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/25 |
-| 03   | Nền tảng List & Table             | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 04   | Nền tảng Form & Media             | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 05   | Products — List                   | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 06   | Categories                        | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 07   | Products — Create / Edit / Detail | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 08   | Orders                            | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 09   | Customers                         | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 10   | Inventory                         | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 11   | Promotions                        | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 12   | Users & Roles                     | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 13   | Settings                          | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
-| 14   | Đối chiếu và chốt                 | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| Plan | Nội dung                          | Test mới | Tổng test ở checkpoint | Coverage dòng (%) | JS gzip toàn nhánh (kB) | Typecheck / lint / build | PR                                                          |
+| ---- | --------------------------------- | -------- | ---------------------- | ----------------- | ----------------------- | ------------------------ | ----------------------------------------------------------- |
+| 01   | Hoàn thiện Layout                 | 4        | 169                    | 85.25             | 259.8                   | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/24 |
+| 02   | Dashboard                         | 4        | 173                    | 83.64             | 447.04                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/25 |
+| 03   | Nền tảng List & Table             | 4        | 177                    | 84.8              | 447.33                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/26 |
+| 04   | Nền tảng Form & Media             | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 05   | Products — List                   | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 06   | Categories                        | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 07   | Products — Create / Edit / Detail | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 08   | Orders                            | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 09   | Customers                         | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 10   | Inventory                         | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 11   | Promotions                        | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 12   | Users & Roles                     | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 13   | Settings                          | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 14   | Đối chiếu và chốt                 | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
 
 E2E: hoãn theo lựa chọn của người phụ trách. Backend: người phụ trách xác nhận chưa có. Coverage là kết quả Vitest tại thời điểm kiểm nhánh, không phải chứng nhận backend hay kiểm UI thủ công.
 
