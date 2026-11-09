@@ -12,17 +12,19 @@ const router = useRouter()
 const navigation = useNavigation()
 const { t } = useT()
 const groups = computed(() =>
-  (['navigate', 'create'] as const).map((group) => ({
-    id: group,
-    label: group === 'navigate' ? t('common.navigate') : t('common.create'),
-    items: navigation.value.commands
-      .filter((command) => command.group === group)
-      .map((command) => ({
-        label: t(command.titleKey as MessageKey),
-        icon: command.icon,
-        onSelect: () => router.push(command.path),
-      })),
-  })).filter((group) => group.items.length),
+  (['navigate', 'create'] as const)
+    .map((group) => ({
+      id: group,
+      label: group === 'navigate' ? t('common.navigate') : t('common.create'),
+      items: navigation.value.commands
+        .filter((command) => command.group === group)
+        .map((command) => ({
+          label: t(command.titleKey as MessageKey),
+          icon: command.icon,
+          onSelect: () => router.push(command.path),
+        })),
+    }))
+    .filter((group) => group.items.length),
 )
 </script>
 

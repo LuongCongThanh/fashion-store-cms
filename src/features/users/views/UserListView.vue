@@ -30,7 +30,9 @@ const query = useUsersQuery(params)
     </PageHeader>
     <UserFilters :search="params.search" :status="params.status" :roleId="params.roleId" @filter="setFilter" />
     <DataTableToolbar
-      :title="tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })"
+      :title="
+        tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })
+      "
       :count="0"
     />
     <UserTable

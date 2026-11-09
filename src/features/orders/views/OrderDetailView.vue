@@ -66,8 +66,12 @@ async function change(status: OrderStatus) {
         </FormSection>
       </div>
       <aside class="space-y-4 lg:sticky lg:top-4">
-        <FormSection :title="t('dashboard.customers')"><OrderCustomerInfo :customer="query.data.value.customer" /></FormSection>
-        <FormSection :title="t('orders.shipping')"><OrderShippingInfo :shipping="query.data.value.shipping" /></FormSection>
+        <FormSection :title="t('dashboard.customers')"
+          ><OrderCustomerInfo :customer="query.data.value.customer"
+        /></FormSection>
+        <FormSection :title="t('orders.shipping')"
+          ><OrderShippingInfo :shipping="query.data.value.shipping"
+        /></FormSection>
         <FormSection :title="t('orders.payment')"><OrderPaymentInfo :payment="query.data.value.payment" /></FormSection>
         <FormSection :title="t('orders.timeline')"><OrderTimeline :events="query.data.value.timeline" /></FormSection>
       </aside>

@@ -30,7 +30,13 @@ onMounted(async () => {
 const RevenueChart = defineAsyncComponent(() => import('@features/dashboard/components/RevenueChart.vue'))
 const OrderChart = defineAsyncComponent(() => import('@features/dashboard/components/OrderChart.vue'))
 const definitions: DashboardWidget[] = [
-  { key: 'pending-orders', title: 'dashboard.pendingOrders', kind: 'queue', permission: 'order:read', to: '/orders?status=pending' },
+  {
+    key: 'pending-orders',
+    title: 'dashboard.pendingOrders',
+    kind: 'queue',
+    permission: 'order:read',
+    to: '/orders?status=pending',
+  },
   { key: 'revenue', title: 'dashboard.revenue', kind: 'stat', permission: 'order:read', format: 'money' },
   { key: 'orders', title: 'nav.orders', kind: 'stat', permission: 'order:read' },
   { key: 'customers', title: 'dashboard.customers', kind: 'stat', permission: 'customer:read' },
@@ -78,11 +84,21 @@ const cards = computed(() => resolved.value.filter((widget) => widget.kind !== '
     <LoadingState v-if="loadingUser" />
     <EmptyState v-else-if="!cards.length" :title="t('common.empty')" />
     <section v-if="queues.length" aria-labelledby="dashboard-queue-title">
-      <h2 id="dashboard-queue-title" class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">{{ t('dashboard.needsAttention') }}</h2>
+      <h2 id="dashboard-queue-title" class="mb-2 text-xs font-semibold tracking-wider text-muted uppercase">
+        {{ t('dashboard.needsAttention') }}
+      </h2>
       <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <RouterLink v-for="queue in queues" :key="queue.key" :to="queue.to!" class="flex items-center justify-between rounded-lg border border-default bg-default px-4 py-3 transition-colors duration-150 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none">
+        <RouterLink
+          v-for="queue in queues"
+          :key="queue.key"
+          :to="queue.to!"
+          class="flex items-center justify-between rounded-lg border border-default bg-default px-4 py-3 transition-colors duration-150 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+        >
           <span class="text-sm">{{ t(queue.title as MessageKey) }}</span>
-          <span class="tabular-nums">{{ queue.result?.isPending ? '…' : (queue.result?.data?.value ?? 0) }} <span class="i-lucide-chevron-right" aria-hidden="true" /></span>
+          <span class="tabular-nums"
+            >{{ queue.result?.isPending ? '…' : (queue.result?.data?.value ?? 0) }}
+            <span class="i-lucide-chevron-right" aria-hidden="true"
+          /></span>
         </RouterLink>
       </div>
     </section>

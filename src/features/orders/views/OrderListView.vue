@@ -40,7 +40,9 @@ const filters = computed(() =>
     <OrderFilters :params="params" @filter="setFilter" />
     <ActiveFilterTags :filters="filters" @remove="setFilter($event, undefined)" @clear="reset" />
     <DataTableToolbar
-      :title="tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })"
+      :title="
+        tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })
+      "
       :count="0"
     />
     <OrderTable

@@ -20,7 +20,9 @@ const query = useStockMovementsQuery(params)
     <PageHeader :title="t('inventory.movements')" />
     <StockMovementFilters :params="params" @filter="setFilter" />
     <DataTableToolbar
-      :title="tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })"
+      :title="
+        tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })
+      "
       :count="0"
     />
     <StockMovementTable

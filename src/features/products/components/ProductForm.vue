@@ -35,7 +35,9 @@ const emit = defineEmits<{
 const { t } = useT()
 const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptionEditor.vue'))
 const form = useTemplateRef<HTMLFormElement>('form')
-const errorEntries = computed(() => Object.entries(props.errors).filter((entry): entry is [string, string] => !!entry[1]))
+const errorEntries = computed(() =>
+  Object.entries(props.errors).filter((entry): entry is [string, string] => !!entry[1]),
+)
 const fieldLabel = (key: string) => {
   if (key === 'price') return t('products.price')
   if (key === 'slug') return 'Slug'
@@ -59,13 +61,35 @@ watch(
 
 <template>
   <form ref="form" class="space-y-6" @submit.prevent="emit('submit', 'published')">
-    <nav class="sticky top-0 z-10 flex gap-1 overflow-x-auto border-b border-default bg-default py-2" :aria-label="t('common.sections')">
-      <a v-for="section in [['basic', t('dashboard.products')], ['pricing', t('products.price')], ['categories', t('products.category')], ['images', t('media.upload')], ['variants', t('products.variant')], ['seo', t('products.seo')]]" :key="section[0]" :href="`#product-${section[0]}`" class="whitespace-nowrap rounded-md px-3 py-2 text-sm text-muted hover:text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{{ section[1] }}</a>
+    <nav
+      class="sticky top-0 z-10 flex gap-1 overflow-x-auto border-b border-default bg-default py-2"
+      :aria-label="t('common.sections')"
+    >
+      <a
+        v-for="section in [
+          ['basic', t('dashboard.products')],
+          ['pricing', t('products.price')],
+          ['categories', t('products.category')],
+          ['images', t('media.upload')],
+          ['variants', t('products.variant')],
+          ['seo', t('products.seo')],
+        ]"
+        :key="section[0]"
+        :href="`#product-${section[0]}`"
+        class="rounded-md px-3 py-2 text-sm whitespace-nowrap text-muted hover:text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >{{ section[1] }}</a
+      >
     </nav>
-    <div v-if="errorEntries.length" role="alert" data-validation-summary class="rounded-lg border border-error p-4" tabindex="-1">
+    <div
+      v-if="errorEntries.length"
+      role="alert"
+      data-validation-summary
+      class="rounded-lg border border-error p-4"
+      tabindex="-1"
+    >
       <p class="font-semibold text-highlighted">{{ t('common.validationErrors') }}</p>
       <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
-        <li v-for="([key, message]) in errorEntries" :key="key">{{ fieldLabel(key) }}: {{ message }}</li>
+        <li v-for="[key, message] in errorEntries" :key="key">{{ fieldLabel(key) }}: {{ message }}</li>
       </ul>
     </div>
     <FormSection id="product-basic" :title="t('dashboard.products')">
