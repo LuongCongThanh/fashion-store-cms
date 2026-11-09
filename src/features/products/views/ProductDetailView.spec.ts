@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest'
 
+import { plainSpaces } from '@test/Intl'
 import { renderFeature } from '@test/RenderFeature'
 
 import ProductDetailView from './ProductDetailView.vue'
@@ -24,4 +25,23 @@ it('sanitizes product descriptions before rendering and hides edit without write
   expect(wrapper.find('[data-description] script').exists()).toBe(false)
   expect(wrapper.find('[data-description] img').attributes('onerror')).toBeUndefined()
   expect(wrapper.find('a[href="/products/p1/edit"]').exists()).toBe(false)
+})
+
+it('shows the product price as money', async () => {
+  const { wrapper } = await renderFeature(ProductDetailView, {
+    path: '/products/p1',
+    routePath: '/products/:id',
+    mock(http) {
+      http.onGet(/\/products\/p1$/).reply(200, {
+        id: 'p1',
+        name: 'Áo linen',
+        description: '',
+        status: 'draft',
+        price: 1_890_000,
+        variants: [],
+        images: [],
+      })
+    },
+  })
+  expect(plainSpaces(wrapper.text())).toContain('1.890.000 ₫')
 })

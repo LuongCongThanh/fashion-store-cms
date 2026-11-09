@@ -6,6 +6,7 @@ import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
 import RowActions from '@shared/components/table/RowActions.vue'
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Product } from '@features/products/types/Product.types'
@@ -27,6 +28,7 @@ const emit = defineEmits<{
   action: [action: string, id: string]
 }>()
 const { t } = useT()
+const format = useFormat()
 const columns = computed<TableColumn<Product>[]>(() => [
   {
     id: 'select',
@@ -75,6 +77,8 @@ const columns = computed<TableColumn<Product>[]>(() => [
         },
         t('products.price'),
       ),
+    cell: ({ row }) =>
+      h('span', { 'data-cell': 'price', class: 'block text-right tabular-nums' }, format.money(row.original.price)),
   },
   {
     accessorKey: 'status',

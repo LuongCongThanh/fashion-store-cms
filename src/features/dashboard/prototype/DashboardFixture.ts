@@ -1,4 +1,4 @@
-// PROTOTYPE (Phase 0.5) — dữ liệu tĩnh, có cả giá trị biên (tên dài, số lớn), không merge.
+// PROTOTYPE (Phase 0.5) — dữ liệu tĩnh, có cả giá trị biên (tên dài, số lớn).
 export const kpis = {
   revenue: { value: 1_284_560_000, delta: 12.4 },
   orders: { value: 1_842, delta: -3.1 },

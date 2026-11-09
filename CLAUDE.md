@@ -1,5 +1,9 @@
 # CLAUDE.md
 
+## UI
+
+Read `DESIGN.md` before changing any UI. It is the design contract; external design skills only advise or audit.
+
 ## Agent skills
 
 ### Issue tracker

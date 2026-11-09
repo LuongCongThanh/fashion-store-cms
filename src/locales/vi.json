@@ -23,7 +23,7 @@
     "empty": "Chưa có dữ liệu",
     "search": "Tìm kiếm",
     "pagination": "Phân trang",
-    "results": "kết quả",
+    "results": "{n} kết quả",
     "pageSize": "Số dòng",
     "previous": "Trang trước",
     "next": "Trang sau",

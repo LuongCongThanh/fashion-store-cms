@@ -1,4 +1,4 @@
-// PROTOTYPE (Phase 0.5) — dữ liệu tĩnh có tên dài, giá lớn, thiếu ảnh, hết hàng. Không merge.
+// PROTOTYPE (Phase 0.5) — dữ liệu tĩnh có tên dài, giá lớn, thiếu ảnh, hết hàng.
 export interface ProtoProduct {
   id: string
   name: string

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// PROTOTYPE (Phase 0.5 UI/UX hardening) — thanh chuyển biến thể nổi, chỉ DEV, không merge.
+// PROTOTYPE (Phase 0.5 UI/UX hardening) — thanh chuyển biến thể nổi, chỉ có trong route dev `/prototype/*`.
 import { useEventListener } from '@vueuse/core'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -11,7 +11,6 @@ const route = useRoute()
 const router = useRouter()
 const index = computed(() => props.variants.findIndex((variant) => variant.key === props.current))
 const active = computed(() => props.variants[index.value])
-const isDev = import.meta.env.DEV
 
 function go(step: number) {
   const next = props.variants[(index.value + step + props.variants.length) % props.variants.length]
@@ -32,7 +31,6 @@ useEventListener('keydown', (event: KeyboardEvent) => {
 
 <template>
   <div
-    v-if="isDev"
     class="fixed bottom-4 left-1/2 z-[100] flex -translate-x-1/2 items-center gap-1 rounded-full bg-black px-2 py-1.5 font-mono text-xs text-white shadow-2xl ring-2 ring-yellow-300"
     role="toolbar"
     aria-label="Prototype variant switcher"

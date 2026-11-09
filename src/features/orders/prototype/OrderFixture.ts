@@ -1,4 +1,4 @@
-// PROTOTYPE (Phase 0.5) — 1 đơn hàng tĩnh có tên/địa chỉ dài, nhiều dòng, giảm giá. Không merge.
+// PROTOTYPE (Phase 0.5) — 1 đơn hàng tĩnh có tên/địa chỉ dài, nhiều dòng, giảm giá.
 import type { Order } from '@features/orders/types/Order.types'
 
 export const order: Order = {

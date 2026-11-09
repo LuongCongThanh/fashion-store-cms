@@ -1,11 +1,12 @@
 <script setup lang="ts">
-// PROTOTYPE (Phase 0.5) — 3 biến thể Dashboard trên route thật, chọn bằng `?variant=A|B|C`. Không merge.
+// PROTOTYPE (Phase 0.5) — 3 biến thể Dashboard trên route dev `/prototype/*`, chọn bằng `?variant=A|B|C`. Chỉ có khi DEV.
 import DashboardVariantA from '@features/dashboard/prototype/DashboardVariantA.vue'
 import DashboardVariantB from '@features/dashboard/prototype/DashboardVariantB.vue'
 import DashboardVariantC from '@features/dashboard/prototype/DashboardVariantC.vue'
 import PrototypeSwitcher from '@shared/components/prototype/PrototypeSwitcher.vue'
+import { usePrototypeVariant } from '@shared/composables/UsePrototypeVariant'
 
-defineProps<{ variant: string }>()
+const variant = usePrototypeVariant(['A', 'B', 'C'])
 const variants = [
   { key: 'A', name: 'Action-first', component: DashboardVariantA },
   { key: 'B', name: 'Editorial report', component: DashboardVariantB },

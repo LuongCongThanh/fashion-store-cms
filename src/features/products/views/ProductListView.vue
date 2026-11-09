@@ -9,7 +9,6 @@ import { useCategoriesQuery } from '@features/categories/UseCategories'
 import { useProductBulkMutation, useProductsQuery } from '@features/products/api/Products.api'
 import ProductFilters from '@features/products/components/ProductFilters.vue'
 import ProductTable from '@features/products/components/ProductTable.vue'
-import ProductListPrototype from '@features/products/prototype/ProductListPrototype.vue'
 import { productListSchema } from '@features/products/schemas/ProductList.schema'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import PageHeader from '@shared/components/page/PageHeader.vue'
@@ -17,11 +16,9 @@ import DataTableBulkActions from '@shared/components/table/DataTableBulkActions.
 import DataTableColumnVisibility from '@shared/components/table/DataTableColumnVisibility.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
-import { usePrototypeVariant } from '@shared/composables/UsePrototypeVariant'
 import { useT } from '@shared/lib/i18n/I18n'
 
 const { t } = useT()
-const variant = usePrototypeVariant(['A', 'B', 'C'])
 const { can } = useAuth()
 const confirm = useConfirm()
 const router = useRouter()
@@ -58,8 +55,7 @@ function rowAction(action: string, id: string) {
 </script>
 
 <template>
-  <ProductListPrototype v-if="variant" :variant="variant" />
-  <div v-else class="space-y-4">
+  <div class="space-y-4">
     <PageHeader :title="t('dashboard.products')">
       <template #actions>
         <UButton v-if="can('product:write')" to="/products/new">{{ t('common.create') }}</UButton>
