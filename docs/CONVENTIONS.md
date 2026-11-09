@@ -100,10 +100,12 @@ cms/
 │   │       └── UseStoreScope.spec.ts       # test useStoreScope()
 │   ├── layouts/                            # khung trang bọc quanh view
 │   │   ├── components/                     # chỉ layout dùng
-│   │   │   ├── AppHeader.vue               # thanh trên: StoreSwitcher, UserMenu
-│   │   │   ├── AppSidebar.vue              # trạng thái thu gọn: useLocalStorage
+│   │   │   ├── AppShell.vue                # UDashboardGroup + sidebar + panel; seam test của layout
+│   │   │   ├── AppHeader.vue               # UDashboardNavbar: breadcrumb, locale/theme (lg), UserMenu
+│   │   │   ├── AppSidebar.vue              # UDashboardSidebar: StoreSwitcher, SidebarNav, nút thu gọn (storage cms.dashboard)
 │   │   │   ├── CommandPalette.vue          # (P5) Ctrl/⌘+K — render useNavigation().commands (§S.1)
 │   │   │   ├── ShortcutsHelpModal.vue      # (P5) render useNavigation().shortcuts
+│   │   │   ├── SidebarNav.vue              # UNavigationMenu render useNavigation().sidebarGroups
 │   │   │   ├── StoreSwitcher.vue           # dùng useStoreScope() (§M.3)
 │   │   │   └── UserMenu.vue                # đổi theme + ngôn ngữ + logout
 │   │   ├── AuthLayout.vue                  # layout trang chưa đăng nhập (login)
@@ -129,10 +131,15 @@ cms/
 │   │   │   │   └── OfflineBanner.vue       # §R
 │   │   │   ├── form/                       # (P5)
 │   │   │   │   └── FormActions.vue         # cụm nút Lưu / Huỷ chuẩn ở cuối form
+│   │   │   ├── list/                       # thanh lọc của trang List
+│   │   │   │   └── FilterSelect.vue        # UFormField + USelect, có mục "Tất cả"
 │   │   │   ├── page/                       # khung chung của một trang
 │   │   │   │   └── PageHeader.vue          # tiêu đề trang, font-display (§L.5)
 │   │   │   └── table/                      # (P5)
-│   │   │       ├── DataTable.vue           # §22
+│   │   │       ├── DataTable.vue           # §22 — UTable compact, thead dính, Empty/LoadingState
+│   │   │       ├── DataTableToolbar.vue    # tiêu đề + chọn cột; thanh hàng loạt khi có dòng chọn
+│   │   │       ├── SortHeader.ts           # sortHeader() — nút sắp xếp ở header cột, có focus ring
+│   │   │       ├── TableLink.vue           # RouterLink cột tên, line-clamp-1 + title
 │   │   │       └── DataTable.spec.ts       # (P5) test bảng: sort, phân trang, chọn dòng
 │   │   ├── composables/                    # ≥ 2 nơi dùng, không nghiệp vụ
 │   │   │   ├── UseListState.ts             # (P5) §6.1
@@ -174,6 +181,7 @@ cms/
 │   │   ├── factories/                      # dữ liệu giả bằng faker (§S.2)
 │   │   │   └── User.factory.ts             # sinh User giả
 │   │   ├── Render.ts                       # renderWithPlugins() — gọi createAppRuntime() với fake
+│   │   ├── Select.ts                       # chọn USelect/UDropdownMenu bằng bàn phím (jsdom không có pointer capture)
 │   │   └── Setup.ts                        # vitest setupFiles: matcher, mock toàn cục, reset giữa các test
 │   ├── App.vue                             # component gốc: <RouterView/> + UApp
 │   ├── env.d.ts                            # ImportMetaEnv
