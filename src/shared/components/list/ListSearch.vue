@@ -6,6 +6,7 @@ defineProps<{ modelValue?: string }>()
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 const { t } = useT()
 </script>
+
 <template>
   <UInput
     name="search"

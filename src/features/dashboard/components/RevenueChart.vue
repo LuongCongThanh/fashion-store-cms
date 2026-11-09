@@ -14,6 +14,7 @@ const option = computed(() => ({
   series: [{ type: 'line', data: props.points.map((point) => point.value) }],
 }))
 </script>
+
 <template>
   <figure :aria-label="title">
     <VChart :option="option" autoresize class="h-64 w-full" />

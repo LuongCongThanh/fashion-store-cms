@@ -16,6 +16,7 @@ defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [value: RoleInput]; submit: []; cancel: [] }>()
 const { t } = useT()
 </script>
+
 <template>
   <form class="space-y-5" @submit.prevent="emit('submit')">
     <FormSection :title="t('roles.title')">

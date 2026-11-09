@@ -33,6 +33,7 @@ function localized(lang: 'vi' | 'en', key: 'name' | 'description', event: Event)
   })
 }
 </script>
+
 <template>
   <form class="space-y-5" @submit.prevent="emit('submit')">
     <FormSection :title="t('products.category')">

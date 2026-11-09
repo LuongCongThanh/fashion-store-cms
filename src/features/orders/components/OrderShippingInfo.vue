@@ -2,6 +2,7 @@
 import type { Order } from '@features/orders/types/Order.types'
 defineProps<{ shipping: Order['shipping'] }>()
 </script>
+
 <template>
   <div class="space-y-2">
     <p>{{ shipping.address }}</p>

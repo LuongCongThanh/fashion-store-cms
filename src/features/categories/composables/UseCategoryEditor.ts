@@ -36,7 +36,12 @@ export function useCategoryEditor() {
   const { values, errors, setValues, setErrors, resetForm, meta } = useForm({
     initialValues: initial,
   })
-  const model = computed({ get: () => values, set: (value: CategoryInput) => setValues(value) })
+  const model = computed({
+    get: () => values,
+    set: (value: CategoryInput) => {
+      setValues(value)
+    },
+  })
   useHydrateForm(
     query.data,
     () => meta.value.dirty,

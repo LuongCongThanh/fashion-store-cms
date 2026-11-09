@@ -9,6 +9,7 @@ defineProps<{ status: OrderStatus; pending: boolean }>()
 const emit = defineEmits<{ change: [status: OrderStatus] }>()
 const { t } = useT()
 </script>
+
 <template>
   <div class="flex flex-wrap gap-2">
     <UButton

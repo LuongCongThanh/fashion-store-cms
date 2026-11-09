@@ -49,12 +49,23 @@ it('lets a list View sort, paginate, select and hide columns using controlled ta
               type: 'checkbox',
               name: `select:${row.original.id}`,
               checked: row.getIsSelected(),
-              onChange: (event: Event) => row.toggleSelected((event.target as HTMLInputElement).checked),
+              onChange: (event: Event) => {
+                row.toggleSelected((event.target as HTMLInputElement).checked)
+              },
             }),
         },
         {
           accessorKey: 'name',
-          header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, 'Name'),
+          header: ({ column }) =>
+            h(
+              'button',
+              {
+                onClick: () => {
+                  column.toggleSorting()
+                },
+              },
+              'Name',
+            ),
         },
         {
           id: 'actions',

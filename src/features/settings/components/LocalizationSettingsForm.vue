@@ -17,6 +17,7 @@ const emit = defineEmits<{
 }>()
 const { t } = useT()
 </script>
+
 <template>
   <form class="space-y-5" @submit.prevent="emit('submit')">
     <fieldset :disabled="!canWrite || pending">

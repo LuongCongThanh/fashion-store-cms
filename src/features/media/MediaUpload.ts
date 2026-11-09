@@ -14,8 +14,12 @@ export function uploadToStorage(
       return
     }
     const request = new XMLHttpRequest()
-    const abort = () => request.abort()
-    const cleanup = () => options.signal.removeEventListener('abort', abort)
+    const abort = () => {
+      request.abort()
+    }
+    const cleanup = () => {
+      options.signal.removeEventListener('abort', abort)
+    }
     request.open('PUT', url)
     for (const [key, value] of Object.entries(options.headers ?? { 'Content-Type': file.type }))
       request.setRequestHeader(key, value)

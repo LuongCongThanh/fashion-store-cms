@@ -32,7 +32,9 @@ export function useStoreSettingsEditor() {
   })
   const model = computed({
     get: () => values,
-    set: (value: StoreSettingsInput) => setValues(value),
+    set: (value: StoreSettingsInput) => {
+      setValues(value)
+    },
   })
   useHydrateForm(
     query.data,
@@ -75,6 +77,8 @@ export function useStoreSettingsEditor() {
     submit,
     upload,
     canWrite: computed(() => can('settings:write')),
-    cancel: () => resetForm(),
+    cancel: () => {
+      resetForm()
+    },
   }
 }

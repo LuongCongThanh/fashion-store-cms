@@ -10,6 +10,7 @@ function toggle(id: string, checked: boolean) {
   )
 }
 </script>
+
 <template>
   <fieldset>
     <legend>{{ t('roles.title') }}</legend>

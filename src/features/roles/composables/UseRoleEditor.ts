@@ -25,7 +25,12 @@ export function useRoleEditor() {
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: { name: '', permissions: [] as string[] },
   })
-  const model = computed({ get: () => values, set: (value: RoleInput) => setValues(value) })
+  const model = computed({
+    get: () => values,
+    set: (value: RoleInput) => {
+      setValues(value)
+    },
+  })
   useHydrateForm(
     query.data,
     () => meta.value.dirty,

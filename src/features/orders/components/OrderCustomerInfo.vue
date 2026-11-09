@@ -2,6 +2,7 @@
 import type { Order } from '@features/orders/types/Order.types'
 defineProps<{ customer: Order['customer'] }>()
 </script>
+
 <template>
   <div class="space-y-2">
     <p>{{ customer.name }}</p>

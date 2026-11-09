@@ -2,9 +2,11 @@
 // Kiểm tra BẢNG RANH GIỚI (BOUNDARIES) chạy đúng — thay cho kiểm tay ở Step 2 (D41).
 // lintText() lint một đoạn code giả như thể nó nằm ở `filePath` → không cần tạo file thật.
 import { ESLint } from 'eslint'
+import tseslint from 'typescript-eslint'
 import { describe, expect, it } from 'vitest'
 
-const eslint = new ESLint()
+// lintText() dùng đường dẫn giả không thuộc tsconfig → tắt lint có type, chỉ kiểm rule cú pháp.
+const eslint = new ESLint({ overrideConfig: tseslint.configs.disableTypeChecked })
 
 /** Trả true nếu dòng import này bị no-restricted-imports chặn khi đặt trong file `from`. */
 async function isBlocked(from: string, importPath: string) {
@@ -51,6 +53,8 @@ const CASES: [string, string, boolean][] = [
   ['src/features/auth/components/LoginForm.vue', 'vue-router', true],
   ['src/features/auth/views/LoginView.vue', '@shared/types/Api.generated', true],
   ['src/features/auth/api/Auth.api.ts', '@shared/types/Api.generated', false],
+  ['src/features/auth/views/LoginView.vue', '@test/Render', true],
+  ['src/features/auth/views/LoginView.spec.ts', '@test/Render', false],
 ]
 
 describe('ranh giới import (BOUNDARIES)', () => {

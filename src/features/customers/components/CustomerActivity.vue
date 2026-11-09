@@ -5,6 +5,7 @@ import type { Customer } from '@features/customers/types/Customer.types'
 defineProps<{ activity: Customer['activity'] }>()
 const { t } = useT()
 </script>
+
 <template>
   <ol v-if="activity.length">
     <li v-for="event in activity" :key="event.id">

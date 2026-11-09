@@ -2,6 +2,7 @@
 import type { Order } from '@features/orders/types/Order.types'
 defineProps<{ payment: Order['payment'] }>()
 </script>
+
 <template>
   <div class="space-y-2">
     <p>{{ payment.method }}</p>

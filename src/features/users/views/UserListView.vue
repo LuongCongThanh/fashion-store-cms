@@ -17,6 +17,7 @@ const { can } = useAuth()
 const { params, setFilter, setPage, setSort } = useListState(userListSchema)
 const query = useUsersQuery(params)
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('users.title')">

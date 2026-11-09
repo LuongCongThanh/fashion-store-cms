@@ -5,6 +5,7 @@ import type { AppLocale } from '@shared/lib/i18n/I18n'
 const { locale, setLocale } = useLocale()
 const { t } = useT()
 </script>
+
 <template>
   <select
     name="language"

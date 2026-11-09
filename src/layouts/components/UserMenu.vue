@@ -38,7 +38,9 @@ const items = computed(() => [
     icon: 'i-lucide-languages',
     type: 'checkbox' as const,
     checked: locale.value === lang,
-    onSelect: (): void => setLocale(lang),
+    onSelect: (): void => {
+      setLocale(lang)
+    },
   })),
   [{ label: t('common.logout'), icon: 'i-lucide-log-out', onSelect: (): void => void logout() }],
 ])

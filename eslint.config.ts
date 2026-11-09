@@ -40,6 +40,10 @@ const noApp: Restriction = {
   group: ['@app/*', '@app/**'],
   message: 'Only main.ts and src/test/ may import @app/* (§A, D37).',
 }
+const noTest: Restriction = {
+  group: ['@test/*', '@test/**'],
+  message: 'Production code must not import @test/* (only *.spec.ts and src/test/).',
+}
 const noLayouts: Restriction = {
   group: ['@layouts/*', '@layouts/**'],
   message: 'features/ must not import layouts/.',
@@ -83,7 +87,7 @@ type Boundary = { files: string[]; forbid: Restriction[]; name: string }
 
 /** Ba dòng ranh giới cho một feature: chung, components/ (presentational), api/ (DTO ok). */
 const featureRows = (feature: string): Boundary[] => {
-  const base = [featureBoundaryFor(feature), noParentImport, noApp, noLayouts]
+  const base = [featureBoundaryFor(feature), noParentImport, noTest, noApp, noLayouts]
   return [
     { name: `features/${feature}`, files: [`src/features/${feature}/**/*.{ts,vue}`], forbid: [...base, noDto] },
     {
@@ -109,44 +113,56 @@ export const BOUNDARIES: Boundary[] = [
   {
     name: 'default',
     files: ['src/**/*.{ts,vue}'],
-    forbid: [featureBoundary, noParentImport, noDto],
+    forbid: [featureBoundary, noParentImport, noTest, noDto],
   },
   {
     name: 'layouts',
     files: ['src/layouts/**/*.{ts,vue}'],
-    forbid: [featureBoundary, noParentImport, noApp, noDto],
+    forbid: [featureBoundary, noParentImport, noTest, noApp, noDto],
   },
   ...FEATURES.flatMap(featureRows),
-  { name: 'shared', files: ['src/shared/**/*.{ts,vue}'], forbid: [noUpper, noParentImport, noDto] },
+  { name: 'shared', files: ['src/shared/**/*.{ts,vue}'], forbid: [noUpper, noParentImport, noTest, noDto] },
   {
     name: 'shared/components',
     files: ['src/shared/components/**/*.{ts,vue}'],
-    forbid: [noUpper, noParentImport, noDto, noHttpInSharedUi],
+    forbid: [noUpper, noParentImport, noTest, noDto, noHttpInSharedUi],
   },
   {
     name: 'shared/lib',
     files: ['src/shared/lib/**/*.ts'],
-    forbid: [noUpper, noParentImport, noDto, libIsBottom],
+    forbid: [noUpper, noParentImport, noTest, noDto, libIsBottom],
   },
   {
     name: 'shared/lib/api (DTO ok)',
     files: ['src/shared/lib/api/**/*.ts'],
-    forbid: [noUpper, noParentImport, libIsBottom],
+    forbid: [noUpper, noParentImport, noTest, libIsBottom],
   },
   {
     name: 'Routes.ts',
     files: ['src/app/router/Routes.ts'],
-    forbid: [featureBoundaryForRoutes, noParentImport, noDto],
+    forbid: [featureBoundaryForRoutes, noParentImport, noTest, noDto],
   },
 ]
 
-/** Chuyển bảng thành các block flat config. Không chứa logic nào khác. */
+const TEST_FILES = ['**/*.spec.ts', 'src/test/**']
+
+/**
+ * Chuyển bảng thành các block flat config. Mỗi dòng sinh 2 block: code thường, và file test
+ * (giao `files` × TEST_FILES) với cùng pattern trừ noTest — test được import @test/*.
+ */
 const toFlatConfig = (rows: typeof BOUNDARIES): Linter.Config[] =>
-  rows.map(({ files, forbid, name }) => ({
-    name: `boundaries/${name}`,
-    files,
-    rules: { 'no-restricted-imports': ['error', { patterns: forbid }] },
-  }))
+  rows.flatMap(({ files, forbid, name }) => [
+    {
+      name: `boundaries/${name}`,
+      files,
+      rules: { 'no-restricted-imports': ['error', { patterns: forbid }] },
+    },
+    {
+      name: `boundaries/${name} (test)`,
+      files: files.flatMap((f) => TEST_FILES.map((t) => [f, t])),
+      rules: { 'no-restricted-imports': ['error', { patterns: forbid.filter((r) => r !== noTest) }] },
+    },
+  ])
 
 const SUFFIX = '?(.api|.mapper|.routes|.store|.schema|.types|.config|.factory|.generated|.d)?(.spec)'
 
@@ -161,8 +177,17 @@ export default defineConfig(
       'src/shared/types/Api.generated.ts',
     ],
   },
-  ...tseslint.configs.strict,
+  ...tseslint.configs.strictTypeChecked,
   ...vue.configs['flat/recommended'],
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+        extraFileExtensions: ['.vue'],
+      },
+    },
+  },
   {
     files: ['**/*.vue'],
     languageOptions: { parserOptions: { parser: tseslint.parser, extraFileExtensions: ['.vue'] } },
@@ -195,7 +220,9 @@ export default defineConfig(
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
-      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/switch-exhaustiveness-check': 'error',
+      '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'vue/multi-word-component-names': 'error',
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
@@ -207,6 +234,29 @@ export default defineConfig(
       'vue/require-explicit-emits': 'error',
       'vue/attribute-hyphenation': ['error', 'never'],
       'vue/v-on-event-hyphenation': ['error', 'never', { autofix: true }],
+      'vue/no-unused-refs': 'error',
+      'vue/no-unused-properties': 'error',
+      'vue/require-typed-ref': 'error',
+      'vue/no-ref-object-reactivity-loss': 'error',
+      'vue/prefer-use-template-ref': 'error',
+      'vue/no-useless-v-bind': 'error',
+      'vue/padding-line-between-blocks': 'error',
+      'vue/no-bare-strings-in-template': [
+        'warn',
+        {
+          // Mặc định của rule + thuật ngữ/tên ngôn ngữ không dịch.
+          allowlist: [
+            ...'(),.&+-=*/#%!?:[]{}<>|'.split(''),
+            '·',
+            '•',
+            '–',
+            '—',
+            'SKU',
+            'Tiếng Việt',
+            'English',
+          ],
+        },
+      ],
     },
   },
   {
@@ -236,9 +286,22 @@ export default defineConfig(
     },
   },
   {
-    // Component host nhỏ trong test là bình thường.
-    files: ['**/*.spec.ts'],
-    rules: { 'vue/one-component-per-file': 'off' },
+    // Component host nhỏ trong test là bình thường; mock/axios history/JSON.parse trả `any`.
+    files: ['**/*.spec.ts', 'src/test/**/*.ts'],
+    rules: {
+      'vue/one-component-per-file': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/require-await': 'off',
+    },
+  },
+  {
+    // Trang dev xem design system — không cần i18n.
+    files: ['src/app/views/DesignSystemView.vue'],
+    rules: { 'vue/no-bare-strings-in-template': 'off' },
   },
   {
     // import() động và vi.mock()/vi.importActual() cũng phải dùng alias, không dùng ../

@@ -11,7 +11,9 @@ const navigation = useNavigation()
 const { t } = useT()
 const items = computed(() => navigation.value.breadcrumbs(route))
 </script>
+
 <template>
+  <!-- eslint-disable-next-line vue/no-bare-strings-in-template -- landmark label, selector của test -->
   <nav aria-label="Breadcrumb" class="flex min-w-0 gap-2 text-sm">
     <template v-for="(item, index) in items" :key="item.path">
       <span v-if="index" aria-hidden="true">/</span>

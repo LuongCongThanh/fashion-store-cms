@@ -15,6 +15,7 @@ const { can } = useAuth()
 const { params, setFilter, setPage, setSort } = useListState(promotionListSchema)
 const query = usePromotionsQuery(params)
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('promotions.title')">

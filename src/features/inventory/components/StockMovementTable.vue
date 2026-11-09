@@ -18,6 +18,7 @@ const columns = computed<TableColumn<StockMovement>[]>(() => [
   })),
 ])
 </script>
+
 <template>
   <DataTable
     :data="data"

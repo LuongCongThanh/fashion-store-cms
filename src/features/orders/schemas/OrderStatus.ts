@@ -9,5 +9,5 @@ const transitions: Record<OrderStatus, OrderStatus[]> = {
   refunded: [],
 }
 export function nextOrderStatuses(status: OrderStatus): OrderStatus[] {
-  return transitions[status] ?? []
+  return transitions[status]
 }

@@ -6,6 +6,7 @@ defineProps<{ options: Category[]; modelValue: string[]; exclude?: string }>()
 const emit = defineEmits<{ 'update:modelValue': [ids: string[]] }>()
 const { t } = useT()
 </script>
+
 <template>
   <label
     >{{ t('products.category')

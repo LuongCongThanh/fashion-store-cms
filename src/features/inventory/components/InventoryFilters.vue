@@ -6,6 +6,7 @@ defineProps<{ search: string; status?: string }>()
 const emit = defineEmits<{ filter: [key: string, value: unknown] }>()
 const { t } = useT()
 </script>
+
 <template>
   <FilterBar>
     <ListSearch :modelValue="search" @update:modelValue="emit('filter', 'search', $event)" />

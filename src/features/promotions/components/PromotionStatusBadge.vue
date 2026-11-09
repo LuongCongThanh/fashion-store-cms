@@ -7,6 +7,7 @@ defineProps<{ status: Promotion['status'] }>()
 const { t } = useT()
 const colors = { draft: 'neutral', active: 'success', inactive: 'warning' } as const
 </script>
+
 <template>
   <StatusBadge :color="colors[status]" :label="t(`promotions.status.${status}`)" />
 </template>

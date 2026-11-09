@@ -26,7 +26,16 @@ const columns = computed<TableColumn<Order>[]>(() => [
   },
   {
     accessorKey: 'total',
-    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, t('orders.total')),
+    header: ({ column }) =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+        },
+        t('orders.total'),
+      ),
   },
   {
     accessorKey: 'paymentStatus',
@@ -40,10 +49,20 @@ const columns = computed<TableColumn<Order>[]>(() => [
   },
   {
     accessorKey: 'createdAt',
-    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, t('common.createdAt')),
+    header: ({ column }) =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+        },
+        t('common.createdAt'),
+      ),
   },
 ])
 </script>
+
 <template>
   <DataTable
     :data="data"

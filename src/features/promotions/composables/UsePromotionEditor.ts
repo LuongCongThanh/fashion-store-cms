@@ -36,7 +36,12 @@ export function usePromotionEditor() {
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: initial,
   })
-  const model = computed({ get: () => values, set: (value: PromotionInput) => setValues(value) })
+  const model = computed({
+    get: () => values,
+    set: (value: PromotionInput) => {
+      setValues(value)
+    },
+  })
   useHydrateForm(
     query.data,
     () => meta.value.dirty,

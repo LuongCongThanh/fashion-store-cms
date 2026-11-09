@@ -120,10 +120,15 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
     return config
   }
 
-  async function request(method: Method, url: string, body: unknown, opts: RequestOpts<string, Method> = {}) {
-    const res = await instance.request({
+  async function request<T>(
+    method: Method,
+    url: string,
+    body: unknown,
+    opts: RequestOpts<string, Method> = {},
+  ): Promise<T> {
+    const res = await instance.request<T>({
       method,
-      url: fillPath(url, opts.path as Record<string, number | string> | undefined),
+      url: fillPath(url, opts.path),
       data: body,
       params: opts.query,
       signal: opts.signal,
@@ -138,7 +143,7 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
     post: (url, body, opts) => request('post', url, body, opts),
     put: (url, body, opts) => request('put', url, body, opts),
     patch: (url, body, opts) => request('patch', url, body, opts),
-  } as HttpClient
+  }
 }
 
 interface ErrorBody {
@@ -159,7 +164,7 @@ function toApiError(error: unknown): never {
   const res = error.response
   if (res) {
     const body = isErrorBody(res.data) ? res.data : undefined
-    const requestId = res.headers?.['x-request-id'] as string | undefined
+    const requestId = res.headers['x-request-id'] as string | undefined
     throw new ApiError(
       res.status,
       body?.code ?? codeFromStatus(res.status),

@@ -54,7 +54,7 @@ it('asks for confirmation before deleting selected products', async () => {
   expect(http.history.post).toHaveLength(0)
   const dialog = document.querySelector('[role="dialog"]')
   const confirm = [...(dialog?.querySelectorAll('button') ?? [])].find(
-    (button) => button.textContent?.trim() === 'Xác nhận',
+    (button) => button.textContent.trim() === 'Xác nhận',
   )
   expect(confirm).toBeDefined()
   confirm?.click()

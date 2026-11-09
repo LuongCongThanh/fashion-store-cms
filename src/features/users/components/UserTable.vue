@@ -25,7 +25,16 @@ const { t } = useT()
 const columns = computed<TableColumn<StaffUser>[]>(() => [
   {
     accessorKey: 'name',
-    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, t('common.name')),
+    header: ({ column }) =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+        },
+        t('common.name'),
+      ),
     cell: ({ row }) =>
       props.canWrite
         ? h('a', { href: `/users/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
@@ -49,11 +58,14 @@ const columns = computed<TableColumn<StaffUser>[]>(() => [
     cell: ({ row }) =>
       h(RowActions, {
         actions: [{ id: 'edit', label: t('common.edit'), allowed: props.canWrite }],
-        onAction: (action) => emit('action', action, row.original.id),
+        onAction: (action: string) => {
+          emit('action', action, row.original.id)
+        },
       }),
   },
 ])
 </script>
+
 <template>
   <DataTable
     :data="data"

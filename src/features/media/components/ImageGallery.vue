@@ -12,6 +12,7 @@ const emit = defineEmits<{
 }>()
 const { t } = useT()
 </script>
+
 <template>
   <ul class="flex flex-wrap gap-4">
     <li v-for="(image, index) in images" :key="image.id" class="space-y-2">

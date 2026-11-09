@@ -16,6 +16,7 @@ const { can } = useAuth()
 const { params, setFilter, setPage, setSort } = useListState(roleListSchema)
 const query = useRolesQuery(params)
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('roles.title')">

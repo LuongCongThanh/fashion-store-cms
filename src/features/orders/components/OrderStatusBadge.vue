@@ -15,6 +15,7 @@ const colors = {
   refunded: 'neutral',
 } as const
 </script>
+
 <template>
   <StatusBadge :label="t(`orders.status.${status}`)" :color="colors[status]" />
 </template>

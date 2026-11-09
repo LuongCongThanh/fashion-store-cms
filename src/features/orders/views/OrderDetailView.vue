@@ -33,6 +33,7 @@ async function change(status: OrderStatus) {
   mutation.mutate(status)
 }
 </script>
+
 <template>
   <LoadingState v-if="query.isPending.value" />
   <ErrorState v-else-if="query.isError.value" :error="query.error.value" @retry="query.refetch()" />

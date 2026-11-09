@@ -7,6 +7,7 @@ defineProps<{ status: PaymentStatus }>()
 const { t } = useT()
 const colors = { paid: 'success', unpaid: 'warning', refunded: 'neutral' } as const
 </script>
+
 <template>
   <StatusBadge :label="t(`orders.paymentStatus.${status}`)" :color="colors[status]" />
 </template>

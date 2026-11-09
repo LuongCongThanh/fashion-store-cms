@@ -22,7 +22,16 @@ const { t } = useT()
 const columns = computed<TableColumn<InventoryItem>[]>(() => [
   {
     accessorKey: 'sku',
-    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, 'SKU'),
+    header: ({ column }) =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+        },
+        'SKU',
+      ),
   },
   ...(['current', 'reserved', 'available'] as const).map((key) => ({
     accessorKey: key,
@@ -39,14 +48,22 @@ const columns = computed<TableColumn<InventoryItem>[]>(() => [
           id: 'actions',
           header: t('common.actions'),
           cell: ({ row }: { row: { original: InventoryItem } }) =>
-            h(UButton, { 'data-action': 'adjust', onClick: () => emit('adjust', row.original) }, () =>
-              t('inventory.adjust'),
+            h(
+              UButton,
+              {
+                'data-action': 'adjust',
+                onClick: () => {
+                  emit('adjust', row.original)
+                },
+              },
+              () => t('inventory.adjust'),
             ),
         },
       ]
     : []),
 ])
 </script>
+
 <template>
   <DataTable
     :data="data"

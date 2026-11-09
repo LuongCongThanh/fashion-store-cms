@@ -6,6 +6,7 @@ defineProps<{ filters: { key: string; label: string; value: string }[] }>()
 const emit = defineEmits<{ remove: [key: string]; clear: [] }>()
 const { t } = useT()
 </script>
+
 <template>
   <div v-if="filters.length" class="flex flex-wrap gap-2">
     <UButton

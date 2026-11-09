@@ -6,6 +6,7 @@ defineProps<{ pending?: boolean; draft?: boolean }>()
 const emit = defineEmits<{ cancel: []; draft: [] }>()
 const { t } = useT()
 </script>
+
 <template>
   <footer class="sticky bottom-0 flex justify-end gap-3 border-t border-default bg-default p-4">
     <UButton type="button" :disabled="pending" variant="outline" @click="emit('cancel')">{{

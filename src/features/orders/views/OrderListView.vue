@@ -15,7 +15,7 @@ const { params, setFilter, setPage, setSort, reset } = useListState(orderListSch
 const query = useOrdersQuery(params)
 const filters = computed(() =>
   Object.entries(params.value)
-    .filter(([key, value]) => !['page', 'pageSize', 'sort'].includes(key) && value !== '' && value !== undefined)
+    .filter(([key, value]) => !['page', 'pageSize', 'sort'].includes(key) && value !== '')
     .map(([key, value]) => ({
       key,
       label:
@@ -30,6 +30,7 @@ const filters = computed(() =>
     })),
 )
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('nav.orders')" />

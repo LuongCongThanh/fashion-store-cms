@@ -27,6 +27,7 @@ function toggle(keys: string[], checked: boolean) {
   emit('update:modelValue', [...values])
 }
 </script>
+
 <template>
   <table class="w-full border-collapse">
     <caption>

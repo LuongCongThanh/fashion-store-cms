@@ -28,7 +28,12 @@ export function useLocalizationEditor() {
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: initial,
   })
-  const model = computed({ get: () => values, set: (value: LocalizationInput) => setValues(value) })
+  const model = computed({
+    get: () => values,
+    set: (value: LocalizationInput) => {
+      setValues(value)
+    },
+  })
   useHydrateForm(
     query.data,
     () => meta.value.dirty,
@@ -59,6 +64,8 @@ export function useLocalizationEditor() {
     mutation,
     submit,
     canWrite: computed(() => can('settings:write')),
-    cancel: () => resetForm(),
+    cancel: () => {
+      resetForm()
+    },
   }
 }

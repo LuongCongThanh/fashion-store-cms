@@ -7,6 +7,7 @@ defineProps<{ status: InventoryItem['status'] }>()
 const { t } = useT()
 const colors = { 'in-stock': 'success', 'low-stock': 'warning', 'out-of-stock': 'error' } as const
 </script>
+
 <template>
   <StatusBadge :label="t(`inventory.status.${status}`)" :color="colors[status]" />
 </template>

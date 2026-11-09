@@ -43,7 +43,9 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const router = overrides.router ?? createAppRouter({ translate: i18n.translate })
   const notifier = overrides.notifier ?? createNotifier({ toast: useToast(), t: i18n.translate, te: i18n.has })
   const queryClient = createAppQueryClient({
-    onMutationError: notifier.error,
+    onMutationError: (error) => {
+      notifier.error(error)
+    },
     retry: overrides.retry,
   })
   // Session tạo trước nhưng chỉ gọi `http` khi refresh thật sự xảy ra (lazy) → không vòng phụ thuộc.

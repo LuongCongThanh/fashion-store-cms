@@ -35,6 +35,7 @@ const emit = defineEmits<{
 const { t } = useT()
 const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptionEditor.vue'))
 </script>
+
 <template>
   <form class="space-y-5" @submit.prevent="emit('submit', 'published')">
     <FormSection :title="t('dashboard.products')">

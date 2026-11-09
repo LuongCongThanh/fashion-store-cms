@@ -13,6 +13,7 @@ function retry() {
   void editor.stores.refetch()
 }
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('users.title')" />

@@ -36,6 +36,7 @@ function drop(event: DragEvent, parentId: string | null) {
   emit('move', id, parentId)
 }
 </script>
+
 <template>
   <div role="tree" :aria-label="t('products.category')">
     <div v-if="canWrite" class="rounded border border-dashed p-3" @dragover.prevent @drop.prevent="drop($event, null)">

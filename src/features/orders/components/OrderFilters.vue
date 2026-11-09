@@ -9,6 +9,7 @@ defineProps<{ params: OrderListParams }>()
 const emit = defineEmits<{ filter: [key: string, value: unknown] }>()
 const { t } = useT()
 </script>
+
 <template>
   <FilterBar>
     <ListSearch :modelValue="params.search" @update:modelValue="emit('filter', 'search', $event)" />

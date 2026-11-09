@@ -19,6 +19,7 @@ const columns = computed<TableColumn<Order>[]>(() => [
   { accessorKey: 'total', header: t('orders.total') },
 ])
 </script>
+
 <template>
   <DataTable :data="data" :columns="columns" :loading="loading" :error="error" @retry="emit('retry')" />
 </template>

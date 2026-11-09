@@ -19,7 +19,16 @@ const { t } = useT()
 const columns = computed<TableColumn<Role>[]>(() => [
   {
     accessorKey: 'name',
-    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, t('common.name')),
+    header: ({ column }) =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+        },
+        t('common.name'),
+      ),
     cell: ({ row }) =>
       props.canWrite
         ? h('a', { href: `/roles/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
@@ -32,6 +41,7 @@ const columns = computed<TableColumn<Role>[]>(() => [
   },
 ])
 </script>
+
 <template>
   <DataTable
     :data="data"

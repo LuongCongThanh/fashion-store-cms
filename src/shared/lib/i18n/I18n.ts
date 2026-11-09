@@ -30,6 +30,8 @@ const isAppLocale = (v: unknown): v is AppLocale => LOCALES.includes(v as AppLoc
 export function createAppI18n(opts: { storageKey?: string } = {}) {
   const storageKey = opts.storageKey ?? 'cms.locale'
   const i18n = createI18n<[MessageSchema], AppLocale, false>({
+    // vue-i18n v11 vẫn cần cờ này để dùng Composition API; bỏ khi lên v12.
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     legacy: false,
     locale: 'vi',
     fallbackLocale: 'en',
@@ -82,6 +84,8 @@ export function useLocale() {
  * còn `t` ở đây chỉ nhận MessageKey → `t('sai.key')` báo lỗi typecheck (§H).
  */
 export function useT() {
+  // Composer của vue-i18n bind sẵn `this` cho các hàm này.
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { t, te, n, d } = useI18n()
   return {
     t: (key: MessageKey, named?: Record<string, unknown>) => (named ? t(key, named) : t(key)),

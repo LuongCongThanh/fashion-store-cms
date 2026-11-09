@@ -13,7 +13,16 @@ const { t } = useT()
 const columns = computed<TableColumn<Customer>[]>(() => [
   {
     accessorKey: 'name',
-    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, t('common.name')),
+    header: ({ column }) =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+        },
+        t('common.name'),
+      ),
     cell: ({ row }) => h('a', { href: `/customers/${encodeURIComponent(row.original.id)}` }, row.original.name),
   },
   { accessorKey: 'email', header: t('auth.login.email') },
@@ -21,10 +30,20 @@ const columns = computed<TableColumn<Customer>[]>(() => [
   { accessorKey: 'orderCount', header: t('nav.orders') },
   {
     accessorKey: 'totalSpent',
-    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, t('customers.totalSpent')),
+    header: ({ column }) =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            column.toggleSorting()
+          },
+        },
+        t('customers.totalSpent'),
+      ),
   },
 ])
 </script>
+
 <template>
   <DataTable
     :data="data"

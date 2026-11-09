@@ -11,7 +11,9 @@ const { t } = useT()
 const editor = useEditor({
   extensions: [StarterKit],
   content: DOMPurify.sanitize(props.modelValue),
-  onUpdate: ({ editor }) => emit('update:modelValue', DOMPurify.sanitize(editor.getHTML())),
+  onUpdate: ({ editor }) => {
+    emit('update:modelValue', DOMPurify.sanitize(editor.getHTML()))
+  },
   editorProps: {
     attributes: {
       'aria-label': t('categories.description'),
@@ -27,6 +29,7 @@ watch(
   },
 )
 </script>
+
 <template>
   <EditorContent :editor="editor" />
 </template>

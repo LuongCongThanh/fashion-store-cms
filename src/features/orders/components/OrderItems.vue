@@ -5,6 +5,7 @@ import type { Order } from '@features/orders/types/Order.types'
 defineProps<{ items: Order['items'] }>()
 const { t } = useT()
 </script>
+
 <template>
   <table class="w-full">
     <thead>

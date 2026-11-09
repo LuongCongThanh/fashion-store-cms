@@ -26,6 +26,7 @@ function update(index: number, key: 'sku' | 'price' | 'stock', event: Event) {
   )
 }
 </script>
+
 <template>
   <div class="space-y-3">
     <div class="flex flex-wrap gap-3">

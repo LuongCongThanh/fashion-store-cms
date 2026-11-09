@@ -44,6 +44,8 @@ export function useProductEditor() {
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: initial,
   })
+  // vee-validate trả arrow function, không phụ thuộc `this`.
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { replace: replaceVariants } = useFieldArray<ProductInput['variants'][number]>('variants')
   const model = computed({
     get: () => values,

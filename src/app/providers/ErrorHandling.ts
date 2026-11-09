@@ -34,12 +34,24 @@ export function installErrorHandling(app: App, deps: ErrorHandlingDeps): () => v
 
   // Deploy mới xoá chunk cũ → tải lại trang MỘT lần (cờ trong sessionStorage chặn vòng lặp reload).
   deps.router.onError((err) => {
-    if (!isChunkLoadError(err) || sessionStorage.getItem(CHUNK_RELOAD_FLAG)) return report(err)
+    if (!isChunkLoadError(err) || sessionStorage.getItem(CHUNK_RELOAD_FLAG)) {
+      report(err)
+      return
+    }
     sessionStorage.setItem(CHUNK_RELOAD_FLAG, '1')
-    ;(deps.reload ?? (() => window.location.reload()))()
+    ;(
+      deps.reload ??
+      (() => {
+        window.location.reload()
+      })
+    )()
   })
 
-  const onRejection = (event: PromiseRejectionEvent) => report(event.reason)
+  const onRejection = (event: PromiseRejectionEvent) => {
+    report(event.reason)
+  }
   window.addEventListener('unhandledrejection', onRejection)
-  return () => window.removeEventListener('unhandledrejection', onRejection)
+  return () => {
+    window.removeEventListener('unhandledrejection', onRejection)
+  }
 }

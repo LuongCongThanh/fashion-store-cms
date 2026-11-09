@@ -11,6 +11,7 @@ const { t } = useT()
 const { params, setFilter, setPage, setSort } = useListState(customerListSchema)
 const query = useCustomersQuery(params)
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('dashboard.customers')" />

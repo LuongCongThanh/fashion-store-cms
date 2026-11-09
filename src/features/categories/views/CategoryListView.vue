@@ -16,6 +16,7 @@ function move(id: string, parentId: string | null) {
   if (can('category:write')) mutation.mutate({ id, parentId })
 }
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('products.category')">

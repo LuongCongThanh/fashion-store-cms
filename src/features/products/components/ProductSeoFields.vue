@@ -6,6 +6,7 @@ defineProps<{ modelValue: ProductInput; errors: Record<string, string | undefine
 const emit = defineEmits<{ 'update:modelValue': [value: ProductInput] }>()
 const { t } = useT()
 </script>
+
 <template>
   <div>
     <label v-for="key in ['slug', 'metaTitle', 'metaDescription'] as const" :key="key" class="block"

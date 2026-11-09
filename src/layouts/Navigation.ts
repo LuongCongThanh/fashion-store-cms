@@ -75,7 +75,7 @@ export function buildNavigation(routes: readonly RouteRecordRaw[], can: (permiss
 
   function breadcrumbs(route: {
     path?: string
-    params?: Record<string, unknown>
+    params?: Record<string, string | string[] | undefined>
     matched: readonly { path: string; meta: RouteMeta }[]
   }) {
     const ancestors = allowed.flatMap((record) =>

@@ -12,6 +12,7 @@ function retry() {
   void editor.permissions.refetch()
 }
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('roles.title')" />

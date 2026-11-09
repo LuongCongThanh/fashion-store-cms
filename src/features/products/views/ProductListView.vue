@@ -53,6 +53,7 @@ function rowAction(action: string, id: string) {
   else void router.push(`/products/${encodeURIComponent(id)}${action === 'edit' ? '/edit' : ''}`)
 }
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('dashboard.products')">

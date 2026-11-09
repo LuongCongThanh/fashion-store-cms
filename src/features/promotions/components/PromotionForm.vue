@@ -12,6 +12,7 @@ defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [value: PromotionInput]; submit: []; cancel: [] }>()
 const { t } = useT()
 </script>
+
 <template>
   <form class="space-y-4" @submit.prevent="emit('submit')">
     <FormSection :title="t('promotions.title')">

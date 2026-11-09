@@ -15,7 +15,7 @@ export function useConfirm(): (options: ConfirmOptions) => Promise<boolean> {
   const overlay = useOverlay()
   const dialog = overlay.create(ConfirmDialog)
   return async (options) => {
-    const result = await dialog.open(options).result
+    const result: unknown = await dialog.open(options).result
     return result === true
   }
 }

@@ -5,6 +5,7 @@ import type { Customer } from '@features/customers/types/Customer.types'
 defineProps<{ addresses: Customer['addresses'] }>()
 const { t } = useT()
 </script>
+
 <template>
   <ul v-if="addresses.length" class="space-y-4">
     <li v-for="address in addresses" :key="address.id">

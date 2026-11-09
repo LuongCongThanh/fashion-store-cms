@@ -28,7 +28,12 @@ export function useUserEditor() {
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: initial,
   })
-  const model = computed({ get: () => values, set: (value: UserInput) => setValues(value) })
+  const model = computed({
+    get: () => values,
+    set: (value: UserInput) => {
+      setValues(value)
+    },
+  })
   useHydrateForm(
     query.data,
     () => meta.value.dirty,

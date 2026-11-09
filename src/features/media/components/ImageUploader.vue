@@ -33,6 +33,7 @@ onBeforeUnmount(() => {
   if (preview.value) URL.revokeObjectURL(preview.value)
 })
 </script>
+
 <template>
   <div class="space-y-3">
     <label

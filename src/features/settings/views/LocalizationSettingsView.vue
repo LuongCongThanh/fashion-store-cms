@@ -8,6 +8,7 @@ import { useT } from '@shared/lib/i18n/I18n'
 const { t } = useT()
 const editor = useLocalizationEditor()
 </script>
+
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('settings.localization')" />

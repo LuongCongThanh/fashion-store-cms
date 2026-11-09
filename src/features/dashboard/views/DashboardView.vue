@@ -55,6 +55,7 @@ const lists = {
   'low-stock': LowStockList,
 }
 </script>
+
 <template>
   <div class="space-y-6">
     <PageHeader :title="t('nav.dashboard')" />

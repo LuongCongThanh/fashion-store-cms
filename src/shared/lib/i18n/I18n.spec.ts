@@ -12,7 +12,16 @@ const LocaleProbe = defineComponent({
   setup() {
     const { t } = useT()
     const { setLocale } = useLocale()
-    return () => h('button', { onClick: () => setLocale('en') }, t('common.save'))
+    return () =>
+      h(
+        'button',
+        {
+          onClick: () => {
+            setLocale('en')
+          },
+        },
+        t('common.save'),
+      )
   },
 })
 
@@ -52,7 +61,15 @@ describe('useLocale', () => {
     const UiProbe = defineComponent({
       setup() {
         const { setLocale } = useLocale()
-        return () => [h(UAlert, { title: 'x', close: true }), h('button', { id: 'en', onClick: () => setLocale('en') })]
+        return () => [
+          h(UAlert, { title: 'x', close: true }),
+          h('button', {
+            id: 'en',
+            onClick: () => {
+              setLocale('en')
+            },
+          }),
+        ]
       },
     })
     const { wrapper } = renderWithPlugins(UiProbe)
