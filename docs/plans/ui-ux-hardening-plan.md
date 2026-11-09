@@ -34,7 +34,7 @@ Plan này không thay thế inventory page/component hiện tại. Nó xác đ�
 
 ## 3. Hiện trạng và vấn đề cần giải quyết
 
-Project đã có nền tảng phù hợp: Vue 3, Vite, Tailwind CSS 4, Nuxt UI 4, semantic color mapping, dark mode, i18n, Playwright và các shared pattern cho page, form, table và feedback.
+Stack và shared pattern hiện có: xem [FE_architecture.md](../FE_architecture.md) và [CONVENTIONS.md](../CONVENTIONS.md).
 
 Các khoảng trống chính:
 
@@ -78,37 +78,29 @@ Khi triển khai plan cần:
 
 Không tạo ADR chỉ để ghi lại lựa chọn thẩm mỹ có thể đảo ngược. Chỉ cân nhắc ADR nếu sau này project chọn một toolchain/design format có lock-in đáng kể hoặc áp dụng boundary khó thay đổi.
 
-## 5. Đánh giá 12 repo
+## 5. Công cụ và skill cho CMS
 
-| Repo                                                                           | Vai trò phù hợp                                                | Quyết định                       | Lưu ý                                                                                                            |
-| ------------------------------------------------------------------------------ | -------------------------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| [UI/UX Pro Max Skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | Khám phá style, palette, font pair và UX rules                 | Dùng có chọn lọc trong discovery | Hỗ trợ Vue/Nuxt UI; không nạp toàn catalog cho mọi task. Pin commit và chuyển kết quả đã chọn vào `DESIGN.md`.   |
-| [Awesome DESIGN.md](https://github.com/VoltAgent/awesome-design-md)            | Tham khảo cấu trúc và cách diễn đạt design contract            | Reference only                   | Chỉ nghiên cứu vài mẫu; không sao chép nguyên brand/theme file.                                                  |
-| [Open Design](https://github.com/nexu-io/open-design)                          | Concept lab và prototype local                                 | Optional sandbox                 | Không thêm làm runtime dependency hoặc cho tự refactor production repo trước khi có design contract.             |
-| [Taste Skill](https://github.com/Leonxlnx/taste-skill)                         | Art direction, reference imagery và critique                   | Dùng: `design-taste-frontend`    | Doctrine thiên website/marketing; dùng để critique mockup, login, empty state.                                   |
-| [Impeccable](https://github.com/pbakaus/impeccable)                            | Audit, polish và phát hiện UI rập khuôn                        | Thay bằng skill đã cài           | Không cài repo; dùng `anti-ui-slop` / `unslop-ui` (đã có) cho cùng mục đích phát hiện UI rập khuôn.              |
-| [React Bits](https://github.com/DavidHDev/react-bits)                          | Visual reference cho microinteraction                          | Reference/prototype only         | React không tương thích trực tiếp với Vue; không cài registry vào CMS. License có Commons Clause.                |
-| [Emil Kowalski Skills](https://github.com/emilkowalski/skills)                 | Animation audit, performance, reduced motion và stress test    | Dùng 4 skill                     | `emil-design-eng`, `break-ui`, `animation-performance`, `improve-animations`; nạp theo phase, không nạp cả pack. |
-| [Hallmark](https://github.com/nutlope/hallmark)                                | Static/browser audit cho contrast, focus, mobile, UI rập khuôn | Pilot audit gates                | Dùng skill `hallmark`; không lấy theme catalog làm design system; bắt đầu ở chế độ reporting.                    |
-| [Google DESIGN.md](https://github.com/google-labs-code/design.md)              | Structured design contract, token lint/diff và Tailwind export | Adopt có kiểm soát               | Leverage cao nhất; format alpha nên pin version và không phụ thuộc trong runtime.                                |
-| [GSAP Skills](https://github.com/greensock/gsap-skills)                        | Hướng dẫn animation phức tạp                                   | On demand                        | Chỉ xét khi CSS/Vue transition không đáp ứng interaction có giá trị rõ ràng.                                     |
-| [Scroll World](https://github.com/oso95/scroll-world)                          | 3D/video scroll campaign                                       | Loại khỏi CMS                    | Chỉ có thể là experiment độc lập cho storefront/campaign trong một effort khác.                                  |
-| [Canvas UI](https://github.com/DavidHDev/canvas-ui)                            | WebGL/WebGPU visual experiment                                 | Không dùng trong CMS core        | API/canvas path còn experimental, tăng chi phí accessibility/performance/maintenance; license có Commons Clause. |
+Tiêu chí chọn: giúp màn hình nghiệp vụ dễ đọc, dễ quét, thao tác nhanh. Công cụ thiên về landing page/marketing chỉ dùng ở phạm vi hẹp hoặc loại bỏ. Chỉ nạp skill cần cho bước đang làm.
 
-### Skill theo phase
+| Bước                                 | Skill                                                                        | Nguồn                               |
+| ------------------------------------ | ---------------------------------------------------------------------------- | ----------------------------------- |
+| Phase 0 — reconcile, baseline        | `ux-heuristics`, `break-ui`                                                  | Emil Kowalski, bổ sung              |
+| Phase 0.5 — HTML mockup              | `ui-ux-pro-max`, `design-taste-frontend`, `refactoring-ui`, `web-typography` | UI/UX Pro Max, Taste Skill, bổ sung |
+| Phase 1 — viết `DESIGN.md`           | `design-md`, `write-design-md`                                               | Google DESIGN.md                    |
+| Phase 1 — audit sau khi có contract  | `hallmark`, `break-ui`, `anti-ui-slop` / `unslop-ui` (report-only)           | Hallmark, Emil, thay cho Impeccable |
+| Phase 2–4 — shell, shared, archetype | `refactoring-ui`, `ux-heuristics`, `emil-design-eng`, `break-ui`             | Emil Kowalski, bổ sung              |
+| Phase 5 — dashboard, chart           | `refactoring-ui`, `web-typography`                                           | bổ sung                             |
+| Phase 6 — quality gates              | `hallmark`, `anti-ui-slop` / `unslop-ui`, `animation-performance`            | Hallmark, Emil                      |
+| Phase 7 — motion                     | `emil-design-eng`, `improve-animations`, `animation-performance`             | Emil Kowalski                       |
 
-Bổ sung ngoài 12 repo: `refactoring-ui`, `web-typography`, `ux-heuristics` (đã cài sẵn). Chỉ nạp skill cần cho bước đang làm.
+Lưu ý khi dùng:
 
-| Bước                                 | Skill                                                                        |
-| ------------------------------------ | ---------------------------------------------------------------------------- |
-| Phase 0 — reconcile, baseline        | `ux-heuristics`, `break-ui`                                                  |
-| Phase 0.5 — HTML mockup              | `ui-ux-pro-max`, `design-taste-frontend`, `refactoring-ui`, `web-typography` |
-| Phase 1 — viết `DESIGN.md`           | `design-md`, `write-design-md`                                               |
-| Phase 1 — audit sau khi có contract  | `hallmark`, `break-ui`, `anti-ui-slop` / `unslop-ui` (report-only)           |
-| Phase 2–4 — shell, shared, archetype | `refactoring-ui`, `ux-heuristics`, `emil-design-eng`, `break-ui`             |
-| Phase 5 — dashboard, chart           | `refactoring-ui`, `web-typography`                                           |
-| Phase 6 — quality gates              | `hallmark`, `anti-ui-slop` / `unslop-ui`, `animation-performance`            |
-| Phase 7 — motion                     | `emil-design-eng`, `improve-animations`, `animation-performance`             |
+- **Google DESIGN.md**: format còn alpha — pin version, không thành runtime dependency.
+- **UI/UX Pro Max, Taste Skill**: chỉ cho discovery/critique; kết quả được chọn phải chuyển vào `DESIGN.md` mới có hiệu lực. Taste Skill thiên marketing nên chỉ dùng cho mockup, login, empty state.
+- **Hallmark**: không lấy theme catalog làm design system.
+- **Awesome DESIGN.md, Open Design**: chỉ tham khảo cấu trúc / sandbox prototype, không sao chép theme.
+- **GSAP Skills**: chỉ khi CSS/Vue transition không đủ (xem Phase 7).
+- **Không dùng trong CMS**: React Bits, Canvas UI (React/WebGL, license Commons Clause), Scroll World (3D landing) — xem §2 Ngoài phạm vi.
 
 ### Công cụ thiết kế
 
@@ -130,7 +122,7 @@ External skill không được tự đổi palette, typography, density hoặc c
 
 Các quyết định dưới đây là input cho phase viết `DESIGN.md`, chưa phải token specification hoàn chỉnh:
 
-- Dùng hướng **Fashion editorial + operational clarity**.
+- Dùng hướng **Fashion editorial + operational clarity**, trong đó **operational clarity luôn thắng** khi xung đột: màn hình list, form, detail ưu tiên mật độ thông tin, khả năng quét và tốc độ thao tác; chất editorial chỉ thể hiện qua typography, khoảng trắng và accent ở login, empty state, page header và dashboard.
 - Giữ palette rose hiện tại làm brand direction tạm thời, dùng có kiểm soát trên accent và primary action; neutral/slate đảm nhiệm phần lớn surface và data-dense UI.
 - Giữ font hiện tại làm baseline để đánh giá trước khi cân nhắc thay đổi.
 - Dùng density `comfortable` mặc định; table/list nghiệp vụ có thể hỗ trợ `compact`.
@@ -359,7 +351,7 @@ Mỗi motion proposal phải trả lời:
 4. Chi phí bundle, main-thread và maintenance là bao nhiêu?
 5. Nó có làm chậm bulk workflow hoặc che feedback quan trọng không?
 
-GSAP chỉ được pilot khi câu trả lời cho câu 2 là “không” và giá trị interaction đã được chứng minh. React Bits hoặc Canvas UI chỉ được dùng làm reference/prototype isolated; không copy vào production trước accessibility, license và performance review. Scroll World không thuộc plan CMS.
+GSAP chỉ được pilot khi câu trả lời cho câu 2 là “không” và giá trị interaction đã được chứng minh.
 
 ## 9. Quality checklist bắt buộc
 
@@ -401,20 +393,19 @@ GSAP chỉ được pilot khi câu trả lời cho câu 2 là “không” và g
 - Không cấp credential hoặc inherited environment nếu không thật sự cần.
 - Không chạy audit tool ở chế độ vô hiệu hóa approvals/sandbox.
 - Không biến output của audit tool thành CI blocking trước khi triage false positive.
-- Với Commons Clause hoặc asset license hạn chế, thực hiện legal review trước khi copy/distribute source.
+- Asset hoặc source có license hạn chế phải legal review trước khi copy/distribute.
 
 ## 11. Rủi ro và cách giảm thiểu
 
-| Rủi ro                                     | Hệ quả                                       | Giảm thiểu                                                            |
-| ------------------------------------------ | -------------------------------------------- | --------------------------------------------------------------------- |
-| Nhiều skill đưa ra style mâu thuẫn         | UI thiếu nhất quán                           | `DESIGN.md` là nguồn chuẩn duy nhất; external tools chỉ audit/advice. |
-| Redesign toàn bộ cùng lúc                  | Diff lớn, khó review, regression cao         | Làm theo archetype và reference implementation.                       |
-| Snapshot test nhiều noise                  | CI bị bỏ qua hoặc update mù quáng            | Fixture ổn định, reporting trước, blocking sau.                       |
-| Fashion aesthetic làm giảm usability       | CMS đẹp nhưng thao tác chậm                  | Operational clarity và task completion là acceptance gate.            |
-| Animation làm tăng bundle/main-thread cost | UI chậm, khó bảo trì                         | CSS/Vue first; đo baseline; GSAP on demand.                           |
-| Copy component từ React/WebGL repo         | Sai stack, accessibility và ownership burden | Chỉ dùng reference/prototype; implement theo Vue/Nuxt UI contract.    |
-| Schema DESIGN.md alpha thay đổi            | Tooling churn                                | Pin version, giữ runtime độc lập, review migration.                   |
-| Asset/reference không rõ license           | Rủi ro pháp lý                               | Không sao chép mặc định; provenance và license review bắt buộc.       |
+| Rủi ro                                     | Hệ quả                               | Giảm thiểu                                                            |
+| ------------------------------------------ | ------------------------------------ | --------------------------------------------------------------------- |
+| Nhiều skill đưa ra style mâu thuẫn         | UI thiếu nhất quán                   | `DESIGN.md` là nguồn chuẩn duy nhất; external tools chỉ audit/advice. |
+| Redesign toàn bộ cùng lúc                  | Diff lớn, khó review, regression cao | Làm theo archetype và reference implementation.                       |
+| Snapshot test nhiều noise                  | CI bị bỏ qua hoặc update mù quáng    | Fixture ổn định, reporting trước, blocking sau.                       |
+| Fashion aesthetic làm giảm usability       | CMS đẹp nhưng thao tác chậm          | Operational clarity và task completion là acceptance gate.            |
+| Animation làm tăng bundle/main-thread cost | UI chậm, khó bảo trì                 | CSS/Vue first; đo baseline; GSAP on demand.                           |
+| Schema DESIGN.md alpha thay đổi            | Tooling churn                        | Pin version, giữ runtime độc lập, review migration.                   |
+| Asset/reference không rõ license           | Rủi ro pháp lý                       | Không sao chép mặc định; provenance và license review bắt buộc.       |
 
 ## 12. Definition of Done
 
