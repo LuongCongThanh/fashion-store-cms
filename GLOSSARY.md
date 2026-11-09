@@ -32,13 +32,3 @@ _Avoid_: User khi nói về người mua.
 _Avoid_: Customer khi nói về tài khoản vận hành CMS.
 
 **Stock Movement**: Một lần nhập, xuất hoặc điều chỉnh tồn kho của Variant, có số lượng, lý do và thông tin truy vết.
-
-## Thiết kế giao diện
-
-**Fashion editorial + operational clarity**:
-Hướng thiết kế kết hợp cảm giác biên tập thời trang có chủ đích với khả năng đọc, quét và thao tác nhanh của một CMS nghiệp vụ.
-_Avoid_: SaaS dashboard chung chung, marketing landing page.
-
-**Design contract**:
-Nguồn chuẩn mô tả hướng thẩm mỹ, design token và các quy tắc giao diện mà page, component và công cụ audit phải tuân theo.
-_Avoid_: Design inspiration, page inventory, implementation plan.
