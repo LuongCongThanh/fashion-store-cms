@@ -18,7 +18,7 @@ Plan này không thay thế inventory page/component hiện tại. Nó xác đ�
 
 ### Trong phạm vi
 
-- CMS nghiệp vụ hiện tại: authentication, dashboard, catalog, order, customer, inventory, promotion, user/role và settings.
+- CMS nghiệp vụ hiện tại: authentication, dashboard, catalog, order, customer, inventory, promotion, User/Role và settings.
 - Design direction, token, responsive behavior, component state và interaction pattern.
 - Tính nhất quán của Nuxt UI primitives và shared/feature components.
 - Accessibility, visual testing và performance của UI.
@@ -62,6 +62,8 @@ Các khoảng trống chính:
 
 Schema hoặc CLI của Google DESIGN.md có thể được dùng làm nền tảng, nhưng không được trở thành runtime dependency. Do format còn alpha, phải pin version và review migration trước khi nâng cấp.
 
+**Ranh giới với `docs/CONVENTIONS.md` §L:** hiện §L ghi nguồn chuẩn token là `main.css` `@theme` + Nuxt UI color map trong `vite.config.ts`. Khi `DESIGN.md` được merge, §L thu gọn thành pointer sang `DESIGN.md`; `main.css` và `vite.config.ts` là _implementation_ của token, không phải nguồn luật thứ hai. Thay đổi token đi theo thứ tự `DESIGN.md` → `main.css`/`vite.config.ts`, trong cùng một PR.
+
 ### `fashion-store-cms-pages-components.md` — inventory cần reconciliation
 
 [File inventory hiện tại](./cms-pages-components/fashion-store-cms-pages-components.md) tiếp tục chịu trách nhiệm cho route, view, component ownership và build order. Không chuyển nó thành design contract.
@@ -83,15 +85,34 @@ Không tạo ADR chỉ để ghi lại lựa chọn thẩm mỹ có thể đảo
 | [UI/UX Pro Max Skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | Khám phá style, palette, font pair và UX rules                 | Dùng có chọn lọc trong discovery | Hỗ trợ Vue/Nuxt UI; không nạp toàn catalog cho mọi task. Pin commit và chuyển kết quả đã chọn vào `DESIGN.md`.   |
 | [Awesome DESIGN.md](https://github.com/VoltAgent/awesome-design-md)            | Tham khảo cấu trúc và cách diễn đạt design contract            | Reference only                   | Chỉ nghiên cứu vài mẫu; không sao chép nguyên brand/theme file.                                                  |
 | [Open Design](https://github.com/nexu-io/open-design)                          | Concept lab và prototype local                                 | Optional sandbox                 | Không thêm làm runtime dependency hoặc cho tự refactor production repo trước khi có design contract.             |
-| [Taste Skill](https://github.com/Leonxlnx/taste-skill)                         | Art direction, reference imagery và critique                   | Optional critique                | Doctrine thiên website/marketing; chỉ hợp login, empty state hoặc review có phạm vi rõ.                          |
-| [Impeccable](https://github.com/pbakaus/impeccable)                            | Audit, polish và phát hiện UI rập khuôn                        | Pilot cho audit                  | Không chạy Live với approvals/sandbox bị tắt hoặc cho agent ngoài kế thừa toàn bộ environment.                   |
+| [Taste Skill](https://github.com/Leonxlnx/taste-skill)                         | Art direction, reference imagery và critique                   | Dùng: `design-taste-frontend`    | Doctrine thiên website/marketing; dùng để critique mockup, login, empty state.                                   |
+| [Impeccable](https://github.com/pbakaus/impeccable)                            | Audit, polish và phát hiện UI rập khuôn                        | Thay bằng skill đã cài           | Không cài repo; dùng `anti-ui-slop` / `unslop-ui` (đã có) cho cùng mục đích phát hiện UI rập khuôn.              |
 | [React Bits](https://github.com/DavidHDev/react-bits)                          | Visual reference cho microinteraction                          | Reference/prototype only         | React không tương thích trực tiếp với Vue; không cài registry vào CMS. License có Commons Clause.                |
-| [Emil Kowalski Skills](https://github.com/emilkowalski/skills)                 | Animation audit, performance, reduced motion và stress test    | Pilot từng skill                 | Ưu tiên `break-ui`, animation performance và reduced-motion checks; không nạp cả pack mặc định.                  |
-| [Hallmark](https://github.com/nutlope/hallmark)                                | Static/browser audit cho contrast, focus, mobile và AI-slop    | Pilot audit gates                | Không lấy theme catalog làm design system; bắt đầu ở chế độ reporting.                                           |
+| [Emil Kowalski Skills](https://github.com/emilkowalski/skills)                 | Animation audit, performance, reduced motion và stress test    | Dùng 4 skill                     | `emil-design-eng`, `break-ui`, `animation-performance`, `improve-animations`; nạp theo phase, không nạp cả pack. |
+| [Hallmark](https://github.com/nutlope/hallmark)                                | Static/browser audit cho contrast, focus, mobile, UI rập khuôn | Pilot audit gates                | Dùng skill `hallmark`; không lấy theme catalog làm design system; bắt đầu ở chế độ reporting.                    |
 | [Google DESIGN.md](https://github.com/google-labs-code/design.md)              | Structured design contract, token lint/diff và Tailwind export | Adopt có kiểm soát               | Leverage cao nhất; format alpha nên pin version và không phụ thuộc trong runtime.                                |
 | [GSAP Skills](https://github.com/greensock/gsap-skills)                        | Hướng dẫn animation phức tạp                                   | On demand                        | Chỉ xét khi CSS/Vue transition không đáp ứng interaction có giá trị rõ ràng.                                     |
 | [Scroll World](https://github.com/oso95/scroll-world)                          | 3D/video scroll campaign                                       | Loại khỏi CMS                    | Chỉ có thể là experiment độc lập cho storefront/campaign trong một effort khác.                                  |
 | [Canvas UI](https://github.com/DavidHDev/canvas-ui)                            | WebGL/WebGPU visual experiment                                 | Không dùng trong CMS core        | API/canvas path còn experimental, tăng chi phí accessibility/performance/maintenance; license có Commons Clause. |
+
+### Skill theo phase
+
+Bổ sung ngoài 12 repo: `refactoring-ui`, `web-typography`, `ux-heuristics` (đã cài sẵn). Chỉ nạp skill cần cho bước đang làm.
+
+| Bước                                 | Skill                                                                        |
+| ------------------------------------ | ---------------------------------------------------------------------------- |
+| Phase 0 — reconcile, baseline        | `ux-heuristics`, `break-ui`                                                  |
+| Phase 0.5 — HTML mockup              | `ui-ux-pro-max`, `design-taste-frontend`, `refactoring-ui`, `web-typography` |
+| Phase 1 — viết `DESIGN.md`           | `design-md`, `write-design-md`                                               |
+| Phase 1 — audit sau khi có contract  | `hallmark`, `break-ui`, `anti-ui-slop` / `unslop-ui` (report-only)           |
+| Phase 2–4 — shell, shared, archetype | `refactoring-ui`, `ux-heuristics`, `emil-design-eng`, `break-ui`             |
+| Phase 5 — dashboard, chart           | `refactoring-ui`, `web-typography`                                           |
+| Phase 6 — quality gates              | `hallmark`, `anti-ui-slop` / `unslop-ui`, `animation-performance`            |
+| Phase 7 — motion                     | `emil-design-eng`, `improve-animations`, `animation-performance`             |
+
+### Công cụ thiết kế
+
+Không dùng Figma (tài khoản free, Figma AI/MCP có giới hạn). Hướng thiết kế được chốt bằng **mockup HTML** do agent tạo; nếu cần đưa vào Figma, import mockup qua plugin html.to.design. Penpot là phương án vẽ tay miễn phí nếu cần.
 
 ### Thứ tự quyền lực
 
@@ -171,6 +192,21 @@ Baseline phải được review và chấp thuận trước khi snapshot trở t
 - Các vấn đề được nhóm thành design-system gap, shared-pattern gap hoặc feature-specific gap.
 - Chưa có CI blocking từ snapshot/audit mới.
 
+### Phase 0.5 — HTML mockup và duyệt hướng thiết kế
+
+**Mục tiêu:** chốt hướng thiết kế bằng mắt trước khi viết thành luật.
+
+**Công việc**
+
+- Tạo mockup HTML cho Dashboard, Product list và Order detail, có light và dark mode.
+- Dùng palette rose và font hiện tại (provisional), density `comfortable`.
+- Critique mockup bằng `design-taste-frontend` và `refactoring-ui` trước khi trình duyệt.
+
+**Acceptance criteria**
+
+- User duyệt mockup; chưa duyệt thì không sang Phase 1.
+- Mockup không phải code production và không merge vào `src/`.
+
 ### Phase 1 — Viết Design contract
 
 **Mục tiêu:** biến visual direction thành nguồn chuẩn có thể kiểm tra.
@@ -183,10 +219,13 @@ Baseline phải được review và chấp thuận trước khi snapshot trở t
 - Định nghĩa page anatomy, responsive layout, content hierarchy và action priority.
 - Định nghĩa pattern cho forms, tables, filters, detail sections, feedback và charts.
 - Ghi rõ provisional brand choices và điều kiện thay thế khi có brand guideline chính thức.
+- Thu gọn `docs/CONVENTIONS.md` §L thành pointer sang `DESIGN.md`.
+- Sau khi có contract, audit mockup và màn hình hiện tại bằng `hallmark` và `break-ui` (report-only).
 
 **Deliverable**
 
 - `DESIGN.md` được review.
+- Audit report đối chiếu với contract.
 - Mapping giữa design tokens và Tailwind/Nuxt UI config.
 - Danh sách gap giữa contract và implementation hiện tại.
 
@@ -203,7 +242,7 @@ Baseline phải được review và chấp thuận trước khi snapshot trở t
 **Công việc**
 
 - Thiết kế mobile navigation drawer và hành vi đóng/mở/focus trap.
-- Rework header để breadcrumb, store, locale, theme và user actions reflow có thứ tự ưu tiên.
+- Rework header để breadcrumb, Store switcher, locale, theme và User menu reflow có thứ tự ưu tiên.
 - Chuẩn hóa `PageContainer`, `PageHeader`, page actions và responsive spacing.
 - Xử lý overflow, sticky region và safe-area trên mobile.
 - Bổ sung app-shell states vào Design System view.
@@ -242,7 +281,7 @@ Baseline phải được review và chấp thuận trước khi snapshot trở t
 
 - Product list làm reference implementation.
 - Chuẩn hóa filter hierarchy, active filter visibility, bulk actions và compact density.
-- Sau khi đạt chuẩn, rollout sang order, customer, inventory, promotion, user và role lists.
+- Sau khi đạt chuẩn, rollout sang order, customer, inventory, promotion, User và Role lists.
 
 #### 4.2 Form/editor archetype
 
@@ -291,7 +330,7 @@ Baseline phải được review và chấp thuận trước khi snapshot trở t
 - Thêm Playwright screenshot tests cho bộ baseline.
 - Thêm accessibility checks cho landmark, name/role/value, contrast, focus và keyboard flow.
 - Chạy responsive overflow, reduced motion và dark-mode checks.
-- Pilot Hallmark/Emil/Impeccable trên phạm vi nhỏ, đối chiếu false positive trước khi tự động hóa.
+- Pilot `hallmark`, `break-ui` và `anti-ui-slop` trên phạm vi nhỏ, đối chiếu false positive trước khi tự động hóa.
 - Thiết lập performance budget từ baseline theo route/chunk và nguyên tắc không regression.
 
 **Rollout gate**
@@ -360,7 +399,7 @@ GSAP chỉ được pilot khi câu trả lời cho câu 2 là “không” và g
 - Ghi lại nguồn, version và license của technique/asset được sử dụng.
 - Không cho external agent/tool tự ý thay design contract.
 - Không cấp credential hoặc inherited environment nếu không thật sự cần.
-- Không chạy Impeccable Live ở chế độ vô hiệu hóa approvals/sandbox.
+- Không chạy audit tool ở chế độ vô hiệu hóa approvals/sandbox.
 - Không biến output của audit tool thành CI blocking trước khi triage false positive.
 - Với Commons Clause hoặc asset license hạn chế, thực hiện legal review trước khi copy/distribute source.
 
@@ -392,8 +431,9 @@ Effort UI/UX hardening được xem là hoàn tất khi:
 
 ## 13. Bước tiếp theo sau khi duyệt plan
 
-1. Thực hiện Phase 0 và cập nhật inventory theo code thực tế.
-2. Tạo baseline screenshots và audit report.
-3. Dùng kết quả đó để viết `DESIGN.md`, không suy diễn design contract chỉ từ repo tham khảo.
-4. Phân rã từng phase thành issue trong `.scratch/<feature>/` theo quy ước issue tracker của project.
-5. Chỉ pilot external skill sau khi issue ghi rõ phạm vi, version, quyền truy cập và tiêu chí thành công.
+1. Merge plan này (PR riêng, chỉ tài liệu).
+2. Tạo branch mới từ `dev` cho Phase 0.5: mockup HTML Dashboard, Product list, Order detail (light/dark).
+3. User duyệt mockup.
+4. Viết `DESIGN.md` bằng `write-design-md`, thu gọn CONVENTIONS §L thành pointer.
+5. Audit bằng `hallmark` + `break-ui` (report-only); mockup và `DESIGN.md` nằm trong PR đó, tách khỏi PR plan.
+6. Phase 0 reconcile inventory có thể chạy song song; phân rã các phase sau thành issue trong `.scratch/<feature>/`.

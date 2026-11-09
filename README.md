@@ -27,4 +27,4 @@ npm run dev
 - Kiến trúc frontend: [docs/FE_architecture.md](docs/FE_architecture.md)
 - Quy ước code (cây thư mục, đặt tên, lint, test, HTTP, lỗi, i18n, design system): [docs/CONVENTIONS.md](docs/CONVENTIONS.md)
 - Thuật ngữ: [GLOSSARY.md](GLOSSARY.md)
-- Giao diện: `DESIGN.md` là nguồn chuẩn về visual direction, token và quy tắc UI (sẽ tạo theo [UI/UX hardening plan](docs/plans/ui-ux-hardening-plan.md))
+- Giao diện: `DESIGN.md` (chưa tạo) sẽ là nguồn chuẩn về visual direction và quy tắc UI, thay cho phần design system trong CONVENTIONS §L — xem [UI/UX hardening plan](docs/plans/ui-ux-hardening-plan.md)
