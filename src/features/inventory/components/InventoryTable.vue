@@ -5,6 +5,7 @@ import { computed, h } from 'vue'
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
+import { sortHeader } from '@shared/components/table/SortHeader'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { InventoryItem } from '@features/inventory/types/Inventory.types'
@@ -22,16 +23,7 @@ const { t } = useT()
 const columns = computed<TableColumn<InventoryItem>[]>(() => [
   {
     accessorKey: 'sku',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-        },
-        'SKU',
-      ),
+    header: ({ column }) => sortHeader(column, 'SKU'),
   },
   ...(['current', 'reserved', 'available'] as const).map((key) => ({
     accessorKey: key,

@@ -4,7 +4,9 @@ import { computed, h } from 'vue'
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
+import { sortHeader } from '@shared/components/table/SortHeader'
 import TableLink from '@shared/components/table/TableLink.vue'
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Order } from '@features/orders/types/Order.types'
@@ -14,6 +16,7 @@ import PaymentStatusBadge from './PaymentStatusBadge.vue'
 defineProps<{ data: Order[]; loading: boolean; error?: unknown; sort: string }>()
 const emit = defineEmits<{ sort: [value: string]; retry: [] }>()
 const { t } = useT()
+const format = useFormat()
 const columns = computed<TableColumn<Order>[]>(() => [
   {
     accessorKey: 'number',
@@ -28,16 +31,8 @@ const columns = computed<TableColumn<Order>[]>(() => [
   },
   {
     accessorKey: 'total',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-        },
-        t('orders.total'),
-      ),
+    header: ({ column }) => sortHeader(column, t('orders.total'), { align: 'right' }),
+    cell: ({ row }) => h('span', { class: 'block text-right tabular-nums' }, format.money(row.original.total)),
   },
   {
     accessorKey: 'paymentStatus',
@@ -51,16 +46,7 @@ const columns = computed<TableColumn<Order>[]>(() => [
   },
   {
     accessorKey: 'createdAt',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-        },
-        t('common.createdAt'),
-      ),
+    header: ({ column }) => sortHeader(column, t('common.createdAt')),
   },
 ])
 </script>

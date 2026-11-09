@@ -4,7 +4,9 @@ import { computed } from 'vue'
 
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
+import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
+import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 type RowSelectionState = Record<string, boolean>
 type VisibilityState = Record<string, boolean>
@@ -73,7 +75,6 @@ const visible = computed({
     :data="data"
     :columns="columns"
     :loading="loading"
-    :empty="t('common.empty')"
     :getRowId="(row) => row.id"
     :manualPagination="true"
     :manualSorting="true"
@@ -81,5 +82,8 @@ const visible = computed({
     sticky="header"
     :ui="TABLE_UI"
     class="w-full"
-  />
+  >
+    <template #empty><EmptyState :title="t('common.empty')" /></template>
+    <template #loading><LoadingState /></template>
+  </UTable>
 </template>

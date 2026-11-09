@@ -2,7 +2,7 @@
 import UBadge from '@nuxt/ui/components/Badge.vue'
 import UButton from '@nuxt/ui/components/Button.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
-import UTable from '@nuxt/ui/components/Table.vue'
+import { h } from 'vue'
 
 import { uiConfig } from '@app/config/Ui.config'
 import EmptyState from '@shared/components/feedback/EmptyState.vue'
@@ -11,6 +11,8 @@ import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import StatusBadge from '@shared/components/feedback/StatusBadge.vue'
 import FilterSelect from '@shared/components/list/FilterSelect.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
+import DataTable from '@shared/components/table/DataTable.vue'
+import TableLink from '@shared/components/table/TableLink.vue'
 
 /** Trang duyệt token với designer (§L.10) — chỉ đăng ký route ở dev. */
 type Color = keyof typeof uiConfig.colors
@@ -28,16 +30,22 @@ const SOLID_COLORS = ['error', 'neutral', 'primary'] as const
 // Fixture xấu nhất (tên dài, giá lớn, tồn 0) để soi bảng compact.
 const ROWS = [
   {
+    id: '1',
     sku: 'DAM-MIDI-0001',
     name: 'Đầm midi lụa xếp ly cổ yếm phối nơ lưng — phiên bản giới hạn Thu Đông 2026',
     price: '15.500.000 ₫',
     stock: 'Hết',
   },
-  { sku: 'AO-LINEN-0002', name: 'Áo linen', price: '250.000 ₫', stock: '12' },
+  { id: '2', sku: 'AO-LINEN-0002', name: 'Áo linen', price: '250.000 ₫', stock: '12' },
 ]
 const COLUMNS = [
   { accessorKey: 'sku', header: 'SKU', meta: { class: { td: 'font-mono text-xs' } } },
-  { accessorKey: 'name', header: 'Tên', meta: { class: { td: 'max-w-80 truncate' } } },
+  {
+    accessorKey: 'name',
+    header: 'Tên',
+    cell: ({ row }: { row: { original: (typeof ROWS)[number] } }) =>
+      h(TableLink, { to: '/design-system', label: row.original.name }),
+  },
   { accessorKey: 'price', header: 'Giá', meta: { class: { th: 'text-right', td: 'text-right tabular-nums' } } },
   { accessorKey: 'stock', header: 'Tồn', meta: { class: { th: 'text-right', td: 'text-right tabular-nums' } } },
 ]
@@ -109,9 +117,7 @@ const TEXTS = ['text-highlighted', 'text-default', 'text-muted', 'text-dimmed'] 
 
     <section class="flex flex-col gap-3">
       <h2 class="font-display text-lg font-semibold">Bảng compact</h2>
-      <div class="overflow-x-auto rounded-lg border border-default">
-        <UTable :data="ROWS" :columns="COLUMNS" :ui="{ td: 'py-1.5', thead: 'sticky top-0 z-10 bg-elevated' }" />
-      </div>
+      <DataTable :data="ROWS" :columns="COLUMNS" />
     </section>
 
     <section class="grid gap-4 md:grid-cols-3">
