@@ -87,9 +87,9 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 
 | Nhóm          | Giá trị                                                                                                   |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
-| Spacing       | Thang Tailwind, bội 4px. Trong card dùng `p-4`/`p-5`, giữa các khối `gap-4`, giữa section lớn `space-y-6`, padding trang `p-4 lg:p-6` (`PageContainer`) |
-| Mật độ        | **comfortable** (mặc định): dòng bảng `py-2.5` ≈ 40px. **compact** (bảng nghiệp vụ dày): `py-1.5` ≈ 36px, control `sm` |
-| Radius        | `--ui-radius: 0.375rem`. Control: `rounded-md`. Card/khối: `rounded-lg`. Badge tròn/avatar: `rounded-full` |
+| Spacing       | Thang Tailwind, bội 4px. Trong card dùng `p-4`/`p-5`, giữa các khối `gap-4`. **Trong khối dùng `space-y-4`, giữa section dùng `space-y-6`; không dùng `space-y-5`.** Padding trang `p-4 lg:p-6` (`PageContainer`) |
+| Mật độ        | **Không có nút chuyển chế độ.** Màn chung dùng **comfortable**: dòng `py-2.5` ≈ 40px. Bảng nghiệp vụ cố định **compact**: `py-1.5` ≈ 36px, control `sm` |
+| Radius        | `--ui-radius: 0.375rem`. Control: `rounded-md`. Card/khối: **`rounded-lg`, không dùng `rounded-xl`**. Badge tròn/avatar: `rounded-full` |
 | Viền          | 1px `border-default`. Ưu tiên viền thay cho bóng                                                          |
 | Shadow        | `shadow-xs` cho card nổi nhẹ (hiếm). Dropdown và modal dùng shadow của Nuxt UI. Không thêm bóng trang trí |
 | Control size  | Nuxt UI mặc định `md`. Trong bảng và toolbar dày dùng `sm`/`xs`                                           |
@@ -141,8 +141,11 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 
 ## Open questions
 
-1. **Mật độ:** `docs/CONVENTIONS.md` §L.11 hiện ghi "không làm chế độ compact/comfortable (mặc định bảng gọn)", còn plan §6 ghi "comfortable mặc định, bảng hỗ trợ compact". File này đi theo plan. Đề xuất: không làm nút chuyển chế độ; màn chung dùng comfortable, bảng nghiệp vụ cố định compact.
-2. **Radius card:** code dùng `rounded-xl` (`FormSection`, card dashboard), còn §L.6 ghi `rounded-lg`. Đề xuất: thống nhất về `rounded-lg` khi làm Phase 3.
-3. **Tên trạng thái:** §L.4 ghi order `shipping` và product `active`, còn code dùng `processing`/`shipped` và `published`. File này theo code. Bảng cũ ở §L.4 đã được bỏ khi chuyển luật sang đây.
-4. **Khoảng cách section:** code trộn `space-y-4` (27 chỗ) và `space-y-5` (8 chỗ). Đề xuất: giữ `space-y-4` trong khối, `space-y-6` giữa các section; bỏ `space-y-5`.
-5. **Màu brand chính thức** và quyết định giữ hay đổi font: chờ brand guideline.
+1. **Màu brand chính thức** và quyết định giữ hay đổi font: tạm giữ rose + Plus Jakarta Sans/Inter. Chờ brand guideline; khi có thì chỉ đổi giá trị token.
+
+## Đã quyết (2026-11-09)
+
+- Mật độ: không có nút chuyển chế độ. Màn chung comfortable, bảng nghiệp vụ compact.
+- Radius card: `rounded-lg`. Phase 3 sửa 2 chỗ đang dùng `rounded-xl` (`FormSection`, card dashboard).
+- Khoảng cách: `space-y-4` trong khối, `space-y-6` giữa section. Phase 3 dọn các chỗ đang dùng `space-y-5`.
+- Tên trạng thái theo code (`processing`/`shipped`, `published`). Bảng cũ ở `CONVENTIONS.md` §L.4 đã bỏ.
