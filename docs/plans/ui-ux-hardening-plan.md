@@ -62,7 +62,7 @@ Các khoảng trống chính:
 
 Schema hoặc CLI của Google DESIGN.md có thể được dùng làm nền tảng, nhưng không được trở thành runtime dependency. Do format còn alpha, phải pin version và review migration trước khi nâng cấp.
 
-**Ranh giới với `docs/CONVENTIONS.md` §L:** hiện §L ghi nguồn chuẩn token là `main.css` `@theme` + Nuxt UI color map trong `vite.config.ts`. Khi `DESIGN.md` được merge, §L thu gọn thành pointer sang `DESIGN.md`; `main.css` và `vite.config.ts` là _implementation_ của token, không phải nguồn luật thứ hai. Thay đổi token đi theo thứ tự `DESIGN.md` → `main.css`/`vite.config.ts`, trong cùng một PR.
+**Ranh giới với `docs/CONVENTIONS.md` §L:** hiện §L ghi nguồn chuẩn token là `main.css` `@theme` + Nuxt UI color map trong `src/app/config/Ui.config.ts`. Khi `DESIGN.md` được merge, §L thu gọn thành pointer sang `DESIGN.md`; `main.css` và `Ui.config.ts` là _implementation_ của token, không phải nguồn luật thứ hai. Thay đổi token đi theo thứ tự `DESIGN.md` → `main.css`/`Ui.config.ts`, trong cùng một PR.
 
 ### `fashion-store-cms-pages-components.md` — inventory cần reconciliation
 
