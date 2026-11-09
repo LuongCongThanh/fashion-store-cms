@@ -1,6 +1,6 @@
 # 02 — Dashboard
 
-Status: in-progress
+Status: on-hold
 Blocked by: 01
 Nguồn: §4.2 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P4 · Spec: [spec.md](./spec.md)
 
@@ -32,3 +32,23 @@ Nguyên tắc chung:
 - Chart chỉ nằm trong chunk lazy (kiểm bằng `npm run analyze`).
 - `typecheck`, `lint`, `test` pass.
 - E2E (Playwright) cho luồng dashboard chính, gồm widget bị ẩn theo permission, pass.
+
+### Tiếp tục khi có API
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+**Sửa được ngay, không cần API** (từ review 2026-11-09):
+
+- [ ] `StatCard.vue` dùng `toLocaleString()` theo locale trình duyệt, không có VND; giá trị trong list không format (§H).
+- [ ] Chart chưa có theme `cms-light` / `cms-dark` theo `useColorMode` (§L.11).
+- [ ] `DashboardView.vue` gọi `ensureUser()` để vá lỗi guard của plan 01 — sai tầng, cần sửa ở guard.
+- [ ] Loading là `<p>` chữ, chưa phải skeleton (user story 49); link `/inventory?search=<label>` tìm theo tên thay vì id.
+- [ ] Hai `it` nằm ngoài `describe`; các component chưa có test riêng.
+
+**Chờ API / BE:**
+
+- [ ] Thay DTO viết tay bằng type sinh từ Swagger.
+- [ ] Kiểm chart chỉ nằm trong chunk lazy (`npm run analyze`).
+- [ ] E2E dashboard.
+
+**Khi có API:** thay type viết tay bằng type sinh từ Swagger, nối lại lớp dữ liệu tạm với endpoint thật, chạy E2E, rồi kiểm lại các tiêu chí hoàn thành trong [spec.md](./spec.md).

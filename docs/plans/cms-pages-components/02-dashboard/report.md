@@ -1,6 +1,6 @@
 # 02 — Báo cáo: Dashboard
 
-Status: in-progress
+Status: on-hold
 Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
 Nhánh: `feat/cms-02-dashboard`
 PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/25
@@ -35,3 +35,32 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 - API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
 - E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
 - Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #25.
+
+### Đã làm (giữ nguyên)
+
+- Component chỉ nhận props: `StatCard`, `RevenueChart`, `OrderChart`, `RecentOrders`, `TopProducts`, `LowStockList`.
+- Cài `echarts`, `vue-echarts`; ẩn widget theo permission; một widget lỗi không làm hỏng cả dashboard.
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `features/dashboard/api/Dashboard.api.ts` (`useDashboardQuery`, `GET /dashboard/*`).
+- DTO `DashboardPayload` viết tay trong `types/Dashboard.types.ts`.
+- `DashboardView.vue` gọi query trực tiếp; 4 test trong `DashboardView.spec.ts` dùng HTTP giả.
+
+### Chưa làm — chờ API / BE
+
+- Thay DTO viết tay bằng type sinh từ Swagger.
+- Kiểm chart chỉ nằm trong chunk lazy (`npm run analyze`).
+- E2E dashboard.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- `StatCard.vue` dùng `toLocaleString()` theo locale trình duyệt, không có VND; giá trị trong list không format (§H).
+- Chart chưa có theme `cms-light` / `cms-dark` theo `useColorMode` (§L.11).
+- `DashboardView.vue` gọi `ensureUser()` để vá lỗi guard của plan 01 — sai tầng, cần sửa ở guard.
+- Loading là `<p>` chữ, chưa phải skeleton (user story 49); link `/inventory?search=<label>` tìm theo tên thay vì id.
+- Hai `it` nằm ngoài `describe`; các component chưa có test riêng.
