@@ -12,6 +12,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 CHECK = os.path.join(ROOT, "scripts", "check-pr-body.sh")
 
 
+def find_bash():
+    """Trên Windows, `bash` trong PATH có thể là WSL (System32\\bash.exe) và không chạy được
+    script của repo. Ưu tiên Git Bash; các hệ khác dùng `bash` trong PATH."""
+    if os.name == "nt":
+        for base in (os.environ.get("ProgramFiles"), os.environ.get("ProgramW6432"),
+                     os.environ.get("LOCALAPPDATA") and os.path.join(os.environ["LOCALAPPDATA"], "Programs")):
+            if base:
+                p = os.path.join(base, "Git", "bin", "bash.exe")
+                if os.path.isfile(p):
+                    return p
+    return "bash"
+
+
 def deny(reason):
     print(json.dumps({"hookSpecificOutput": {
         "hookEventName": "PreToolUse",
@@ -25,10 +38,11 @@ def check_file(path, cwd):
     p = p if os.path.isabs(p) else os.path.join(cwd, p)
     if not os.path.isfile(p):
         deny(f"PR body file không tồn tại: {path}")
-    r = subprocess.run(["bash", CHECK, p], capture_output=True, text=True)
+    r = subprocess.run([find_bash(), CHECK, p], capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
     if r.returncode != 0:
-        deny("PR body không theo .github/pull_request_template.md:\n" + r.stdout.strip()
-             + "\nSửa file rồi chạy lại.")
+        deny("PR body không theo .github/pull_request_template.md:\n"
+             + (r.stdout.strip() or r.stderr.strip()) + "\nSửa file rồi chạy lại.")
 
 
 def opt(tokens, *names):
