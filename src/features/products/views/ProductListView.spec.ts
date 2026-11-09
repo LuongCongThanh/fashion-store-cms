@@ -8,7 +8,7 @@ import { chooseOption } from '@test/Select'
 
 import ProductListView from './ProductListView.vue'
 
-it('changes the saved product view through the URL', async () => {
+it('changes the product status preset through the URL', async () => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
@@ -41,7 +41,7 @@ it('removes one active filter without dropping the others', async () => {
     history: createMemoryHistory(),
     routes: [{ path: '/products', component: { render: () => null } }],
   })
-  await router.push('/products?status=published&categoryId=linen&minPrice=15500000&page=2')
+  await router.push('/products?search=lua&status=published&categoryId=linen&minPrice=15500000&page=2')
   const { wrapper, http } = renderWithPlugins(ProductListView, { router })
   http.onGet(/\/categories$/).reply(200, [{ id: 'linen', name: 'Linen', parentId: null }])
   http.onGet(/\/products$/).reply(200, {
@@ -51,6 +51,7 @@ it('removes one active filter without dropping the others', async () => {
   await flushPromises()
 
   expect(plainSpaces(wrapper.text())).toContain('Giá tối thiểu: 15.500.000 ₫')
+  expect(wrapper.find('button[aria-label="Bỏ lọc Tìm kiếm"]').exists()).toBe(true)
   const removeStatus = wrapper.find('button[aria-label="Bỏ lọc Trạng thái"]')
   expect(removeStatus.exists()).toBe(true)
   await removeStatus.trigger('click')
@@ -74,7 +75,10 @@ it('keeps row actions accessible for a long product name without an image', asyn
   await flushPromises()
 
   expect(wrapper.find('[data-product-thumbnail="fallback"]').text()).toBe('Đ')
-  expect(wrapper.find(`[aria-label="Thao tác ${longName}"]`).exists()).toBe(true)
+  const rowActions = wrapper.find(`[aria-label="Thao tác ${longName}"]`)
+  expect(rowActions.exists()).toBe(true)
+  expect(rowActions.element.closest('td')?.classList).toContain('sticky')
+  expect(rowActions.element.closest('td')?.classList).toContain('right-0')
   expect(
     wrapper
       .findAll('a')

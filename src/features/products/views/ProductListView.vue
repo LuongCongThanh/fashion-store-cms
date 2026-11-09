@@ -2,16 +2,16 @@
 import UButton from '@nuxt/ui/components/Button.vue'
 import { useLocalStorage } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { useCategoriesQuery } from '@features/categories/UseCategories'
 import { useProductBulkMutation, useProductsQuery } from '@features/products/api/Products.api'
 import ProductFilters from '@features/products/components/ProductFilters.vue'
-import ProductSavedViews from '@features/products/components/ProductSavedViews.vue'
+import ProductStatusPresets from '@features/products/components/ProductStatusPresets.vue'
 import ProductTable from '@features/products/components/ProductTable.vue'
+import { useProductStatusPresets } from '@features/products/composables/UseProductStatusPresets'
 import { productListSchema } from '@features/products/schemas/ProductList.schema'
-import { PRODUCT_STATUSES } from '@features/products/types/Product.types'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
@@ -20,50 +20,19 @@ import { useListState } from '@shared/composables/UseListState'
 import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { ProductStatus } from '@features/products/types/Product.types'
-
 const { t, tn } = useT()
 const format = useFormat()
 const { can } = useAuth()
 const confirm = useConfirm()
-const route = useRoute()
 const router = useRouter()
 const { params, setFilter, setPage, setSort, reset } = useListState(productListSchema)
 const query = useProductsQuery(params)
+const statusPresets = useProductStatusPresets(params)
 const categories = useCategoriesQuery()
 const mutation = useProductBulkMutation()
 const selection = ref<Record<string, boolean>>({})
 const visibility = useLocalStorage<Record<string, boolean>>('cms.columns.products', {})
 const ids = computed(() => Object.keys(selection.value).filter((id) => selection.value[id]))
-const savedViewStatuses = [undefined, ...PRODUCT_STATUSES] as const
-const savedViewQueries = savedViewStatuses.map((status) =>
-  useProductsQuery(
-    computed(() => ({
-      ...params.value,
-      page: 1,
-      pageSize: 1,
-      status,
-    })),
-  ),
-)
-const savedViews = computed(() =>
-  savedViewStatuses.map((status, index) => ({
-    label: status
-      ? t(status === 'published' ? 'products.savedViews.published' : `products.status.${status}`)
-      : t('common.all'),
-    status,
-    count: format.number(savedViewQueries[index]?.data.value?.meta.total ?? 0),
-    isPending: savedViewQueries[index]?.isPending.value ?? true,
-    to: { query: savedViewQuery(status) },
-  })),
-)
-const hasSavedViewError = computed(() => savedViewQueries.some((savedQuery) => savedQuery.isError.value))
-function savedViewQuery(status: ProductStatus | undefined) {
-  return { ...route.query, status, page: '1' }
-}
-function retrySavedViews() {
-  void Promise.all(savedViewQueries.map((savedQuery) => savedQuery.refetch()))
-}
 watch(params, () => {
   selection.value = {}
 })
@@ -90,17 +59,17 @@ function rowAction(action: string, id: string) {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-6">
     <PageHeader :title="t('dashboard.products')">
       <template #actions>
         <UButton v-if="can('product:write')" to="/products/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
-    <ProductSavedViews
-      :views="savedViews"
+    <ProductStatusPresets
+      :presets="statusPresets.presets.value"
       :activeStatus="params.status"
-      :hasError="hasSavedViewError"
-      @retry="retrySavedViews"
+      :hasError="statusPresets.hasError.value"
+      @retry="statusPresets.retry"
     />
     <ProductFilters :params="params" :categories="categories.data.value ?? []" @filter="setFilter" @clear="reset" />
     <DataTableToolbar

@@ -1,7 +1,8 @@
 export const PRODUCT_STATUSES = ['draft', 'published', 'archived'] as const
 export type ProductStatus = (typeof PRODUCT_STATUSES)[number]
 
-export interface Product {
+/** FE model for one row in the Product list; API DTOs stay inside api/. */
+export interface ProductListItem {
   id: string
   name: string
   status: ProductStatus

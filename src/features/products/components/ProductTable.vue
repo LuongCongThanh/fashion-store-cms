@@ -11,12 +11,12 @@ import TableLink from '@shared/components/table/TableLink.vue'
 import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { Product } from '@features/products/types/Product.types'
+import type { ProductListItem } from '@features/products/types/Product.types'
 
 import ProductStatusBadge from './ProductStatusBadge.vue'
 import ProductThumbnail from './ProductThumbnail.vue'
 const props = defineProps<{
-  data: Product[]
+  data: ProductListItem[]
   loading: boolean
   error?: unknown
   sort: string
@@ -32,7 +32,7 @@ const emit = defineEmits<{
 }>()
 const { t } = useT()
 const format = useFormat()
-const columns = computed<TableColumn<Product>[]>(() => [
+const columns = computed<TableColumn<ProductListItem>[]>(() => [
   {
     id: 'select',
     header: ({ table }) =>
@@ -76,6 +76,7 @@ const columns = computed<TableColumn<Product>[]>(() => [
   {
     id: 'actions',
     header: t('common.actions'),
+    meta: { class: { th: 'sticky right-0 bg-elevated', td: 'sticky right-0 bg-default' } },
     cell: ({ row }) =>
       h(RowActions, {
         label: `${t('common.actions')} ${row.original.name}`,

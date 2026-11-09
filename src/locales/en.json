@@ -130,7 +130,7 @@
     "cancelled": "Upload cancelled"
   },
   "products": {
-    "savedViews": {
+    "statusPresets": {
       "label": "Saved product views",
       "published": "Live"
     },

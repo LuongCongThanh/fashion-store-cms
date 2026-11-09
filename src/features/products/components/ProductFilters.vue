@@ -22,6 +22,7 @@ const statusItems = computed(() => PRODUCT_STATUSES.map((value) => ({ label: t(`
 const categoryItems = computed(() => props.categories.map((category) => ({ label: category.name, value: category.id })))
 const activeFilters = computed(() => {
   const filters: { key: string; label: string; value: string }[] = []
+  if (props.params.search) filters.push({ key: 'search', label: t('common.search'), value: props.params.search })
   if (props.params.status)
     filters.push({ key: 'status', label: t('common.status'), value: t(`products.status.${props.params.status}`) })
   if (props.params.categoryId) {
@@ -38,7 +39,12 @@ const activeFilters = computed(() => {
 
 <template>
   <FilterBar>
-    <ListSearch :modelValue="params.search" @update:modelValue="emit('filter', 'search', $event)" />
+    <ListSearch
+      :modelValue="params.search"
+      size="sm"
+      class="w-72 shrink-0"
+      @update:modelValue="emit('filter', 'search', $event)"
+    />
     <FilterSelect
       name="status"
       :label="t('common.status')"
@@ -64,6 +70,7 @@ const activeFilters = computed(() => {
         :name="key"
         type="number"
         min="0"
+        size="sm"
         :modelValue="params[key]"
         class="w-32"
         @change="emit('filter', key, ($event.target as HTMLInputElement).value)"

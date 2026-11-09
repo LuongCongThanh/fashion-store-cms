@@ -130,7 +130,7 @@
     "cancelled": "Đã hủy tải ảnh"
   },
   "products": {
-    "savedViews": {
+    "statusPresets": {
       "label": "Bộ lọc sản phẩm đã lưu",
       "published": "Đang bán"
     },
