@@ -1,0 +1,4 @@
+- generic:
+  - generic "Toggle devtools panel" [ref=f2e2] [cursor=pointer]
+  - region "Thông báo (F8)":
+    - list
