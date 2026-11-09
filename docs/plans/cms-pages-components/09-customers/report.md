@@ -1,6 +1,6 @@
 # 09 — Báo cáo: Customers
 
-Status: in-progress
+Status: on-hold
 Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
 Nhánh: `feat/cms-09-customers`
 PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/32
@@ -44,3 +44,29 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 - API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
 - E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
 - Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #32.
+
+### Đã làm (giữ nguyên)
+
+- `CustomerTable`, `CustomerFilters`, `CustomerProfile`, `CustomerAddressList`, `CustomerActivity`, `CustomerOrderTable`; shared `PageTabs` (tab giữ trên URL).
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `api/Customers.api.ts`, `types/Customer.types.ts`; `CustomerDetailView` gọi `useOrdersQuery`.
+- 2 test view dùng HTTP giả.
+
+### Chưa làm — chờ API / BE
+
+- Tách type list/detail theo contract thật (list không trả `addresses`, `activity`).
+- Quyết định sản phẩm về che email/số điện thoại (PII).
+- E2E danh sách và chi tiết khách hàng.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- Tổng tiền hiện số thô, `createdAt` hiện chuỗi ISO (§H).
+- Mượn key i18n của feature khác (`auth.login.email`, `nav.orders`, `dashboard.customers`).
+- Thiếu cột trạng thái; số điện thoại rỗng render `<dd>` trống; `PageTabs` thiếu `aria-controls` và điều hướng bằng phím mũi tên.
+- Chưa test ẩn tab Orders khi thiếu `order:read`.
