@@ -1,6 +1,6 @@
 # 12 — Users & Roles
 
-Status: ready-for-agent
+Status: on-hold
 Blocked by: 03, 04
 Nguồn: §4.9 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P10 · Spec: [spec.md](./spec.md)
 
@@ -30,3 +30,23 @@ Nguyên tắc chung:
 - Route read/write bị chặn đúng theo permission đã khai báo.
 - `typecheck`, `lint`, `test` pass.
 - E2E (Playwright) cho luồng tạo/sửa user, gán role/Store và sửa role permission pass.
+
+### Tiếp tục khi có API
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+**Sửa được ngay, không cần API** (từ review 2026-11-09):
+
+- [ ] **Ưu tiên cao:** UI cho người có `user:write` gán mọi role, kể cả cho chính mình.
+- [ ] **Ưu tiên cao:** tự vô hiệu hóa tài khoản / tự gỡ `role:write` khỏi role mình đang giữ mà không cảnh báo.
+- [ ] Form user luôn gọi `/roles`, `/stores` — thiếu `role:read` thì cả form thành ErrorState.
+- [ ] `pageSize: 100` cắt bớt role; `UserTable` hiện ID thay vì tên; lọc role phải gõ ID.
+- [ ] Action/resource trong ma trận chưa dịch; email sai báo 'Required'; query key không bắt đầu bằng tên feature; hai selector trùng nhau.
+
+**Chờ API / BE:**
+
+- [ ] Spec yêu cầu 'Danh sách permission lấy từ BE' — chỉ hoàn thành được khi có API.
+- [ ] BE phải chặn leo thang đặc quyền (gán role cao hơn quyền của người sửa).
+- [ ] Làm mới quyền của user hiện tại sau khi sửa role; E2E user/role.
+
+**Khi có API:** thay type viết tay bằng type sinh từ Swagger, nối lại lớp dữ liệu tạm với endpoint thật, chạy E2E, rồi kiểm lại các tiêu chí hoàn thành trong [spec.md](./spec.md).

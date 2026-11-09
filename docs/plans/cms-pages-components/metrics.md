@@ -17,7 +17,7 @@ Ngày đo: 2026-11-09. Mỗi dòng là kết quả đo trên đúng nhánh PR n�
 | 09   | Customers                         | 2        | 197                    | 85.26             | 665.54                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/32 |
 | 10   | Inventory                         | 2        | 199                    | 85.25             | 670.57                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/33 |
 | 11   | Promotions                        | 4        | 203                    | 85.36             | 676.05                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/34 |
-| 12   | Users & Roles                     | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 12   | Users & Roles                     | 6        | 209                    | 85.0              | 686.77                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/35 |
 | 13   | Settings                          | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
 | 14   | Đối chiếu và chốt                 | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
 

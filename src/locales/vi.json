@@ -242,5 +242,13 @@
     "startAt": "Bắt đầu",
     "endAt": "Kết thúc",
     "invalid": "Dữ liệu không hợp lệ; kiểm tra mã, giá trị và thời gian"
+  },
+  "users": {
+    "title": "Người dùng"
+  },
+  "roles": {
+    "title": "Vai trò",
+    "permissions": "Quyền truy cập",
+    "resource": "Tài nguyên"
   }
 }
