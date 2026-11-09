@@ -4,6 +4,7 @@ import { computed, h } from 'vue'
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
+import TableLink from '@shared/components/table/TableLink.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Promotion } from '@features/promotions/types/Promotion.types'
@@ -33,7 +34,7 @@ const columns = computed<TableColumn<Promotion>[]>(() => [
       ),
     cell: ({ row }) =>
       props.canWrite
-        ? h('a', { href: `/promotions/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
+        ? h(TableLink, { to: `/promotions/${encodeURIComponent(row.original.id)}/edit`, label: row.original.name })
         : row.original.name,
   },
   { accessorKey: 'code', header: t('promotions.code') },

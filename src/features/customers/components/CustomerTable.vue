@@ -4,6 +4,7 @@ import { computed, h } from 'vue'
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
+import TableLink from '@shared/components/table/TableLink.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Customer } from '@features/customers/types/Customer.types'
@@ -23,7 +24,8 @@ const columns = computed<TableColumn<Customer>[]>(() => [
         },
         t('common.name'),
       ),
-    cell: ({ row }) => h('a', { href: `/customers/${encodeURIComponent(row.original.id)}` }, row.original.name),
+    cell: ({ row }) =>
+      h(TableLink, { to: `/customers/${encodeURIComponent(row.original.id)}`, label: row.original.name }),
   },
   { accessorKey: 'email', header: t('auth.login.email') },
   { accessorKey: 'phone', header: t('customers.phone') },

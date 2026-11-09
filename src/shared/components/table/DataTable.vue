@@ -26,6 +26,15 @@ const emit = defineEmits<{
   retry: []
 }>()
 const { t } = useT()
+
+// DESIGN.md mục Bảng: compact (row ~36px), thead dính, bảng cuộn trong khung của nó (trang không cuộn ngang).
+const TABLE_UI = {
+  root: 'max-h-[calc(100dvh-16rem)] overflow-auto rounded-lg border border-default',
+  thead: 'bg-elevated',
+  th: 'py-2 text-xs font-medium text-muted whitespace-nowrap',
+  td: 'py-1.5 text-sm',
+}
+
 const sorting = computed<SortingState>({
   get: () =>
     props.sort &&
@@ -69,6 +78,8 @@ const visible = computed({
     :manualPagination="true"
     :manualSorting="true"
     :manualFiltering="true"
+    sticky="header"
+    :ui="TABLE_UI"
     class="w-full"
   />
 </template>

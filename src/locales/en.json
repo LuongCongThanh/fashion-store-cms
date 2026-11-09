@@ -28,6 +28,7 @@
     "previous": "Previous page",
     "next": "Next page",
     "columns": "Visible columns",
+    "clearSelection": "Clear selection",
     "selected": "selected",
     "actions": "Actions",
     "status": "Status",

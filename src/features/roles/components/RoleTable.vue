@@ -4,6 +4,7 @@ import { computed, h } from 'vue'
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
+import TableLink from '@shared/components/table/TableLink.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Role } from '@features/roles/types/Role.types'
@@ -31,7 +32,7 @@ const columns = computed<TableColumn<Role>[]>(() => [
       ),
     cell: ({ row }) =>
       props.canWrite
-        ? h('a', { href: `/roles/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
+        ? h(TableLink, { to: `/roles/${encodeURIComponent(row.original.id)}/edit`, label: row.original.name })
         : row.original.name,
   },
   {

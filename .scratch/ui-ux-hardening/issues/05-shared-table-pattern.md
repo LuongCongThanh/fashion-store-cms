@@ -1,6 +1,6 @@
 # 05 — Phase 3: pattern bảng nghiệp vụ dùng chung
 
-Status: ready-for-agent
+Status: done
 Blocked by: 02, 04
 
 Cập nhật `DataTable` và các component liên quan theo `DESIGN.md` mục Components/Bảng:
@@ -20,3 +20,4 @@ Test: DataTable spec cho chọn dòng → thanh hàng loạt hiện, bỏ chọn
 ## Comments
 - 2026-11-09: Dùng `UTable` với `rowSelection`, `columnVisibility`, pagination như `pages/customers.vue` của template, thay vì tự viết. Cân nhắc `UPopover` + `UCalendar` cho `FilterDateRange`.
 - 2026-11-09: Nhận thêm `DataTableColumnVisibility` từ ticket 04: đổi `<details>` + checkbox native sang `UDropdownMenu` checkbox.
+- 2026-11-09: Xong trên `feat/shared-table-pattern` (xếp chồng trên #49). Thêm `DataTableToolbar` (thay `DataTableBulkActions` + `DataTableColumnVisibility`, chọn cột bằng `UDropdownMenu` checkbox) và `TableLink` (áp cho 7 bảng). `DataTable` compact + `sticky="header"` + khung cuộn. Luật ưu tiên cột ở `sm` đã vào `DESIGN.md`; việc gắn `hidden sm:table-cell` cho từng bảng làm ở #07/#08. `UPopover` + `UCalendar` cho `FilterDateRange` chưa làm (giữ `UInput type=date`, đủ dùng). Toolbar mới chỉ áp ở Product list; các list khác rollout ở #08.

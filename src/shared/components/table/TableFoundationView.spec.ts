@@ -12,11 +12,11 @@ import FilterBar from '@shared/components/list/FilterBar.vue'
 import ListSearch from '@shared/components/list/ListSearch.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { renderWithPlugins } from '@test/Render'
+import { chooseMenuItem } from '@test/Select'
 
 import DataTable from './DataTable.vue'
-import DataTableBulkActions from './DataTableBulkActions.vue'
-import DataTableColumnVisibility from './DataTableColumnVisibility.vue'
 import DataTablePagination from './DataTablePagination.vue'
+import DataTableToolbar from './DataTableToolbar.vue'
 import RowActions from './RowActions.vue'
 
 type Item = { id: string; name: string }
@@ -91,13 +91,22 @@ it('lets a list View sort, paginate, select and hide columns using controlled ta
             }),
           ),
           h(StatusBadge, { label: 'Published', color: 'success' }),
-          h(DataTableColumnVisibility, {
-            columns: [{ id: 'name', label: 'Name' }],
-            modelValue: visibility.value,
-            'onUpdate:modelValue': (value) => {
-              visibility.value = value
+          h(
+            DataTableToolbar,
+            {
+              title: 'Items',
+              count: Object.values(selection.value).filter(Boolean).length,
+              columns: [{ id: 'name', label: 'Name' }],
+              visibility: visibility.value,
+              'onUpdate:visibility': (value: Record<string, boolean>) => {
+                visibility.value = value
+              },
+              onClear: () => {
+                selection.value = {}
+              },
             },
-          }),
+            { bulk: () => h('button', { 'data-action': 'bulk-archive' }, 'Archive') },
+          ),
           h(DataTable<Item>, {
             data: [{ id: 'p1', name: 'Áo' }],
             columns,
@@ -109,11 +118,6 @@ it('lets a list View sort, paginate, select and hide columns using controlled ta
               selection.value = value
             },
           }),
-          h(
-            DataTableBulkActions,
-            { count: Object.values(selection.value).filter(Boolean).length, 'data-bulk': '' },
-            () => 'Bulk actions',
-          ),
           h(DataTablePagination, {
             meta: { page: params.value.page, pageSize: 20, total: 40, totalPages: 2 },
             onPage: (page) => void setPage(page),
@@ -126,13 +130,20 @@ it('lets a list View sort, paginate, select and hide columns using controlled ta
   await wrapper.find('th button').trigger('click')
   await flushPromises()
   expect(router.currentRoute.value.query.sort).toBe('-name')
+  expect(wrapper.find('h2').text()).toBe('Items')
+  expect(wrapper.find('[data-action="bulk-archive"]').exists()).toBe(false)
   await wrapper.find('input[name="select:p1"]').setValue(true)
-  expect(wrapper.find('[data-bulk]').text()).toContain('1 đã chọn')
+  // Chọn dòng: thanh hàng loạt thay vào chỗ tiêu đề bảng.
+  expect(wrapper.text()).toContain('1 đã chọn')
+  expect(wrapper.find('[data-action="bulk-archive"]').exists()).toBe(true)
+  expect(wrapper.find('h2').exists()).toBe(false)
+  await wrapper.find('button[aria-label="Bỏ chọn"]').trigger('click')
+  expect(wrapper.find('h2').text()).toBe('Items')
+  expect(wrapper.find('[data-action="bulk-archive"]').exists()).toBe(false)
   await wrapper.find('button[aria-label="Trang sau"]').trigger('click')
   await flushPromises()
   expect(router.currentRoute.value.query.page).toBe('2')
-  await wrapper.find('summary').trigger('click')
-  await wrapper.find('details input[type="checkbox"]').setValue(false)
+  await chooseMenuItem(wrapper, 'Cột hiển thị', 'Name')
   expect(wrapper.find('thead').text()).not.toContain('Name')
 })
 
