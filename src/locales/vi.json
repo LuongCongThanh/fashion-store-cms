@@ -118,5 +118,19 @@
     "moveRight": "Di chuyển phải",
     "tooMany": "Tối đa 10 ảnh",
     "cancelled": "Đã hủy tải ảnh"
+  },
+  "products": {
+    "status": {
+      "draft": "Bản nháp",
+      "published": "Đã xuất bản",
+      "archived": "Lưu trữ"
+    },
+    "price": "Giá",
+    "category": "Danh mục",
+    "minPrice": "Giá tối thiểu",
+    "maxPrice": "Giá tối đa",
+    "publish": "Xuất bản",
+    "unpublish": "Ẩn",
+    "delete": "Xóa"
   }
 }

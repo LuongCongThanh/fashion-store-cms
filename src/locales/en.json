@@ -118,5 +118,19 @@
     "moveRight": "Move right",
     "tooMany": "Maximum 10 images",
     "cancelled": "Upload cancelled"
+  },
+  "products": {
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "price": "Price",
+    "category": "Category",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "delete": "Delete"
   }
 }
