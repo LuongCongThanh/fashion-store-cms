@@ -89,6 +89,8 @@ export function useT() {
   const { t, te, n, d } = useI18n()
   return {
     t: (key: MessageKey, named?: Record<string, unknown>) => (named ? t(key, named) : t(key)),
+    /** Số ít / số nhiều: `count` chọn dạng (`a | b` trong file locale), `named` điền biến (VD `{n}` đã format). */
+    tn: (key: MessageKey, count: number, named: Record<string, unknown> = {}) => t(key, named, count),
     te,
     n,
     d,

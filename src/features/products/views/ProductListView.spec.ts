@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
+import { plainSpaces } from '@test/Intl'
 import { renderWithPlugins } from '@test/Render'
 
 import ProductListView from './ProductListView.vue'
@@ -77,4 +78,21 @@ it('filters products using category options from the category feature', async ()
   await wrapper.find('select[name="categoryId"]').setValue('linen')
   await flushPromises()
   expect(router.currentRoute.value.query.categoryId).toBe('linen')
+})
+
+it('shows product prices as money, right-aligned', async () => {
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: '/products', component: { render: () => null } }],
+  })
+  await router.push('/products')
+  const { wrapper, http } = renderWithPlugins(ProductListView, { router })
+  http.onGet(/\/products$/).reply(200, {
+    data: [{ id: 'p4', name: 'Túi tote da thật Atelier', status: 'published', price: 15_500_000 }],
+    meta: { page: 1, pageSize: 20, total: 1, totalPages: 1 },
+  })
+  await flushPromises()
+  const price = wrapper.find('[data-cell="price"]')
+  expect(plainSpaces(price.text())).toBe('15.500.000 ₫')
+  expect(price.classes()).toContain('text-right')
 })
