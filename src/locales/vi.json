@@ -44,7 +44,9 @@
     "from": "Từ ngày",
     "to": "Đến ngày",
     "clearAll": "Xóa bộ lọc",
-    "createdAt": "Ngày tạo"
+    "createdAt": "Ngày tạo",
+    "active": "Hoạt động",
+    "inactive": "Ngừng hoạt động"
   },
   "nav": {
     "dashboard": "Tổng quan",
@@ -188,5 +190,13 @@
     "customerIdLabel": "Khách hàng",
     "minAmountLabel": "Tổng tối thiểu",
     "maxAmountLabel": "Tổng tối đa"
+  },
+  "customers": {
+    "profile": "Hồ sơ",
+    "addresses": "Địa chỉ",
+    "activity": "Hoạt động",
+    "default": "Mặc định",
+    "phone": "Điện thoại",
+    "totalSpent": "Tổng chi tiêu"
   }
 }

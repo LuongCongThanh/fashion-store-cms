@@ -44,7 +44,9 @@
     "from": "From date",
     "to": "To date",
     "clearAll": "Clear filters",
-    "createdAt": "Created at"
+    "createdAt": "Created at",
+    "active": "Active",
+    "inactive": "Inactive"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -188,5 +190,13 @@
     "customerIdLabel": "Customer",
     "minAmountLabel": "Minimum total",
     "maxAmountLabel": "Maximum total"
+  },
+  "customers": {
+    "profile": "Profile",
+    "addresses": "Addresses",
+    "activity": "Activity",
+    "default": "Default",
+    "phone": "Phone",
+    "totalSpent": "Total spent"
   }
 }
