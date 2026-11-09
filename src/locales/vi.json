@@ -36,7 +36,10 @@
     "selectAll": "Chọn tất cả",
     "create": "Tạo mới",
     "edit": "Chỉnh sửa",
-    "view": "Xem"
+    "view": "Xem",
+    "saveDraft": "Lưu nháp",
+    "unsaved": "Bỏ thay đổi chưa lưu?",
+    "delete": "Xóa"
   },
   "nav": {
     "dashboard": "Tổng quan",
@@ -102,5 +105,18 @@
     "lowStock": "Sắp hết hàng",
     "revenueChart": "Biểu đồ doanh thu",
     "orderChart": "Biểu đồ đơn hàng"
+  },
+  "media": {
+    "invalidType": "Ảnh sai định dạng (JPEG, PNG, WebP)",
+    "tooLarge": "Ảnh vượt quá 5 MB",
+    "failed": "Không thể tải ảnh lên",
+    "upload": "Tải ảnh lên",
+    "uploading": "Đang tải ảnh",
+    "preview": "Xem trước",
+    "main": "Đặt ảnh chính",
+    "moveLeft": "Di chuyển trái",
+    "moveRight": "Di chuyển phải",
+    "tooMany": "Tối đa 10 ảnh",
+    "cancelled": "Đã hủy tải ảnh"
   }
 }

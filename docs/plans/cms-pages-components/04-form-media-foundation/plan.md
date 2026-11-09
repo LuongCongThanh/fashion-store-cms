@@ -1,6 +1,6 @@
 # 04 — Nền tảng Form & Media
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 01
 Nguồn: §3 (`form/`), §4.10 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P5 · Spec: [spec.md](./spec.md)
 
