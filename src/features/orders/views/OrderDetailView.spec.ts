@@ -97,3 +97,26 @@ it('shows money and timeline dates formatted in the app locale', async () => {
   expect(shown).not.toContain(placedAt)
   expect(wrapper.find('time').attributes('datetime')).toBe(placedAt)
 })
+
+it('shows an empty state instead of a bare table when the order has no items', async () => {
+  const { wrapper } = await renderFeature(OrderDetailView, {
+    path: '/orders/o1',
+    routePath: '/orders/:id',
+    mock(http) {
+      http.onGet(/\/orders\/o1$/).reply(200, {
+        id: 'o1',
+        number: 'ORD-001',
+        status: 'pending',
+        paymentStatus: 'unpaid',
+        total: 0,
+        customer: { name: 'Lan', email: 'lan@shop.vn' },
+        shipping: { address: 'Hà Nội', carrier: '', trackingNumber: '' },
+        payment: { method: 'COD', reference: '' },
+        items: [],
+        timeline: [],
+      })
+    },
+  })
+  expect(wrapper.text()).toContain('Đơn hàng chưa có sản phẩm')
+  expect(wrapper.find('table').exists()).toBe(false)
+})

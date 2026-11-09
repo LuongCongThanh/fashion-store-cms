@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
@@ -9,7 +10,8 @@ const format = useFormat()
 </script>
 
 <template>
-  <table class="w-full">
+  <EmptyState v-if="!items.length" :title="t('orders.noItems')" icon="i-lucide-package-open" />
+  <table v-else class="w-full">
     <thead>
       <tr>
         <th>{{ t('common.name') }}</th>

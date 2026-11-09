@@ -7,6 +7,6 @@ defineProps<{ shipping: Order['shipping'] }>()
   <div class="space-y-2">
     <p>{{ shipping.address }}</p>
     <p>{{ shipping.carrier }}</p>
-    <p>{{ shipping.trackingNumber }}</p>
+    <p class="font-mono break-all">{{ shipping.trackingNumber }}</p>
   </div>
 </template>

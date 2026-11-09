@@ -18,7 +18,7 @@ const { t } = useT()
 </script>
 
 <template>
-  <form class="space-y-5" @submit.prevent="emit('submit')">
+  <form class="space-y-6" @submit.prevent="emit('submit')">
     <FormSection :title="t('roles.title')">
       <label
         >{{ t('common.name')
