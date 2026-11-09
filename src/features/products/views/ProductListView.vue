@@ -8,7 +8,9 @@ import { useAuth } from '@features/auth/UseAuth'
 import { useCategoriesQuery } from '@features/categories/UseCategories'
 import { useProductBulkMutation, useProductsQuery } from '@features/products/api/Products.api'
 import ProductFilters from '@features/products/components/ProductFilters.vue'
+import ProductStatusPresets from '@features/products/components/ProductStatusPresets.vue'
 import ProductTable from '@features/products/components/ProductTable.vue'
+import { useProductStatusPresets } from '@features/products/composables/UseProductStatusPresets'
 import { productListSchema } from '@features/products/schemas/ProductList.schema'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import PageHeader from '@shared/components/page/PageHeader.vue'
@@ -23,8 +25,9 @@ const format = useFormat()
 const { can } = useAuth()
 const confirm = useConfirm()
 const router = useRouter()
-const { params, setFilter, setPage, setSort } = useListState(productListSchema)
+const { params, setFilter, setPage, setSort, reset } = useListState(productListSchema)
 const query = useProductsQuery(params)
+const statusPresets = useProductStatusPresets(params)
 const categories = useCategoriesQuery()
 const mutation = useProductBulkMutation()
 const selection = ref<Record<string, boolean>>({})
@@ -56,13 +59,19 @@ function rowAction(action: string, id: string) {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-6">
     <PageHeader :title="t('dashboard.products')">
       <template #actions>
         <UButton v-if="can('product:write')" to="/products/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
-    <ProductFilters :params="params" :categories="categories.data.value ?? []" @filter="setFilter" />
+    <ProductStatusPresets
+      :presets="statusPresets.presets.value"
+      :activeStatus="params.status"
+      :hasError="statusPresets.hasError.value"
+      @retry="statusPresets.retry"
+    />
+    <ProductFilters :params="params" :categories="categories.data.value ?? []" @filter="setFilter" @clear="reset" />
     <DataTableToolbar
       v-model:visibility="visibility"
       :title="

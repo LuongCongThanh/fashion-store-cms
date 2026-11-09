@@ -45,6 +45,7 @@
     "from": "From date",
     "to": "To date",
     "clearAll": "Clear filters",
+    "removeFilter": "Remove {label} filter",
     "createdAt": "Created at",
     "active": "Active",
     "inactive": "Inactive",
@@ -129,6 +130,10 @@
     "cancelled": "Upload cancelled"
   },
   "products": {
+    "statusPresets": {
+      "label": "Saved product views",
+      "published": "Live"
+    },
     "status": {
       "draft": "Draft",
       "published": "Published",
