@@ -14,11 +14,14 @@ const navigation = useNavigation()
 const isCollapsed = useLocalStorage('cms.sidebarCollapsed', false)
 
 // Chỉ render kết quả của Navigation, không tự đọc route meta (§V.3).
-const items = computed(() =>
-  navigation.value.sidebar.map((item) => ({
-    label: t(item.titleKey as MessageKey),
-    icon: item.icon,
-    to: item.path,
+const groups = computed(() =>
+  navigation.value.sidebarGroups.map((group) => ({
+    title: group.titleKey ? t(group.titleKey as MessageKey) : null,
+    items: group.items.map((item) => ({
+      label: t(item.titleKey as MessageKey),
+      icon: item.icon,
+      to: item.path,
+    })),
   })),
 )
 </script>
@@ -40,6 +43,16 @@ const items = computed(() =>
         @click="isCollapsed = !isCollapsed"
       />
     </div>
-    <UNavigationMenu :items="items" orientation="vertical" :collapsed="isCollapsed" class="px-2" />
+    <div v-for="(group, index) in groups" :key="index" class="py-2">
+      <p v-if="group.title && !isCollapsed" class="px-4 text-xs font-semibold text-muted">
+        {{ group.title }}
+      </p>
+      <UNavigationMenu
+        :items="group.items"
+        orientation="vertical"
+        :collapsed="isCollapsed"
+        class="px-2"
+      />
+    </div>
   </aside>
 </template>

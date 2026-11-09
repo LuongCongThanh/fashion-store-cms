@@ -1,6 +1,6 @@
 # Spec 01 — Hoàn thiện Layout
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: —
 Nguồn: §2, §3 (`PageContainer`) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: P3 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

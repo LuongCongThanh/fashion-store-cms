@@ -16,11 +16,20 @@
     },
     "logout": "Đăng xuất",
     "store": "Cửa hàng",
-    "appName": "Fashion Store CMS"
+    "appName": "Fashion Store CMS",
+    "languageLabel": "Ngôn ngữ",
+    "themeLabel": "Giao diện"
   },
   "nav": {
     "dashboard": "Tổng quan",
-    "collapse": "Thu gọn menu"
+    "collapse": "Thu gọn menu",
+    "orders": "Đơn hàng",
+    "groups": {
+      "store": "Cửa hàng",
+      "customers": "Khách hàng",
+      "marketing": "Tiếp thị",
+      "system": "Hệ thống"
+    }
   },
   "auth": {
     "login": {

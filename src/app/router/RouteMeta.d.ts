@@ -2,6 +2,7 @@ import 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
+    sidebarGroup?: 'store' | 'customers' | 'marketing' | 'system'
     requiresAuth?: boolean
     permission?: string
     /** Chỉ cho người chưa đăng nhập (login, quên mật khẩu). */

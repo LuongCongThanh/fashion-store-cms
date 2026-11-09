@@ -1,52 +1,34 @@
-# Metrics
+# Metrics — CMS pages & components
 
-Cuối mỗi phiên làm plan, điền số liệu vào dòng của plan đó. Token lấy từ `/cost` hoặc usage của Claude Code (ước lượng nếu chia theo transcript). Số liệu chất lượng lấy sau khi PR merge vào `dev`.
+Ngày đo: 2026-11-09. Mỗi dòng là kết quả đo trên đúng nhánh PR nối tiếp; chưa merge vào dev. Base gốc: `97875842ec6cd774a5c1439929a31842a3680746` (165 tests, coverage dòng 78,09%).
 
-## Token đã dùng
+## Chất lượng theo PR
 
-| #   | Plan                              | Số phiên | Input | Output | Cache read | Tổng tokens | Chi phí (USD) |
-| --- | --------------------------------- | -------- | ----- | ------ | ---------- | ----------- | ------------- |
-| 00  | Chia plan + viết spec             | 1        |       |        |            |             |               |
-| 01  | Hoàn thiện Layout                 |          |       |        |            |             |               |
-| 02  | Dashboard                         |          |       |        |            |             |               |
-| 03  | Nền tảng List & Table             |          |       |        |            |             |               |
-| 04  | Nền tảng Form & Media             |          |       |        |            |             |               |
-| 05  | Products — List                   |          |       |        |            |             |               |
-| 06  | Categories                        |          |       |        |            |             |               |
-| 07  | Products — Create / Edit / Detail |          |       |        |            |             |               |
-| 08  | Orders                            |          |       |        |            |             |               |
-| 09  | Customers                         |          |       |        |            |             |               |
-| 10  | Inventory                         |          |       |        |            |             |               |
-| 11  | Promotions                        |          |       |        |            |             |               |
-| 12  | Users & Roles                     |          |       |        |            |             |               |
-| 13  | Settings                          |          |       |        |            |             |               |
-| 14  | Đối chiếu và chốt                 |          |       |        |            |             |               |
-|     | **Tổng**                          |          |       |        |            |             |               |
+| Plan | Nội dung                          | Test mới | Tổng test ở checkpoint | Coverage dòng (%) | Typecheck / lint / build | PR                                                          |
+| ---- | --------------------------------- | -------- | ---------------------- | ----------------- | ------------------------ | ----------------------------------------------------------- |
+| 01   | Hoàn thiện Layout                 | 4        | 169                    | 85.25             | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/24 |
+| 02   | Dashboard                         | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 03   | Nền tảng List & Table             | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 04   | Nền tảng Form & Media             | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 05   | Products — List                   | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 06   | Categories                        | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 07   | Products — Create / Edit / Detail | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 08   | Orders                            | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 09   | Customers                         | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 10   | Inventory                         | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 11   | Promotions                        | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 12   | Users & Roles                     | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 13   | Settings                          | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 14   | Đối chiếu và chốt                 | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
 
-## Chất lượng
+E2E: hoãn theo lựa chọn của người phụ trách. Backend: người phụ trách xác nhận chưa có. Coverage là kết quả Vitest tại thời điểm kiểm nhánh, không phải chứng nhận backend hay kiểm UI thủ công.
 
-| #   | Plan                              | Unit test mới | E2E mới | Coverage (lines %) | Bundle chunk feature (kB gzip) | Lint/typecheck | Ngày merge |
-| --- | --------------------------------- | ------------- | ------- | ------------------ | ------------------------------ | -------------- | ---------- |
-| 01  | Hoàn thiện Layout                 |               |         |                    |                                |                |            |
-| 02  | Dashboard                         |               |         |                    |                                |                |            |
-| 03  | Nền tảng List & Table             |               |         |                    |                                |                |            |
-| 04  | Nền tảng Form & Media             |               |         |                    |                                |                |            |
-| 05  | Products — List                   |               |         |                    |                                |                |            |
-| 06  | Categories                        |               |         |                    |                                |                |            |
-| 07  | Products — Create / Edit / Detail |               |         |                    |                                |                |            |
-| 08  | Orders                            |               |         |                    |                                |                |            |
-| 09  | Customers                         |               |         |                    |                                |                |            |
-| 10  | Inventory                         |               |         |                    |                                |                |            |
-| 11  | Promotions                        |               |         |                    |                                |                |            |
-| 12  | Users & Roles                     |               |         |                    |                                |                |            |
-| 13  | Settings                          |               |         |                    |                                |                |            |
-| 14  | Đối chiếu và chốt                 |               |         |                    |                                |                |            |
+## Token Codex
 
-## Tiến độ danh mục
+Đọc bộ đếm thực từ local session JSONL: lấy `total_token_usage` cuối mỗi session, trừ checkpoint trước lúc bắt đầu task cho phiên chính; cộng riêng các session review con đúng parent ID. Không cộng dồn các bản ghi cumulative và không cộng cached input lần nữa vào input. Phân bổ token triển khai theo từng plan: **không có số đo riêng** vì phiên triển khai ban đầu đã làm chung. Số này sẽ không được ước lượng hoặc chia đều.
 
-| Nhóm                    | Tổng mục trong nguồn | Đã làm | Bỏ (có lý do) |
-| ----------------------- | -------------------- | ------ | ------------- |
-| Layout (§2)             | 3 (+1 backlog)       |        |               |
-| Shared (§3)             | 16                   |        |               |
-| Views (§4)              | 31                   |        |               |
-| Feature components (§4) | ~60                  |        |               |
+Snapshot chi tiết và cách tái tạo được bổ sung trong PR 14. Chi phí USD: không có dữ liệu hóa đơn thực tế, không suy ra từ token ChatGPT bằng bảng giá API.
+
+## Quy trình PR
+
+14 nhánh / 14 draft PR nối tiếp, theo lựa chọn của người phụ trách. Mỗi PR sau nhắm nhánh trước để diff chỉ có một plan. Khi PR trước squash merge, restack phần chưa merge rồi đổi base PR đến lượt về dev. Không tự merge.

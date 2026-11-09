@@ -16,11 +16,20 @@
     },
     "logout": "Sign out",
     "store": "Store",
-    "appName": "Fashion Store CMS"
+    "appName": "Fashion Store CMS",
+    "languageLabel": "Language",
+    "themeLabel": "Theme"
   },
   "nav": {
     "dashboard": "Dashboard",
-    "collapse": "Collapse menu"
+    "collapse": "Collapse menu",
+    "orders": "Orders",
+    "groups": {
+      "store": "Store",
+      "customers": "Customers",
+      "marketing": "Marketing",
+      "system": "System"
+    }
   },
   "auth": {
     "login": {

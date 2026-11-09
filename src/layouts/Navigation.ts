@@ -83,7 +83,50 @@ export function buildNavigation(
     )
   }
 
-  return { sidebar, commands, shortcuts, titleOf }
+  function breadcrumbs(route: {
+    path?: string
+    params?: Record<string, unknown>
+    matched: readonly { path: string; meta: RouteMeta }[]
+  }) {
+    const ancestors = allowed.flatMap((record) =>
+      record.meta.command?.group === 'navigate' &&
+      record.meta.titleKey &&
+      record.path !== '/' &&
+      route.path?.startsWith(`${record.path}/`)
+        ? [{ path: record.path, titleKey: record.meta.titleKey }]
+        : [],
+    )
+    const matched = route.matched.flatMap((record) =>
+      record.meta.titleKey
+        ? [
+            {
+              path: (record.path || '/').replace(/:([a-zA-Z0-9_]+)/g, (_match, key: string) =>
+                encodeURIComponent(String(route.params?.[key] ?? '')),
+              ),
+              titleKey: record.meta.titleKey,
+            },
+          ]
+        : [],
+    )
+    const seen = new Set<string>()
+    return [...ancestors, ...matched]
+      .sort((a, b) => a.path.length - b.path.length)
+      .filter((item) => {
+        if (seen.has(item.path)) return false
+        seen.add(item.path)
+        return true
+      })
+  }
+
+  const sidebarGroups = ([undefined, 'store', 'customers', 'marketing', 'system'] as const)
+    .map((group) => ({
+      titleKey: group ? `nav.groups.${group}` : null,
+      items: sidebar.filter(
+        (item) => allowed.find((route) => route.name === item.name)?.meta.sidebarGroup === group,
+      ),
+    }))
+    .filter((group) => group.items.length)
+  return { sidebar, sidebarGroups, commands, shortcuts, titleOf, breadcrumbs }
 }
 
 /** Điều hướng reactive theo quyền của user hiện tại — sidebar, palette, phím tắt chỉ render kết quả này. */
