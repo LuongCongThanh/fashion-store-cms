@@ -18,7 +18,9 @@
     "store": "Cửa hàng",
     "appName": "Fashion Store CMS",
     "languageLabel": "Ngôn ngữ",
-    "themeLabel": "Giao diện"
+    "themeLabel": "Giao diện",
+    "loading": "Đang tải…",
+    "empty": "Chưa có dữ liệu"
   },
   "nav": {
     "dashboard": "Tổng quan",
@@ -74,5 +76,15 @@
     "RATE_LIMITED": "Bạn thao tác quá nhanh. Vui lòng thử lại sau.",
     "SERVER_ERROR": "Máy chủ gặp lỗi. Vui lòng thử lại sau.",
     "UNKNOWN": "Có lỗi xảy ra. Vui lòng thử lại."
+  },
+  "dashboard": {
+    "revenue": "Doanh thu",
+    "customers": "Khách hàng",
+    "products": "Sản phẩm",
+    "recentOrders": "Đơn hàng gần đây",
+    "topProducts": "Sản phẩm bán chạy",
+    "lowStock": "Sắp hết hàng",
+    "revenueChart": "Biểu đồ doanh thu",
+    "orderChart": "Biểu đồ đơn hàng"
   }
 }

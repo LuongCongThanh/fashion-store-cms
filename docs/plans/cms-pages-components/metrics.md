@@ -7,7 +7,7 @@ Ngày đo: 2026-11-09. Mỗi dòng là kết quả đo trên đúng nhánh PR n�
 | Plan | Nội dung                          | Test mới | Tổng test ở checkpoint | Coverage dòng (%) | Typecheck / lint / build | PR                                                          |
 | ---- | --------------------------------- | -------- | ---------------------- | ----------------- | ------------------------ | ----------------------------------------------------------- |
 | 01   | Hoàn thiện Layout                 | 4        | 169                    | 85.25             | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/24 |
-| 02   | Dashboard                         | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
+| 02   | Dashboard                         | 4        | 173                    | 83.64             | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/25 |
 | 03   | Nền tảng List & Table             | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
 | 04   | Nền tảng Form & Media             | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
 | 05   | Products — List                   | —        | —                      | —                 | chưa chạy                | đang chuẩn bị                                               |
