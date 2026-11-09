@@ -29,10 +29,10 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 | ----------- | --------- | -------------- | ------------------------------------------------------------ |
 | `primary`   | `brand`   | 600 / 400      | **Một** hành động chính mỗi màn, link, focus, item nav active, điểm nhấn chart |
 | `neutral`   | `slate`   | —              | Nền, chữ, viền, nút phụ, trạng thái nháp. Là màu chủ đạo của UI dày dữ liệu |
-| `success`   | `emerald` | —              | Thành công, đã giao, còn hàng, delta tăng                    |
+| `success`   | `emerald` | —              | Thành công, đã giao, còn hàng, delta tăng (qua badge)        |
 | `info`      | `sky`     | —              | Thông tin, đã xác nhận, đang giao                            |
 | `warning`   | `amber`   | —              | Cảnh báo, chờ xác nhận, sắp hết hàng                         |
-| `error`     | `red`     | —              | Lỗi, xoá, huỷ, hết hàng, delta giảm                          |
+| `error`     | `red`     | —              | Lỗi, xoá, huỷ, hết hàng, delta giảm (qua badge)              |
 | `secondary` | `indigo`  | —              | Hầu như không dùng. Cần review trước khi dùng                 |
 
 **Palette `brand` (tạm), định nghĩa trong `main.css` `@theme`:**
@@ -49,10 +49,17 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 | Thanh / cột phụ chart | `bg-accented`                | Cột chart không nổi bật, chấm timeline cũ           |
 | Chữ nổi bật         | `text-highlighted`             | Tiêu đề trang, giá trị đang active                  |
 | Chữ thường          | `text-default`                 | Body                                                |
-| Chữ phụ             | `text-muted` · `text-dimmed`   | Nhãn, mô tả, metadata · số thứ tự trang trí         |
+| Chữ phụ             | `text-muted` · `text-dimmed`   | Nhãn, mô tả, metadata · chỉ cho chữ trang trí có `aria-hidden` |
 | Viền                | `border-default`               | Mọi viền card, bảng, divider (`divide-default`)     |
 
 **Màu theo trạng thái nghiệp vụ.** Map màu đặt trong badge component của feature (ví dụ `OrderStatusBadge.vue`). Badge **luôn có chữ**, không dùng màu làm tín hiệu duy nhất.
+
+**Tương phản của màu trạng thái.** Ở light mode, `success`/`warning`/`info`/`error` là bước 500, chỉ đạt khoảng 2.1–3.8:1 trên nền trắng. Vì vậy:
+
+- **Không** dùng `text-success|warning|info|error` cho chữ.
+- Màu trạng thái chỉ dùng làm nền, viền hoặc badge `subtle`/`soft`. Chữ của các badge này dùng bước đậm, nên đạt AA.
+- Delta (▲/▼ %), tồn kho và số đếm phải hiển thị **qua badge `subtle`**, hoặc dùng chữ `text-default` kèm ký hiệu ▲/▼.
+- Ngoại lệ là `text-primary` (đã đẩy lên bước 600, ≈ 4.7:1). Chỉ dùng nó cho link và chữ ≥ `text-sm`.
 
 | Đối tượng | Map                                                                                                                         |
 | --------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -100,11 +107,11 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 Ưu tiên Nuxt UI primitive (`UButton`, `UInput`, `UBadge`, `UCheckbox`, `UTable`…). Chỉ viết wrapper khi đã chứng minh có khoảng trống mà Nuxt UI không đáp ứng.
 
 - **Button.** Chính: `UButton` mặc định (solid primary), **tối đa 1 nút mỗi vùng**. Phụ: `color="neutral" variant="outline"`. Nút nhẹ trong bảng: `variant="ghost"`/`soft`, size `xs`. Huỷ/xoá: `color="error" variant="ghost"`, và phải xác nhận qua `useConfirm`. Nút đang chạy dùng prop `loading`. Nút chỉ có icon phải có `aria-label`.
-- **Badge.** `UBadge variant="subtle"` cho trạng thái. Đếm hàng đợi dùng `variant="solid"` kèm `tabular-nums`.
+- **Badge.** `UBadge variant="subtle"` cho trạng thái. Đếm hàng đợi dùng `variant="soft"` kèm `tabular-nums`. `solid` chỉ được dùng với `primary`, `error` và `neutral`; **không** dùng `solid` cho `warning`/`info`/`success`, vì chữ trắng trên nền bước 500 chỉ đạt khoảng 2.1–2.8:1.
 - **Page header** (`PageHeader`). Tiêu đề, tuỳ chọn mô tả, slot `actions` bên phải. Nút chính nằm phải cùng.
 - **Hàng đợi "Cần xử lý"** (pattern từ dashboard). Một hàng link ô (`grid sm:grid-cols-2 xl:grid-cols-4`), mỗi ô gồm nhãn, badge đếm và `›`. Bấm vào sẽ mở list đã lọc sẵn. Hover/focus đổi viền sang `primary`.
 - **Bảng nghiệp vụ.** Có viền ngoài `rounded-lg`. `thead` dùng `bg-elevated text-xs text-muted` và dính (`sticky top-0 z-10`). Cột đầu là checkbox. Cột "Sản phẩm" gồm ảnh nhỏ 40px, tên (`line-clamp-1`, có `title`) và SKU mono. Tiền căn phải. Cuối dòng có menu `⋯`. Khi chọn dòng, **thanh thao tác hàng loạt thay vào chỗ tiêu đề bảng** (nền `bg-primary/10`), hiện số đã chọn và các action. Bảng cuộn ngang trong khung của nó, trang không bị cuộn ngang.
-- **Tab bộ lọc đã lưu.** Tab gạch chân (`border-b-2 border-primary` khi active), mỗi tab kèm số đếm. Đặt phía trên thanh lọc.
+- **Tab bộ lọc đã lưu.** Tab gạch chân (`border-b-2 border-primary` khi active), mỗi tab kèm số đếm. Đặt phía trên thanh lọc. Mỗi tab đổi URL nên làm bằng `<nav>` chứa các `RouterLink` có `aria-current="page"`. **Không** dùng `role="tab"` tự viết. Tab đổi nội dung tại chỗ thì dùng `UTabs`, vì nó đã có điều hướng bằng phím mũi tên.
 - **Thanh lọc.** Nằm trên một dòng gồm: ô tìm kiếm (`w-72`), các nút lọc `outline sm`, chip lọc đang bật (`UBadge soft primary` có nút `×`) và nút "Xoá lọc".
 - **Thanh tiến trình trạng thái** (order). Các bước bằng nhau. Bước đã qua và bước hiện tại tô `bg-primary`, bước sau tô `bg-accented`. Bước hiện tại có `aria-current="step"`. Đi kèm **một** nút hành động tiếp theo, đặt bên phải header.
 - **Section / card.** `rounded-lg border border-default bg-default`. Tiêu đề section nằm trong khối.
@@ -131,7 +138,7 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 - **Do** dùng `font-display` cho chữ ≥ 18px. **Don't** dùng nó trong bảng hay form.
 - **Do** dùng `tabular-nums` cho mọi con số và căn phải cột tiền. **Don't** cắt chữ mà không có `title` hoặc cách khác để xem đủ nội dung.
 - **Do** cho mọi hành động thiết yếu luôn hiển thị hoặc truy cập được bằng bàn phím. **Don't** để hành động chỉ hiện khi hover.
-- **Do** giữ focus ring `focus-visible` của Nuxt UI. **Don't** dùng `outline-none` trần.
+- **Do** giữ focus ring `focus-visible` của Nuxt UI. Element tự viết (link ô, `<button>`, dòng bảng bấm được) phải dùng `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`. Ring phải đạt ≥ 3:1 so với nền và hiện ngay lập tức, không có animation. **Don't** dùng `outline-none` trần, hay control native (`<select>`, `<input>`) không có style khi đã có primitive Nuxt UI tương ứng.
 - **Do** dùng viền để phân tách. **Don't** thêm bóng, gradient hay hiệu ứng trang trí. Ngoại lệ duy nhất là ảnh giả khi thiếu ảnh.
 - **Do** đảm bảo tương phản chữ ≥ 4.5:1 ở cả light và dark.
 
