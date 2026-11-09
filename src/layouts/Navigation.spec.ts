@@ -54,10 +54,7 @@ describe('buildNavigation', () => {
       { name: 'home', path: '/', titleKey: 'nav.dashboard', icon: 'i-lucide-home' },
     ])
 
-    expect(buildNavigation(ROUTES, allow(['orders.read'])).sidebar.map((i) => i.path)).toEqual([
-      '/',
-      '/orders',
-    ])
+    expect(buildNavigation(ROUTES, allow(['orders.read'])).sidebar.map((i) => i.path)).toEqual(['/', '/orders'])
   })
 
   it('builds palette commands for every permitted route with a command', () => {
@@ -98,9 +95,7 @@ describe('buildNavigation', () => {
         matched: [{ meta: { requiresAuth: true } }, { meta: { titleKey: 'nav.orders' } }],
       }),
     ).toBe('nav.orders')
-    expect(titleOf({ matched: [{ meta: { titleKey: 'nav.dashboard' } }, { meta: {} }] })).toBe(
-      'nav.dashboard',
-    )
+    expect(titleOf({ matched: [{ meta: { titleKey: 'nav.dashboard' } }, { meta: {} }] })).toBe('nav.dashboard')
     expect(titleOf({ matched: [{ meta: {} }] })).toBeNull()
   })
 })

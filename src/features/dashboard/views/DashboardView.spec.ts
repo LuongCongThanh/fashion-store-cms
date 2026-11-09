@@ -56,9 +56,7 @@ it('loads the current user when opening the dashboard directly after a reload', 
 it('links a recent order directly to its detail page', async () => {
   const { wrapper, http } = renderWithPlugins(DashboardView)
   http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
-  http
-    .onGet(/\/dashboard\/recent-orders$/)
-    .reply(200, { items: [{ id: 'o1', label: 'ORD-001', value: 200000 }] })
+  http.onGet(/\/dashboard\/recent-orders$/).reply(200, { items: [{ id: 'o1', label: 'ORD-001', value: 200000 }] })
   http.onGet(/\/dashboard\//).reply(200, { value: 12, points: [], items: [] })
   await flushPromises()
   expect(wrapper.find('a[href="/orders/o1"]').text()).toBe('ORD-001')

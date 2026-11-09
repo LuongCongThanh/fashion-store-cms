@@ -5,14 +5,13 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useProductQuery } from '@features/products/api/ProductEditor.api'
+import ProductStatusBadge from '@features/products/components/ProductStatusBadge.vue'
 import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import { useProductQuery } from '../api/ProductEditor.api'
-import ProductStatusBadge from '../components/ProductStatusBadge.vue'
 
 const route = useRoute()
 const { can } = useAuth()
@@ -27,11 +26,9 @@ const description = computed(() => DOMPurify.sanitize(query.data.value?.descript
   <div v-else-if="query.data.value" class="space-y-5">
     <PageHeader :title="query.data.value.name">
       <template #actions>
-        <UButton
-          v-if="can('product:write')"
-          :to="`/products/${encodeURIComponent(query.data.value.id)}/edit`"
-          >{{ t('common.edit') }}</UButton
-        >
+        <UButton v-if="can('product:write')" :to="`/products/${encodeURIComponent(query.data.value.id)}/edit`">{{
+          t('common.edit')
+        }}</UButton>
       </template>
     </PageHeader>
     <ProductStatusBadge :status="query.data.value.status" />

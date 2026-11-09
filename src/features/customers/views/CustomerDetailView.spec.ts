@@ -27,15 +27,11 @@ it('restores the selected customer tab from the URL and scopes order history to 
   })
   expect(wrapper.find('[role="tab"][aria-selected="true"]').text()).toContain('Đơn hàng')
   expect(wrapper.text()).toContain('ORD-001')
-  expect(http.history.get.find((request) => request.url === '/orders')?.params.customerId).toBe(
-    'c1',
-  )
+  expect(http.history.get.find((request) => request.url === '/orders')?.params.customerId).toBe('c1')
   await wrapper.find('button[aria-label="Trang sau"]').trigger('click')
   await flushPromises()
   expect(router.currentRoute.value.query.page).toBe('2')
-  expect(http.history.get.filter((request) => request.url === '/orders').at(-1)?.params.page).toBe(
-    2,
-  )
+  expect(http.history.get.filter((request) => request.url === '/orders').at(-1)?.params.page).toBe(2)
   await wrapper.find('[role="tab"][data-tab="addresses"]').trigger('click')
   await flushPromises()
   expect(router.currentRoute.value.query.tab).toBe('addresses')

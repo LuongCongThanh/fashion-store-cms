@@ -11,9 +11,7 @@ export type MessageSchema = typeof vi
 
 /** Mọi key lá của MessageSchema, VD 'common.save' | 'errors.UNKNOWN'. */
 type Leaves<T, P extends string = ''> = {
-  [K in keyof T & string]: T[K] extends Record<string, unknown>
-    ? Leaves<T[K], `${P}${K}.`>
-    : `${P}${K}`
+  [K in keyof T & string]: T[K] extends Record<string, unknown> ? Leaves<T[K], `${P}${K}.`> : `${P}${K}`
 }[keyof T & string]
 export type MessageKey = Leaves<MessageSchema>
 export type AppLocale = 'en' | 'vi'

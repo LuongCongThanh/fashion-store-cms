@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import UButton from '@nuxt/ui/components/Button.vue'
 
+import { nextOrderStatuses } from '@features/orders/schemas/OrderStatus'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { nextOrderStatuses } from '../schemas/OrderStatus'
-
-import type { OrderStatus } from '../types/Order.types'
+import type { OrderStatus } from '@features/orders/types/Order.types'
 defineProps<{ status: OrderStatus; pending: boolean }>()
 const emit = defineEmits<{ change: [status: OrderStatus] }>()
 const { t } = useT()

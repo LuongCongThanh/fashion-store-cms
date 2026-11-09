@@ -4,7 +4,7 @@ import { onBeforeUnmount, ref } from 'vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { MediaImage } from '../types/Media.types'
+import type { MediaImage } from '@features/media/types/Media.types'
 defineProps<{
   uploading: boolean
   error?: string
@@ -37,24 +37,15 @@ onBeforeUnmount(() => {
   <div class="space-y-3">
     <label
       >{{ t('media.upload')
-      }}<input
-        type="file"
-        accept="image/jpeg,image/png,image/webp"
-        :disabled="uploading"
-        @change="select"
-      />
+      }}<input type="file" accept="image/jpeg,image/png,image/webp" :disabled="uploading" @change="select" />
     </label>
     <p v-if="error" role="alert">{{ error }}</p>
     <UButton v-if="uploading" type="button" data-action="cancel-upload" @click="emit('cancel')">{{
       t('common.cancel')
     }}</UButton>
-    <UButton
-      v-if="canRetry && !uploading"
-      type="button"
-      data-action="retry-upload"
-      @click="emit('retry')"
-      >{{ t('common.retry') }}</UButton
-    >
+    <UButton v-if="canRetry && !uploading" type="button" data-action="retry-upload" @click="emit('retry')">{{
+      t('common.retry')
+    }}</UButton>
     <progress v-if="uploading" :value="progress" max="100" :aria-label="t('media.uploading')" />
     <img
       v-if="image || preview"

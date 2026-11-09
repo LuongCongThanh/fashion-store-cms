@@ -14,16 +14,12 @@ import { createHttpClient } from './HttpClient'
 const BASE = 'http://api.test'
 
 /** Chỉ test qua interface: createHttpClient({ transport: mock.adapter() }) (§O.3). */
-function setup(
-  opts: { callRefresh?: (rt: string) => Promise<AuthTokens>; initial?: SessionSnapshot } = {},
-) {
+function setup(opts: { callRefresh?: (rt: string) => Promise<AuthTokens>; initial?: SessionSnapshot } = {}) {
   const mock = new MockAdapter(axios.create())
   const session = createSession({
     pinia: createPinia(),
     queryClient: new QueryClient(),
-    callRefresh: vi.fn(
-      opts.callRefresh ?? (async () => ({ accessToken: 'fresh', refreshToken: 'rt-2' })),
-    ),
+    callRefresh: vi.fn(opts.callRefresh ?? (async () => ({ accessToken: 'fresh', refreshToken: 'rt-2' }))),
     initial: opts.initial ?? { accessToken: 'token-1', refreshToken: 'rt-1', storeId: 'store-1' },
   })
   const http = createHttpClient({
@@ -74,15 +70,9 @@ describe('HttpClient', () => {
     const { mock, http } = setup({ callRefresh })
     mock
       .onGet(new RegExp(`${BASE}/items/\\d`))
-      .reply((config) =>
-        config.headers?.Authorization === 'Bearer fresh' ? [200, { ok: config.url }] : [401, {}],
-      )
+      .reply((config) => (config.headers?.Authorization === 'Bearer fresh' ? [200, { ok: config.url }] : [401, {}]))
 
-    const results = await Promise.all([
-      http.get('/items/1'),
-      http.get('/items/2'),
-      http.get('/items/3'),
-    ])
+    const results = await Promise.all([http.get('/items/1'), http.get('/items/2'), http.get('/items/3')])
 
     expect(callRefresh).toHaveBeenCalledTimes(1)
     expect(results).toEqual([{ ok: '/items/1' }, { ok: '/items/2' }, { ok: '/items/3' }])

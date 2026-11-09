@@ -17,11 +17,7 @@ type HasPaths = [keyof paths] extends [never] ? false : true
 type PathsWith<M extends Method> = HasPaths extends true
   ? { [P in keyof paths]: paths[P] extends Record<M, object> ? P : never }[keyof paths]
   : string
-type Op<P, M extends Method> = P extends keyof paths
-  ? paths[P] extends Record<M, infer O>
-    ? O
-    : never
-  : never
+type Op<P, M extends Method> = P extends keyof paths ? (paths[P] extends Record<M, infer O> ? O : never) : never
 type JsonOf<T> = T extends { content: { 'application/json': infer R } } ? R : unknown
 type ResponseOf<P, M extends Method> = HasPaths extends true
   ? Op<P, M> extends { responses: infer R }
@@ -67,10 +63,7 @@ export interface RequestOpts<P, M extends Method> {
 
 /** Mọi method trả thẳng `data`; lỗi LUÔN là ApiError (§O.1). */
 export interface HttpClient {
-  get<P extends PathsWith<'get'>>(
-    url: P,
-    opts?: RequestOpts<P, 'get'>,
-  ): Promise<ResponseOf<P, 'get'>>
+  get<P extends PathsWith<'get'>>(url: P, opts?: RequestOpts<P, 'get'>): Promise<ResponseOf<P, 'get'>>
   post<P extends PathsWith<'post'>>(
     url: P,
     body: BodyOf<P, 'post'>,
@@ -86,10 +79,7 @@ export interface HttpClient {
     body: BodyOf<P, 'patch'>,
     opts?: RequestOpts<P, 'patch'>,
   ): Promise<ResponseOf<P, 'patch'>>
-  delete<P extends PathsWith<'delete'>>(
-    url: P,
-    opts?: RequestOpts<P, 'delete'>,
-  ): Promise<ResponseOf<P, 'delete'>>
+  delete<P extends PathsWith<'delete'>>(url: P, opts?: RequestOpts<P, 'delete'>): Promise<ResponseOf<P, 'delete'>>
 }
 
 interface Config extends InternalAxiosRequestConfig {
@@ -130,12 +120,7 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
     return config
   }
 
-  async function request(
-    method: Method,
-    url: string,
-    body: unknown,
-    opts: RequestOpts<string, Method> = {},
-  ) {
+  async function request(method: Method, url: string, body: unknown, opts: RequestOpts<string, Method> = {}) {
     const res = await instance.request({
       method,
       url: fillPath(url, opts.path as Record<string, number | string> | undefined),

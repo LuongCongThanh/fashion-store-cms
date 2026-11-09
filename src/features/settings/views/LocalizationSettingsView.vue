@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import LocalizationSettingsForm from '@features/settings/components/LocalizationSettingsForm.vue'
+import { useLocalizationEditor } from '@features/settings/composables/UseLocalizationEditor'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import LocalizationSettingsForm from '../components/LocalizationSettingsForm.vue'
-import { useLocalizationEditor } from '../composables/UseLocalizationEditor'
 const { t } = useT()
 const editor = useLocalizationEditor()
 </script>

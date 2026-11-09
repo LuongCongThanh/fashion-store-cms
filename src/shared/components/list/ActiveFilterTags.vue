@@ -15,8 +15,6 @@ const { t } = useT()
       trailingIcon="i-lucide-x"
       @click="emit('remove', filter.key)"
       >{{ filter.label }}: {{ filter.value }}</UButton
-    ><UButton data-action="clear-filters" variant="ghost" @click="emit('clear')">{{
-      t('common.clearAll')
-    }}</UButton>
+    ><UButton data-action="clear-filters" variant="ghost" @click="emit('clear')">{{ t('common.clearAll') }}</UButton>
   </div>
 </template>

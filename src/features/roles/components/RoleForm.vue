@@ -3,10 +3,10 @@ import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import PermissionMatrix from './PermissionMatrix.vue'
+import type { RoleInput } from '@features/roles/schemas/Role.schema'
+import type { Permission } from '@features/roles/types/Role.types'
 
-import type { RoleInput } from '../schemas/Role.schema'
-import type { Permission } from '../types/Role.types'
+import PermissionMatrix from './PermissionMatrix.vue'
 defineProps<{
   modelValue: RoleInput
   permissions: Permission[]

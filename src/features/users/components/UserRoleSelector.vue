@@ -6,9 +6,7 @@ const { t } = useT()
 function toggle(id: string, checked: boolean) {
   emit(
     'update:modelValue',
-    checked
-      ? [...new Set([...props.modelValue, id])]
-      : props.modelValue.filter((value) => value !== id),
+    checked ? [...new Set([...props.modelValue, id])] : props.modelValue.filter((value) => value !== id),
   )
 }
 </script>

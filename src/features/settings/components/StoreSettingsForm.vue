@@ -4,7 +4,7 @@ import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { StoreSettingsInput } from '../schemas/Settings.schema'
+import type { StoreSettingsInput } from '@features/settings/schemas/Settings.schema'
 defineProps<{
   modelValue: StoreSettingsInput
   errors: Record<string, string | undefined>

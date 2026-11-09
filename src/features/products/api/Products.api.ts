@@ -6,17 +6,15 @@ import type { MaybeRefOrGetter } from 'vue'
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 import { useLocale } from '@shared/lib/i18n/I18n'
 
+import type { ProductListParams } from '@features/products/schemas/ProductList.schema'
+import type { Product } from '@features/products/types/Product.types'
 import type { Paginated } from '@shared/types/Pagination.types'
-
-import type { ProductListParams } from '../schemas/ProductList.schema'
-import type { Product } from '../types/Product.types'
 export function useProductsQuery(params: MaybeRefOrGetter<ProductListParams>) {
   const http = useHttpClient()
   const { locale } = useLocale()
   return useQuery({
     queryKey: computed(() => ['products', locale.value, toValue(params)]),
-    queryFn: ({ signal }) =>
-      http.get('/products', { query: toValue(params), signal }) as Promise<Paginated<Product>>,
+    queryFn: ({ signal }) => http.get('/products', { query: toValue(params), signal }) as Promise<Paginated<Product>>,
   })
 }
 export function useProductBulkMutation() {

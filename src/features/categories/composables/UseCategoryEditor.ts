@@ -3,18 +3,17 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useCategoriesQuery } from '@features/categories/api/Categories.api'
+import { useCategoryDetailQuery, useSaveCategoryMutation } from '@features/categories/api/CategoryEditor.api'
+import { categorySchema } from '@features/categories/schemas/Category.schema'
+import { categoryParentOptions } from '@features/categories/schemas/CategoryTree'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useUnsavedGuard } from '@shared/composables/UseUnsavedGuard'
 import { applyApiErrorToForm } from '@shared/lib/form/ApplyApiErrorToForm'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useCategoriesQuery } from '../api/Categories.api'
-import { useCategoryDetailQuery, useSaveCategoryMutation } from '../api/CategoryEditor.api'
-import { categorySchema } from '../schemas/Category.schema'
-import { categoryParentOptions } from '../schemas/CategoryTree'
-
-import type { CategoryInput } from '../schemas/Category.schema'
+import type { CategoryInput } from '@features/categories/schemas/Category.schema'
 export function useCategoryEditor() {
   const notify = useNotify()
   const route = useRoute()
@@ -54,19 +53,14 @@ export function useCategoryEditor() {
   useUnsavedGuard(() => meta.value.dirty)
   async function submit() {
     if (!can('category:write') || mutation.isPending.value) return
-    if (
-      values.parentId &&
-      !parentOptions.value.some((category) => category.id === values.parentId)
-    ) {
+    if (values.parentId && !parentOptions.value.some((category) => category.id === values.parentId)) {
       setErrors({ parentId: t('categories.invalidParent') })
       return
     }
     const parsed = categorySchema.safeParse(values)
     if (!parsed.success) {
       setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')]),
-        ),
+        Object.fromEntries(parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')])),
       )
       return
     }

@@ -5,16 +5,14 @@ import type { MaybeRefOrGetter } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
+import type { RoleInput } from '@features/roles/schemas/Role.schema'
+import type { Permission, Role } from '@features/roles/types/Role.types'
 import type { Paginated } from '@shared/types/Pagination.types'
-
-import type { RoleInput } from '../schemas/Role.schema'
-import type { Permission, Role } from '../types/Role.types'
 export function useRolesQuery(params: MaybeRefOrGetter<Record<string, unknown>> = {}) {
   const http = useHttpClient()
   return useQuery({
     queryKey: computed(() => ['roles', toValue(params)]),
-    queryFn: ({ signal }) =>
-      http.get('/roles', { signal, query: toValue(params) }) as Promise<Paginated<Role>>,
+    queryFn: ({ signal }) => http.get('/roles', { signal, query: toValue(params) }) as Promise<Paginated<Role>>,
   })
 }
 export function usePermissionsQuery() {
@@ -29,8 +27,7 @@ export function useRoleQuery(id: MaybeRefOrGetter<string>) {
   return useQuery({
     queryKey: computed(() => ['roles', 'detail', toValue(id)]),
     enabled: computed(() => !!toValue(id)),
-    queryFn: ({ signal }) =>
-      http.get(`/roles/${encodeURIComponent(toValue(id))}`, { signal }) as Promise<Role>,
+    queryFn: ({ signal }) => http.get(`/roles/${encodeURIComponent(toValue(id))}`, { signal }) as Promise<Role>,
   })
 }
 export function useSaveRoleMutation(id: MaybeRefOrGetter<string>) {
@@ -39,9 +36,7 @@ export function useSaveRoleMutation(id: MaybeRefOrGetter<string>) {
   return useMutation({
     meta: { errorHandling: 'local' },
     mutationFn: (input: RoleInput) =>
-      toValue(id)
-        ? http.put(`/roles/${encodeURIComponent(toValue(id))}`, input)
-        : http.post('/roles', input),
+      toValue(id) ? http.put(`/roles/${encodeURIComponent(toValue(id))}`, input) : http.post('/roles', input),
     onSuccess: () => client.invalidateQueries({ queryKey: ['roles'] }),
   })
 }

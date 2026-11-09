@@ -10,11 +10,7 @@ const { t } = useT()
 <template>
   <FilterBar>
     <ListSearch :modelValue="params.search" @update:modelValue="emit('filter', 'search', $event)" />
-    <FilterDateRange
-      :from="params.from"
-      :to="params.to"
-      @filter="(key, value) => emit('filter', key, value)"
-    />
+    <FilterDateRange :from="params.from" :to="params.to" @filter="(key, value) => emit('filter', key, value)" />
     <label
       >{{ t('inventory.type')
       }}<select

@@ -6,11 +6,7 @@ const props = defineProps<{ title: string; description?: string; icon?: string }
 </script>
 
 <template>
-  <UEmpty
-    :icon="props.icon ?? 'i-lucide-inbox'"
-    :title="props.title"
-    :description="props.description"
-  >
+  <UEmpty :icon="props.icon ?? 'i-lucide-inbox'" :title="props.title" :description="props.description">
     <template #actions>
       <slot name="actions" />
     </template>

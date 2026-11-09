@@ -14,8 +14,7 @@ const { needRefresh, reload } = usePwa()
 
 // Có bản mới → toast + nút Tải lại; không tự reload để không mất dữ liệu form (§R.2).
 watch(needRefresh, (hasUpdate) => {
-  if (hasUpdate)
-    notify.prompt('pwa.updateAvailable', { label: 'pwa.reload', onClick: () => void reload() })
+  if (hasUpdate) notify.prompt('pwa.updateAvailable', { label: 'pwa.reload', onClick: () => void reload() })
 })
 </script>
 

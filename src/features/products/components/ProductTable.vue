@@ -8,9 +8,9 @@ import DataTable from '@shared/components/table/DataTable.vue'
 import RowActions from '@shared/components/table/RowActions.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import ProductStatusBadge from './ProductStatusBadge.vue'
+import type { Product } from '@features/products/types/Product.types'
 
-import type { Product } from '../types/Product.types'
+import ProductStatusBadge from './ProductStatusBadge.vue'
 const props = defineProps<{
   data: Product[]
   loading: boolean
@@ -45,15 +45,12 @@ const columns = computed<TableColumn<Product>[]>(() => [
   },
   {
     accessorKey: 'name',
-    header: ({ column }) =>
-      h('button', { onClick: () => column.toggleSorting(), type: 'button' }, t('common.name')),
-    cell: ({ row }) =>
-      h('a', { href: `/products/${encodeURIComponent(row.original.id)}` }, row.original.name),
+    header: ({ column }) => h('button', { onClick: () => column.toggleSorting(), type: 'button' }, t('common.name')),
+    cell: ({ row }) => h('a', { href: `/products/${encodeURIComponent(row.original.id)}` }, row.original.name),
   },
   {
     accessorKey: 'price',
-    header: ({ column }) =>
-      h('button', { onClick: () => column.toggleSorting(), type: 'button' }, t('products.price')),
+    header: ({ column }) => h('button', { onClick: () => column.toggleSorting(), type: 'button' }, t('products.price')),
   },
   {
     accessorKey: 'status',

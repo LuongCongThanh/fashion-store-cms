@@ -4,6 +4,11 @@ import { useRoute } from 'vue-router'
 import { z } from 'zod'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useCustomerQuery } from '@features/customers/api/Customers.api'
+import CustomerActivity from '@features/customers/components/CustomerActivity.vue'
+import CustomerAddressList from '@features/customers/components/CustomerAddressList.vue'
+import CustomerOrderTable from '@features/customers/components/CustomerOrderTable.vue'
+import CustomerProfile from '@features/customers/components/CustomerProfile.vue'
 import { useOrdersQuery } from '@features/orders/UseOrders'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
@@ -12,12 +17,6 @@ import PageTabs from '@shared/components/page/PageTabs.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import { useCustomerQuery } from '../api/Customers.api'
-import CustomerActivity from '../components/CustomerActivity.vue'
-import CustomerAddressList from '../components/CustomerAddressList.vue'
-import CustomerOrderTable from '../components/CustomerOrderTable.vue'
-import CustomerProfile from '../components/CustomerProfile.vue'
 const route = useRoute()
 const { t } = useT()
 const { can } = useAuth()
@@ -28,9 +27,7 @@ const tabs = computed(() => [
   ...(can('order:read') ? [{ id: 'orders', label: t('nav.orders') }] : []),
   { id: 'activity', label: t('customers.activity') },
 ])
-const tab = computed(() =>
-  tabs.value.some((tab) => tab.id === route.query.tab) ? String(route.query.tab) : 'profile',
-)
+const tab = computed(() => (tabs.value.some((tab) => tab.id === route.query.tab) ? String(route.query.tab) : 'profile'))
 const {
   params: orderParams,
   setPage,
@@ -54,10 +51,7 @@ const orders = useOrdersQuery(
     <PageTabs :tabs="tabs" />
     <div role="tabpanel">
       <CustomerProfile v-if="tab === 'profile'" :customer="query.data.value" />
-      <CustomerAddressList
-        v-else-if="tab === 'addresses'"
-        :addresses="query.data.value.addresses"
-      />
+      <CustomerAddressList v-else-if="tab === 'addresses'" :addresses="query.data.value.addresses" />
       <CustomerOrderTable
         v-else-if="tab === 'orders'"
         :data="orders.data.value?.data ?? []"

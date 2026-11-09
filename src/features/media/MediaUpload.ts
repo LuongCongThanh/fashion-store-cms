@@ -20,8 +20,7 @@ export function uploadToStorage(
     for (const [key, value] of Object.entries(options.headers ?? { 'Content-Type': file.type }))
       request.setRequestHeader(key, value)
     request.upload.addEventListener('progress', (event) => {
-      if (event.lengthComputable && event.total > 0)
-        options.onProgress(Math.round((event.loaded / event.total) * 100))
+      if (event.lengthComputable && event.total > 0) options.onProgress(Math.round((event.loaded / event.total) * 100))
     })
     request.addEventListener(
       'load',

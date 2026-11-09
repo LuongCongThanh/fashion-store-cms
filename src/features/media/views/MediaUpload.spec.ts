@@ -2,10 +2,9 @@ import { flushPromises } from '@vue/test-utils'
 import { afterEach, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 
+import ImageUploader from '@features/media/components/ImageUploader.vue'
+import { useMedia } from '@features/media/UseMedia'
 import { renderWithPlugins } from '@test/Render'
-
-import ImageUploader from '../components/ImageUploader.vue'
-import { useMedia } from '../UseMedia'
 
 class StorageRequest extends EventTarget {
   upload = new EventTarget()
@@ -26,9 +25,7 @@ class StorageRequest extends EventTarget {
     this.body = file
     StorageRequest.requests.push(this)
     queueMicrotask(() =>
-      this.upload.dispatchEvent(
-        new ProgressEvent('progress', { lengthComputable: true, loaded: 2, total: 4 }),
-      ),
+      this.upload.dispatchEvent(new ProgressEvent('progress', { lengthComputable: true, loaded: 2, total: 4 })),
     )
   }
   abort() {
@@ -59,9 +56,7 @@ it('rejects invalid images before HTTP and shows a successfully uploaded preview
     },
   })
   const { wrapper, http } = renderWithPlugins(Host)
-  http
-    .onPost(/\/media\/presign$/)
-    .reply(200, { mediaId: 'image-1', uploadUrl: 'https://storage.test/upload' })
+  http.onPost(/\/media\/presign$/).reply(200, { mediaId: 'image-1', uploadUrl: 'https://storage.test/upload' })
   http
     .onPost(/\/media\/image-1\/complete$/)
     .reply(200, { id: 'image-1', url: 'https://store.test/image.png', name: 'photo.png' })
@@ -115,9 +110,7 @@ it('cancels a storage upload without completing it and retries the original imag
     },
   })
   const { wrapper, http } = renderWithPlugins(Host)
-  http
-    .onPost(/\/media\/presign$/)
-    .reply(200, { mediaId: 'image-1', uploadUrl: 'https://storage.test/upload' })
+  http.onPost(/\/media\/presign$/).reply(200, { mediaId: 'image-1', uploadUrl: 'https://storage.test/upload' })
   http
     .onPost(/\/media\/image-1\/complete$/)
     .reply(200, { id: 'image-1', url: 'https://store.test/image.png', name: 'photo.png' })

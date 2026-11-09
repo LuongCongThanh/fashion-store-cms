@@ -4,16 +4,15 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { useRolesQuery } from '@features/roles/UseRoles'
+import { useAssignableStoresQuery, useSaveUserMutation, useUserQuery } from '@features/users/api/Users.api'
+import { userSchema } from '@features/users/schemas/User.schema'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useUnsavedGuard } from '@shared/composables/UseUnsavedGuard'
 import { applyApiErrorToForm } from '@shared/lib/form/ApplyApiErrorToForm'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useAssignableStoresQuery, useSaveUserMutation, useUserQuery } from '../api/Users.api'
-import { userSchema } from '../schemas/User.schema'
-
-import type { UserInput } from '../schemas/User.schema'
+import type { UserInput } from '@features/users/schemas/User.schema'
 export function useUserEditor() {
   const route = useRoute()
   const router = useRouter()
@@ -51,9 +50,7 @@ export function useUserEditor() {
     const parsed = userSchema.safeParse(values)
     if (!parsed.success) {
       setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')]),
-        ),
+        Object.fromEntries(parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')])),
       )
       return
     }

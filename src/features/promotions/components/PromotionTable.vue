@@ -6,9 +6,9 @@ import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 import DataTable from '@shared/components/table/DataTable.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import PromotionStatusBadge from './PromotionStatusBadge.vue'
+import type { Promotion } from '@features/promotions/types/Promotion.types'
 
-import type { Promotion } from '../types/Promotion.types'
+import PromotionStatusBadge from './PromotionStatusBadge.vue'
 const props = defineProps<{
   data: Promotion[]
   loading: boolean
@@ -21,15 +21,10 @@ const { t } = useT()
 const columns = computed<TableColumn<Promotion>[]>(() => [
   {
     accessorKey: 'name',
-    header: ({ column }) =>
-      h('button', { onClick: () => column.toggleSorting() }, t('common.name')),
+    header: ({ column }) => h('button', { onClick: () => column.toggleSorting() }, t('common.name')),
     cell: ({ row }) =>
       props.canWrite
-        ? h(
-            'a',
-            { href: `/promotions/${encodeURIComponent(row.original.id)}/edit` },
-            row.original.name,
-          )
+        ? h('a', { href: `/promotions/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
         : row.original.name,
   },
   { accessorKey: 'code', header: t('promotions.code') },

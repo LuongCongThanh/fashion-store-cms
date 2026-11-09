@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { ProductInput } from '../schemas/Product.schema'
+import type { ProductInput } from '@features/products/schemas/Product.schema'
 defineProps<{ modelValue: ProductInput; errors: Record<string, string | undefined> }>()
 const emit = defineEmits<{ 'update:modelValue': [value: ProductInput] }>()
 const { t } = useT()

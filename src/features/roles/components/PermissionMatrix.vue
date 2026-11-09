@@ -3,22 +3,16 @@ import { computed } from 'vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { Permission } from '../types/Role.types'
+import type { Permission } from '@features/roles/types/Role.types'
 const props = defineProps<{ permissions: Permission[]; modelValue: string[] }>()
 const emit = defineEmits<{ 'update:modelValue': [value: string[]] }>()
 const { t } = useT()
-const resources = computed(() => [
-  ...new Set(props.permissions.map((permission) => permission.resource)),
-])
-const actions = computed(() => [
-  ...new Set(props.permissions.map((permission) => permission.action)),
-])
+const resources = computed(() => [...new Set(props.permissions.map((permission) => permission.resource))])
+const actions = computed(() => [...new Set(props.permissions.map((permission) => permission.action))])
 function keys(resource?: string, action?: string) {
   return props.permissions
     .filter(
-      (permission) =>
-        (!resource || permission.resource === resource) &&
-        (!action || permission.action === action),
+      (permission) => (!resource || permission.resource === resource) && (!action || permission.action === action),
     )
     .map((permission) => permission.key)
 }

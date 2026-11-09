@@ -15,10 +15,6 @@ const items = computed(() =>
 </script>
 <template>
   <UDropdownMenu v-if="items.length" :items="items"
-    ><UButton
-      data-action="row-actions"
-      icon="i-lucide-ellipsis"
-      :aria-label="t('common.actions')"
-      variant="ghost"
+    ><UButton data-action="row-actions" icon="i-lucide-ellipsis" :aria-label="t('common.actions')" variant="ghost"
   /></UDropdownMenu>
 </template>

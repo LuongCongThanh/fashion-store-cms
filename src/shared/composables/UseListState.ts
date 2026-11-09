@@ -46,9 +46,7 @@ export function useListState<S extends z.ZodObject>(schema: S) {
     reset: () => {
       clearTimeout(timer)
       return router.push({
-        query: Object.fromEntries(
-          Object.entries(route.query).filter(([key]) => !(key in schema.shape)),
-        ),
+        query: Object.fromEntries(Object.entries(route.query).filter(([key]) => !(key in schema.shape))),
       })
     },
   }

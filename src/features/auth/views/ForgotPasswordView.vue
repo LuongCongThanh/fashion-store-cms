@@ -9,15 +9,14 @@ import { computed, reactive, ref } from 'vue'
 
 import type { FormSubmitEvent } from '@nuxt/ui'
 
+import { forgotPasswordSchema } from '@features/auth/schemas/Login.schema'
+import { useAuth } from '@features/auth/UseAuth'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useNotify } from '@shared/composables/UseNotify'
 import { isApiError } from '@shared/lib/api/errors/ApiError'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { forgotPasswordSchema } from '../schemas/Login.schema'
-import { useAuth } from '../UseAuth'
-
-import type { ForgotPasswordInput } from '../schemas/Login.schema'
+import type { ForgotPasswordInput } from '@features/auth/schemas/Login.schema'
 
 const { t } = useT()
 const auth = useAuth()
@@ -46,10 +45,7 @@ async function onSubmit(event: FormSubmitEvent<ForgotPasswordInput>) {
 
 <template>
   <div class="space-y-6">
-    <PageHeader
-      :title="t('auth.forgotPassword.title')"
-      :description="t('auth.forgotPassword.subtitle')"
-    />
+    <PageHeader :title="t('auth.forgotPassword.title')" :description="t('auth.forgotPassword.subtitle')" />
 
     <UAlert
       v-if="sent"
@@ -61,14 +57,7 @@ async function onSubmit(event: FormSubmitEvent<ForgotPasswordInput>) {
 
     <UForm v-else :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UFormField name="email" :label="t('auth.login.email')">
-        <UInput
-          v-model="state.email"
-          name="email"
-          type="email"
-          autocomplete="email"
-          class="w-full"
-          autofocus
-        />
+        <UInput v-model="state.email" name="email" type="email" autocomplete="email" class="w-full" autofocus />
       </UFormField>
       <UButton type="submit" block :loading="submitting" :disabled="submitting">{{
         t('auth.forgotPassword.submit')

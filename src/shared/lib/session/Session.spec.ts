@@ -6,13 +6,9 @@ import { createSession } from './Session'
 
 import type { AuthTokens, SessionSnapshot } from './Session'
 
-function setup(
-  opts: { callRefresh?: (rt: string) => Promise<AuthTokens>; initial?: SessionSnapshot } = {},
-) {
+function setup(opts: { callRefresh?: (rt: string) => Promise<AuthTokens>; initial?: SessionSnapshot } = {}) {
   const queryClient = new QueryClient()
-  const callRefresh = vi.fn(
-    opts.callRefresh ?? (async () => ({ accessToken: 'new-at', refreshToken: 'new-rt' })),
-  )
+  const callRefresh = vi.fn(opts.callRefresh ?? (async () => ({ accessToken: 'new-at', refreshToken: 'new-rt' })))
   const session = createSession({
     pinia: createPinia(),
     queryClient,
@@ -155,9 +151,7 @@ describe('Session', () => {
       const { session } = setup()
       session.signIn({ accessToken: 'at-1', refreshToken: 'rt-1' })
       const fromOtherTab = (key: string, newValue: string | null) =>
-        window.dispatchEvent(
-          new StorageEvent('storage', { key, newValue, storageArea: localStorage }),
-        )
+        window.dispatchEvent(new StorageEvent('storage', { key, newValue, storageArea: localStorage }))
 
       fromOtherTab('cms.session.accessToken', 'at-2')
       expect(session.getAccessToken()).toBe('at-2')

@@ -3,7 +3,7 @@ import UButton from '@nuxt/ui/components/Button.vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { MediaImage } from '../types/Media.types'
+import type { MediaImage } from '@features/media/types/Media.types'
 defineProps<{ images: MediaImage[]; mainId?: string }>()
 const emit = defineEmits<{
   remove: [id: string]
@@ -16,9 +16,7 @@ const { t } = useT()
   <ul class="flex flex-wrap gap-4">
     <li v-for="(image, index) in images" :key="image.id" class="space-y-2">
       <img :src="image.url" :alt="image.name" class="h-28 w-28 object-cover" />
-      <UButton :disabled="mainId === image.id" @click="emit('main', image.id)">{{
-        t('media.main')
-      }}</UButton>
+      <UButton :disabled="mainId === image.id" @click="emit('main', image.id)">{{ t('media.main') }}</UButton>
       <UButton
         :disabled="index === 0"
         :aria-label="t('media.moveLeft')"

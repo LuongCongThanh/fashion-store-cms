@@ -1,7 +1,7 @@
-dist/
-dev-dist/
-coverage/
-playwright-report/
-test-results/
-package-lock.json
+# Chỉ format file code và file test trong src/ (.ts, .vue); bỏ qua mọi thứ khác.
+/*
+!/src/
+/src/**/*.*
+!/src/**/*.ts
+!/src/**/*.vue
 src/shared/types/Api.generated.ts

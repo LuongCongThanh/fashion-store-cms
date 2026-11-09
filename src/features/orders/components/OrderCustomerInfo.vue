@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Order } from '../types/Order.types'
+import type { Order } from '@features/orders/types/Order.types'
 defineProps<{ customer: Order['customer'] }>()
 </script>
 <template>

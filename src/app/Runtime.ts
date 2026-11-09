@@ -41,8 +41,7 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const pinia = createPinia()
   const i18n = createAppI18n()
   const router = overrides.router ?? createAppRouter({ translate: i18n.translate })
-  const notifier =
-    overrides.notifier ?? createNotifier({ toast: useToast(), t: i18n.translate, te: i18n.has })
+  const notifier = overrides.notifier ?? createNotifier({ toast: useToast(), t: i18n.translate, te: i18n.has })
   const queryClient = createAppQueryClient({
     onMutationError: notifier.error,
     retry: overrides.retry,

@@ -2,6 +2,17 @@
 import { useRoute } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useOrderQuery, useOrderStatusMutation } from '@features/orders/api/Orders.api'
+import OrderCustomerInfo from '@features/orders/components/OrderCustomerInfo.vue'
+import OrderItems from '@features/orders/components/OrderItems.vue'
+import OrderPaymentInfo from '@features/orders/components/OrderPaymentInfo.vue'
+import OrderShippingInfo from '@features/orders/components/OrderShippingInfo.vue'
+import OrderStatusAction from '@features/orders/components/OrderStatusAction.vue'
+import OrderStatusBadge from '@features/orders/components/OrderStatusBadge.vue'
+import OrderSummary from '@features/orders/components/OrderSummary.vue'
+import OrderTimeline from '@features/orders/components/OrderTimeline.vue'
+import PaymentStatusBadge from '@features/orders/components/PaymentStatusBadge.vue'
+import { nextOrderStatuses } from '@features/orders/schemas/OrderStatus'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
@@ -9,19 +20,7 @@ import FormSection from '@shared/components/form/FormSection.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useOrderQuery, useOrderStatusMutation } from '../api/Orders.api'
-import OrderCustomerInfo from '../components/OrderCustomerInfo.vue'
-import OrderItems from '../components/OrderItems.vue'
-import OrderPaymentInfo from '../components/OrderPaymentInfo.vue'
-import OrderShippingInfo from '../components/OrderShippingInfo.vue'
-import OrderStatusAction from '../components/OrderStatusAction.vue'
-import OrderStatusBadge from '../components/OrderStatusBadge.vue'
-import OrderSummary from '../components/OrderSummary.vue'
-import OrderTimeline from '../components/OrderTimeline.vue'
-import PaymentStatusBadge from '../components/PaymentStatusBadge.vue'
-import { nextOrderStatuses } from '../schemas/OrderStatus'
-
-import type { OrderStatus } from '../types/Order.types'
+import type { OrderStatus } from '@features/orders/types/Order.types'
 const route = useRoute()
 const { can } = useAuth()
 const { t } = useT()
@@ -29,17 +28,8 @@ const confirm = useConfirm()
 const query = useOrderQuery(() => String(route.params.id))
 const mutation = useOrderStatusMutation(() => String(route.params.id))
 async function change(status: OrderStatus) {
-  if (
-    !can('order:write') ||
-    !query.data.value ||
-    !nextOrderStatuses(query.data.value.status).includes(status)
-  )
-    return
-  if (
-    status === 'cancelled' &&
-    !(await confirm({ title: t('orders.cancelConfirm'), color: 'error' }))
-  )
-    return
+  if (!can('order:write') || !query.data.value || !nextOrderStatuses(query.data.value.status).includes(status)) return
+  if (status === 'cancelled' && !(await confirm({ title: t('orders.cancelConfirm'), color: 'error' }))) return
   mutation.mutate(status)
 }
 </script>

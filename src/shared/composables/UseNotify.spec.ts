@@ -27,9 +27,7 @@ describe('createNotifier', () => {
 
     notifier.error(new ApiError(500, 'SOME_BE_CODE', 'stack trace from BE'))
 
-    expect(toast.add).toHaveBeenCalledWith(
-      expect.objectContaining({ color: 'error', title: 'Lỗi máy chủ' }),
-    )
+    expect(toast.add).toHaveBeenCalledWith(expect.objectContaining({ color: 'error', title: 'Lỗi máy chủ' }))
   })
 
   it('stays silent for aborted requests', () => {
@@ -45,9 +43,7 @@ describe('createNotifier', () => {
 
     notifier.success('common.save')
 
-    expect(toast.add).toHaveBeenCalledWith(
-      expect.objectContaining({ color: 'success', title: 'Đã lưu sản phẩm' }),
-    )
+    expect(toast.add).toHaveBeenCalledWith(expect.objectContaining({ color: 'success', title: 'Đã lưu sản phẩm' }))
   })
 
   it('shows a persistent prompt with a translated action', () => {

@@ -7,9 +7,9 @@ import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 import DataTable from '@shared/components/table/DataTable.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import StockStatusBadge from './StockStatusBadge.vue'
+import type { InventoryItem } from '@features/inventory/types/Inventory.types'
 
-import type { InventoryItem } from '../types/Inventory.types'
+import StockStatusBadge from './StockStatusBadge.vue'
 const props = defineProps<{
   data: InventoryItem[]
   loading: boolean
@@ -39,10 +39,8 @@ const columns = computed<TableColumn<InventoryItem>[]>(() => [
           id: 'actions',
           header: t('common.actions'),
           cell: ({ row }: { row: { original: InventoryItem } }) =>
-            h(
-              UButton,
-              { 'data-action': 'adjust', onClick: () => emit('adjust', row.original) },
-              () => t('inventory.adjust'),
+            h(UButton, { 'data-action': 'adjust', onClick: () => emit('adjust', row.original) }, () =>
+              t('inventory.adjust'),
             ),
         },
       ]

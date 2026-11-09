@@ -3,8 +3,8 @@ import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { CategoryInput } from '../schemas/Category.schema'
-import type { Category } from '../types/Category.types'
+import type { CategoryInput } from '@features/categories/schemas/Category.schema'
+import type { Category } from '@features/categories/types/Category.types'
 const props = defineProps<{
   modelValue: CategoryInput
   errors: Record<string, string | undefined>
@@ -36,10 +36,7 @@ function localized(lang: 'vi' | 'en', key: 'name' | 'description', event: Event)
 <template>
   <form class="space-y-5" @submit.prevent="emit('submit')">
     <FormSection :title="t('products.category')">
-      <label
-        v-for="key in ['name', 'slug', 'metaTitle', 'metaDescription'] as const"
-        :key="key"
-        class="block"
+      <label v-for="key in ['name', 'slug', 'metaTitle', 'metaDescription'] as const" :key="key" class="block"
         >{{ t(`categories.${key}`)
         }}<input
           :name="key"
@@ -73,11 +70,7 @@ function localized(lang: 'vi' | 'en', key: 'name' | 'description', event: Event)
         <span v-if="errors.parentId" data-error="parentId" role="alert">{{ errors.parentId }}</span>
       </label>
     </FormSection>
-    <FormSection
-      v-for="lang in ['vi', 'en'] as const"
-      :key="lang"
-      :title="t(`common.language.${lang}`)"
-    >
+    <FormSection v-for="lang in ['vi', 'en'] as const" :key="lang" :title="t(`common.language.${lang}`)">
       <label v-for="key in ['name', 'description'] as const" :key="key" class="block"
         >{{ t(`categories.${key}`)
         }}<input

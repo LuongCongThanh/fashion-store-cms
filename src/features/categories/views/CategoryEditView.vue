@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import CategoryForm from '@features/categories/components/CategoryForm.vue'
+import { useCategoryEditor } from '@features/categories/composables/UseCategoryEditor'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import CategoryForm from '../components/CategoryForm.vue'
-import { useCategoryEditor } from '../composables/UseCategoryEditor'
 const editor = useCategoryEditor()
 const { t } = useT()
 </script>

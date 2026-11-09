@@ -17,11 +17,7 @@ const { t } = useT()
         @change="emit('filter', 'status', ($event.target as HTMLSelectElement).value)"
       >
         <option value="">{{ t('common.all') }}</option>
-        <option
-          v-for="value in ['draft', 'active', 'inactive'] as const"
-          :key="value"
-          :value="value"
-        >
+        <option v-for="value in ['draft', 'active', 'inactive'] as const" :key="value" :value="value">
           {{ t(`promotions.status.${value}`) }}
         </option>
       </select>

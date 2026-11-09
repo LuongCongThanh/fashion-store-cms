@@ -5,16 +5,15 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@features/auth/UseAuth'
 import { useCategoriesQuery } from '@features/categories/UseCategories'
 import { useMedia } from '@features/media/UseMedia'
+import { useProductQuery, useSaveProductMutation } from '@features/products/api/ProductEditor.api'
+import { productDraftSchema, productPublishSchema } from '@features/products/schemas/Product.schema'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useUnsavedGuard } from '@shared/composables/UseUnsavedGuard'
 import { applyApiErrorToForm } from '@shared/lib/form/ApplyApiErrorToForm'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useProductQuery, useSaveProductMutation } from '../api/ProductEditor.api'
-import { productDraftSchema, productPublishSchema } from '../schemas/Product.schema'
-
-import type { ProductInput } from '../schemas/Product.schema'
+import type { ProductInput } from '@features/products/schemas/Product.schema'
 export function useProductEditor() {
   const notify = useNotify()
   const route = useRoute()
@@ -70,9 +69,7 @@ export function useProductEditor() {
     })
     if (!parsed.success) {
       setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')]),
-        ),
+        Object.fromEntries(parsed.error.issues.map((issue) => [issue.path.join('.'), t('auth.validation.required')])),
       )
       return
     }

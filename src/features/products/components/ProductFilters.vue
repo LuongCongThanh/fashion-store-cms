@@ -4,8 +4,7 @@ import ListSearch from '@shared/components/list/ListSearch.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Category } from '@features/categories/types/Category.types'
-
-import type { ProductListParams } from '../schemas/ProductList.schema'
+import type { ProductListParams } from '@features/products/schemas/ProductList.schema'
 defineProps<{ params: ProductListParams; categories: Category[] }>()
 const emit = defineEmits<{ filter: [key: string, value: unknown] }>()
 const { t } = useT()
@@ -21,11 +20,7 @@ const { t } = useT()
         @change="emit('filter', 'status', ($event.target as HTMLSelectElement).value)"
       >
         <option value="">{{ t('common.all') }}</option>
-        <option
-          v-for="status in ['draft', 'published', 'archived'] as const"
-          :key="status"
-          :value="status"
-        >
+        <option v-for="status in ['draft', 'published', 'archived'] as const" :key="status" :value="status">
           {{ t(`products.status.${status}`) }}
         </option>
       </select>

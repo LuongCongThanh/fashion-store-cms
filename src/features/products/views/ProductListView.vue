@@ -6,6 +6,10 @@ import { useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { useCategoriesQuery } from '@features/categories/UseCategories'
+import { useProductBulkMutation, useProductsQuery } from '@features/products/api/Products.api'
+import ProductFilters from '@features/products/components/ProductFilters.vue'
+import ProductTable from '@features/products/components/ProductTable.vue'
+import { productListSchema } from '@features/products/schemas/ProductList.schema'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTableBulkActions from '@shared/components/table/DataTableBulkActions.vue'
@@ -13,11 +17,6 @@ import DataTableColumnVisibility from '@shared/components/table/DataTableColumnV
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import { useProductBulkMutation, useProductsQuery } from '../api/Products.api'
-import ProductFilters from '../components/ProductFilters.vue'
-import ProductTable from '../components/ProductTable.vue'
-import { productListSchema } from '../schemas/ProductList.schema'
 
 const { t } = useT()
 const { can } = useAuth()
@@ -61,11 +60,7 @@ function rowAction(action: string, id: string) {
         <UButton v-if="can('product:write')" to="/products/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
-    <ProductFilters
-      :params="params"
-      :categories="categories.data.value ?? []"
-      @filter="setFilter"
-    />
+    <ProductFilters :params="params" :categories="categories.data.value ?? []" @filter="setFilter" />
     <DataTableColumnVisibility
       v-model="visibility"
       :columns="[
@@ -96,10 +91,6 @@ function rowAction(action: string, id: string) {
       @retry="query.refetch()"
       @action="rowAction"
     />
-    <DataTablePagination
-      :meta="query.data.value?.meta"
-      @page="setPage"
-      @pageSize="setFilter('pageSize', $event)"
-    />
+    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
   </div>
 </template>

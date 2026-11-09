@@ -27,9 +27,7 @@ it('loads auditable movements with date and type filters', async () => {
   })
   expect(wrapper.text()).toContain('Nhập bổ sung')
   expect(wrapper.text()).toContain('Lan')
-  expect(
-    http.history.get.find((request) => request.url === '/inventory/movements')?.params,
-  ).toMatchObject({
+  expect(http.history.get.find((request) => request.url === '/inventory/movements')?.params).toMatchObject({
     from: '2026-01-01',
     type: 'adjustment',
   })

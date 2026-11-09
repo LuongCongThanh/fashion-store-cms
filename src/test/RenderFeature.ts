@@ -29,9 +29,7 @@ export async function renderFeature(
     history: createMemoryHistory(),
     routes: [
       { path: options.routePath ?? '/:rest(.*)*', component: Host },
-      ...(options.routePath
-        ? [{ path: '/:unmatched(.*)*', component: { render: () => null } }]
-        : []),
+      ...(options.routePath ? [{ path: '/:unmatched(.*)*', component: { render: () => null } }] : []),
     ],
   })
   await router.push(options.path)

@@ -3,18 +3,17 @@ import UButton from '@nuxt/ui/components/Button.vue'
 import { ref } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
+import { useInventoryQuery, useStockAdjustMutation } from '@features/inventory/api/Inventory.api'
+import InventoryFilters from '@features/inventory/components/InventoryFilters.vue'
+import InventoryTable from '@features/inventory/components/InventoryTable.vue'
+import StockAdjustDialog from '@features/inventory/components/StockAdjustDialog.vue'
+import { inventoryListSchema, stockAdjustSchema } from '@features/inventory/schemas/Inventory.schema'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { useInventoryQuery, useStockAdjustMutation } from '../api/Inventory.api'
-import InventoryFilters from '../components/InventoryFilters.vue'
-import InventoryTable from '../components/InventoryTable.vue'
-import StockAdjustDialog from '../components/StockAdjustDialog.vue'
-import { inventoryListSchema, stockAdjustSchema } from '../schemas/Inventory.schema'
-
-import type { InventoryItem } from '../types/Inventory.types'
+import type { InventoryItem } from '@features/inventory/types/Inventory.types'
 const { t } = useT()
 const { can } = useAuth()
 const { params, setFilter, setPage, setSort } = useListState(inventoryListSchema)
@@ -48,9 +47,7 @@ function openAdjust(item: InventoryItem) {
   <div class="space-y-4">
     <PageHeader :title="t('inventory.title')">
       <template #actions>
-        <UButton to="/inventory/movements" variant="outline">{{
-          t('inventory.movements')
-        }}</UButton>
+        <UButton to="/inventory/movements" variant="outline">{{ t('inventory.movements') }}</UButton>
       </template>
     </PageHeader>
     <InventoryFilters :search="params.search" :status="params.status" @filter="setFilter" />
@@ -64,11 +61,7 @@ function openAdjust(item: InventoryItem) {
       @retry="query.refetch()"
       @adjust="openAdjust"
     />
-    <DataTablePagination
-      :meta="query.data.value?.meta"
-      @page="setPage"
-      @pageSize="setFilter('pageSize', $event)"
-    />
+    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
     <StockAdjustDialog
       v-if="selected"
       :key="selected.id"

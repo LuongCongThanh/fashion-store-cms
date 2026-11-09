@@ -52,15 +52,11 @@ describe('useLocale', () => {
     const UiProbe = defineComponent({
       setup() {
         const { setLocale } = useLocale()
-        return () => [
-          h(UAlert, { title: 'x', close: true }),
-          h('button', { id: 'en', onClick: () => setLocale('en') }),
-        ]
+        return () => [h(UAlert, { title: 'x', close: true }), h('button', { id: 'en', onClick: () => setLocale('en') })]
       },
     })
     const { wrapper } = renderWithPlugins(UiProbe)
-    const closeLabel = () =>
-      wrapper.find('[aria-label="Đóng"], [aria-label="Close"]').attributes('aria-label')
+    const closeLabel = () => wrapper.find('[aria-label="Đóng"], [aria-label="Close"]').attributes('aria-label')
     expect(closeLabel()).toBe('Đóng')
 
     await wrapper.find('#en').trigger('click')

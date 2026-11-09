@@ -3,7 +3,7 @@ import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { LocalizationInput } from '../schemas/Settings.schema'
+import type { LocalizationInput } from '@features/settings/schemas/Settings.schema'
 defineProps<{
   modelValue: LocalizationInput
   errors: Record<string, string | undefined>
@@ -54,10 +54,7 @@ const { t } = useT()
             </option>
           </select>
         </label>
-        <label
-          v-for="key in ['timezone', 'currency', 'numberFormat'] as const"
-          :key="key"
-          class="block"
+        <label v-for="key in ['timezone', 'currency', 'numberFormat'] as const" :key="key" class="block"
           >{{ t(`settings.${key}`)
           }}<input
             :name="key"
@@ -79,16 +76,11 @@ const { t } = useT()
             @change="
               emit('update:modelValue', {
                 ...modelValue,
-                dateFormat: ($event.target as HTMLSelectElement)
-                  .value as LocalizationInput['dateFormat'],
+                dateFormat: ($event.target as HTMLSelectElement).value as LocalizationInput['dateFormat'],
               })
             "
           >
-            <option
-              v-for="format in ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD']"
-              :key="format"
-              :value="format"
-            >
+            <option v-for="format in ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD']" :key="format" :value="format">
               {{ format }}
             </option>
           </select>

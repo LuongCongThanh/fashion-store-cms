@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import type { CurrentUser } from '../types/Auth.types'
+import type { CurrentUser } from '@features/auth/types/Auth.types'
 
 /** User hiện tại — nội bộ feature, ngoài feature dùng useAuth(). Token nằm ở Session. */
 export const useAuthStore = defineStore('auth', () => {

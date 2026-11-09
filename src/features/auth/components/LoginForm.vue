@@ -9,11 +9,10 @@ import { computed, reactive, ref } from 'vue'
 
 import type { FormSubmitEvent } from '@nuxt/ui'
 
+import { loginSchema } from '@features/auth/schemas/Login.schema'
 import { useT } from '@shared/lib/i18n/I18n'
 
-import { loginSchema } from '../schemas/Login.schema'
-
-import type { LoginInput } from '../schemas/Login.schema'
+import type { LoginInput } from '@features/auth/schemas/Login.schema'
 
 defineProps<{ submitting: boolean }>()
 const emit = defineEmits<{ submit: [credentials: LoginInput, opts: { remember: boolean }] }>()
@@ -32,14 +31,7 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
 <template>
   <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
     <UFormField name="email" :label="t('auth.login.email')">
-      <UInput
-        v-model="state.email"
-        name="email"
-        type="email"
-        autocomplete="username"
-        class="w-full"
-        autofocus
-      />
+      <UInput v-model="state.email" name="email" type="email" autocomplete="username" class="w-full" autofocus />
     </UFormField>
 
     <UFormField name="password" :label="t('auth.login.password')">

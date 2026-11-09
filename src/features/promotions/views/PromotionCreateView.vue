@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import PromotionForm from '@features/promotions/components/PromotionForm.vue'
+import { usePromotionEditor } from '@features/promotions/composables/UsePromotionEditor'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import PromotionForm from '../components/PromotionForm.vue'
-import { usePromotionEditor } from '../composables/UsePromotionEditor'
 const editor = usePromotionEditor()
 const { t } = useT()
 </script>

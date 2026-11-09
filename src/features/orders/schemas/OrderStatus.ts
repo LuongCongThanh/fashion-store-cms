@@ -1,4 +1,4 @@
-import type { OrderStatus } from '../types/Order.types'
+import type { OrderStatus } from '@features/orders/types/Order.types'
 const transitions: Record<OrderStatus, OrderStatus[]> = {
   pending: ['confirmed', 'cancelled'],
   confirmed: ['processing', 'cancelled'],

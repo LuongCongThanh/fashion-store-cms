@@ -46,11 +46,6 @@ const items = computed(() => [
 
 <template>
   <UDropdownMenu :items="items">
-    <UButton
-      icon="i-lucide-user-round"
-      color="neutral"
-      variant="ghost"
-      :aria-label="t('common.userMenu')"
-    />
+    <UButton icon="i-lucide-user-round" color="neutral" variant="ghost" :aria-label="t('common.userMenu')" />
   </UDropdownMenu>
 </template>

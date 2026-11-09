@@ -5,9 +5,7 @@ const props = defineProps<{ tabs: { id: string; label: string }[] }>()
 const route = useRoute()
 const router = useRouter()
 const active = computed(() =>
-  props.tabs.some((tab) => tab.id === route.query.tab)
-    ? String(route.query.tab)
-    : props.tabs[0]?.id,
+  props.tabs.some((tab) => tab.id === route.query.tab) ? String(route.query.tab) : props.tabs[0]?.id,
 )
 </script>
 <template>

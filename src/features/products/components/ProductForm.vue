@@ -9,11 +9,10 @@ import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Category } from '@features/categories/types/Category.types'
 import type { MediaImage } from '@features/media/types/Media.types'
+import type { ProductInput } from '@features/products/schemas/Product.schema'
 
 import ProductSeoFields from './ProductSeoFields.vue'
 import ProductVariantTable from './ProductVariantTable.vue'
-
-import type { ProductInput } from '../schemas/Product.schema'
 defineProps<{
   modelValue: ProductInput
   errors: Record<string, string | undefined>
@@ -150,11 +149,6 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
         @update:modelValue="emit('update:modelValue', $event)"
       />
     </FormSection>
-    <FormActions
-      draft
-      :pending="pending || uploading"
-      @cancel="emit('cancel')"
-      @draft="emit('submit', 'draft')"
-    />
+    <FormActions draft :pending="pending || uploading" @cancel="emit('cancel')" @draft="emit('submit', 'draft')" />
   </form>
 </template>

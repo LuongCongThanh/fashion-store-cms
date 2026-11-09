@@ -1,60 +1,100 @@
+import { readdirSync } from 'node:fs'
+
 import prettier from 'eslint-config-prettier'
 import checkFile from 'eslint-plugin-check-file'
 import perfectionist from 'eslint-plugin-perfectionist'
 import unusedImports from 'eslint-plugin-unused-imports'
 import vue from 'eslint-plugin-vue'
+import { defineConfig } from 'eslint/config'
 import tseslint from 'typescript-eslint'
 
-type Restriction = { group: string[]; message: string } | { message: string; regex: string }
+type Restriction = ({ group: string[]; message: string } | { message: string; regex: string }) & {
+  importNamePattern?: string
+}
+
+// Danh sách feature đọc từ thư mục → mỗi feature có dòng ranh giới riêng (được import alias của chính nó).
+const FEATURES = readdirSync(new URL('./src/features', import.meta.url), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
 
 // Whitelist viết bằng regex: với `group` (cú pháp gitignore), `@features/**` loại luôn thư mục cha
 // nên phần tử `!` không thể mở lại file bên trong.
 const FEATURE_PUBLIC = 'Use[^/]*|types/[^/]+'
 const featureBoundary: Restriction = {
   regex: `^@features/[^/]+/(?!(?:${FEATURE_PUBLIC})$).+`,
-  message: 'Chỉ import Use*.ts hoặc types/ của feature khác (§B.3).',
+  message: 'Only import Use*.ts or types/ from another feature (§B.3).',
 }
-// Ngoài features/: cấm MỌI import lên thư mục cha (../), chỉ cho ./ cùng thư mục.
+// Trong feature `f`: alias tới chính `f` được tự do, feature khác chỉ qua public API.
+const featureBoundaryFor = (feature: string): Restriction => ({
+  ...featureBoundary,
+  regex: `^@features/(?!${feature}/)[^/]+/(?!(?:${FEATURE_PUBLIC})$).+`,
+})
+// Cấm MỌI import lên thư mục cha (../ hoặc ..) ở toàn bộ src/; chỉ cho ./ cùng thư mục.
 const noParentImport: Restriction = {
-  group: ['../*', '../**'],
-  message: 'Không import thư mục cha bằng ../ ; dùng alias (§N).',
-}
-// Trong feature: ../ được phép (components/ → ../api/), ../../ là thoát khỏi feature.
-const noEscapeFeature: Restriction = {
-  group: ['../../*', '../../**'],
-  message: 'Không import tương đối ra ngoài feature; dùng alias (§N).',
+  regex: '^\\.\\.(/|$)',
+  message: 'Relative parent imports (../) are not allowed; use an alias such as @features/... (§N).',
 }
 const noApp: Restriction = {
   group: ['@app/*', '@app/**'],
-  message: 'Chỉ main.ts và src/test/ được import @app/* (§A, D37).',
+  message: 'Only main.ts and src/test/ may import @app/* (§A, D37).',
 }
 const noLayouts: Restriction = {
   group: ['@layouts/*', '@layouts/**'],
-  message: 'features/ không import layouts/.',
+  message: 'features/ must not import layouts/.',
 }
 const noUpper: Restriction = {
-  group: ['@app/**', '@layouts/**', '@features/**'],
-  message: 'shared/ không được import app/, layouts/, features/.',
+  group: ['@app/*', '@app/**', '@layouts/*', '@layouts/**', '@features/*', '@features/**'],
+  message: 'shared/ must not import app/, layouts/, features/.',
 }
 const noDto: Restriction = {
   group: ['@shared/types/Api.generated'],
-  message: 'DTO chỉ dùng trong features/*/api/ và shared/lib/api/ — dùng Model ở types/ (§T.3).',
+  message: 'DTOs are only allowed in features/*/api/ and shared/lib/api/ — use Models from types/ (§T.3).',
 }
-const presentational: Restriction = {
-  group: ['../api/*', '../stores/*', '../composables/*', 'vue-router'],
-  message: 'components/ là presentational: chỉ props/emits, không gọi API/store/router (§T.1).',
+// Chặn cả import thẳng thư mục (index) và file ở thư mục con của chính feature.
+const presentationalFor = (feature: string): Restriction => ({
+  group: ['api', 'stores', 'composables']
+    .flatMap((dir) => [`@features/${feature}/${dir}`, `@features/${feature}/${dir}/**`])
+    .concat('vue-router'),
+  message: 'components/ are presentational: props/emits only, no API/store/router calls (§T.1).',
+})
+// Use*.ts là barrel public: export cả component lẫn hook. components/ được lấy component
+// nhưng không được gọi hook `use*` (có thể chạm API/store/router).
+const noFeatureComposable: Restriction = {
+  regex: '^@features/[^/]+/Use[^/]*$',
+  importNamePattern: '^use[A-Z]',
+  message: 'components/ are presentational: must not call use* hooks from features (§T.1).',
 }
 const libIsBottom: Restriction = {
   group: ['@shared/components/*', '@shared/components/**', '@shared/composables/*'],
-  message: 'shared/lib/ là tầng dưới: không import components/, composables/ (§A).',
+  message: 'shared/lib/ is the bottom layer: must not import components/ or composables/ (§A).',
 }
 const noHttpInSharedUi: Restriction = {
   group: ['@shared/lib/api/client/*'],
-  message: 'shared/components/ không gọi API (§A).',
+  message: 'shared/components/ must not call the API (§A).',
 }
 const featureBoundaryForRoutes: Restriction = {
   ...featureBoundary,
   regex: `^@features/[^/]+/(?!(?:${FEATURE_PUBLIC}|views/[^/]+|[^/]+\\.routes)$).+`,
+}
+
+type Boundary = { files: string[]; forbid: Restriction[]; name: string }
+
+/** Ba dòng ranh giới cho một feature: chung, components/ (presentational), api/ (DTO ok). */
+const featureRows = (feature: string): Boundary[] => {
+  const base = [featureBoundaryFor(feature), noParentImport, noApp, noLayouts]
+  return [
+    { name: `features/${feature}`, files: [`src/features/${feature}/**/*.{ts,vue}`], forbid: [...base, noDto] },
+    {
+      name: `features/${feature}/components`,
+      files: [`src/features/${feature}/components/**/*.{ts,vue}`],
+      forbid: [...base, noDto, presentationalFor(feature), noFeatureComposable],
+    },
+    {
+      name: `features/${feature}/api (DTO ok)`,
+      files: [`src/features/${feature}/api/**/*.ts`],
+      forbid: base,
+    },
+  ]
 }
 
 /**
@@ -63,9 +103,9 @@ const featureBoundaryForRoutes: Restriction = {
  * Dòng sau áp cho cùng file sẽ THAY dòng trước (hành vi flat config),
  * nên dòng cụ thể đặt sau dòng chung và tự liệt kê đủ pattern của nó.
  */
-export const BOUNDARIES: { files: string[]; forbid: Restriction[]; name: string }[] = [
+export const BOUNDARIES: Boundary[] = [
   {
-    name: 'mặc định',
+    name: 'default',
     files: ['src/**/*.{ts,vue}'],
     forbid: [featureBoundary, noParentImport, noDto],
   },
@@ -74,21 +114,7 @@ export const BOUNDARIES: { files: string[]; forbid: Restriction[]; name: string 
     files: ['src/layouts/**/*.{ts,vue}'],
     forbid: [featureBoundary, noParentImport, noApp, noDto],
   },
-  {
-    name: 'features',
-    files: ['src/features/**/*.{ts,vue}'],
-    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto],
-  },
-  {
-    name: 'feature/components',
-    files: ['src/features/*/components/**/*.{ts,vue}'],
-    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts, noDto, presentational],
-  },
-  {
-    name: 'feature/api (DTO ok)',
-    files: ['src/features/*/api/**/*.ts'],
-    forbid: [featureBoundary, noEscapeFeature, noApp, noLayouts],
-  },
+  ...FEATURES.flatMap(featureRows),
   { name: 'shared', files: ['src/shared/**/*.{ts,vue}'], forbid: [noUpper, noParentImport, noDto] },
   {
     name: 'shared/components',
@@ -108,7 +134,7 @@ export const BOUNDARIES: { files: string[]; forbid: Restriction[]; name: string 
   {
     name: 'Routes.ts',
     files: ['src/app/router/Routes.ts'],
-    forbid: [featureBoundaryForRoutes, noParentImport],
+    forbid: [featureBoundaryForRoutes, noParentImport, noDto],
   },
 ]
 
@@ -120,10 +146,9 @@ const toFlatConfig = (rows: typeof BOUNDARIES) =>
     rules: { 'no-restricted-imports': ['error', { patterns: forbid }] as const },
   }))
 
-const SUFFIX =
-  '?(.api|.mapper|.routes|.store|.schema|.types|.config|.factory|.generated|.d)?(.spec)'
+const SUFFIX = '?(.api|.mapper|.routes|.store|.schema|.types|.config|.factory|.generated|.d)?(.spec)'
 
-export default tseslint.config(
+export default defineConfig(
   {
     ignores: [
       'dist/',
@@ -164,10 +189,7 @@ export default tseslint.config(
       ],
       'perfectionist/sort-named-imports': 'error',
       'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
-        'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
-      ],
+      'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
@@ -176,10 +198,7 @@ export default tseslint.config(
       'vue/multi-word-component-names': 'error',
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
       'vue/block-order': ['error', { order: ['script', 'template', 'style'] }],
-      'vue/define-macros-order': [
-        'error',
-        { order: ['defineProps', 'defineEmits', 'defineModel'] },
-      ],
+      'vue/define-macros-order': ['error', { order: ['defineProps', 'defineEmits', 'defineModel'] }],
       'vue/component-api-style': ['error', ['script-setup']],
       'vue/define-props-declaration': ['error', 'type-based'],
       'vue/no-v-html': 'error',
@@ -202,7 +221,8 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/**/*.{ts,vue}'],
+    // Một block chung cho src/, e2e/, scripts/: middle extension được khớp qua SUFFIX.
+    files: ['src/**/*.{ts,vue}', 'e2e/**/*.ts', 'scripts/**/*.ts'],
     ignores: ['src/main.ts', 'src/env.d.ts'],
     plugins: { 'check-file': checkFile },
     rules: {
@@ -214,19 +234,26 @@ export default tseslint.config(
     },
   },
   {
-    files: ['e2e/**/*.ts', 'scripts/**/*.ts'],
-    plugins: { 'check-file': checkFile },
-    rules: {
-      'check-file/filename-naming-convention': [
-        'error',
-        { '**/*.ts': `[A-Z]*([a-zA-Z0-9])${SUFFIX}` },
-      ],
-    },
-  },
-  {
     // Component host nhỏ trong test là bình thường.
     files: ['**/*.spec.ts'],
     rules: { 'vue/one-component-per-file': 'off' },
+  },
+  {
+    // import() động và vi.mock()/vi.importActual() cũng phải dùng alias, không dùng ../
+    files: ['src/**/*.{ts,vue}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ImportExpression[source.value=/^\\.\\./]',
+          message: 'Relative parent imports (../) are not allowed; use an alias (§N).',
+        },
+        {
+          selector: "CallExpression[callee.object.name='vi'][arguments.0.value=/^\\.\\./]",
+          message: 'Relative parent paths (../) are not allowed in vi.*; use an alias (§N).',
+        },
+      ],
+    },
   },
   ...toFlatConfig(BOUNDARIES),
   prettier,

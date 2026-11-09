@@ -22,11 +22,7 @@ async function renderLogin(query = '') {
   return { ...result, router }
 }
 
-async function fill(
-  wrapper: Awaited<ReturnType<typeof renderLogin>>['wrapper'],
-  email: string,
-  password: string,
-) {
+async function fill(wrapper: Awaited<ReturnType<typeof renderLogin>>['wrapper'], email: string, password: string) {
   await wrapper.find('input[name="email"]').setValue(email)
   await wrapper.find('input[name="password"]').setValue(password)
   await wrapper.find('form').trigger('submit')

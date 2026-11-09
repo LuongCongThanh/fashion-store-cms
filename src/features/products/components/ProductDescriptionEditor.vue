@@ -23,8 +23,7 @@ watch(
   () => props.modelValue,
   (value) => {
     const clean = DOMPurify.sanitize(value)
-    if (editor.value && editor.value.getHTML() !== clean)
-      editor.value.commands.setContent(clean, { emitUpdate: false })
+    if (editor.value && editor.value.getHTML() !== clean) editor.value.commands.setContent(clean, { emitUpdate: false })
   },
 )
 </script>

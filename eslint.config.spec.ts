@@ -22,7 +22,15 @@ const CASES: [string, string, boolean][] = [
   ['src/layouts/AuthLayout.vue', '@features/auth/types/Auth.types', false],
   ['src/layouts/AuthLayout.vue', '@features/auth/views/LoginView.vue', true],
   ['src/features/auth/views/LoginView.vue', '../../products/api/X', true],
-  ['src/features/auth/views/LoginView.vue', '../stores/Auth.store', false],
+  ['src/features/auth/views/LoginView.vue', '../stores/Auth.store', true],
+  ['src/features/auth/views/LoginView.vue', '..', true],
+  ['src/features/auth/views/LoginView.vue', '@features/auth/stores/Auth.store', false],
+  ['src/features/auth/views/LoginView.vue', '@features/products/api/Products.api', true],
+  ['src/features/auth/views/LoginView.vue', '@features/products/UseProducts', false],
+  ['src/features/auth/components/LoginForm.vue', '@features/auth/api/Auth.api', true],
+  ['src/features/auth/components/LoginForm.vue', '@features/auth/stores', true],
+  ['src/features/auth/components/LoginForm.vue', '@features/auth/schemas/Login.schema', false],
+  ['src/shared/lib/query/QueryClient.ts', '../api/errors/ErrorPolicy', true],
   ['src/app/router/Routes.ts', '@features/auth/views/LoginView.vue', false],
   ['src/layouts/AuthLayout.vue', '../lib/api/client/HttpClient', true],
   ['src/layouts/AuthLayout.vue', '@shared/lib/api/client/HttpClient', false],
@@ -51,12 +59,41 @@ describe('ranh giới import (BOUNDARIES)', () => {
   })
 })
 
+describe('import động / vi.* không dùng ../', () => {
+  const lint = async (code: string) => {
+    const [result] = await eslint.lintText(code, { filePath: 'src/features/auth/views/X.spec.ts' })
+    return (result?.messages ?? []).some((m) => m.ruleId === 'no-restricted-syntax')
+  }
+
+  it.each([
+    ["void import('../api/Auth.api')\n", true],
+    ["vi.mock('../api/Auth.api')\n", true],
+    ["void import('@features/auth/api/Auth.api')\n", false],
+    ["vi.mock('@features/auth/api/Auth.api')\n", false],
+  ])('%s → chặn=%s', async (code, blocked) => {
+    expect(await lint(code)).toBe(blocked)
+  })
+})
+
+describe('hook use* trong components/', () => {
+  it('chặn gọi hook use* nhưng cho lấy component từ Use*.ts', async () => {
+    const code = (name: string) =>
+      `<script setup lang="ts">\nimport { ${name} } from '@features/categories/UseCategories'\n</script>\n`
+    const blocked = async (name: string) => {
+      const [result] = await eslint.lintText(code(name), {
+        filePath: 'src/features/products/components/ProductForm.vue',
+      })
+      return (result?.messages ?? []).some((m) => m.ruleId === 'no-restricted-imports')
+    }
+    expect(await blocked('useCategoriesQuery')).toBe(true)
+    expect(await blocked('CategorySelector')).toBe(false)
+  })
+})
+
 describe('đặt tên file', () => {
   it('báo lỗi tên file kebab-case trong src/', async () => {
     const [result] = await eslint.lintText('export {}\n', { filePath: 'src/foo-bar.ts' })
-    expect(result?.messages.some((m) => m.ruleId === 'check-file/filename-naming-convention')).toBe(
-      true,
-    )
+    expect(result?.messages.some((m) => m.ruleId === 'check-file/filename-naming-convention')).toBe(true)
   })
 
   it('chấp nhận PascalCase kèm hậu tố hợp lệ', async () => {

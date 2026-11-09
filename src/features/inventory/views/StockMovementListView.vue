@@ -1,13 +1,12 @@
 <script setup lang="ts">
+import { useStockMovementsQuery } from '@features/inventory/api/Inventory.api'
+import StockMovementFilters from '@features/inventory/components/StockMovementFilters.vue'
+import StockMovementTable from '@features/inventory/components/StockMovementTable.vue'
+import { movementListSchema } from '@features/inventory/schemas/Inventory.schema'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
-
-import { useStockMovementsQuery } from '../api/Inventory.api'
-import StockMovementFilters from '../components/StockMovementFilters.vue'
-import StockMovementTable from '../components/StockMovementTable.vue'
-import { movementListSchema } from '../schemas/Inventory.schema'
 const { t } = useT()
 const { params, setFilter, setPage, setSort } = useListState(movementListSchema)
 const query = useStockMovementsQuery(params)
@@ -24,10 +23,6 @@ const query = useStockMovementsQuery(params)
       @sort="setSort"
       @retry="query.refetch()"
     />
-    <DataTablePagination
-      :meta="query.data.value?.meta"
-      @page="setPage"
-      @pageSize="setFilter('pageSize', $event)"
-    />
+    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
   </div>
 </template>

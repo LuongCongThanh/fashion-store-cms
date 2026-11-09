@@ -28,10 +28,7 @@ export function isSilent(e: unknown): boolean {
 export type MutationErrorRoute = 'form' | 'local' | 'silent' | 'toast'
 
 /** Mutation lỗi đi đâu (§O.4). */
-export function routeMutationError(
-  e: unknown,
-  meta?: { errorHandling?: 'global' | 'local' },
-): MutationErrorRoute {
+export function routeMutationError(e: unknown, meta?: { errorHandling?: 'global' | 'local' }): MutationErrorRoute {
   if (isSilent(e)) return 'silent'
   if (meta?.errorHandling === 'local') return 'local'
   if (isApiError(e) && (e.status === 400 || e.status === 422) && hasFields(e.fields)) return 'form'

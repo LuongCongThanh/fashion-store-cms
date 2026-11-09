@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
-import type { LocalizationInput, StoreSettingsInput } from '../schemas/Settings.schema'
+import type { LocalizationInput, StoreSettingsInput } from '@features/settings/schemas/Settings.schema'
 export function useStoreSettingsQuery() {
   const http = useHttpClient()
   return useQuery({
@@ -25,8 +25,7 @@ export function useLocalizationQuery() {
   const http = useHttpClient()
   return useQuery({
     queryKey: computed(() => ['settings', 'localization']),
-    queryFn: ({ signal }) =>
-      http.get('/settings/localization', { signal }) as Promise<LocalizationInput>,
+    queryFn: ({ signal }) => http.get('/settings/localization', { signal }) as Promise<LocalizationInput>,
   })
 }
 export function useSaveLocalizationMutation() {
