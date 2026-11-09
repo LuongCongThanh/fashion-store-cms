@@ -32,8 +32,11 @@ const featureBoundaryFor = (feature: string): Restriction => ({
   regex: `^@features/(?!${feature}/)[^/]+/(?!(?:${FEATURE_PUBLIC})$).+`,
 })
 // Cấm MỌI import lên thư mục cha (../ hoặc ..) ở toàn bộ src/; chỉ cho ./ cùng thư mục.
+// Một regex cho mọi chỗ chặn `../`: import tĩnh, import() động, vi.*().
+// `/` viết là \u002F vì selector của no-restricted-syntax (esquery) không cho `/` trong regex.
+const PARENT_PATH = String.raw`^\.\.(\u002F|$)`
 const noParentImport: Restriction = {
-  regex: String.raw`^\.\.(/|$)`,
+  regex: PARENT_PATH,
   message: 'Relative parent imports (../) are not allowed; use an alias such as @features/... (§N).',
 }
 const noApp: Restriction = {
@@ -87,7 +90,7 @@ type Boundary = { files: string[]; forbid: Restriction[]; name: string }
 
 /** Ba dòng ranh giới cho một feature: chung, components/ (presentational), api/ (DTO ok). */
 const featureRows = (feature: string): Boundary[] => {
-  const base = [featureBoundaryFor(feature), noParentImport, noTest, noApp, noLayouts]
+  const base = [featureBoundaryFor(feature), noApp, noLayouts]
   return [
     { name: `features/${feature}`, files: [`src/features/${feature}/**/*.{ts,vue}`], forbid: [...base, noDto] },
     {
@@ -113,56 +116,53 @@ export const BOUNDARIES: Boundary[] = [
   {
     name: 'default',
     files: ['src/**/*.{ts,vue}'],
-    forbid: [featureBoundary, noParentImport, noTest, noDto],
+    forbid: [featureBoundary, noDto],
   },
   {
     name: 'layouts',
     files: ['src/layouts/**/*.{ts,vue}'],
-    forbid: [featureBoundary, noParentImport, noTest, noApp, noDto],
+    forbid: [featureBoundary, noApp, noDto],
   },
   ...FEATURES.flatMap(featureRows),
-  { name: 'shared', files: ['src/shared/**/*.{ts,vue}'], forbid: [noUpper, noParentImport, noTest, noDto] },
+  { name: 'shared', files: ['src/shared/**/*.{ts,vue}'], forbid: [noUpper, noDto] },
   {
     name: 'shared/components',
     files: ['src/shared/components/**/*.{ts,vue}'],
-    forbid: [noUpper, noParentImport, noTest, noDto, noHttpInSharedUi],
+    forbid: [noUpper, noDto, noHttpInSharedUi],
   },
   {
     name: 'shared/lib',
     files: ['src/shared/lib/**/*.ts'],
-    forbid: [noUpper, noParentImport, noTest, noDto, libIsBottom],
+    forbid: [noUpper, noDto, libIsBottom],
   },
   {
     name: 'shared/lib/api (DTO ok)',
     files: ['src/shared/lib/api/**/*.ts'],
-    forbid: [noUpper, noParentImport, noTest, libIsBottom],
+    forbid: [noUpper, libIsBottom],
   },
   {
     name: 'Routes.ts',
     files: ['src/app/router/Routes.ts'],
-    forbid: [featureBoundaryForRoutes, noParentImport, noTest, noDto],
+    forbid: [featureBoundaryForRoutes, noDto],
   },
 ]
 
 const TEST_FILES = ['**/*.spec.ts', 'src/test/**']
 
 /**
- * Chuyển bảng thành các block flat config. Mỗi dòng sinh 2 block: code thường, và file test
- * (giao `files` × TEST_FILES) với cùng pattern trừ noTest — test được import @test/*.
+ * Chuyển bảng thành các block flat config. noParentImport và noTest áp cho MỌI dòng nên thêm ở đây,
+ * không lặp trong bảng. Mỗi dòng sinh 2 block: code thường, và file test (giao `files` × TEST_FILES)
+ * không có noTest — test được import @test/*.
  */
 const toFlatConfig = (rows: typeof BOUNDARIES): Linter.Config[] =>
   rows.flatMap(({ files, forbid, name }) => [
-    {
-      name: `boundaries/${name}`,
-      files,
-      rules: { 'no-restricted-imports': ['error', { patterns: forbid }] },
-    },
-    {
-      name: `boundaries/${name} (test)`,
-      files: files.flatMap((f) => TEST_FILES.map((t) => [f, t])),
-      rules: { 'no-restricted-imports': ['error', { patterns: forbid.filter((r) => r !== noTest) }] },
-    },
-  ])
+    { files, name, patterns: [...forbid, noParentImport, noTest] },
+    { files: files.flatMap((f) => TEST_FILES.map((t) => [f, t])), name: `${name} (test)`, patterns: [...forbid, noParentImport] },
+  ]).map(({ files, name, patterns }) => ({
+    name: `boundaries/${name}`,
+    files,
+    rules: { 'no-restricted-imports': ['error', { patterns }] },
+  }))
 
 const SUFFIX = '?(.api|.mapper|.routes|.store|.schema|.types|.config|.factory|.generated|.d)?(.spec)'
 
@@ -310,11 +310,11 @@ export default defineConfig(
       'no-restricted-syntax': [
         'error',
         {
-          selector: String.raw`ImportExpression[source.value=/^\.\./]`,
+          selector: `ImportExpression[source.value=/${PARENT_PATH}/]`,
           message: 'Relative parent imports (../) are not allowed; use an alias (§N).',
         },
         {
-          selector: String.raw`CallExpression[callee.object.name='vi'][arguments.0.value=/^\.\./]`,
+          selector: `CallExpression[callee.object.name='vi'][arguments.0.value=/${PARENT_PATH}/]`,
           message: 'Relative parent paths (../) are not allowed in vi.*; use an alias (§N).',
         },
       ],
