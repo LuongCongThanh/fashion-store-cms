@@ -1,19 +1,25 @@
 <script setup lang="ts">
+import USelect from '@nuxt/ui/components/Select.vue'
+import { computed } from 'vue'
+
 import { useTheme } from '@shared/composables/UseTheme'
 import { useT } from '@shared/lib/i18n/I18n'
+
+import type { ThemeMode } from '@shared/composables/UseTheme'
 const { mode } = useTheme()
 const { t } = useT()
+
+const MODES: ThemeMode[] = ['light', 'dark', 'auto']
+const items = computed(() => MODES.map((value) => ({ label: t(`common.theme.${value}`), value })))
 </script>
 
 <template>
-  <select
+  <USelect
     v-model="mode"
-    name="theme"
+    :items="items"
     :aria-label="t('common.themeLabel')"
-    class="rounded border border-default bg-default p-1 text-sm"
-  >
-    <option value="light">{{ t('common.theme.light') }}</option>
-    <option value="dark">{{ t('common.theme.dark') }}</option>
-    <option value="auto">{{ t('common.theme.auto') }}</option>
-  </select>
+    size="sm"
+    color="neutral"
+    variant="ghost"
+  />
 </template>

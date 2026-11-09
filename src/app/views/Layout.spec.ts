@@ -9,6 +9,7 @@ import { useAuth } from '@features/auth/UseAuth'
 import AppShell from '@layouts/components/AppShell.vue'
 import { buildUser } from '@test/factories/User.factory'
 import { renderWithPlugins } from '@test/Render'
+import { chooseOption } from '@test/Select'
 
 const mounted: VueWrapper[] = []
 afterEach(() => {
@@ -78,7 +79,7 @@ describe('Layout navigation', () => {
   it('shows translated ancestor breadcrumbs and switches language without changing the URL', async () => {
     const { wrapper, router } = await renderLayout()
     expect(wrapper.find('nav[aria-label="Breadcrumb"]').text()).toContain('Tổng quan')
-    await wrapper.find('select[name="language"]').setValue('en')
+    await chooseOption(wrapper, 'Ngôn ngữ', 'English')
     await flushPromises()
     expect(wrapper.find('nav[aria-label="Breadcrumb"]').text()).toContain('Dashboard')
     expect(router.currentRoute.value.fullPath).toBe('/products?status=draft')
@@ -86,10 +87,10 @@ describe('Layout navigation', () => {
   })
   it('keeps system as a selectable persisted theme', async () => {
     const { wrapper } = await renderLayout()
-    await wrapper.find('select[name="theme"]').setValue('dark')
+    await chooseOption(wrapper, 'Giao diện', 'Tối')
     expect(document.documentElement.classList.contains('dark')).toBe(true)
     expect(localStorage.getItem('cms.colorMode')).toBe('dark')
-    await wrapper.find('select[name="theme"]').setValue('auto')
+    await chooseOption(wrapper, 'Giao diện', 'Theo hệ thống')
     expect(localStorage.getItem('cms.colorMode')).toBe('auto')
   })
   it('groups permitted links under their domain', async () => {
