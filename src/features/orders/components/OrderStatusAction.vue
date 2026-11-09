@@ -11,12 +11,13 @@ const { t } = useT()
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-2">
+  <div class="flex flex-wrap justify-end gap-2">
     <UButton
       v-for="next in nextOrderStatuses(status)"
       :key="next"
       :data-status="next"
       :color="next === 'cancelled' ? 'error' : 'primary'"
+      :variant="next === 'cancelled' ? 'ghost' : 'solid'"
       :disabled="pending"
       @click="emit('change', next)"
       >{{ t(`orders.status.${next}`) }}</UButton

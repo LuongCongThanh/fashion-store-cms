@@ -11,22 +11,24 @@ const format = useFormat()
 
 <template>
   <EmptyState v-if="!items.length" :title="t('orders.noItems')" icon="i-lucide-package-open" />
-  <table v-else class="w-full">
+  <div v-else class="overflow-x-auto">
+  <table class="w-full min-w-[32rem] text-sm">
     <thead>
       <tr>
-        <th>{{ t('common.name') }}</th>
-        <th>SKU</th>
-        <th>{{ t('orders.quantity') }}</th>
-        <th>{{ t('products.price') }}</th>
+        <th class="px-3 py-2 text-left text-xs text-muted">{{ t('common.name') }}</th>
+        <th class="px-3 py-2 text-left text-xs text-muted">SKU</th>
+        <th class="px-3 py-2 text-right text-xs text-muted">{{ t('orders.quantity') }}</th>
+        <th class="px-3 py-2 text-right text-xs text-muted">{{ t('products.price') }}</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="item in items" :key="item.id">
-        <td>{{ item.name }}</td>
-        <td>{{ item.sku }}</td>
-        <td class="text-right tabular-nums">{{ format.number(item.quantity) }}</td>
-        <td class="text-right tabular-nums">{{ format.money(item.price) }}</td>
+        <td class="px-3 py-2.5">{{ item.name }}</td>
+        <td class="px-3 py-2.5 font-mono">{{ item.sku }}</td>
+        <td class="px-3 py-2.5 text-right tabular-nums">{{ format.number(item.quantity) }}</td>
+        <td class="px-3 py-2.5 text-right tabular-nums">{{ format.money(item.price) }}</td>
       </tr>
     </tbody>
   </table>
+  </div>
 </template>

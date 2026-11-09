@@ -30,6 +30,7 @@ it('offers only valid next statuses and changes the order through its public act
   expect(wrapper.text()).toContain('ORD-001')
   expect(wrapper.find('button[data-status="confirmed"]').exists()).toBe(true)
   expect(wrapper.find('button[data-status="delivered"]').exists()).toBe(false)
+  expect(wrapper.get('[aria-current="step"]').text()).toBe('Chờ xác nhận')
   await wrapper.find('button[data-status="confirmed"]').trigger('click')
   await flushPromises()
   expect(JSON.parse(http.history.patch[0]?.data as string)).toEqual({ status: 'confirmed' })
