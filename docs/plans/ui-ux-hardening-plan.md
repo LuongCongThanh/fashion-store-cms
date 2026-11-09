@@ -197,7 +197,7 @@ Baseline phải được review và chấp thuận trước khi snapshot trở t
 **Acceptance criteria**
 
 - User duyệt mockup; chưa duyệt thì không sang Phase 1.
-- Mockup không phải code production và không merge vào `src/`.
+- Mockup không phải code production: nếu nằm trong `src/` thì chỉ được nạp qua route dev (`import.meta.env.DEV`), không có trong bundle production.
 
 ### Phase 1 — Viết Design contract
 

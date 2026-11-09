@@ -21,6 +21,22 @@ const devRoutes: RouteRecordRaw[] = import.meta.env.DEV
         name: 'design-system',
         component: () => import('@app/views/DesignSystemView.vue'),
       },
+      // Phase 0.5 UI/UX hardening: 3 biến thể mỗi màn, `?variant=A|B|C`, fixture tĩnh, không gọi API.
+      {
+        path: 'prototype/dashboard',
+        name: 'prototype-dashboard',
+        component: () => import('@features/dashboard/prototype/DashboardPrototype.vue'),
+      },
+      {
+        path: 'prototype/products',
+        name: 'prototype-products',
+        component: () => import('@features/products/prototype/ProductListPrototype.vue'),
+      },
+      {
+        path: 'prototype/orders',
+        name: 'prototype-orders',
+        component: () => import('@features/orders/prototype/OrderDetailPrototype.vue'),
+      },
     ]
   : []
 

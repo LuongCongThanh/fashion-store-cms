@@ -4,7 +4,7 @@ Chốt ngày 2026-11-09.
 
 **Câu hỏi:** Các màn CMS đại diện nên có cấu trúc thế nào khi theo hướng "Fashion editorial + operational clarity"?
 
-**Tư liệu gốc:** branch `prototype/ui-direction`, draft PR #42 (không merge). Chạy `npm run dev` rồi mở `?variant=A|B|C`.
+**Tư liệu gốc:** PR #42, merge vào `dev` dưới dạng route chỉ có khi DEV. Chạy `npm run dev` rồi mở `/prototype/dashboard`, `/prototype/products`, `/prototype/orders` với `?variant=A|B|C`.
 
 | Màn          | Chọn                     | Giữ lại                                                                                         |
 | ------------ | ------------------------ | ----------------------------------------------------------------------------------------------- |

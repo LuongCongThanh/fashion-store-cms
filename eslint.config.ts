@@ -299,8 +299,12 @@ export default defineConfig(
     },
   },
   {
-    // Trang dev xem design system — không cần i18n.
-    files: ['src/app/views/DesignSystemView.vue'],
+    // Trang chỉ có ở dev (design system, prototype Phase 0.5) — không cần i18n.
+    files: [
+      'src/app/views/DesignSystemView.vue',
+      'src/features/*/prototype/**/*.vue',
+      'src/shared/components/prototype/**/*.vue',
+    ],
     rules: { 'vue/no-bare-strings-in-template': 'off' },
   },
   {
