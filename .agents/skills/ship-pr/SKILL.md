@@ -27,6 +27,8 @@ Ship the current task as one reviewable pull request. Invocation authorizes crea
    - every required section from the repository PR template;
    - a concise behavior-focused summary, concrete verification evidence, known gaps/risks, migrations or API impact, and accurate checklist state.
 
+   Before writing or updating the body, load the available skill named `pr`. Apply its `Summary`, `Evidence`, and `Merge Danger` guidance inside the repository template: preserve every repository-required section, add the `pr` sections when absent, and use the smallest useful visual. Repository-required fields define the envelope; the `pr` skill defines how the core narrative is presented. If the `pr` skill is unavailable, use those three sections as the fallback structure.
+
 8. **Report completion.** Return the commit SHA, pushed branch, PR number/link, checks run, and any pending CI or reviewer action. Completion means the intended files are committed, the branch is tracking its remote, and exactly one open PR targets `dev`.
 
 ## Guardrails
