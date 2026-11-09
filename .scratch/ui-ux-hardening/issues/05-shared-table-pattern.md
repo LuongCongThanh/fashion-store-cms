@@ -19,3 +19,4 @@ Test: DataTable spec cho chọn dòng → thanh hàng loạt hiện, bỏ chọn
 
 ## Comments
 - 2026-11-09: Dùng `UTable` với `rowSelection`, `columnVisibility`, pagination như `pages/customers.vue` của template, thay vì tự viết. Cân nhắc `UPopover` + `UCalendar` cho `FilterDateRange`.
+- 2026-11-09: Nhận thêm `DataTableColumnVisibility` từ ticket 04: đổi `<details>` + checkbox native sang `UDropdownMenu` checkbox.

@@ -1,20 +1,27 @@
 <script setup lang="ts">
+import USelect from '@nuxt/ui/components/Select.vue'
+
 import { useLocale, useT } from '@shared/lib/i18n/I18n'
 
 import type { AppLocale } from '@shared/lib/i18n/I18n'
 const { locale, setLocale } = useLocale()
 const { t } = useT()
+
+// Tên ngôn ngữ viết bằng chính ngôn ngữ đó, không dịch.
+const ITEMS: { label: string; value: AppLocale }[] = [
+  { label: 'Tiếng Việt', value: 'vi' },
+  { label: 'English', value: 'en' },
+]
 </script>
 
 <template>
-  <select
-    name="language"
+  <USelect
+    :modelValue="locale"
+    :items="ITEMS"
     :aria-label="t('common.languageLabel')"
-    :value="locale"
-    class="rounded border border-default bg-default p-1 text-sm"
-    @change="setLocale(($event.target as HTMLSelectElement).value as AppLocale)"
-  >
-    <option value="vi">Tiếng Việt</option>
-    <option value="en">English</option>
-  </select>
+    size="sm"
+    color="neutral"
+    variant="ghost"
+    @update:modelValue="setLocale($event as AppLocale)"
+  />
 </template>

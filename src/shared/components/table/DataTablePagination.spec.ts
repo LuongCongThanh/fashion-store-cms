@@ -1,9 +1,10 @@
 import { flushPromises } from '@vue/test-utils'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
 import { plainSpaces, withLocaleSwitch } from '@test/Intl'
 import { renderWithPlugins } from '@test/Render'
+import { chooseOption } from '@test/Select'
 
 import DataTablePagination from './DataTablePagination.vue'
 
@@ -18,4 +19,11 @@ it.each([
   await wrapper.find('[data-action="locale-en"]').trigger('click')
   await flushPromises()
   expect(plainSpaces(wrapper.find('[data-total]').text())).toBe(en)
+})
+
+it('changes the page size through a labelled select', async () => {
+  const onPageSize = vi.fn()
+  const { wrapper } = renderWithPlugins(() => h(DataTablePagination, { meta: meta(80), onPageSize }))
+  await chooseOption(wrapper, 'Số dòng', '50')
+  expect(onPageSize).toHaveBeenCalledWith(50)
 })

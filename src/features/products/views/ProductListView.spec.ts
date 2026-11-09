@@ -4,6 +4,7 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 
 import { plainSpaces } from '@test/Intl'
 import { renderWithPlugins } from '@test/Render'
+import { chooseOption } from '@test/Select'
 
 import ProductListView from './ProductListView.vue'
 
@@ -21,8 +22,7 @@ it('renders server products and changes filters, sort and page through the URL',
   await flushPromises()
   expect(wrapper.text()).toContain('Áo linen')
   expect(wrapper.find('[data-action="row-actions"]').exists()).toBe(true)
-  await wrapper.find('select[name="status"]').setValue('draft')
-  await flushPromises()
+  await chooseOption(wrapper, 'Trạng thái', 'Bản nháp')
   expect(router.currentRoute.value.query).toMatchObject({ status: 'draft', page: '1' })
   await wrapper
     .findAll('th button')
@@ -75,8 +75,7 @@ it('filters products using category options from the category feature', async ()
       http.onGet(/\/products$/).reply(200, { data: [], meta: { page: 1, pageSize: 20, total: 0, totalPages: 0 } })
     },
   })
-  await wrapper.find('select[name="categoryId"]').setValue('linen')
-  await flushPromises()
+  await chooseOption(wrapper, 'Danh mục', 'Linen')
   expect(router.currentRoute.value.query.categoryId).toBe('linen')
 })
 

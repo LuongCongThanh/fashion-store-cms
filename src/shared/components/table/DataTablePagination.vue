@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import UButton from '@nuxt/ui/components/Button.vue'
+import USelect from '@nuxt/ui/components/Select.vue'
 
 import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
@@ -9,19 +10,21 @@ defineProps<{ meta?: Paginated<unknown>['meta'] }>()
 const emit = defineEmits<{ page: [page: number]; pageSize: [size: number] }>()
 const { t, tn } = useT()
 const format = useFormat()
+
+const PAGE_SIZES = [10, 20, 50, 100].map((size) => ({ label: String(size), value: size }))
 </script>
 
 <template>
   <nav v-if="meta" :aria-label="t('common.pagination')" class="flex items-center justify-end gap-3">
     <span data-total>{{ tn('common.results', meta.total, { n: format.number(meta.total) }) }}</span>
-    <select
-      name="pageSize"
-      :value="meta.pageSize"
+    <USelect
+      :modelValue="meta.pageSize"
+      :items="PAGE_SIZES"
       :aria-label="t('common.pageSize')"
-      @change="emit('pageSize', Number(($event.target as HTMLSelectElement).value))"
-    >
-      <option v-for="size in [10, 20, 50, 100]" :key="size" :value="size">{{ size }}</option>
-    </select>
+      size="sm"
+      class="w-20"
+      @update:modelValue="emit('pageSize', Number($event))"
+    />
     <UButton
       :disabled="meta.page <= 1"
       :aria-label="t('common.previous')"
