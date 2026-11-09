@@ -18,3 +18,4 @@ Test: DashboardView spec cho widget theo quyền, hàng đợi điều hướng 
 ## Comments
 
 - 2026-11-09: Ticket 02 (#44) đã thêm formatter nhưng chưa có nhãn "Hết" cho tồn 0; chuyển phần đó sang ticket này.
+- 2026-11-09: KPI phụ: `UPageGrid` + `UPageCard` + `UBadge` (như `HomeStats.vue`). KPI hero: kiểm `UChart` (dependency + bundle so với baseline #01) trước khi dùng; nặng quá thì chọn chart nhẹ hơn. Không lấy bố cục trang home của template.

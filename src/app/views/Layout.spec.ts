@@ -1,13 +1,12 @@
 import { flushPromises } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, onMounted } from 'vue'
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router'
 
 import type { VueWrapper } from '@vue/test-utils'
 
 import { useAuth } from '@features/auth/UseAuth'
-import AppHeader from '@layouts/components/AppHeader.vue'
-import AppSidebar from '@layouts/components/AppSidebar.vue'
+import AppShell from '@layouts/components/AppShell.vue'
 import { buildUser } from '@test/factories/User.factory'
 import { renderWithPlugins } from '@test/Render'
 
@@ -17,6 +16,21 @@ afterEach(() => {
     wrapper.unmount()
   })
 })
+
+// Slideover của UDashboardSidebar được tải lazy nên phải chờ nó xuất hiện/biến mất.
+async function openedDrawer(): Promise<HTMLElement> {
+  return vi.waitFor(() => {
+    const dialog = document.body.querySelector<HTMLElement>('[role="dialog"]')
+    if (!dialog) throw new Error('drawer chưa mở')
+    return dialog
+  })
+}
+
+async function drawerClosed(): Promise<void> {
+  await vi.waitFor(() => {
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull()
+  })
+}
 
 async function renderLayout() {
   const router = createRouter({
@@ -28,7 +42,7 @@ async function renderLayout() {
           setup: () => {
             const { ensureUser } = useAuth()
             onMounted(() => void ensureUser())
-            return () => h('div', [h(AppHeader), h(AppSidebar)])
+            return () => h(AppShell, null, { default: () => h(RouterView) })
           },
         }),
         meta: { titleKey: 'nav.dashboard' },
@@ -82,44 +96,36 @@ describe('Layout navigation', () => {
     const { wrapper, http } = await renderLayout()
     http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
     await flushPromises()
-    expect(wrapper.find('aside').text()).toContain('Cửa hàng')
-    expect(wrapper.find('aside a[href="/orders"]').exists()).toBe(true)
+    expect(wrapper.find('nav[aria-label="Menu điều hướng"]').text()).toContain('Cửa hàng')
+    expect(wrapper.find('nav[aria-label="Menu điều hướng"] a[href="/orders"]').exists()).toBe(true)
   })
   it('opens a navigation drawer from the header menu button', async () => {
     const { wrapper, http } = await renderLayout()
     http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
     await flushPromises()
-    await wrapper.find('button[aria-label="Mở menu"]').trigger('click')
-    await flushPromises()
-    const dialog = document.body.querySelector('[role="dialog"]')
-    expect(dialog).not.toBeNull()
-    expect(dialog?.querySelector('a[href="/orders"]')).not.toBeNull()
+    await wrapper.find('button[aria-label="Mở thanh bên"]').trigger('click')
+    const dialog = await openedDrawer()
+    expect(dialog.querySelector('a[href="/orders"]')).not.toBeNull()
   })
   it('closes the drawer on Escape and returns focus to the menu button', async () => {
     const { wrapper } = await renderLayout()
-    const trigger = wrapper.find('button[aria-label="Mở menu"]')
+    const trigger = wrapper.find('button[aria-label="Mở thanh bên"]')
     ;(trigger.element as HTMLElement).focus()
     await trigger.trigger('click')
-    await flushPromises()
-    const dialog = document.body.querySelector<HTMLElement>('[role="dialog"]')
-    dialog?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
-    await flushPromises()
-    await new Promise((resolve) => setTimeout(resolve, 0))
-    expect(document.body.querySelector('[role="dialog"]')).toBeNull()
+    const dialog = await openedDrawer()
+    dialog.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    await drawerClosed()
     expect(document.activeElement).toBe(trigger.element)
   })
   it('closes the drawer when the route changes', async () => {
     const { wrapper, router } = await renderLayout()
-    await wrapper.find('button[aria-label="Mở menu"]').trigger('click')
-    await flushPromises()
-    expect(document.body.querySelector('[role="dialog"]')).not.toBeNull()
+    await wrapper.find('button[aria-label="Mở thanh bên"]').trigger('click')
+    await openedDrawer()
     await router.push('/')
-    await flushPromises()
-    await new Promise((resolve) => setTimeout(resolve, 0))
-    expect(document.body.querySelector('[role="dialog"]')).toBeNull()
+    await drawerClosed()
   })
   it('hides sidebar links when the current user lacks permission', async () => {
     const { wrapper } = await renderLayout()
-    expect(wrapper.find('aside a[href="/orders"]').exists()).toBe(false)
+    expect(wrapper.find('nav[aria-label="Menu điều hướng"] a[href="/orders"]').exists()).toBe(false)
   })
 })

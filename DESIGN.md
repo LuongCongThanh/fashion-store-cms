@@ -121,7 +121,7 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 
 ## Layout
 
-- **App shell:** sidebar rộng 256px (thu gọn 64px), cố định từ `lg`. Dưới `lg` thì sidebar thành drawer (`USlideover`), mở bằng nút menu trong header, tự đóng khi đổi route. Header chứa breadcrumb, Store switcher, locale, theme và User menu. Dưới `lg` header chỉ giữ nút menu, Store switcher (cắt chữ), breadcrumb rút gọn còn trang hiện tại, User menu; locale và theme nằm trong User menu. Header và page dùng `px-4 lg:px-6`.
+- **App shell:** dựng bằng `UDashboardGroup` + `UDashboardSidebar` + `UDashboardPanel` + `UDashboardNavbar` của Nuxt UI (cách ghép theo template `nuxt-ui-templates/dashboard`), không tự dựng sidebar/header. Sidebar rộng cố định 256px (thu gọn 64px, không kéo đổi độ rộng), từ `lg` trở lên. Dưới `lg` sidebar thành slideover từ trái (không phải `drawer` bottom sheet của Nuxt UI), mở bằng nút toggle trong navbar, tự đóng khi đổi route. Store switcher nằm ở đầu sidebar, User menu và nút thu gọn ở chân/navbar. Navbar chứa breadcrumb (dưới `lg` rút gọn còn trang hiện tại), locale, theme (chỉ từ `lg`; dưới `lg` nằm trong User menu) và User menu. Navbar không lặp tiêu đề trang; tiêu đề nằm ở `PageHeader`. Header và page dùng `px-4 lg:px-6`.
 - **Vùng nội dung:** `PageContainer` = `mx-auto max-w-screen-2xl p-4 lg:p-6`.
 - **Breakpoint:** `sm 640 · md 768 · lg 1024 · xl 1280 · 2xl 1536`. Màn đích là desktop ≥ 1280, nhưng mọi route phải dùng được ở 375px.
 - **z-index:** `z-10` cho header bảng sticky, `z-20` cho sidebar mobile. Overlay để Nuxt UI quản lý.

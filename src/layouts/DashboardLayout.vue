@@ -6,8 +6,7 @@ import PageContainer from '@shared/components/page/PageContainer.vue'
 import { useNotify } from '@shared/composables/UseNotify'
 import { usePwa } from '@shared/composables/UsePwa'
 
-import AppHeader from './components/AppHeader.vue'
-import AppSidebar from './components/AppSidebar.vue'
+import AppShell from './components/AppShell.vue'
 
 const notify = useNotify()
 const { needRefresh, reload } = usePwa()
@@ -19,14 +18,8 @@ watch(needRefresh, (hasUpdate) => {
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-default text-default">
-    <AppSidebar />
-    <div class="flex min-w-0 flex-1 flex-col">
-      <OfflineBanner />
-      <AppHeader />
-      <main>
-        <PageContainer><RouterView /></PageContainer>
-      </main>
-    </div>
-  </div>
+  <AppShell>
+    <template #banner><OfflineBanner /></template>
+    <PageContainer><RouterView /></PageContainer>
+  </AppShell>
 </template>

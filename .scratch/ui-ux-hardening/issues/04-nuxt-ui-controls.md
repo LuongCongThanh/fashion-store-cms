@@ -10,3 +10,6 @@ Focus ring theo `DESIGN.md`.
 Nguồn: hallmark #5.
 
 Test: spec hiện có vẫn xanh, chỉ cập nhật selector; mỗi control phải lấy được bằng role và tên.
+
+## Comments
+- 2026-11-09: Theo cách ghép của template dashboard (`pages/customers.vue`): `USelect`/`UInput` cho filter, `UPagination` cho phân trang. Xem bảng tái dùng trong spec.

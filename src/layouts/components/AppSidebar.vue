@@ -1,30 +1,41 @@
 <script setup lang="ts">
-import UButton from '@nuxt/ui/components/Button.vue'
-import { useLocalStorage } from '@vueuse/core'
+import UDashboardSidebar from '@nuxt/ui/components/DashboardSidebar.vue'
+import UDashboardSidebarCollapse from '@nuxt/ui/components/DashboardSidebarCollapse.vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
 
 import SidebarNav from './SidebarNav.vue'
+import StoreSwitcher from './StoreSwitcher.vue'
 
 const { t } = useT()
-const isCollapsed = useLocalStorage('cms.sidebarCollapsed', false)
+
+// DESIGN.md: rộng cố định 256px, thu gọn 64px; dưới lg là slideover từ trái, tự đóng khi đổi route.
+const WIDTH = 256
+const COLLAPSED_WIDTH = 64
 </script>
 
 <template>
-  <aside
-    class="hidden shrink-0 flex-col border-r border-default bg-muted transition-[width] duration-150 lg:flex"
-    :class="isCollapsed ? 'w-16' : 'w-64'"
+  <UDashboardSidebar
+    id="main"
+    mode="slideover"
+    collapsible
+    :resizable="false"
+    :defaultSize="WIDTH"
+    :minSize="WIDTH"
+    :maxSize="WIDTH"
+    :collapsedSize="COLLAPSED_WIDTH"
+    class="bg-muted"
   >
-    <div class="flex h-14 items-center justify-between px-4">
-      <span v-if="!isCollapsed" class="font-display text-base font-bold">{{ t('common.appName') }}</span>
-      <UButton
-        :icon="isCollapsed ? 'i-lucide-panel-left-open' : 'i-lucide-panel-left-close'"
-        color="neutral"
-        variant="ghost"
-        :aria-label="t('nav.collapse')"
-        @click="isCollapsed = !isCollapsed"
-      />
-    </div>
-    <SidebarNav :collapsed="isCollapsed" />
-  </aside>
+    <template #header="{ collapsed }">
+      <StoreSwitcher :collapsed="collapsed" />
+    </template>
+    <template #default="{ collapsed }">
+      <nav :aria-label="t('nav.menu')">
+        <SidebarNav :collapsed="collapsed" />
+      </nav>
+    </template>
+    <template #footer>
+      <UDashboardSidebarCollapse class="hidden lg:inline-flex" />
+    </template>
+  </UDashboardSidebar>
 </template>

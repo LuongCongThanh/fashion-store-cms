@@ -116,7 +116,36 @@ User CMS (nhân viên vận hành, quản lý Store) đang làm việc trên m�
 - **Luật focus:** element tự viết dùng outline `primary` 2px, offset 2px, chỉ khi `focus-visible`; ring ≥ 3:1 so với nền. Không tự viết `role="tab"`: dùng `UTabs`, hoặc `<nav>` + `aria-current` nếu là link.
 - **Primitive:** dùng Nuxt UI (`USelect`, `UInput`, `USlideover`, `UTabs`, `UTable`…). Chỉ viết wrapper khi đã chứng minh có khoảng trống.
 - **Format:** mọi tiền/số/ngày đi qua shared module format (`formatMoney`, `formatNumber`, `formatDateTime`, composable `useFormat()`) theo locale app. Module đã xong (#44); các ticket sau chỉ dùng nó, không gọi `toLocaleString()` trần.
-- **Layout shell:** dưới `lg`, sidebar thành drawer (`USlideover`) mở từ `AppHeader`. Locale và theme chuyển vào User menu. Padding trang `px-4 lg:px-6`.
+- **Layout shell (chốt lại 2026-11-09, thay bản tự viết ở #47):**
+  - Dựng bằng các component `UDashboard*` có sẵn trong `@nuxt/ui`, theo cách ghép của template [nuxt-ui-templates/dashboard](https://github.com/nuxt-ui-templates/dashboard). Không copy file template (template là app Nuxt, repo này là Vue + Vite).
+  - Khung: `UDashboardGroup` (`storage="local"`, `storageKey="cms.dashboard"`; bỏ key cũ `cms.sidebarCollapsed`, ghi vào mục Migration của PR) → `UDashboardSidebar` (`collapsible`, không `resizable`, độ rộng `px` 256/64 theo `DESIGN.md`, `mode="slideover"` mở từ trái dưới `lg`) → `UDashboardPanel` (navbar dính, `PageContainer` nằm trong slot body).
+  - Sidebar: Store switcher ở đầu (vị trí giống chọn team của template), `SidebarNav` lấy dữ liệu từ `Navigation.ts` (lọc theo quyền), User menu ở chân.
+  - Navbar (`UDashboardNavbar`): nút `UDashboardSidebarCollapse`/toggle + breadcrumb; bên phải là locale + theme (chỉ trên desktop) và User menu. Navbar không lặp tiêu đề trang; tiêu đề lớn vẫn nằm trong `PageHeader`.
+  - Locale và theme có trong User menu. Padding trang `px-4 lg:px-6`.
+  - `UDashboardToolbar` chưa dùng; ticket 07 quyết định thanh lọc nằm ở toolbar hay trong trang.
+  - Trong `DESIGN.md`, chữ "drawer" đổi thành "slideover từ trái" để không nhầm với `drawer` (bottom sheet) của Nuxt UI.
+- **Tái dùng template dashboard của Nuxt UI:** chỉ lấy cách ghép các component `U*`, dựng trên khung của repo (`Navigation.ts`, i18n, quyền, `HttpClient`, `shared/lib/format`) và theo `DESIGN.md`. Tránh tự viết lại component Nuxt UI đã có.
+
+  | Nhóm | Template | Component Nuxt UI | Thay / áp vào | Ticket |
+  | --- | --- | --- | --- | --- |
+  | Lấy | `layouts/default.vue` | `UDashboardGroup`, `UDashboardSidebar`, `UNavigationMenu` | `DashboardLayout`, `AppSidebar`, `MobileNavDrawer` | 03 |
+  | Lấy | `pages/*.vue` (khung) | `UDashboardPanel`, `UDashboardNavbar`, `UDashboardSidebarCollapse` | `AppHeader`, nút thu gọn tự viết | 03 |
+  | Lấy | `TeamsMenu.vue` | `UDropdownMenu` ở đầu sidebar | `StoreSwitcher` chuyển lên đầu sidebar | 03 |
+  | Lấy | `UserMenu.vue` | `UDropdownMenu` + color mode | Cách xếp nhóm của `UserMenu` | 03/04 |
+  | Lấy | `pages/customers.vue` | `UTable` (`rowSelection`, `columnVisibility`, pagination), `UInput`, `USelect`, `UPagination` | `DataTablePagination`, `DataTableBulkActions`, `DataTableColumnVisibility`, các filter | 04, 05 |
+  | Lấy | `settings.vue` | `UDashboardToolbar` + `UNavigationMenu` ngang | `PageTabs`, tab bộ lọc đã lưu | 07, 10 |
+  | Lấy | `settings/index.vue`, `security.vue` | `UPageCard`, `UForm`, `UFormField` | `FormSection`, archetype Form | 06, 10 |
+  | Có điều kiện | `layouts/default.vue` | `UDashboardSearch`, `UDashboardSearchButton`, `defineShortcuts` | Command palette từ `command` meta của `Navigation.ts` | 15 |
+  | Có điều kiện | `home/HomeStats.vue` | `UPageGrid`, `UPageCard`, `UBadge` | KPI phụ (delta qua badge) | 12 |
+  | Có điều kiện | `home/HomeChart.vue` | `UChart` | KPI hero chart: kiểm dependency + bundle trước | 12 |
+  | Có điều kiện | `HomeDateRangePicker.vue` | `UPopover`, `UCalendar` | Có thể thay `FilterDateRange` | 05 |
+  | Có điều kiện | `NotificationsSlideover.vue` | `USlideover`, `UChip` | Chỉ khi có API thông báo | — |
+  | Không | trang home | — | Đã chốt Dashboard A (`mockup-decision.md`) | — |
+  | Không | `inbox.vue`, `UDashboardResizeHandle` | — | CMS không có inbox; sidebar độ rộng cố định | — |
+  | Không | `customers/AddModal.vue` | — | Form là trang riêng (archetype Form) | — |
+  | Không | `server/api`, `date-fns`, auto-import | — | Đặc thù Nuxt; đã có `HttpClient`, `shared/lib/format` | — |
+
+  **Giữ lại** (pattern riêng theo `DESIGN.md`, đã dựng trên `U*`): `PageHeader`, `EmptyState`/`ErrorState`/`LoadingState`, `StatusBadge`, `ActiveFilterTags`, `FilterBar`, `ConfirmDialog`.
 - **Pattern bảng (`DataTable`):** compact `py-1.5`, `thead` dính, thanh hàng loạt thay vào tiêu đề bảng (bỏ khối `DataTableBulkActions` riêng), cột tên là router link + `line-clamp-1` + `title`, cột tiền căn phải, cuộn ngang trong khung. Thứ tự ưu tiên cột ở `sm` được ghi vào `DESIGN.md`.
 - **Token:** `rounded-lg` (bỏ `rounded-xl`), khoảng cách dọc `space-y-4`/`space-y-6` (bỏ `space-y-5`).
 - **State dùng chung:** `LoadingState`/skeleton, `EmptyState`, error có nút thử lại. Mọi widget dashboard và bảng đều có đủ ba state.
@@ -158,7 +187,7 @@ User CMS (nhân viên vận hành, quản lý Store) đang làm việc trên m�
 
 ## Further Notes
 
-- **Ticket:** `issues/01`–`14`. Làm ticket nào hết bị chặn trước (dòng `Blocked by`). Ticket 02 (formatter) đã xong ở #44; phần nhãn "Hết" chuyển sang ticket 12.
+- **Ticket:** `issues/01`–`15`. Ticket 03 mở lại để làm lại shell bằng `UDashboard*` (PR #47 chưa merge, làm trên cùng branch). Làm ticket nào hết bị chặn trước (dòng `Blocked by`). Ticket 02 (formatter) đã xong ở #44; phần nhãn "Hết" chuyển sang ticket 12.
 - **Thứ tự phase:**
   - 0: baseline (01).
   - 2–3: nền tảng + pattern (02–06).
