@@ -1,6 +1,6 @@
 # 13 — Phase 6: visual regression + a11y + performance budget
 
-Status: ready-for-agent
+Status: done
 Blocked by: 07, 09, 12
 
 Playwright:
@@ -15,3 +15,11 @@ Thêm `@axe-core/playwright` (đo lại tương phản thật, so với các tí
 Chế độ chỉ báo cáo trước. Check nào ổn định, có người phụ trách thì mới chặn merge.
 
 Test: chính nó.
+
+## Comments
+
+- 2026-11-10: Thêm 42 browser cases cho 7 màn × 375/768/1280 × light/dark,
+  cộng app shell mobile. Mỗi case dùng fixture xấu nhất, chặn horizontal overflow,
+  lưu screenshot và axe report. Network được mock bằng `page.route()`; không cần backend.
+- Performance gate report-only: largest JS chunk 530.05/560 kB, tổng CSS
+  219.28/240 kB, đều PASS. Toàn bộ 43 Playwright tests pass trên Chromium.

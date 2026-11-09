@@ -20,6 +20,7 @@
     "format:check": "prettier --check .",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "quality:ui": "npm run analyze && tsx scripts/CheckUiBudget.ts && playwright test e2e/UiHardening.spec.ts",
     "pwa:assets": "pwa-assets-generator",
     "knip": "knip",
     "analyze": "vite build --mode analyze",
@@ -27,6 +28,7 @@
     "metrics:tokens": "tsx scripts/CodexUsage.ts"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/types": "^21.2.3",

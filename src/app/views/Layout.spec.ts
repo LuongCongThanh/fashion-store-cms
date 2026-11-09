@@ -136,7 +136,7 @@ describe('Layout navigation', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true }))
     const dialog = await openedDrawer()
     expect(dialog.textContent).toContain('Đơn hàng')
-    const order = [...dialog.querySelectorAll<HTMLElement>('[role="option"]')].find((item) => item.textContent?.includes('Đơn hàng'))
+    const order = [...dialog.querySelectorAll<HTMLElement>('[role="option"]')].find((item) => item.textContent.includes('Đơn hàng'))
     order?.click()
     await flushPromises()
     expect(router.currentRoute.value.path).toBe('/orders')

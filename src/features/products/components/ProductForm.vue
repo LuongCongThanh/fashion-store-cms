@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, nextTick, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, useTemplateRef, watch } from 'vue'
 
 import { CategorySelector } from '@features/categories/UseCategories'
 import { ImageGallery, ImageUploader } from '@features/media/UseMediaComponents'
@@ -34,7 +34,7 @@ const emit = defineEmits<{
 }>()
 const { t } = useT()
 const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptionEditor.vue'))
-const form = ref<HTMLFormElement>()
+const form = useTemplateRef<HTMLFormElement>('form')
 const errorEntries = computed(() => Object.entries(props.errors).filter((entry): entry is [string, string] => !!entry[1]))
 const fieldLabel = (key: string) => {
   if (key === 'price') return t('products.price')
@@ -48,7 +48,9 @@ watch(
   async () => {
     if (!errorEntries.value.length) return
     await nextTick()
-    const name = CSS.escape(errorEntries.value[0]![0])
+    const firstError = errorEntries.value[0]
+    if (!firstError) return
+    const name = CSS.escape(firstError[0])
     form.value?.querySelector<HTMLElement>(`[name="${name}"]`)?.focus()
   },
   { deep: true },

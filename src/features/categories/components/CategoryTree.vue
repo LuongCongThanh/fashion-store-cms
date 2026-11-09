@@ -43,7 +43,8 @@ function moveWithKeyboard(event: KeyboardEvent, id: string) {
     emit('move', id, null)
   } else if (event.key === 'ArrowRight' && index > 0) {
     event.preventDefault()
-    emit('move', id, rows.value[index - 1]!.item.id)
+    const previous = rows.value[index - 1]
+    if (previous) emit('move', id, previous.item.id)
   }
 }
 </script>

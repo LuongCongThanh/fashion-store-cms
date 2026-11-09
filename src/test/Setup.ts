@@ -6,7 +6,7 @@ import { afterEach } from 'vitest'
 enableAutoUnmount(afterEach)
 
 // jsdom không triển khai API layout này; Reka dùng nó khi đổi option đang highlight.
-if (typeof Element !== 'undefined' && !Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => {}
+if (typeof Element !== 'undefined') Element.prototype.scrollIntoView = () => {}
 
 // Spec chạy ở `@vitest-environment node` không có Web Storage dù type DOM khai báo luôn có.
 afterEach(() => {

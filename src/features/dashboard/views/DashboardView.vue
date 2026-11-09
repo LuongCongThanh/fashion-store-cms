@@ -82,7 +82,7 @@ const cards = computed(() => resolved.value.filter((widget) => widget.kind !== '
       <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <RouterLink v-for="queue in queues" :key="queue.key" :to="queue.to!" class="flex items-center justify-between rounded-lg border border-default bg-default px-4 py-3 transition-colors duration-150 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none">
           <span class="text-sm">{{ t(queue.title as MessageKey) }}</span>
-          <span class="tabular-nums">{{ queue.result?.isPending ? '…' : (queue.result?.data?.value ?? 0) }} <span aria-hidden="true">›</span></span>
+          <span class="tabular-nums">{{ queue.result?.isPending ? '…' : (queue.result?.data?.value ?? 0) }} <span class="i-lucide-chevron-right" aria-hidden="true" /></span>
         </RouterLink>
       </div>
     </section>
