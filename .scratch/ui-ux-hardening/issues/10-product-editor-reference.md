@@ -8,3 +8,6 @@ Form dài: section navigation, validation summary, action bar dính, label/help/
 Sau khi duyệt thì Category, Promotion và Settings kế thừa.
 
 Test: ProductForm spec cho validation summary focus vào lỗi đầu tiên.
+
+## Comments
+- 2026-11-09: Section nav và card form: `UNavigationMenu` + `UPageCard` + `UForm`/`UFormField` theo cách ghép của `settings/*` trong template.

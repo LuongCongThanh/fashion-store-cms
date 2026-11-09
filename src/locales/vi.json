@@ -51,7 +51,7 @@
   },
   "nav": {
     "dashboard": "Tổng quan",
-    "collapse": "Thu gọn menu",
+    "menu": "Menu điều hướng",
     "orders": "Đơn hàng",
     "groups": {
       "store": "Cửa hàng",

@@ -8,3 +8,6 @@ Blocked by: 05, 06
 Tham chiếu prototype A + tab của B (#42). Cần user duyệt trước khi rollout (#08).
 
 Test: ProductListView spec cho tab đổi query, chip bỏ lọc, fixture xấu nhất không làm mất menu ⋯.
+
+## Comments
+- 2026-11-09: Tab bộ lọc đã lưu: cân nhắc `UDashboardToolbar` + `UNavigationMenu` ngang (như `settings.vue` của template). Ticket này quyết định thanh lọc nằm ở toolbar hay trong trang.

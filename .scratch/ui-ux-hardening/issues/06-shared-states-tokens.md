@@ -13,3 +13,6 @@ Blocked by: —
 Nguồn: hallmark #11, #12; break-ui #3, #7.
 
 Test: view spec cho empty state; kiểm tay `/design-system`.
+
+## Comments
+- 2026-11-09: `FormSection` cân nhắc dựng trên `UPageCard` (như `settings/index.vue` của template) thay vì tự viết card.
