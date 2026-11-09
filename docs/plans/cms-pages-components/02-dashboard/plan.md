@@ -1,6 +1,6 @@
 # 02 — Dashboard
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 01
 Nguồn: §4.2 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P4 · Spec: [spec.md](./spec.md)
 

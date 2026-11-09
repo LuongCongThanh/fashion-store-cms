@@ -18,7 +18,9 @@
     "store": "Store",
     "appName": "Fashion Store CMS",
     "languageLabel": "Language",
-    "themeLabel": "Theme"
+    "themeLabel": "Theme",
+    "loading": "Loading…",
+    "empty": "No data"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -74,5 +76,15 @@
     "RATE_LIMITED": "Too many requests. Please try again later.",
     "SERVER_ERROR": "The server encountered an error. Please try again later.",
     "UNKNOWN": "Something went wrong. Please try again."
+  },
+  "dashboard": {
+    "revenue": "Revenue",
+    "customers": "Customers",
+    "products": "Products",
+    "recentOrders": "Recent orders",
+    "topProducts": "Top products",
+    "lowStock": "Low stock",
+    "revenueChart": "Revenue chart",
+    "orderChart": "Order chart"
   }
 }
