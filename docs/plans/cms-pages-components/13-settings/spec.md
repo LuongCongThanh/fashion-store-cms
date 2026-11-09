@@ -1,6 +1,6 @@
 # Spec 13 — Settings
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 04
 Nguồn: §4.11 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: P10 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

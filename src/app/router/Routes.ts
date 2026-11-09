@@ -10,6 +10,7 @@ import { orderRoutes } from '@features/orders/Orders.routes'
 import { productRoutes } from '@features/products/Products.routes'
 import { promotionRoutes } from '@features/promotions/Promotions.routes'
 import { roleRoutes } from '@features/roles/Roles.routes'
+import { settingsRoutes } from '@features/settings/Settings.routes'
 import { userRoutes } from '@features/users/Users.routes'
 
 /** Trang chỉ dùng ở dev (§L.10). */
@@ -30,6 +31,7 @@ export const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     children: [
       ...dashboardRoutes,
+      ...settingsRoutes,
       ...userRoutes,
       ...roleRoutes,
       ...promotionRoutes,

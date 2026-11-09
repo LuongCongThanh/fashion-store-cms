@@ -1,29 +1,46 @@
-# 13 — Báo cáo
+# 13 — Báo cáo: Settings
 
-Trạng thái: chưa bắt đầu
-Nhánh / PR: — / —
-Ngày hoàn thành: —
+Status: in-progress
+Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
+Nhánh: `feat/cms-13-settings`
+PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/36
+Base hiện tại: `feat/cms-12-users-roles`; đổi về `dev` khi PR phụ thuộc đã squash merge.
+Ngày kiểm: 2026-11-09. Chưa merge; không đánh dấu done thay cho reviewer.
 
 ## Đã làm
 
--
+Thông tin Store/logo và localization tách khỏi locale giao diện CMS.
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md)                                                               | Kết quả | Ghi chú |
-| ----------------------------------------------------------------------------------------- | ------- | ------- |
-| Redirect đúng; không có `settings:write` thì form read-only hoặc bị chặn theo route meta. |         |         |
-| `typecheck`, `lint`, `test` pass.                                                         |         |         |
-| E2E redirect settings và lưu Store/localization pass.                                     |         |         |
+| Kiểm tra                                   | Kết quả                                      |
+| ------------------------------------------ | -------------------------------------------- |
+| Typecheck                                  | PASS                                         |
+| Lint                                       | PASS                                         |
+| Vitest                                     | 211 tests / 51 files PASS; +2 so với base PR |
+| Coverage dòng                              | 84.55% (toàn nhánh tại checkpoint)           |
+| Coverage statements / branches / functions | 82.42% / 80.73% / 73.61%                     |
+| Production build                           | PASS                                         |
+| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
-## Số liệu
+Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
 
-Ghi vào [metrics.md](../metrics.md): token, số test, coverage, bundle size.
+## Hành vi đã kiểm qua seam được duyệt
 
-## Lệch so với plan / quyết định mới
+- `src/features/settings/views/LocalizationSettingsView.spec.ts` — saves localization preferences without changing the CMS interface language (**passed**)
+- `src/features/settings/views/StoreSettingsView.spec.ts` — loads Store settings and saves the edited contact information (**passed**)
 
--
+## Bundle
 
-## Việc còn tồn
+Tổng JavaScript gzip của toàn bộ nhánh (gồm các chunk tải động): 692.01 kB. Đây không phải kích thước tải ban đầu của riêng feature.
 
--
+## Token
+
+Phần triển khai ban đầu bị làm chung trong một phiên, nên không có bộ đếm độc lập chính xác cho plan này. Không chia đều hoặc bịa số token theo PR. Tổng task và các phiên review con được ghi từ event token_count trong Codex ở metrics/token artifact của plan 14.
+
+## Việc còn tồn / giới hạn
+
+- API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
+- E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
+- Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.

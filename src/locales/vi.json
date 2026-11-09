@@ -46,7 +46,8 @@
     "clearAll": "Xóa bộ lọc",
     "createdAt": "Ngày tạo",
     "active": "Hoạt động",
-    "inactive": "Ngừng hoạt động"
+    "inactive": "Ngừng hoạt động",
+    "saved": "Đã lưu"
   },
   "nav": {
     "dashboard": "Tổng quan",
@@ -250,5 +251,22 @@
     "title": "Vai trò",
     "permissions": "Quyền truy cập",
     "resource": "Tài nguyên"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "store": "Thông tin cửa hàng",
+    "localization": "Ngôn ngữ & định dạng",
+    "name": "Tên",
+    "description": "Mô tả",
+    "contactEmail": "Email liên hệ",
+    "phone": "Điện thoại",
+    "address": "Địa chỉ",
+    "languages": "Ngôn ngữ (cách nhau dấu phẩy)",
+    "defaultLanguage": "Ngôn ngữ mặc định",
+    "timezone": "Múi giờ",
+    "currency": "Tiền tệ",
+    "numberFormat": "Định dạng số",
+    "dateFormat": "Định dạng ngày",
+    "invalid": "Cấu hình không hợp lệ"
   }
 }
