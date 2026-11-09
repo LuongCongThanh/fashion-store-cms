@@ -1,8 +1,8 @@
 # Spec 14 — Đối chiếu và chốt
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 01–13
-Nguồn: §6 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: — · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
+Nguồn: §6 trong [danh mục page & component](../fashion-store-cms-pages-components.md) · Phase: — · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
 > **Chú thích:** spec trả lời câu hỏi _làm gì và thế nào là xong_. Cách làm nằm trong `plan.md`, các bước thực hiện nằm trong [Quy trình](../spec.md#quy-trình-thực-hiện-mỗi-plan) của spec tổng.
 

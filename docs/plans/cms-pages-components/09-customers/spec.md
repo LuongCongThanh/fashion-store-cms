@@ -2,7 +2,7 @@
 
 Status: on-hold
 Blocked by: 08
-Nguồn: §4.6, §3 (`PageTabs`) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: P8 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
+Nguồn: §4.6, §3 (`PageTabs`) trong [danh mục page & component](../fashion-store-cms-pages-components.md) · Phase: P8 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
 > **Chú thích:** spec trả lời câu hỏi _làm gì và thế nào là xong_. Cách làm nằm trong `plan.md`, các bước thực hiện nằm trong [Quy trình](../spec.md#quy-trình-thực-hiện-mỗi-plan) của spec tổng.
 

@@ -19,16 +19,55 @@ Ngày đo: 2026-11-09. Mỗi dòng là kết quả đo trên đúng nhánh PR n�
 | 11   | Promotions                        | 4        | 203                    | 85.36             | 676.05                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/34 |
 | 12   | Users & Roles                     | 6        | 209                    | 85.0              | 686.77                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/35 |
 | 13   | Settings                          | 2        | 211                    | 84.55             | 692.01                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/36 |
-| 14   | Đối chiếu và chốt                 | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 14   | Đối chiếu và chốt                 | 10       | 221                    | 85.67             | 692.01                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/37 |
 
 E2E: hoãn theo lựa chọn của người phụ trách. Backend: người phụ trách xác nhận chưa có. Coverage là kết quả Vitest tại thời điểm kiểm nhánh, không phải chứng nhận backend hay kiểm UI thủ công.
 
-## Token Codex
+## Token Codex — số đo thực
 
-Đọc bộ đếm thực từ local session JSONL: lấy `total_token_usage` cuối mỗi session, trừ checkpoint trước lúc bắt đầu task cho phiên chính; cộng riêng các session review con đúng parent ID. Không cộng dồn các bản ghi cumulative và không cộng cached input lần nữa vào input. Phân bổ token triển khai theo từng plan: **không có số đo riêng** vì phiên triển khai ban đầu đã làm chung. Số này sẽ không được ước lượng hoặc chia đều.
+Snapshot: `2026-11-09T00:12:29.424Z`. Task bắt đầu lúc `2026-11-08T18:58:56.143Z` (09/11/2026, 01:58:56 giờ Việt Nam). Nguồn: event `token_count` của một phiên chính và hai phiên review con. [JSON chi tiết](./token-metrics.json).
 
-Snapshot chi tiết và cách tái tạo được bổ sung trong PR 14. Chi phí USD: không có dữ liệu hóa đơn thực tế, không suy ra từ token ChatGPT bằng bảng giá API.
+| Chỉ số                                                  |         Tokens |
+| ------------------------------------------------------- | -------------: |
+| Input (đã bao gồm cached input)                         |     43,558,160 |
+| Cached input — phần nằm trong input                     |     43,250,816 |
+| Input không cache                                       |        307,344 |
+| Output                                                  |        193,717 |
+| Reasoning output — trường phụ, không cộng lại vào total |         69,661 |
+| **Tổng task: input + output**                           | **43,751,877** |
 
-## Quy trình PR
+Lấy bản ghi cumulative cuối mỗi session, trừ checkpoint trước task cho phiên chính; cộng riêng từng child session đúng parent ID. Không cộng tất cả event cumulative, không cộng cached input lần thứ hai. Bản ghi trước task (cài skill) được loại khỏi số task. Snapshot chưa gồm event usage chưa được Codex phát tại thời điểm chạy.
 
-14 nhánh / 14 draft PR nối tiếp, theo lựa chọn của người phụ trách. Mỗi PR sau nhắm nhánh trước để diff chỉ có một plan. Khi PR trước squash merge, restack phần chưa merge rồi đổi base PR đến lượt về dev. Không tự merge.
+| Phiên                                            | Input trong task | Cached input |  Output |  Tổng task |
+| ------------------------------------------------ | ---------------: | -----------: | ------: | ---------: |
+| `01a1bc84-28f7-7690-b41f-c9794f943eaa` (primary) |       42,341,224 |   42,117,504 | 190,018 | 42,531,242 |
+| `01a1bcad-d133-7973-9be0-d3bb7604b2a5` (review)  |          490,427 |      448,256 |   1,659 |    492,086 |
+| `01a1bcad-fa56-7cd3-9a1f-0eef6b2ba314` (review)  |          726,509 |      685,056 |   2,040 |    728,549 |
+
+### Theo từng plan
+
+**Không có số đo triển khai độc lập cho từng plan.** Phần triển khai đầu tiên đã làm chung một phiên và review sửa nhiều plan xen kẽ; không thể chia chính xác 14 con số từ aggregate. Không chia đều, không ước lượng và không dùng số token của một lần kiểm tra thay cho token triển khai.
+
+Chi phí USD: **không có dữ liệu hóa đơn**. Token hoạt động Codex không được tự đổi thành tiền ChatGPT bằng bảng giá API. [OpenAI Docs về usage/session commands](https://learn.chatgpt.com/docs/developer-commands).
+
+### Tái tạo snapshot
+
+```sh
+npm run metrics:tokens -- --session "$HOME/.codex/sessions/2026/11/09/rollout-2026-11-09T01-55-40-01a1bc84-28f7-7690-b41f-c9794f943eaa.jsonl" --since 2026-11-08T18:58:56.143Z --out docs/plans/cms-pages-components/token-metrics.json
+```
+
+Script chỉ xuất counters/ID và phương pháp tính; không đưa prompt, tool output, access token hoặc transcript vào repo.
+
+mỗi session, trừ checkpoint trước task cho phiên chính; cộng riêng từng child session đúng parent ID. Không cộng tất cả event cumulative, không cộng cached input lần thứ hai. Bản ghi trước task (cài skill) được loại khỏi số task. Snapshot chưa gồm event usage chưa được Codex phát tại thời điểm chạy.
+
+| Phiên                                            | Input trong task | Cached input |  Output |  Tổng task |
+| ------------------------------------------------ | ---------------: | -----------: | ------: | ---------: |
+| `01a1bc84-28f7-7690-b41f-c9794f943eaa` (primary) |       42,341,224 |   42,117,504 | 190,018 | 42,531,242 |
+| `01a1bcad-d133-7973-9be0-d3bb7604b2a5` (review)  |          490,427 |      448,256 |   1,659 |    492,086 |
+| `01a1bcad-fa56-7cd3-9a1f-0eef6b2ba314` (review)  |          726,509 |      685,056 |   2,040 |    728,549 |
+
+## Đọc số liệu bundle và coverage
+
+JS gzip là tổng các chunk JavaScript của toàn nhánh, bao gồm chunk tải động; không phải tải ban đầu của riêng feature. Coverage của mỗi checkpoint có thể thay đổi khi nền tảng chưa được feature sau sử dụng; giá trị được ghi nguyên số đo, không loại file để tăng điểm. Chi tiết statements/branches/functions nằm trong report và [validation-metrics.json](./validation-metrics.json).
+
+Không có ngày merge vì các PR đang draft. Archive chỉ thực hiện sau khi chuỗi PR đã được duyệt và các phần DoD hoãn đã được chốt; không đổi `done` để che phần backend/E2E chưa kiểm.

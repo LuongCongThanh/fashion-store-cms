@@ -1,8 +1,8 @@
 # 14 — Đối chiếu và chốt
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 01–13
-Nguồn: §6 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase — · Spec: [spec.md](./spec.md)
+Nguồn: §6 trong [danh mục page & component](../fashion-store-cms-pages-components.md) · Phase — · Spec: [spec.md](./spec.md)
 
 Phần dùng chung (không chép lại): quy tắc đặt component (nguồn §1), [CONVENTIONS.md](../../../CONVENTIONS.md) §A, §B, §E, §Q; [FE_architecture.md](../../../FE_architecture.md) §5, §6, §9, §22, §23, §31; [GLOSSARY.md](../../../../GLOSSARY.md).
 

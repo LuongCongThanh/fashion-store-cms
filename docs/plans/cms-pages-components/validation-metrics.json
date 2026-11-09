@@ -1,0 +1,665 @@
+{
+  "baseline_commit": "97875842ec6cd774a5c1439929a31842a3680746",
+  "baseline_tests": 165,
+  "baseline_line_coverage": 78.09,
+  "e2e": "deferred by user",
+  "backend": "does not exist, confirmed by user",
+  "plans": {
+    "1": {
+      "branch": "feat/cms-01-layout-completion",
+      "base_branch": "dev",
+      "title": "Hoàn thiện Layout",
+      "status": "published",
+      "tests": 169,
+      "test_files": 21,
+      "new_tests": 4,
+      "coverage": {
+        "Statements": 83.84,
+        "Branches": 81.9,
+        "Functions": 80.63,
+        "Lines": 85.25
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/24",
+      "head": "75835eee6b873042db5981eb037a56aff205c25a",
+      "bundle": {
+        "all_js_gzip_kb": 259.8,
+        "largest_chunks": [
+          {
+            "chunk": "index-jC1botyC.js",
+            "gzip_kb": 105.74
+          },
+          {
+            "chunk": "DashboardLayout-yppG28os.js",
+            "gzip_kb": 45.94
+          },
+          {
+            "chunk": "tv-yk_S1ch5.js",
+            "gzip_kb": 34.98
+          },
+          {
+            "chunk": "runtime-core.esm-bundler-CyHXQRNX.js",
+            "gzip_kb": 26.56
+          },
+          {
+            "chunk": "Button-Bn-WF-Jx.js",
+            "gzip_kb": 9.14
+          }
+        ]
+      },
+      "pre_format_head": "4909aceb6ea648ac707bc2bbdea16d4046b5e14d",
+      "format_check": true
+    },
+    "2": {
+      "branch": "feat/cms-02-dashboard",
+      "base_branch": "feat/cms-01-layout-completion",
+      "title": "Dashboard",
+      "status": "published",
+      "tests": 173,
+      "test_files": 22,
+      "new_tests": 4,
+      "coverage": {
+        "Statements": 82.0,
+        "Branches": 82.31,
+        "Functions": 77.73,
+        "Lines": 83.64
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/25",
+      "head": "df29fd2409311e52c846197fdd254971145987f4",
+      "bundle": {
+        "all_js_gzip_kb": 447.04,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "index-CGL8OL9E.js",
+            "gzip_kb": 106.13
+          },
+          {
+            "chunk": "DashboardLayout-D1scloGr.js",
+            "gzip_kb": 45.87
+          },
+          {
+            "chunk": "tv-DvpA_NOu.js",
+            "gzip_kb": 34.99
+          },
+          {
+            "chunk": "runtime-core.esm-bundler-jRiih14Y.js",
+            "gzip_kb": 26.57
+          }
+        ]
+      },
+      "pre_format_head": "d6a82579f3ba324bcd6234bd00826a0076471f3e",
+      "format_check": true
+    },
+    "3": {
+      "branch": "feat/cms-03-list-table-foundation",
+      "base_branch": "feat/cms-02-dashboard",
+      "title": "Nền tảng List & Table",
+      "status": "published",
+      "tests": 177,
+      "test_files": 24,
+      "new_tests": 4,
+      "coverage": {
+        "Statements": 83.11,
+        "Branches": 83.5,
+        "Functions": 78.44,
+        "Lines": 84.8
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/26",
+      "head": "2c459dc09b24b9a83da1c3ce967691a8c024084a",
+      "bundle": {
+        "all_js_gzip_kb": 447.33,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "index-BSe7C6P4.js",
+            "gzip_kb": 106.42
+          },
+          {
+            "chunk": "DashboardLayout-BBWlTH87.js",
+            "gzip_kb": 45.87
+          },
+          {
+            "chunk": "tv-DvpA_NOu.js",
+            "gzip_kb": 34.99
+          },
+          {
+            "chunk": "runtime-core.esm-bundler-jRiih14Y.js",
+            "gzip_kb": 26.57
+          }
+        ]
+      },
+      "pre_format_head": "85622dac523382b3373ed6d75c567dd65ad8fd8f",
+      "format_check": true
+    },
+    "4": {
+      "branch": "feat/cms-04-form-media-foundation",
+      "base_branch": "feat/cms-03-list-table-foundation",
+      "title": "Nền tảng Form & Media",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 447.69,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "index-Bv8lq8X8.js",
+            "gzip_kb": 106.78
+          },
+          {
+            "chunk": "DashboardLayout-iSBO5_NT.js",
+            "gzip_kb": 45.87
+          },
+          {
+            "chunk": "tv-DvpA_NOu.js",
+            "gzip_kb": 34.99
+          },
+          {
+            "chunk": "runtime-core.esm-bundler-jRiih14Y.js",
+            "gzip_kb": 26.57
+          }
+        ]
+      },
+      "tests": 179,
+      "test_files": 25,
+      "new_tests": 2,
+      "coverage": {
+        "Statements": 78.44,
+        "Branches": 76.7,
+        "Functions": 73.21,
+        "Lines": 80.19
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/27",
+      "head": "6b7f2cb98b00637ba1f7acf6d944f95686dbadbe",
+      "pre_format_head": "d50d67703ed648bc3e92d2b1ee2c6fe9414f5343",
+      "format_check": true
+    },
+    "5": {
+      "branch": "feat/cms-05-products-list",
+      "base_branch": "feat/cms-04-form-media-foundation",
+      "title": "Products — List",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 490.44,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "index-DSq5dSgd.js",
+            "gzip_kb": 108.46
+          },
+          {
+            "chunk": "ProductListView-uwoGGi9d.js",
+            "gzip_kb": 36.54
+          },
+          {
+            "chunk": "tv-B1ElgzLH.js",
+            "gzip_kb": 35.01
+          },
+          {
+            "chunk": "Badge-DURSmdIO.js",
+            "gzip_kb": 28.08
+          }
+        ]
+      },
+      "tests": 182,
+      "test_files": 26,
+      "new_tests": 3,
+      "coverage": {
+        "Statements": 80.19,
+        "Branches": 78.63,
+        "Functions": 74.87,
+        "Lines": 82.04
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/28",
+      "head": "52677a12e0a726ceebf7df2eed9ffd22f4406f38",
+      "pre_format_head": "f95a0850bbc8471d6adef6531ad08864d574ebb9",
+      "format_check": true
+    },
+    "6": {
+      "branch": "feat/cms-06-categories",
+      "base_branch": "feat/cms-05-products-list",
+      "title": "Categories",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 509.87,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "index-BWvyzI-W.js",
+            "gzip_kb": 114.23
+          },
+          {
+            "chunk": "tv-Cw2p0d3e.js",
+            "gzip_kb": 35.06
+          },
+          {
+            "chunk": "ProductListView-GUIh4vMV.js",
+            "gzip_kb": 31.27
+          },
+          {
+            "chunk": "runtime-core.esm-bundler-jRiih14Y.js",
+            "gzip_kb": 26.57
+          }
+        ]
+      },
+      "tests": 185,
+      "test_files": 29,
+      "new_tests": 3,
+      "coverage": {
+        "Statements": 83.08,
+        "Branches": 80.55,
+        "Functions": 76.87,
+        "Lines": 85.23
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/29",
+      "head": "57ab36149d7509bfa3a328578c46a8df4c580b45",
+      "pre_format_head": "b97c45ac5a80f0bae8dac21688bdb66f982e8571",
+      "format_check": true
+    },
+    "7": {
+      "branch": "feat/cms-07-products-form-detail",
+      "base_branch": "feat/cms-06-categories",
+      "title": "Products — Create / Edit / Detail",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 654.8,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-B63F65Sh.js",
+            "gzip_kb": 122.42
+          },
+          {
+            "chunk": "index-BNDG8ZZW.js",
+            "gzip_kb": 115.2
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "ProductListView-4NzyAKYE.js",
+            "gzip_kb": 31.18
+          }
+        ]
+      },
+      "tests": 192,
+      "test_files": 33,
+      "new_tests": 7,
+      "coverage": {
+        "Statements": 83.59,
+        "Branches": 79.82,
+        "Functions": 77.05,
+        "Lines": 85.9
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/30",
+      "head": "f03fb289197c21a082ac00d3752d6297769f5968",
+      "pre_format_head": "f22fbcfa1640d111b9c60f5607c96735efa205b4",
+      "format_check": true
+    },
+    "8": {
+      "branch": "feat/cms-08-orders",
+      "base_branch": "feat/cms-07-products-form-detail",
+      "title": "Orders",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 661.06,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-DyFPPOUd.js",
+            "gzip_kb": 122.42
+          },
+          {
+            "chunk": "index-D8uquby0.js",
+            "gzip_kb": 115.98
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "DataTable-hqvXvk1p.js",
+            "gzip_kb": 28.81
+          }
+        ]
+      },
+      "tests": 195,
+      "test_files": 35,
+      "new_tests": 3,
+      "coverage": {
+        "Statements": 83.44,
+        "Branches": 80.53,
+        "Functions": 75.84,
+        "Lines": 85.6
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/31",
+      "head": "2c8914782091fe03774d503a7948b5d3afa50405",
+      "pre_format_head": "677810d3d84683d32715dc8fc7228b95b2869189",
+      "format_check": true
+    },
+    "9": {
+      "branch": "feat/cms-09-customers",
+      "base_branch": "feat/cms-08-orders",
+      "title": "Customers",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 665.54,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-qu-K5FDR.js",
+            "gzip_kb": 122.42
+          },
+          {
+            "chunk": "index-DXWa9u8m.js",
+            "gzip_kb": 116.35
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "DataTable-BORNOKhW.js",
+            "gzip_kb": 28.54
+          }
+        ]
+      },
+      "tests": 197,
+      "test_files": 37,
+      "new_tests": 2,
+      "coverage": {
+        "Statements": 83.11,
+        "Branches": 80.57,
+        "Functions": 74.8,
+        "Lines": 85.26
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/32",
+      "head": "5ef8305c721080b0bd244adcd4978ce4b0db40b0",
+      "pre_format_head": "ec2f570e0cc7adbf23b7cda1968865e343fec142",
+      "format_check": true
+    },
+    "10": {
+      "branch": "feat/cms-10-inventory",
+      "base_branch": "feat/cms-09-customers",
+      "title": "Inventory",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 670.57,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-uzQtqM28.js",
+            "gzip_kb": 122.41
+          },
+          {
+            "chunk": "index-xiaizygw.js",
+            "gzip_kb": 116.87
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "DataTable-Bz6dx1TW.js",
+            "gzip_kb": 28.53
+          }
+        ]
+      },
+      "tests": 199,
+      "test_files": 39,
+      "new_tests": 2,
+      "coverage": {
+        "Statements": 83.02,
+        "Branches": 81.26,
+        "Functions": 73.97,
+        "Lines": 85.25
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/33",
+      "head": "e35d23e3427f0fbb086608a79660a5380f3e9fb8",
+      "pre_format_head": "e2d8041f7162ce906fea6c6ed20e868d49d18881",
+      "format_check": true
+    },
+    "11": {
+      "branch": "feat/cms-11-promotions",
+      "base_branch": "feat/cms-10-inventory",
+      "title": "Promotions",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 676.05,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-BebbeuSG.js",
+            "gzip_kb": 122.41
+          },
+          {
+            "chunk": "index-DFzer01u.js",
+            "gzip_kb": 117.37
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "DataTable-BYFOj6Jt.js",
+            "gzip_kb": 28.54
+          }
+        ]
+      },
+      "tests": 203,
+      "test_files": 43,
+      "new_tests": 4,
+      "coverage": {
+        "Statements": 83.13,
+        "Branches": 81.48,
+        "Functions": 74.02,
+        "Lines": 85.36
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/34",
+      "head": "533cceae69011a4027d66e8d5eeebe9baf381bc8",
+      "pre_format_head": "9f0ee9dbbd546a224de5ec4080cdfebc4a93581e",
+      "format_check": true
+    },
+    "12": {
+      "branch": "feat/cms-12-users-roles",
+      "base_branch": "feat/cms-11-promotions",
+      "title": "Users & Roles",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 686.77,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-l0j3zkxX.js",
+            "gzip_kb": 122.42
+          },
+          {
+            "chunk": "index-CbEP2yDb.js",
+            "gzip_kb": 117.98
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "DataTable-DvmhK3pO.js",
+            "gzip_kb": 28.54
+          }
+        ]
+      },
+      "tests": 209,
+      "test_files": 49,
+      "new_tests": 6,
+      "coverage": {
+        "Statements": 82.99,
+        "Branches": 81.3,
+        "Functions": 74.05,
+        "Lines": 85.0
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/35",
+      "head": "512bc5763671e3b5c2218e1c78bdcff7179b2c93",
+      "pre_format_head": "d18c39734ca3790dfdc5afdf5792315a5d282df1",
+      "format_check": true
+    },
+    "13": {
+      "branch": "feat/cms-13-settings",
+      "base_branch": "feat/cms-12-users-roles",
+      "title": "Settings",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 692.01,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-Np6wCwra.js",
+            "gzip_kb": 122.42
+          },
+          {
+            "chunk": "index-CLbNHwYi.js",
+            "gzip_kb": 118.45
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "DataTable-lUxpVtst.js",
+            "gzip_kb": 28.54
+          }
+        ]
+      },
+      "tests": 211,
+      "test_files": 51,
+      "new_tests": 2,
+      "coverage": {
+        "Statements": 82.42,
+        "Branches": 80.73,
+        "Functions": 73.61,
+        "Lines": 84.55
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/36",
+      "head": "d0a46cfd4931d0a077859f2da2bd679bc66c8eea",
+      "pre_format_head": "e261fbd2c2e331d1ddb462fc33919dcd36c368c9",
+      "format_check": true
+    },
+    "14": {
+      "branch": "feat/cms-14-reconcile-finalize",
+      "base_branch": "feat/cms-13-settings",
+      "title": "Đối chiếu và chốt",
+      "status": "published",
+      "bundle": {
+        "all_js_gzip_kb": 692.01,
+        "largest_chunks": [
+          {
+            "chunk": "dist-BnQzQddS.js",
+            "gzip_kb": 180.38
+          },
+          {
+            "chunk": "ProductDescriptionEditor-Np6wCwra.js",
+            "gzip_kb": 122.42
+          },
+          {
+            "chunk": "index-CLbNHwYi.js",
+            "gzip_kb": 118.45
+          },
+          {
+            "chunk": "tv-BZX8Yua6.js",
+            "gzip_kb": 33.59
+          },
+          {
+            "chunk": "DataTable-lUxpVtst.js",
+            "gzip_kb": 28.54
+          }
+        ]
+      },
+      "tests": 221,
+      "test_files": 52,
+      "new_tests": 10,
+      "coverage": {
+        "Statements": 83.54,
+        "Branches": 81.04,
+        "Functions": 74.35,
+        "Lines": 85.67
+      },
+      "build": true,
+      "lint": true,
+      "typecheck": true,
+      "pr_url": "https://github.com/LuongCongThanh/fashion-store-cms/pull/37",
+      "head": "658157248831d3140132c2598e56d3927da411ea"
+    }
+  }
+}

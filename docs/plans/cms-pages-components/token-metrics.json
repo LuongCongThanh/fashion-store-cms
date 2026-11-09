@@ -1,0 +1,112 @@
+{
+  "snapshot_at": "2026-11-09T00:12:29.424Z",
+  "task_started_at": "2026-11-08T18:58:56.143Z",
+  "method": "Last cumulative token_count per session minus pre-task baseline; direct child review sessions counted separately once.",
+  "task_usage": {
+    "input_tokens": 43558160,
+    "cached_input_tokens": 43250816,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 193717,
+    "reasoning_output_tokens": 69661,
+    "total_tokens": 43751877,
+    "non_cached_input_tokens": 307344
+  },
+  "sessions": [
+    {
+      "session_id": "01a1bc84-28f7-7690-b41f-c9794f943eaa",
+      "kind": "primary",
+      "baseline": {
+        "input_tokens": 145387,
+        "cached_input_tokens": 129280,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1087,
+        "reasoning_output_tokens": 39,
+        "total_tokens": 146474
+      },
+      "cumulative": {
+        "input_tokens": 42486611,
+        "cached_input_tokens": 42246784,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 191105,
+        "reasoning_output_tokens": 69402,
+        "total_tokens": 42677716
+      },
+      "task": {
+        "input_tokens": 42341224,
+        "cached_input_tokens": 42117504,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 190018,
+        "reasoning_output_tokens": 69363,
+        "total_tokens": 42531242
+      },
+      "usage_through": "2026-11-09T00:12:10.435Z"
+    },
+    {
+      "session_id": "01a1bcad-d133-7973-9be0-d3bb7604b2a5",
+      "kind": "review",
+      "baseline": {
+        "input_tokens": 0,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cumulative": {
+        "input_tokens": 490427,
+        "cached_input_tokens": 448256,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1659,
+        "reasoning_output_tokens": 105,
+        "total_tokens": 492086
+      },
+      "task": {
+        "input_tokens": 490427,
+        "cached_input_tokens": 448256,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1659,
+        "reasoning_output_tokens": 105,
+        "total_tokens": 492086
+      },
+      "usage_through": "2026-11-08T19:50:06.135Z"
+    },
+    {
+      "session_id": "01a1bcad-fa56-7cd3-9a1f-0eef6b2ba314",
+      "kind": "review",
+      "baseline": {
+        "input_tokens": 0,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 0,
+        "reasoning_output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cumulative": {
+        "input_tokens": 726509,
+        "cached_input_tokens": 685056,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2040,
+        "reasoning_output_tokens": 193,
+        "total_tokens": 728549
+      },
+      "task": {
+        "input_tokens": 726509,
+        "cached_input_tokens": 685056,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2040,
+        "reasoning_output_tokens": 193,
+        "total_tokens": 728549
+      },
+      "usage_through": "2026-11-08T19:50:06.017Z"
+    }
+  ],
+  "per_plan_implementation_usage": null,
+  "allocation_note": "Initial implementation used one shared session across all 14 plans. Exact per-plan usage cannot be reconstructed; no equal split or estimates are used.",
+  "cost_usd": null,
+  "cost_note": "Rollout counters are not a ChatGPT billing invoice. No API-price cost estimate is substituted.",
+  "notes": [
+    "Cached input is included in input tokens; do not add it again.",
+    "Reasoning output is reported separately but is already represented in total_tokens; do not add it again.",
+    "Snapshot excludes token usage not yet emitted by the active session."
+  ]
+}

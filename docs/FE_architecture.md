@@ -708,10 +708,10 @@ FE validate trước khi upload: mime type, dung lượng tối đa, số lượ
 
 Toàn bộ flow nằm trong `features/media` — là nghiệp vụ nên không ở `shared/` ([quyết định](./CONVENTIONS.md) D33). Feature khác chỉ dùng interface công khai `useMedia()`:
 
-- `useMedia().upload(files)` → `Promise<string[]>` (`mediaId[]`), kèm `progress`, `cancel`.
-- `useMedia().pickImages()` → mở `MediaPickerModal`, trả `Promise<Media[]>`.
+- `useMedia().upload(files)` → `Promise<string[]>` (`mediaId[]`), kèm `progress`, `cancel`, `retry`. Overload nhận một `File` trả `MediaImage` để form lưu preview và ID cùng nhau.
+- `useMedia().pickImages()` / `MediaPickerModal`: backlog media library, ngoài phạm vi plan Form & Media hiện tại.
 
-Bên trong (`MediaUpload.ts`): 4 bước presign → PUT → complete, validate mime/size/số lượng, progress, huỷ, retry. PUT lên S3 dùng `fetch` riêng, không qua HttpClient (khác origin, không gắn token).
+Bên trong (`MediaUpload.ts`): 4 bước presign → PUT → complete, validate mime/size/số lượng, progress, huỷ, retry. PUT lên storage dùng `XMLHttpRequest` riêng, không qua HttpClient (khác origin, không gắn token/Session và không bật credentials). Chọn XHR thay `fetch` để có byte progress thực qua `upload.onprogress` và hủy request; presign/complete vẫn dùng HttpClient.
 
 ---
 
@@ -785,7 +785,9 @@ const productSchema = z.object({
 })
 ```
 
-Form dùng vee-validate với Zod schema (`toTypedSchema`). Lỗi `details.fields` từ API đẩy vào form qua `applyApiErrorToForm(error, form)` (§6.1), không tự map trong từng form. Các section lớn (Variants) dùng `useFieldArray`.
+Form dùng vee-validate giữ values, errors và dirty state; Zod 4 `safeParse` kiểm tra input khi submit. Quyết định triển khai 2026-11-09: `@vee-validate/zod@4.15.1` yêu cầu Zod 3 (`^3.24.0`), nên không cài adapter hoặc hạ Zod để dùng `toTypedSchema`. Khi adapter hỗ trợ Zod 4, có thể thay phần nối validation mà giữ nguyên schema và View tests.
+
+Lỗi `details.fields` từ API đẩy vào form qua `applyApiErrorToForm(error, setErrors)` (§6.1). Các section lớn (Variants) dùng `useFieldArray`. `useHydrateForm()` chỉ áp dụng refetch khi form pristine, hoặc khi chuyển entity/Store; không ghi đè draft đang dirty. `useUnsavedGuard()` chặn cả rời route và đổi record trên cùng route component.
 
 Rich text (`description`) dùng Tiptap; khi render HTML luôn qua DOMPurify — không `v-html` HTML chưa sanitize.
 
@@ -907,7 +909,7 @@ type Paginated<T> = {
 
 `sort`: tên field, prefix `-` là giảm dần.
 
-`Paginated<T>` là **ngoại lệ** của quy tắc "không viết tay type" (§7.1): openapi-typescript không sinh generic. Đặt ở `types/pagination.types.ts`; BE phải giữ đúng shape này cho mọi endpoint list.
+`Paginated<T>` là **ngoại lệ** của quy tắc "không viết tay type" (§7.1): openapi-typescript không sinh generic. Đặt ở `src/shared/types/Pagination.types.ts`; BE phải giữ đúng shape này cho mọi endpoint list.
 
 Params list được quản lý bởi `useListState` (§6.1), không tự viết trong từng view.
 

@@ -1419,3 +1419,12 @@ const { remove } = useProductActions() // composables/: confirm + mutation
 **Kiểm soát:** ESLint (§E) chặn `components/` import `api/`/`stores/`/`composables/` và chặn DTO ngoài `api/`; checklist PR thêm mục "Không có DTO ngoài `api/`, component không gọi API".
 
 ---
+
+## Trạng thái triển khai CMS pages — 2026-11-09
+
+Các routes nghiệp vụ được lắp trong `src/app/router/Routes.ts`; bảng điều hướng hiện tại ở [navigation-flow.md](./navigation-flow.md). Danh mục và báo cáo ở [cms-pages-components](./plans/cms-pages-components/spec.md).
+
+- `useListState` sở hữu URL state; `DataTable` chỉ điều khiển UTable ở chế độ server-side. `Paginated<T>` ở `shared/types/Pagination.types.ts` dùng `{ data, meta }`.
+- Session vẫn xoá cache khi đổi Store; query key không chứa Store ID. Model nghiệp vụ hiện là hợp đồng tạm trong `features/*/types` vì backend chưa tồn tại; không sửa hoặc giả lập nội dung `Api.generated.ts`.
+- Validation dùng Zod 4 với vee-validate; xem quyết định tương thích adapter và hydration ở FE_architecture §19. Upload theo lifecycle ở §17.1, XHR storage riêng để có byte progress và hủy.
+- Người phụ trách chọn kiểm View + logic thuần trong phiên này, hoãn E2E. Không coi kết quả HTTP mock là xác nhận tích hợp backend.

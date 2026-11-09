@@ -26,6 +26,17 @@ Widget thống kê, chart tải động và lỗi/retry riêng từng widget.
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
 
+## Hành vi đã kiểm qua seam được duyệt
+
+- `src/features/dashboard/views/DashboardView.spec.ts` — DashboardView keeps other widgets visible when one fails and can retry it (**passed**)
+- `src/features/dashboard/views/DashboardView.spec.ts` — DashboardView hides restricted widgets and never requests their data (**passed**)
+- `src/features/dashboard/views/DashboardView.spec.ts` — loads the current user when opening the dashboard directly after a reload (**passed**)
+- `src/features/dashboard/views/DashboardView.spec.ts` — links a recent order directly to its detail page (**passed**)
+
+## Bundle
+
+Tổng JavaScript gzip của toàn bộ nhánh (gồm các chunk tải động): 447.04 kB. Đây không phải kích thước tải ban đầu của riêng feature.
+
 ## Token
 
 Phần triển khai ban đầu bị làm chung trong một phiên, nên không có bộ đếm độc lập chính xác cho plan này. Không chia đều hoặc bịa số token theo PR. Tổng task và các phiên review con được ghi từ event token_count trong Codex ở metrics/token artifact của plan 14.

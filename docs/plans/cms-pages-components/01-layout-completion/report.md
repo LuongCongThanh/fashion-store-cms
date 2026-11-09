@@ -26,6 +26,17 @@ Breadcrumb theo route, đổi locale/theme và sidebar theo quyền.
 
 Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
 
+## Hành vi đã kiểm qua seam được duyệt
+
+- `src/app/views/Layout.spec.ts` — Layout navigation shows translated ancestor breadcrumbs and switches language without changing the URL (**passed**)
+- `src/app/views/Layout.spec.ts` — Layout navigation keeps system as a selectable persisted theme (**passed**)
+- `src/app/views/Layout.spec.ts` — Layout navigation groups permitted links under their domain (**passed**)
+- `src/app/views/Layout.spec.ts` — Layout navigation hides sidebar links when the current user lacks permission (**passed**)
+
+## Bundle
+
+Tổng JavaScript gzip của toàn bộ nhánh (gồm các chunk tải động): 259.8 kB. Đây không phải kích thước tải ban đầu của riêng feature.
+
 ## Token
 
 Phần triển khai ban đầu bị làm chung trong một phiên, nên không có bộ đếm độc lập chính xác cho plan này. Không chia đều hoặc bịa số token theo PR. Tổng task và các phiên review con được ghi từ event token_count trong Codex ở metrics/token artifact của plan 14.
