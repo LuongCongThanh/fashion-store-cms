@@ -286,7 +286,7 @@ Lưu ý: tên file `UseAuth.ts` khác hoa/thường với hàm `useAuth` là có
 ### B.3. Ranh giới feature
 
 - **Whitelist**: code ngoài feature chỉ được import `@features/<x>/Use*` và `@features/<x>/types/*`; mọi đường dẫn khác vào `@features/**` bị chặn (bao gồm `api/`, `stores/`, `schemas/`, `components/`, `views/` và thư mục thêm sau).
-- Trong cùng một feature: import nội bộ bằng đường dẫn tương đối `./` / `../` (không vượt ra ngoài thư mục feature); không dùng `@features/<chính-nó>/...`.
+- Trong cùng một feature: import nội bộ bằng alias `@features/<chính-nó>/...` (được import mọi thư mục của chính nó); chỉ dùng `./` cho file cùng thư mục. Cấm mọi `../` trong toàn bộ `src/` (kể cả `import()` động và `vi.mock()`).
 - `views/` chỉ được import từ `app/router/Routes.ts` (lazy `() => import(...)`).
 - `types/` chỉ chứa type/const thuần dữ liệu. Map hành vi (VD `OrderStatus → color`) đặt trong `components/` của feature (§L.4), không đặt trong `types/` vì `types/` là interface công khai.
 - Không dùng `index.ts` barrel.
@@ -395,7 +395,7 @@ Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (strict), `eslin
 | `@typescript-eslint/consistent-type-imports`              | error                                                | `import type`, tree-shake tốt                                                                       |
 | `@typescript-eslint/no-non-null-assertion`                | warn                                                 |                                                                                                     |
 | `no-console`                                              | error, cho phép `warn`/`error`                       |                                                                                                     |
-| `no-restricted-imports`                                   | error                                                | Ranh giới feature (§B.3, whitelist), ngoài `features/` cấm mọi `../`; trong feature cấm `../../`    |
+| `no-restricted-imports`                                   | error                                                | Ranh giới feature (§B.3, whitelist); cấm mọi `../` trong `src/`, dùng alias                         |
 | `vue/multi-word-component-names`                          | error                                                | Component ≥ 2 từ                                                                                    |
 | `vue/component-name-in-template-casing`                   | error, `PascalCase`                                  | `<ProductTable />`                                                                                  |
 | `vue/block-order`                                         | error, `script` → `template` → `style`               |                                                                                                     |
@@ -409,15 +409,15 @@ Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (strict), `eslin
 | `check-file/filename-naming-convention` (ngoài src)       | error                                                | `e2e/**`, `scripts/**`, `src/assets/**`, `public/**` = PascalCase (trừ `favicon.svg`, `robots.txt`) |
 | `vue/attribute-hyphenation`, `vue/v-on-event-hyphenation` | error, `never`                                       | Không kebab-case trong template                                                                     |
 
-Ranh giới feature là whitelist (không cần thêm block khi có feature mới). `featureBoundary` viết bằng `regex` (lookahead), **không** dùng `group` cú pháp gitignore: với `group`, pattern `@features/**` loại luôn thư mục cha nên phần tử `!@features/*/Use*` không mở lại được file bên trong. Bảng `BOUNDARIES` và các pattern:
+Ranh giới feature là whitelist; các dòng của từng feature được sinh tự động từ thư mục `src/features/` (không cần thêm block khi có feature mới). `featureBoundary` viết bằng `regex` (lookahead), **không** dùng `group` cú pháp gitignore: với `group`, pattern `@features/**` loại luôn thư mục cha nên phần tử `!@features/*/Use*` không mở lại được file bên trong. Bảng `BOUNDARIES` và các pattern:
 
 > Nguồn: [`eslint.config.ts`](../eslint.config.ts) — tài liệu không chép lại code, đọc file.
 
-Ghi chú: trong flat config, block sau **thay** (không gộp) giá trị `no-restricted-imports` của block trước cho cùng file, nên mỗi block liệt kê đủ pattern của nó. Các pattern khác dùng `group` (cú pháp gitignore). Pattern `../../*` trong feature cho phép `features/x/components/A.vue` → `../api/X.api` nhưng chặn `../../products/...` (thoát khỏi `features/x/`). Hệ quả: trong feature chỉ lồng tối đa 1 cấp thư mục (`api/`, `components/`…), không tạo `components/sub/`. Mọi ca ranh giới có test tự động trong `eslint.config.spec.ts` (D41) — sửa bảng thì thêm ca vào đó.
+Ghi chú: trong flat config, block sau **thay** (không gộp) giá trị `no-restricted-imports` của block trước cho cùng file, nên mỗi block liệt kê đủ pattern của nó. Các pattern khác dùng `group` (cú pháp gitignore). Mỗi feature `x` có rule riêng: alias `@features/x/**` được phép trong chính `x`, feature khác chỉ qua `Use*`/`types/`. `components/` không import `@features/x/api|stores|composables`, `vue-router`, và không gọi hook `use*` lấy từ `Use*.ts` (vẫn lấy được component). `import()` động và `vi.*('../...')` bị chặn bằng `no-restricted-syntax`. Mọi ca ranh giới có test tự động trong `eslint.config.spec.ts` (D41) — sửa bảng thì thêm ca vào đó.
 
 > Nguồn: [`eslint.config.spec.ts`](../eslint.config.spec.ts) — tài liệu không chép lại code, đọc file.
 
-Prettier (`.prettierrc.json`): `semi: false`, `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`, plugin `prettier-plugin-tailwindcss`.
+Prettier (`.prettierrc.json`): `semi: false`, `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`, plugin `prettier-plugin-tailwindcss`. Phạm vi: chỉ `src/**/*.{ts,vue}` (code + test), mọi file khác bị `.prettierignore` bỏ qua. Line ending LF được ép bằng `.gitattributes`.
 
 ---
 
