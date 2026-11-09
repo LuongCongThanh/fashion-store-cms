@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Kiểm tra PR body theo .github/pull_request_template.md.
-# Dùng chung cho CI (pr-body.yml) và hook Claude Code (.claude/hooks/pr-body-guard.sh).
+# Dùng chung cho CI (pr-body.yml) và hook Claude Code (.claude/hooks/pr-body-guard.py).
 # Cách dùng: scripts/check-pr-body.sh <file-body>   (hoặc "-" để đọc stdin)
 set -uo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd)
