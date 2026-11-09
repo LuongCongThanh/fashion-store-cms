@@ -1,6 +1,6 @@
 # 03 — Nền tảng List & Table
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 01
 Nguồn: §1, §3 (`list/`, `table/`, `feedback/`) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P5 · Spec: [spec.md](./spec.md)
 
