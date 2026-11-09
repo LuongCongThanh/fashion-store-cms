@@ -10,11 +10,14 @@ import StockAdjustDialog from '@features/inventory/components/StockAdjustDialog.
 import { inventoryListSchema, stockAdjustSchema } from '@features/inventory/schemas/Inventory.schema'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
+import DataTableToolbar from '@shared/components/table/DataTableToolbar.vue'
 import { useListState } from '@shared/composables/UseListState'
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { InventoryItem } from '@features/inventory/types/Inventory.types'
-const { t } = useT()
+const { t, tn } = useT()
+const format = useFormat()
 const { can } = useAuth()
 const { params, setFilter, setPage, setSort } = useListState(inventoryListSchema)
 const query = useInventoryQuery(params)
@@ -45,13 +48,17 @@ function openAdjust(item: InventoryItem) {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-6">
     <PageHeader :title="t('inventory.title')">
       <template #actions>
         <UButton to="/inventory/movements" variant="outline">{{ t('inventory.movements') }}</UButton>
       </template>
     </PageHeader>
     <InventoryFilters :search="params.search" :status="params.status" @filter="setFilter" />
+    <DataTableToolbar
+      :title="tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })"
+      :count="0"
+    />
     <InventoryTable
       :data="query.data.value?.data ?? []"
       :loading="query.isPending.value"

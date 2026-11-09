@@ -25,4 +25,5 @@ it('opens customer records from a filtered server list', async () => {
   })
   expect(wrapper.find('a[href="/customers/c1"]').text()).toBe('Lan')
   expect(http.history.get.find((request) => request.url === '/customers')?.params.search).toBe('Lan')
+  expect(wrapper.get('h2').text()).toBe('1 kết quả')
 })

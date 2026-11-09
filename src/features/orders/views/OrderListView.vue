@@ -8,9 +8,12 @@ import { orderListSchema } from '@features/orders/schemas/OrderList.schema'
 import ActiveFilterTags from '@shared/components/list/ActiveFilterTags.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
+import DataTableToolbar from '@shared/components/table/DataTableToolbar.vue'
 import { useListState } from '@shared/composables/UseListState'
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
-const { t } = useT()
+const { t, tn } = useT()
+const format = useFormat()
 const { params, setFilter, setPage, setSort, reset } = useListState(orderListSchema)
 const query = useOrdersQuery(params)
 const filters = computed(() =>
@@ -32,10 +35,14 @@ const filters = computed(() =>
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-6">
     <PageHeader :title="t('nav.orders')" />
     <OrderFilters :params="params" @filter="setFilter" />
     <ActiveFilterTags :filters="filters" @remove="setFilter($event, undefined)" @clear="reset" />
+    <DataTableToolbar
+      :title="tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })"
+      :count="0"
+    />
     <OrderTable
       :data="query.data.value?.data ?? []"
       :loading="query.isPending.value"

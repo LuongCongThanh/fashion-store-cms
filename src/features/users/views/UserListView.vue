@@ -9,23 +9,30 @@ import UserTable from '@features/users/components/UserTable.vue'
 import { userListSchema } from '@features/users/schemas/User.schema'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
+import DataTableToolbar from '@shared/components/table/DataTableToolbar.vue'
 import { useListState } from '@shared/composables/UseListState'
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 const router = useRouter()
-const { t } = useT()
+const { t, tn } = useT()
+const format = useFormat()
 const { can } = useAuth()
 const { params, setFilter, setPage, setSort } = useListState(userListSchema)
 const query = useUsersQuery(params)
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-6">
     <PageHeader :title="t('users.title')">
       <template #actions>
         <UButton v-if="can('user:write')" to="/users/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
     <UserFilters :search="params.search" :status="params.status" :roleId="params.roleId" @filter="setFilter" />
+    <DataTableToolbar
+      :title="tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })"
+      :count="0"
+    />
     <UserTable
       :data="query.data.value?.data ?? []"
       :loading="query.isPending.value"
