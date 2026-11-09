@@ -22,6 +22,7 @@
     "loading": "Loading…",
     "empty": "No data",
     "search": "Search",
+    "navigate": "Navigate",
     "pagination": "Pagination",
     "results": "{n} result | {n} results",
     "sections": "Form sections",

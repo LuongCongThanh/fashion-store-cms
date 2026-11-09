@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import UDashboardNavbar from '@nuxt/ui/components/DashboardNavbar.vue'
+import UDashboardSearchButton from '@nuxt/ui/components/DashboardSearchButton.vue'
+
+import { useT } from '@shared/lib/i18n/I18n'
 
 import AppBreadcrumb from './AppBreadcrumb.vue'
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import ThemeSwitcher from './ThemeSwitcher.vue'
 import UserMenu from './UserMenu.vue'
+const { t } = useT()
 </script>
 
 <template>
@@ -14,6 +18,7 @@ import UserMenu from './UserMenu.vue'
       <AppBreadcrumb />
     </template>
     <template #right>
+      <UDashboardSearchButton class="hidden sm:inline-flex" :label="t('common.search')" />
       <!-- Dưới lg: locale + theme nằm trong UserMenu để header không vỡ hàng ở 375px -->
       <LanguageSwitcher class="hidden lg:block" />
       <ThemeSwitcher class="hidden lg:block" />

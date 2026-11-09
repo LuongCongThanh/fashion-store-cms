@@ -3,6 +3,7 @@ import UDashboardGroup from '@nuxt/ui/components/DashboardGroup.vue'
 import UDashboardPanel from '@nuxt/ui/components/DashboardPanel.vue'
 
 import AppHeader from './AppHeader.vue'
+import AppCommandPalette from './AppCommandPalette.vue'
 import AppSidebar from './AppSidebar.vue'
 
 // Khung app theo cách ghép của nuxt-ui-templates/dashboard; luật ở DESIGN.md mục Layout.
@@ -11,6 +12,7 @@ import AppSidebar from './AppSidebar.vue'
 <template>
   <UDashboardGroup storage="local" storageKey="cms.dashboard" unit="px">
     <AppSidebar />
+    <AppCommandPalette />
     <UDashboardPanel id="main">
       <template #header>
         <slot name="banner" />
