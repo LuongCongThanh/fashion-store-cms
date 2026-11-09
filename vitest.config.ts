@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url'
+
 import { defineConfig, mergeConfig } from 'vitest/config'
 
 import viteConfig from './vite.config.ts'
@@ -6,6 +8,9 @@ export default defineConfig((env) =>
   mergeConfig(
     viteConfig(env),
     defineConfig({
+      resolve: {
+        alias: { 'virtual:pwa-register/vue': fileURLToPath(new URL('./src/test/PwaRegisterStub.ts', import.meta.url)) },
+      },
       test: {
         environment: 'jsdom',
         globals: false,
