@@ -95,3 +95,26 @@ it('shows product prices as money, right-aligned', async () => {
   expect(plainSpaces(price.text())).toBe('15.500.000 ₫')
   expect(price.classes()).toContain('text-right')
 })
+
+it('opens a product from its name through the router, keeping the full name as a title', async () => {
+  const longName = 'Đầm midi lụa xếp ly cổ yếm phối nơ lưng — phiên bản giới hạn Thu Đông 2026'
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path: '/products', component: { render: () => null } },
+      { path: '/products/:id', component: { render: () => null } },
+    ],
+  })
+  await router.push('/products')
+  const { wrapper, http } = renderWithPlugins(ProductListView, { router })
+  http.onGet(/\/products$/).reply(200, {
+    data: [{ id: 'p9', name: longName, status: 'published', price: 1 }],
+    meta: { page: 1, pageSize: 20, total: 1, totalPages: 1 },
+  })
+  await flushPromises()
+  const link = wrapper.findAll('a').find((a) => a.text() === longName)
+  expect(link?.attributes('title')).toBe(longName)
+  await link?.trigger('click')
+  await flushPromises()
+  expect(router.currentRoute.value.path).toBe('/products/p9')
+})

@@ -6,6 +6,8 @@ import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 import StatusBadge from '@shared/components/feedback/StatusBadge.vue'
 import DataTable from '@shared/components/table/DataTable.vue'
 import RowActions from '@shared/components/table/RowActions.vue'
+import { sortHeader } from '@shared/components/table/SortHeader'
+import TableLink from '@shared/components/table/TableLink.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { StaffUser } from '@features/users/types/User.types'
@@ -25,19 +27,10 @@ const { t } = useT()
 const columns = computed<TableColumn<StaffUser>[]>(() => [
   {
     accessorKey: 'name',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-        },
-        t('common.name'),
-      ),
+    header: ({ column }) => sortHeader(column, t('common.name')),
     cell: ({ row }) =>
       props.canWrite
-        ? h('a', { href: `/users/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
+        ? h(TableLink, { to: `/users/${encodeURIComponent(row.original.id)}/edit`, label: row.original.name })
         : row.original.name,
   },
   { accessorKey: 'email', header: t('auth.login.email') },

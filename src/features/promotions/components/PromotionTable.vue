@@ -4,6 +4,8 @@ import { computed, h } from 'vue'
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
+import { sortHeader } from '@shared/components/table/SortHeader'
+import TableLink from '@shared/components/table/TableLink.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Promotion } from '@features/promotions/types/Promotion.types'
@@ -21,19 +23,10 @@ const { t } = useT()
 const columns = computed<TableColumn<Promotion>[]>(() => [
   {
     accessorKey: 'name',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-        },
-        t('common.name'),
-      ),
+    header: ({ column }) => sortHeader(column, t('common.name')),
     cell: ({ row }) =>
       props.canWrite
-        ? h('a', { href: `/promotions/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
+        ? h(TableLink, { to: `/promotions/${encodeURIComponent(row.original.id)}/edit`, label: row.original.name })
         : row.original.name,
   },
   { accessorKey: 'code', header: t('promotions.code') },

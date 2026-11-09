@@ -4,6 +4,8 @@ import { computed, h } from 'vue'
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
+import { sortHeader } from '@shared/components/table/SortHeader'
+import TableLink from '@shared/components/table/TableLink.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Role } from '@features/roles/types/Role.types'
@@ -19,19 +21,10 @@ const { t } = useT()
 const columns = computed<TableColumn<Role>[]>(() => [
   {
     accessorKey: 'name',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-        },
-        t('common.name'),
-      ),
+    header: ({ column }) => sortHeader(column, t('common.name')),
     cell: ({ row }) =>
       props.canWrite
-        ? h('a', { href: `/roles/${encodeURIComponent(row.original.id)}/edit` }, row.original.name)
+        ? h(TableLink, { to: `/roles/${encodeURIComponent(row.original.id)}/edit`, label: row.original.name })
         : row.original.name,
   },
   {

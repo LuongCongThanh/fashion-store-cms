@@ -12,13 +12,14 @@ import ProductTable from '@features/products/components/ProductTable.vue'
 import { productListSchema } from '@features/products/schemas/ProductList.schema'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import PageHeader from '@shared/components/page/PageHeader.vue'
-import DataTableBulkActions from '@shared/components/table/DataTableBulkActions.vue'
-import DataTableColumnVisibility from '@shared/components/table/DataTableColumnVisibility.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
+import DataTableToolbar from '@shared/components/table/DataTableToolbar.vue'
 import { useListState } from '@shared/composables/UseListState'
+import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
-const { t } = useT()
+const { t, tn } = useT()
+const format = useFormat()
 const { can } = useAuth()
 const confirm = useConfirm()
 const router = useRouter()
@@ -62,24 +63,33 @@ function rowAction(action: string, id: string) {
       </template>
     </PageHeader>
     <ProductFilters :params="params" :categories="categories.data.value ?? []" @filter="setFilter" />
-    <DataTableColumnVisibility
-      v-model="visibility"
+    <DataTableToolbar
+      v-model:visibility="visibility"
+      :title="
+        tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })
+      "
+      :count="can('product:write') ? ids.length : 0"
       :columns="[
         { id: 'name', label: t('common.name') },
         { id: 'price', label: t('products.price') },
         { id: 'status', label: t('common.status') },
       ]"
-    />
-    <DataTableBulkActions v-if="can('product:write')" :count="ids.length">
-      <UButton
-        v-for="action in ['publish', 'unpublish', 'delete'] as const"
-        :key="action"
-        :data-action="`bulk-${action}`"
-        :loading="mutation.isPending.value"
-        @click="bulk(action)"
-        >{{ t(`products.${action}`) }}</UButton
-      >
-    </DataTableBulkActions>
+      @clear="selection = {}"
+    >
+      <template #bulk>
+        <UButton
+          v-for="action in ['publish', 'unpublish', 'delete'] as const"
+          :key="action"
+          :data-action="`bulk-${action}`"
+          :color="action === 'delete' ? 'error' : 'neutral'"
+          variant="outline"
+          size="sm"
+          :loading="mutation.isPending.value"
+          @click="bulk(action)"
+          >{{ t(`products.${action}`) }}</UButton
+        >
+      </template>
+    </DataTableToolbar>
     <ProductTable
       v-model:selection="selection"
       :data="query.data.value?.data ?? []"

@@ -45,3 +45,26 @@ it('filters by payment status through a labelled select', async () => {
   await chooseOption(wrapper, 'Thanh toán', 'Tất cả')
   expect(router.currentRoute.value.query.paymentStatus).toBeUndefined()
 })
+
+it('shows the order total as right-aligned money', async () => {
+  const { wrapper } = await renderFeature(OrderListView, {
+    path: '/orders',
+    mock(http) {
+      http.onGet(/\/orders$/).reply(200, {
+        data: [
+          {
+            id: 'o1',
+            number: 'ORD-001',
+            customer: { name: 'Lan' },
+            total: 1500000,
+            status: 'pending',
+            paymentStatus: 'paid',
+          },
+        ],
+        meta: { page: 1, pageSize: 20, total: 1, totalPages: 1 },
+      })
+    },
+  })
+  const cell = wrapper.findAll('td span.text-right').find((span) => span.text().includes('1.500.000'))
+  expect(cell?.text()).toMatch(/1\.500\.000\s*₫/)
+})

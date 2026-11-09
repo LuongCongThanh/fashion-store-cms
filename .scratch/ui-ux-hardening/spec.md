@@ -119,7 +119,7 @@ User CMS (nhân viên vận hành, quản lý Store) đang làm việc trên m�
 - **Layout shell (chốt lại 2026-11-09, thay bản tự viết ở #47):**
   - Dựng bằng các component `UDashboard*` có sẵn trong `@nuxt/ui`, theo cách ghép của template [nuxt-ui-templates/dashboard](https://github.com/nuxt-ui-templates/dashboard). Không copy file template (template là app Nuxt, repo này là Vue + Vite).
   - Khung: `UDashboardGroup` (`storage="local"`, `storageKey="cms.dashboard"`; bỏ key cũ `cms.sidebarCollapsed`, ghi vào mục Migration của PR) → `UDashboardSidebar` (`collapsible`, không `resizable`, độ rộng `px` 256/64 theo `DESIGN.md`, `mode="slideover"` mở từ trái dưới `lg`) → `UDashboardPanel` (navbar dính, `PageContainer` nằm trong slot body).
-  - Sidebar: Store switcher ở đầu (vị trí giống chọn team của template), `SidebarNav` lấy dữ liệu từ `Navigation.ts` (lọc theo quyền), User menu ở chân.
+  - Sidebar: Store switcher ở đầu (vị trí giống chọn team của template), `SidebarNav` lấy dữ liệu từ `Navigation.ts` (lọc theo quyền), nút thu gọn ở chân. User menu nằm ở navbar, không đặt ở chân sidebar.
   - Navbar (`UDashboardNavbar`): nút `UDashboardSidebarCollapse`/toggle + breadcrumb; bên phải là locale + theme (chỉ trên desktop) và User menu. Navbar không lặp tiêu đề trang; tiêu đề lớn vẫn nằm trong `PageHeader`.
   - Locale và theme có trong User menu. Padding trang `px-4 lg:px-6`.
   - `UDashboardToolbar` chưa dùng; ticket 07 quyết định thanh lọc nằm ở toolbar hay trong trang.
@@ -146,7 +146,10 @@ User CMS (nhân viên vận hành, quản lý Store) đang làm việc trên m�
   | Không | `server/api`, `date-fns`, auto-import | — | Đặc thù Nuxt; đã có `HttpClient`, `shared/lib/format` | — |
 
   **Giữ lại** (pattern riêng theo `DESIGN.md`, đã dựng trên `U*`): `PageHeader`, `EmptyState`/`ErrorState`/`LoadingState`, `StatusBadge`, `ActiveFilterTags`, `FilterBar`, `ConfirmDialog`.
-- **Pattern bảng (`DataTable`):** compact `py-1.5`, `thead` dính, thanh hàng loạt thay vào tiêu đề bảng (bỏ khối `DataTableBulkActions` riêng), cột tên là router link + `line-clamp-1` + `title`, cột tiền căn phải, cuộn ngang trong khung. Thứ tự ưu tiên cột ở `sm` được ghi vào `DESIGN.md`.
+- **Pattern bảng (`DataTable`):** compact `py-1.5`, `thead` dính, thanh hàng loạt thay vào tiêu đề bảng (bỏ khối `DataTableBulkActions` riêng), cột tên là router link + `line-clamp-1` + `title`, cột tiền căn phải, cuộn ngang trong khung. Thứ tự ưu tiên cột ở `sm` được ghi vào `DESIGN.md`. Header sắp xếp dùng chung `sortHeader()` (có focus ring); trạng thái rỗng và đang tải của bảng đi qua `EmptyState`/`LoadingState`.
+  - **Hoãn có chủ đích:** ticket 05 chỉ gắn `DataTableToolbar` cho Product list (reference); các list khác rollout ở ticket 08. Class `hidden sm:table-cell` cho từng bảng gắn ở ticket 07 (Product) và 08 (các bảng còn lại).
+  - Chiều cao khung bảng `max-h-[calc(100dvh-16rem)]` là giá trị tạm, chốt sau khi kiểm tay ở ticket 07.
+- **`FormSection` không dựng trên `UPageCard`:** title của `UPageCard` không phải heading, sẽ mất `<h2>` cho trình đọc màn hình. `FormSection` giữ markup riêng với token `rounded-lg`.
 - **Token:** `rounded-lg` (bỏ `rounded-xl`), khoảng cách dọc `space-y-4`/`space-y-6` (bỏ `space-y-5`).
 - **State dùng chung:** `LoadingState`/skeleton, `EmptyState`, error có nút thử lại. Mọi widget dashboard và bảng đều có đủ ba state.
 - **Archetype đã chốt (`mockup-decision.md`):**

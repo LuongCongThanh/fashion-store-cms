@@ -49,3 +49,20 @@ export async function chooseOption(wrapper: VueWrapper, name: string, option: st
   target.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
   await flushPromises()
 }
+
+/** Mở menu (UDropdownMenu) từ nút có aria-label `trigger` rồi chọn mục `item`, bằng bàn phím. */
+export async function chooseMenuItem(wrapper: VueWrapper, trigger: string, item: string): Promise<void> {
+  const button = wrapper.findAll('button').find((b) => b.attributes('aria-label') === trigger)
+  if (!button) throw new Error(`Không thấy nút menu "${trigger}"`)
+  await button.trigger('keydown', { key: 'Enter' })
+  const target = await vi.waitFor(() => {
+    const found = Array.from(document.body.querySelectorAll<HTMLElement>('[role^="menuitem"]')).find(
+      (el) => el.textContent.trim() === item,
+    )
+    if (!found) throw new Error(`Không thấy mục "${item}" trong menu "${trigger}"`)
+    return found
+  })
+  target.focus()
+  target.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+  await flushPromises()
+}

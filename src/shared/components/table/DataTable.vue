@@ -4,7 +4,9 @@ import { computed } from 'vue'
 
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
+import EmptyState from '@shared/components/feedback/EmptyState.vue'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
+import LoadingState from '@shared/components/feedback/LoadingState.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 type RowSelectionState = Record<string, boolean>
 type VisibilityState = Record<string, boolean>
@@ -26,6 +28,15 @@ const emit = defineEmits<{
   retry: []
 }>()
 const { t } = useT()
+
+// DESIGN.md mục Bảng: compact (row ~36px), thead dính, bảng cuộn trong khung của nó (trang không cuộn ngang).
+const TABLE_UI = {
+  root: 'max-h-[calc(100dvh-16rem)] overflow-auto rounded-lg border border-default',
+  thead: 'bg-elevated',
+  th: 'py-2 text-xs font-medium text-muted whitespace-nowrap',
+  td: 'py-1.5 text-sm',
+}
+
 const sorting = computed<SortingState>({
   get: () =>
     props.sort &&
@@ -64,11 +75,15 @@ const visible = computed({
     :data="data"
     :columns="columns"
     :loading="loading"
-    :empty="t('common.empty')"
     :getRowId="(row) => row.id"
     :manualPagination="true"
     :manualSorting="true"
     :manualFiltering="true"
+    sticky="header"
+    :ui="TABLE_UI"
     class="w-full"
-  />
+  >
+    <template #empty><EmptyState :title="t('common.empty')" /></template>
+    <template #loading><LoadingState /></template>
+  </UTable>
 </template>

@@ -6,6 +6,8 @@ import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
 import RowActions from '@shared/components/table/RowActions.vue'
+import { sortHeader } from '@shared/components/table/SortHeader'
+import TableLink from '@shared/components/table/TableLink.vue'
 import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
@@ -51,32 +53,13 @@ const columns = computed<TableColumn<Product>[]>(() => [
   },
   {
     accessorKey: 'name',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-          type: 'button',
-        },
-        t('common.name'),
-      ),
-    cell: ({ row }) => h('a', { href: `/products/${encodeURIComponent(row.original.id)}` }, row.original.name),
+    header: ({ column }) => sortHeader(column, t('common.name')),
+    cell: ({ row }) =>
+      h(TableLink, { to: `/products/${encodeURIComponent(row.original.id)}`, label: row.original.name }),
   },
   {
     accessorKey: 'price',
-    header: ({ column }) =>
-      h(
-        'button',
-        {
-          onClick: () => {
-            column.toggleSorting()
-          },
-          type: 'button',
-        },
-        t('products.price'),
-      ),
+    header: ({ column }) => sortHeader(column, t('products.price'), { align: 'right' }),
     cell: ({ row }) =>
       h('span', { 'data-cell': 'price', class: 'block text-right tabular-nums' }, format.money(row.original.price)),
   },
