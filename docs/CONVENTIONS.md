@@ -384,7 +384,7 @@ Ví dụ: `feat(products): add server-side pagination to product table`.
 
 ## E. ESLint rules
 
-Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (strict), `eslint-plugin-vue` (`flat/recommended`), `eslint-config-prettier` (tắt rule format).
+Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (`strictTypeChecked`, lint có kiểm tra kiểu qua `projectService`), `eslint-plugin-vue` (`flat/recommended`), `eslint-config-prettier` (tắt rule format). `src/env.d.ts` khai báo `declare module '*.vue'` để typescript-eslint đọc được import SFC; vue-tsc vẫn resolve file `.vue` thật.
 
 | Rule                                                      | Mức                                                  | Lý do                                                                                               |
 | --------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
@@ -393,9 +393,13 @@ Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (strict), `eslin
 | `unused-imports/no-unused-vars`                           | warn (bỏ qua `_` prefix)                             |                                                                                                     |
 | `@typescript-eslint/no-explicit-any`                      | error                                                | TypeScript strict thực sự                                                                           |
 | `@typescript-eslint/consistent-type-imports`              | error                                                | `import type`, tree-shake tốt                                                                       |
-| `@typescript-eslint/no-non-null-assertion`                | warn                                                 |                                                                                                     |
+| `@typescript-eslint/no-non-null-assertion`                | error                                                | Đã bật `noUncheckedIndexedAccess`; dùng `!` là né kiểm tra                                          |
+| `@typescript-eslint/no-floating-promises`, `no-misused-promises`, `no-unsafe-*` | error (từ `strictTypeChecked`) | Bắt quên `await` và `any` lan vào code. Spec và `src/test/` tắt `no-unsafe-*`, `require-await` |
+| `@typescript-eslint/switch-exhaustiveness-check`          | error                                                | `switch` trên union phải đủ case                                                                    |
+| `@typescript-eslint/restrict-template-expressions`        | error, cho phép `number`                             |                                                                                                     |
 | `no-console`                                              | error, cho phép `warn`/`error`                       |                                                                                                     |
-| `no-restricted-imports`                                   | error                                                | Ranh giới feature (§B.3, whitelist); cấm mọi `../` trong `src/`, dùng alias                         |
+| `no-restricted-imports`                                   | error                                                | Ranh giới feature (§B.3, whitelist); cấm mọi `../` trong `src/`, dùng alias; code production cấm `@test/*` (`noTest`) |
+| `no-restricted-syntax`                                    | error                                                | Cấm `../` trong `import()` động và `vi.mock()`/`vi.importActual()`                                  |
 | `vue/multi-word-component-names`                          | error                                                | Component ≥ 2 từ                                                                                    |
 | `vue/component-name-in-template-casing`                   | error, `PascalCase`                                  | `<ProductTable />`                                                                                  |
 | `vue/block-order`                                         | error, `script` → `template` → `style`               |                                                                                                     |
@@ -404,6 +408,11 @@ Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (strict), `eslin
 | `vue/define-props-declaration`                            | error, `type-based`                                  |                                                                                                     |
 | `vue/no-v-html`                                           | error                                                | Chỉ cho phép qua component sanitize DOMPurify                                                       |
 | `vue/require-explicit-emits`                              | error                                                |                                                                                                     |
+| `vue/no-unused-refs`, `vue/no-unused-properties`          | error                                                | Xoá ref/prop không dùng                                                                             |
+| `vue/require-typed-ref`, `vue/prefer-use-template-ref`    | error                                                | `ref<T>()` có kiểu; template ref dùng `useTemplateRef`                                              |
+| `vue/no-ref-object-reactivity-loss`, `vue/no-useless-v-bind` | error                                             |                                                                                                     |
+| `vue/padding-line-between-blocks`                         | error                                                | Một dòng trống giữa `<script>`, `<template>`, `<style>`                                             |
+| `vue/no-bare-strings-in-template`                         | warn (allowlist: dấu câu, `SKU`, tên ngôn ngữ)       | Text phải qua i18n (§H). Trang dev `DesignSystemView.vue` được bỏ qua                               |
 | `check-file/filename-naming-convention`                   | error                                                | `src/**/*.{ts,vue}` = PascalCase (bỏ qua phần hậu tố `.store`, `.api`…; ngoại lệ §B.1)              |
 | `check-file/folder-naming-convention`                     | error                                                | `src/**/`, `e2e/**/`, `scripts/**/` = `^([a-z0-9]+                                                  | [A-Z][a-zA-Z0-9]*)$` (một từ thường hoặc PascalCase) |
 | `check-file/filename-naming-convention` (ngoài src)       | error                                                | `e2e/**`, `scripts/**`, `src/assets/**`, `public/**` = PascalCase (trừ `favicon.svg`, `robots.txt`) |
@@ -413,11 +422,15 @@ Ranh giới feature là whitelist; các dòng của từng feature được sinh
 
 > Nguồn: [`eslint.config.ts`](../eslint.config.ts) — tài liệu không chép lại code, đọc file.
 
-Ghi chú: trong flat config, block sau **thay** (không gộp) giá trị `no-restricted-imports` của block trước cho cùng file, nên mỗi block liệt kê đủ pattern của nó. Các pattern khác dùng `group` (cú pháp gitignore). Mỗi feature `x` có rule riêng: alias `@features/x/**` được phép trong chính `x`, feature khác chỉ qua `Use*`/`types/`. `components/` không import `@features/x/api|stores|composables`, `vue-router`, và không gọi hook `use*` lấy từ `Use*.ts` (vẫn lấy được component). `import()` động và `vi.*('../...')` bị chặn bằng `no-restricted-syntax`. Mọi ca ranh giới có test tự động trong `eslint.config.spec.ts` (D41) — sửa bảng thì thêm ca vào đó.
+Ghi chú: trong flat config, block sau **thay** (không gộp) giá trị `no-restricted-imports` của block trước cho cùng file, nên mỗi block liệt kê đủ pattern của nó. Các pattern khác dùng `group` (cú pháp gitignore). Mỗi feature `x` có rule riêng: alias `@features/x/**` được phép trong chính `x`, feature khác chỉ qua `Use*`/`types/`. `components/` không import `@features/x/api|stores|composables`, `vue-router`, và không gọi hook `use*` lấy từ `Use*.ts` (vẫn lấy được component). `import()` động và `vi.*('../...')` bị chặn bằng `no-restricted-syntax`. Mọi ca ranh giới có test tự động trong `eslint.config.spec.ts` (D41) — sửa bảng thì thêm ca vào đó. `noParentImport` và `noTest` được `toFlatConfig` tự thêm vào mọi dòng; với mỗi dòng nó sinh thêm một block cho `**/*.spec.ts` và `src/test/**` không có `noTest`, nên test vẫn import được `@test/*`.
+
+`eslint-disable` chỉ dùng cho báo nhầm từ thư viện hoặc API deprecated chưa thay được: luôn dùng dạng `-next-line` (hoặc cặp `disable`/`enable` bao một khối nhỏ), ghi rõ tên rule, và đặt comment giải thích ngay dòng trên (hoặc sau `--`).
+
+Lint có kiểm tra kiểu phải dựng cả chương trình TypeScript nên `npm run lint` mất khoảng 20s. `vite-plugin-checker` giữ chương trình này trong bộ nhớ: sau khi sửa `env.d.ts`, `tsconfig*.json` hoặc `eslint.config.ts` phải khởi động lại dev server, nếu không checker vẫn báo lỗi cũ.
 
 > Nguồn: [`eslint.config.spec.ts`](../eslint.config.spec.ts) — tài liệu không chép lại code, đọc file.
 
-Prettier (`.prettierrc.json`): `semi: false`, `singleQuote: true`, `printWidth: 100`, `trailingComma: "all"`, plugin `prettier-plugin-tailwindcss`. Phạm vi: chỉ `src/**/*.{ts,vue}` (code + test), mọi file khác bị `.prettierignore` bỏ qua. Line ending LF được ép bằng `.gitattributes`.
+Prettier (`.prettierrc.json`): `semi: false`, `singleQuote: true`, `printWidth: 120`, `trailingComma: "all"`, plugin `prettier-plugin-tailwindcss`. Phạm vi: chỉ `src/**/*.{ts,vue}` (code + test), mọi file khác bị `.prettierignore` bỏ qua. Line ending LF được ép bằng `.gitattributes`.
 
 ---
 
@@ -868,7 +881,7 @@ Mỗi thư mục cấp 1 trong `src/` có một alias (7 alias: `@app`, `@assets
 | `@layouts/*`  | `src/layouts/*`  | `@layouts/DashboardLayout.vue`                                                                                 |
 | `@shared/*`   | `src/shared/*`   | `@shared/components/feedback/ErrorState.vue`, `@shared/lib/api/errors/ApiError`, `@shared/types/Api.generated` |
 | `@locales/*`  | `src/locales/*`  | `@locales/vi.json`                                                                                             |
-| `@test/*`     | `src/test/*`     | `@test/Render` (chỉ trong `*.spec.ts`)                                                                         |
+| `@test/*`     | `src/test/*`     | `@test/Render` (chỉ trong `*.spec.ts` và `src/test/`)                                                                         |
 
 - Không có alias gốc `@/` — mỗi import cho thấy ngay nó thuộc tầng nào, ESLint kiểm tra chiều phụ thuộc (§A) dễ hơn.
 - **Nguồn duy nhất là `tsconfig.app.json`** (`paths` dạng `./src/...`, không cần `baseUrl`); Vite/Vitest đọc lại qua `vite-tsconfig-paths` với `loose: true` (thiếu `loose` thì import alias từ file `.vue` không resolve), không khai báo lặp `resolve.alias`.
