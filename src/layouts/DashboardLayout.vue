@@ -2,6 +2,7 @@
 import { watch } from 'vue'
 
 import OfflineBanner from '@shared/components/feedback/OfflineBanner.vue'
+import PageContainer from '@shared/components/page/PageContainer.vue'
 import { useNotify } from '@shared/composables/UseNotify'
 import { usePwa } from '@shared/composables/UsePwa'
 
@@ -24,8 +25,8 @@ watch(needRefresh, (hasUpdate) => {
     <div class="flex min-w-0 flex-1 flex-col">
       <OfflineBanner />
       <AppHeader />
-      <main class="mx-auto w-full max-w-screen-2xl p-4 lg:p-6">
-        <RouterView />
+      <main>
+        <PageContainer><RouterView /></PageContainer>
       </main>
     </div>
   </div>

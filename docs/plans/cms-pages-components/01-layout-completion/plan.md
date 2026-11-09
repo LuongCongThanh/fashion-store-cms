@@ -1,6 +1,6 @@
 # 01 — Hoàn thiện Layout
 
-Status: ready-for-agent
+Status: on-hold
 Blocked by: —
 Nguồn: §2, §3 (`PageContainer`) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P3 · Spec: [spec.md](./spec.md)
 
@@ -34,3 +34,21 @@ Nguyên tắc chung:
 - Sidebar ẩn item khi thiếu permission.
 - `typecheck`, `lint`, `test` pass.
 - E2E (Playwright) cho luồng breadcrumb, đổi locale/theme và sidebar theo permission pass.
+
+### Tiếp tục khi có API
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+**Sửa được ngay, không cần API** (từ review 2026-11-09):
+
+- [ ] `authGuard` chỉ gọi `ensureUser()` khi route có `meta.permission`; reload ở `/` hoặc `/403` làm sidebar ẩn hết mục. `Layout.spec.ts` tự gọi `ensureUser()` nên không bắt được lỗi.
+- [ ] Breadcrumb chưa đúng với cây route thật: layout không có `titleKey`, `/` bị loại khỏi ancestors, `/403` render `<nav>` rỗng.
+- [ ] `LanguageSwitcher.vue` hard-code nhãn `Tiếng Việt` / `English`; switcher trùng chức năng với `UserMenu` nhưng CONVENTIONS §L.11, §S.1 chưa cập nhật.
+- [ ] Thiếu unit test cho `breadcrumbs`, `sidebarGroups` trong `Navigation.spec.ts`; test theme chưa kiểm `matchMedia` điều khiển class `dark`.
+- [ ] `report.md` thay bảng kiểm từng tiêu chí bằng bảng chung typecheck/lint/coverage.
+
+**Chờ API / BE:**
+
+- [ ] E2E (Playwright) cho layout: hoãn.
+
+**Khi có API:** thay type viết tay bằng type sinh từ Swagger, nối lại lớp dữ liệu tạm với endpoint thật, chạy E2E, rồi kiểm lại các tiêu chí hoàn thành trong [spec.md](./spec.md).
