@@ -1,6 +1,6 @@
 # 06 — Categories
 
-Status: ready-for-agent
+Status: on-hold
 Blocked by: 03, 04
 Nguồn: §4.4 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P6 · Spec: [spec.md](./spec.md)
 
@@ -30,3 +30,21 @@ Nguyên tắc chung:
 - Route read/write bị chặn đúng theo `category:read` / `category:write`.
 - `typecheck`, `lint`, `test` pass.
 - E2E (Playwright) cho luồng category tree: tạo hoặc sửa, kéo thả và lưu pass.
+
+### Tiếp tục khi có API
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+**Sửa được ngay, không cần API** (từ review 2026-11-09):
+
+- [ ] Mọi lỗi validate đều hiện 'Không được để trống' (kể cả slug sai định dạng).
+- [ ] `CategorySelector` gắn `:value` mảng vào `<select multiple>`, có thể không hiện giá trị đã chọn (cần kiểm); đang multi-select trong khi `Product.categoryId` là một giá trị.
+- [ ] Merge `translations` nông; thả vào đúng chỗ cũ vẫn gửi PATCH; chưa có cách di chuyển bằng bàn phím.
+- [ ] Query key `['categories', id]` có thể trùng key list; `UseCategories.ts` export component; view Create/Edit giống hệt nhau.
+
+**Chờ API / BE:**
+
+- [ ] BE chưa xác nhận format dữ liệu đa ngôn ngữ, nhưng `translations.{vi,en}` đã được làm — cần đối chiếu lại khi có API.
+- [ ] E2E kéo thả và lưu.
+
+**Khi có API:** thay type viết tay bằng type sinh từ Swagger, nối lại lớp dữ liệu tạm với endpoint thật, chạy E2E, rồi kiểm lại các tiêu chí hoàn thành trong [spec.md](./spec.md).
