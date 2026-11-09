@@ -8,6 +8,7 @@ import { dashboardRoutes } from '@features/dashboard/Dashboard.routes'
 import { inventoryRoutes } from '@features/inventory/Inventory.routes'
 import { orderRoutes } from '@features/orders/Orders.routes'
 import { productRoutes } from '@features/products/Products.routes'
+import { promotionRoutes } from '@features/promotions/Promotions.routes'
 
 /** Trang chỉ dùng ở dev (§L.10). */
 const devRoutes: RouteRecordRaw[] = import.meta.env.DEV
@@ -27,6 +28,7 @@ export const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     children: [
       ...dashboardRoutes,
+      ...promotionRoutes,
       ...inventoryRoutes,
       ...customerRoutes,
       ...orderRoutes,

@@ -1,30 +1,74 @@
-# 11 — Báo cáo
+# 11 — Báo cáo: Promotions
 
-Trạng thái: chưa bắt đầu
-Nhánh / PR: — / —
-Ngày hoàn thành: —
+Status: on-hold
+Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
+Nhánh: `feat/cms-11-promotions`
+PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/34
+Base hiện tại: `feat/cms-10-inventory`; đổi về `dev` khi PR phụ thuộc đã squash merge.
+Ngày kiểm: 2026-11-09. Chưa merge; không đánh dấu done thay cho reviewer.
 
 ## Đã làm
 
--
+List và form coupon/auto; kiểm code, phần trăm và khoảng thời gian.
 
 ## Kết quả kiểm tra
 
-| Mục kiểm tra (theo plan.md)                                              | Kết quả | Ghi chú |
-| ------------------------------------------------------------------------ | ------- | ------- |
-| Code bắt buộc khi type = coupon; End > Start; % ≤ 100.                   |         |         |
-| Route read/write bị chặn đúng theo `promotion:read` / `promotion:write`. |         |         |
-| `typecheck`, `lint`, `test` pass.                                        |         |         |
-| E2E tạo coupon/automatic promotion và validate input pass.               |         |         |
+| Kiểm tra                                   | Kết quả                                      |
+| ------------------------------------------ | -------------------------------------------- |
+| Typecheck                                  | PASS                                         |
+| Lint                                       | PASS                                         |
+| Vitest                                     | 203 tests / 43 files PASS; +4 so với base PR |
+| Coverage dòng                              | 85.36% (toàn nhánh tại checkpoint)           |
+| Coverage statements / branches / functions | 83.13% / 81.48% / 74.02%                     |
+| Production build                           | PASS                                         |
+| E2E                                        | HOÃN theo lựa chọn của người phụ trách       |
+| Backend / Swagger                          | CHƯA CÓ, đã được người phụ trách xác nhận    |
 
-## Số liệu
+Test chạy trên đúng nhánh này, không lấy số test của nhánh tổng thay cho PR con. Log kiểm tra được dùng để điền [metrics.md](../metrics.md).
 
-Ghi vào [metrics.md](../metrics.md): token, số test, coverage, bundle size.
+## Hành vi đã kiểm qua seam được duyệt
 
-## Lệch so với plan / quyết định mới
+- `src/features/promotions/schemas/Promotion.schema.spec.ts` — rejects percentage discounts over 100, missing coupon codes and reversed dates (**passed**)
+- `src/features/promotions/views/PromotionCreateView.spec.ts` — creates an automatic promotion without a coupon code (**passed**)
+- `src/features/promotions/views/PromotionEditView.spec.ts` — edits an automatic promotion into a fixed-value coupon with a new usage window (**passed**)
+- `src/features/promotions/views/PromotionListView.spec.ts` — lists promotions with localized status and an edit link only for writers (**passed**)
 
--
+## Bundle
 
-## Việc còn tồn
+Tổng JavaScript gzip của toàn bộ nhánh (gồm các chunk tải động): 676.05 kB. Đây không phải kích thước tải ban đầu của riêng feature.
 
--
+## Token
+
+Phần triển khai ban đầu bị làm chung trong một phiên, nên không có bộ đếm độc lập chính xác cho plan này. Không chia đều hoặc bịa số token theo PR. Tổng task và các phiên review con được ghi từ event token_count trong Codex ở metrics/token artifact của plan 14.
+
+## Việc còn tồn / giới hạn
+
+- API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
+- E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
+- Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #34.
+
+### Đã làm (giữ nguyên)
+
+- `PromotionForm`, `PromotionFilters`, `PromotionTable`, `PromotionStatusBadge`; `Promotion.schema.ts` (+ spec).
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `api/Promotions.api.ts`, `types/Promotion.types.ts`, `composables/UsePromotionEditor.ts`.
+- 3 test view dùng HTTP giả.
+
+### Chưa làm — chờ API / BE
+
+- BE xác nhận format datetime (UTC / có offset).
+- Test route guard; E2E tạo/sửa khuyến mãi.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- **Ưu tiên cao:** `UsePromotionEditor.ts:46` cắt `...Z` thành giờ địa phương và gửi lại không offset — lệch 7 giờ ở UTC+7. Test sửa không kiểm `startAt`/`endAt`.
+- Đổi coupon → auto vẫn gửi `code` cũ.
+- Mọi lỗi gom thành một câu chung ở cuối form, không hiện cạnh field (user story 23).
+- Giá trị giảm không format %/VND; `usageLimit` không cho 'không giới hạn'; `Promotion` kế thừa type form input (§T.1).
+- View Create/Edit giống hệt nhau; trạng thái/loại lặp nhiều nơi.
