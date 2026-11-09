@@ -14,3 +14,7 @@ Blocked by: 02, 06
 Cần backend endpoint hàng đợi, hoặc tạm đếm từ list API; ghi vào Gap.
 
 Test: DashboardView spec cho widget theo quyền, hàng đợi điều hướng tới list đã lọc.
+
+## Comments
+
+- 2026-11-09: Ticket 02 (#44) đã thêm formatter nhưng chưa có nhãn "Hết" cho tồn 0; chuyển phần đó sang ticket này.
