@@ -1,6 +1,6 @@
 # 01 — Phase 0: reconcile inventory + baseline
 
-Status: ready-for-agent
+Status: done
 Blocked by: —
 
 Đối chiếu `docs/plans/cms-pages-components/fashion-store-cms-pages-components.md` với code. Mỗi mục được đánh dấu `implemented` / `partial` / `missing` / `backlog`; visual rule thì trỏ sang `DESIGN.md` thay vì chép lại.
@@ -13,3 +13,9 @@ Blocked by: —
 Chưa thêm CI gate.
 
 Kết quả: inventory cập nhật + `baseline.md` (route → chunk KB; danh sách lệch, phân loại design-system gap / shared-pattern gap / feature gap).
+
+## Comments
+
+- 2026-11-10: Đã đối chiếu inventory với code và ghi baseline route chunk/gap tại
+  `.scratch/ui-ux-hardening/baseline.md`. Build analyze pass; mốc này dùng cho
+  performance gate ở ticket 13.
