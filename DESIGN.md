@@ -137,6 +137,11 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 - **Do** để rõ ràng thao tác thắng ở list/form/detail. **Don't** mang chữ cỡ lớn, câu tóm tắt hay lưới ảnh vào màn thao tác hàng loạt.
 - **Do** dùng `font-display` cho chữ ≥ 18px. **Don't** dùng nó trong bảng hay form.
 - **Do** dùng `tabular-nums` cho mọi con số và căn phải cột tiền. **Don't** cắt chữ mà không có `title` hoặc cách khác để xem đủ nội dung.
+- **Do** cho mọi tiền, số và ngày đi qua formatter dùng chung ở `shared/lib/format/`, theo locale của app: tiền dạng `1.890.000 ₫`, ngày theo `Intl.DateTimeFormat`. **Don't** dùng `toLocaleString()` trần (nó lấy locale trình duyệt) hay render số/ISO thô.
+- **Do** chọn cách xử lý chuỗi dài theo từng trường:
+  - Tên trong bảng: cắt còn 1 dòng (`line-clamp-1` + `title`), hiện đầy đủ ở Detail.
+  - Email, mã tracking, mã giao dịch ở Detail: xuống dòng (`break-all`).
+  - Tiền và ngày: không bao giờ cắt.
 - **Do** cho mọi hành động thiết yếu luôn hiển thị hoặc truy cập được bằng bàn phím. **Don't** để hành động chỉ hiện khi hover.
 - **Do** giữ focus ring `focus-visible` của Nuxt UI. Element tự viết (link ô, `<button>`, dòng bảng bấm được) phải dùng `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`. Ring phải đạt ≥ 3:1 so với nền và hiện ngay lập tức, không có animation. **Don't** dùng `outline-none` trần, hay control native (`<select>`, `<input>`) không có style khi đã có primitive Nuxt UI tương ứng.
 - **Do** dùng viền để phân tách. **Don't** thêm bóng, gradient hay hiệu ứng trang trí. Ngoại lệ duy nhất là ảnh giả khi thiếu ảnh.
@@ -156,3 +161,4 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 - Radius card: `rounded-lg`. Phase 3 sửa 2 chỗ đang dùng `rounded-xl` (`FormSection`, card dashboard).
 - Khoảng cách: `space-y-4` trong khối, `space-y-6` giữa section. Phase 3 dọn các chỗ đang dùng `space-y-5`.
 - Tên trạng thái theo code (`processing`/`shipped`, `published`). Bảng cũ ở `CONVENTIONS.md` §L.4 đã bỏ.
+- Formatter tiền/ngày dùng chung ở `shared/lib/format/`. Chuỗi dài: tên trong bảng cắt còn 1 dòng, email/mã ở Detail xuống dòng.
