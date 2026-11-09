@@ -1,6 +1,6 @@
 # 05 — Báo cáo: Products — List
 
-Status: in-progress
+Status: on-hold
 Triển khai frontend: hoàn thành, đã kiểm trên nhánh riêng.
 Nhánh: `feat/cms-05-products-list`
 PR: https://github.com/LuongCongThanh/fashion-store-cms/pull/28
@@ -47,3 +47,27 @@ Phần triển khai ban đầu bị làm chung trong một phiên, nên không c
 - API/model hiện là hợp đồng tạm; chưa có tích hợp backend thật hoặc type Swagger generated.
 - E2E và kiểm giao diện thủ công chưa được thực hiện trong phạm vi kiểm thử đã chốt.
 - Reviewer duyệt, squash merge theo thứ tự phụ thuộc; sau đó đổi base PR kế tiếp về dev.
+
+## Review 2026-11-09 — đã làm và chưa làm
+
+Status: on-hold. Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API. Review chuỗi PR theo hai trục: tuân thủ CONVENTIONS/FE_architecture và đúng spec. PR: #28.
+
+### Đã làm (giữ nguyên)
+
+- `ProductFilters`, `ProductStatusBadge`, `ProductTable`, `ProductListView` (tìm, lọc, sort, phân trang, bulk action).
+
+### Lớp dữ liệu tạm (giữ nguyên, thay khi có API)
+
+- `api/Products.api.ts` (`useProductsQuery`, `useProductBulkMutation`), `types/Product.types.ts`.
+- `views/ProductListView.spec.ts` dùng HTTP giả cho `/products`, `/products/bulk`, `/categories`.
+
+### Chưa làm — chờ API / BE
+
+- E2E danh sách sản phẩm; `Products.api.spec.ts` khi có contract thật.
+
+### Chưa làm — vấn đề review cần sửa (không cần API)
+
+- Test 'ẩn bulk action khi thiếu `product:write`' luôn pass dù bỏ kiểm quyền; chưa test row action khi thiếu quyền.
+- Lọc giá chưa kiểm `minPrice ≤ maxPrice`; lọc danh mục là danh sách phẳng.
+- Xóa hết dòng ở trang cuối để lại trang rỗng; không có toast thành công.
+- Danh sách trạng thái khai báo ở 4 nơi; `ProductTable` dùng `<a href>` cứng; `titleKey: 'dashboard.products'`.
