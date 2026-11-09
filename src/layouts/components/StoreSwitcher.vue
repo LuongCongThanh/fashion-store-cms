@@ -27,6 +27,8 @@ const items = computed(() =>
       variant="ghost"
       trailingIcon="i-lucide-chevrons-up-down"
       :label="current?.name ?? t('common.store')"
+      class="max-w-40 min-w-0 sm:max-w-56"
+      :ui="{ label: 'truncate' }"
     />
   </UDropdownMenu>
 </template>

@@ -121,7 +121,7 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 
 ## Layout
 
-- **App shell:** sidebar rộng 256px (thu gọn 64px), cố định từ `lg`. Dưới `lg` thì sidebar thành drawer. Header chứa breadcrumb, Store switcher, locale, theme và User menu.
+- **App shell:** sidebar rộng 256px (thu gọn 64px), cố định từ `lg`. Dưới `lg` thì sidebar thành drawer (`USlideover`), mở bằng nút menu trong header, tự đóng khi đổi route. Header chứa breadcrumb, Store switcher, locale, theme và User menu. Dưới `lg` header chỉ giữ nút menu, Store switcher (cắt chữ), breadcrumb rút gọn còn trang hiện tại, User menu; locale và theme nằm trong User menu. Header và page dùng `px-4 lg:px-6`.
 - **Vùng nội dung:** `PageContainer` = `mx-auto max-w-screen-2xl p-4 lg:p-6`.
 - **Breakpoint:** `sm 640 · md 768 · lg 1024 · xl 1280 · 2xl 1536`. Màn đích là desktop ≥ 1280, nhưng mọi route phải dùng được ở 375px.
 - **z-index:** `z-10` cho header bảng sticky, `z-20` cho sidebar mobile. Overlay để Nuxt UI quản lý.

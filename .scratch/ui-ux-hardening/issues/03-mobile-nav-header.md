@@ -1,6 +1,6 @@
 # 03 — Phase 2: drawer mobile + header reflow
 
-Status: ready-for-agent
+Status: done
 Blocked by: —
 
 Dưới `lg`: sidebar thành drawer (`USlideover`), mở bằng nút trong `AppHeader`. Drawer phải:
@@ -17,3 +17,7 @@ Header và page dùng `px-4 lg:px-6`. Trang không được cuộn ngang ở 320
 Nguồn: hallmark #3, #4.
 
 Test: Layout.spec cho mở/đóng drawer, focus trở về nút, đóng khi đổi route. Kiểm tay ở 375px, cả light và dark.
+
+## Comments
+
+- 2026-11-09: Xong trên branch `feat/mobile-nav-drawer`. `SidebarNav` dùng chung cho sidebar + `MobileNavDrawer`. Layout.spec thêm 3 test (mở drawer, Esc trả focus, đóng khi đổi route). Còn kiểm tay ở 375px light/dark.
