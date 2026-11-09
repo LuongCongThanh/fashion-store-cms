@@ -198,5 +198,29 @@
     "default": "Mặc định",
     "phone": "Điện thoại",
     "totalSpent": "Tổng chi tiêu"
+  },
+  "inventory": {
+    "status": {
+      "in-stock": "Còn hàng",
+      "low-stock": "Sắp hết",
+      "out-of-stock": "Hết hàng"
+    },
+    "title": "Tồn kho",
+    "adjust": "Điều chỉnh",
+    "reason": "Lý do",
+    "current": "Hiện có",
+    "reserved": "Đã giữ",
+    "available": "Khả dụng",
+    "movements": "Lịch sử tồn kho",
+    "type": "Loại",
+    "quantity": "Số lượng",
+    "reference": "Tham chiếu",
+    "createdAt": "Ngày tạo",
+    "createdBy": "Người tạo",
+    "types": {
+      "in": "Nhập",
+      "out": "Xuất",
+      "adjustment": "Điều chỉnh"
+    }
   }
 }
