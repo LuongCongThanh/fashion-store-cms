@@ -1,6 +1,6 @@
 # 11 — Promotions
 
-Status: in-progress
+Status: on-hold
 Blocked by: 03, 04
 Nguồn: §4.8 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P10 · Spec: [spec.md](./spec.md)
 
@@ -30,3 +30,22 @@ Nguyên tắc chung:
 - Route read/write bị chặn đúng theo `promotion:read` / `promotion:write`.
 - `typecheck`, `lint`, `test` pass.
 - E2E (Playwright) cho luồng tạo coupon/automatic promotion và validate input pass.
+
+### Tiếp tục khi có API
+
+> Tạm dừng chờ API backend. Quyết định của người phụ trách ngày 2026-11-09: giữ nguyên phần đã làm, không làm thêm lớp dữ liệu hay dummy data; làm tiếp khi có API.
+
+**Sửa được ngay, không cần API** (từ review 2026-11-09):
+
+- [ ] **Ưu tiên cao:** `UsePromotionEditor.ts:46` cắt `...Z` thành giờ địa phương và gửi lại không offset — lệch 7 giờ ở UTC+7. Test sửa không kiểm `startAt`/`endAt`.
+- [ ] Đổi coupon → auto vẫn gửi `code` cũ.
+- [ ] Mọi lỗi gom thành một câu chung ở cuối form, không hiện cạnh field (user story 23).
+- [ ] Giá trị giảm không format %/VND; `usageLimit` không cho 'không giới hạn'; `Promotion` kế thừa type form input (§T.1).
+- [ ] View Create/Edit giống hệt nhau; trạng thái/loại lặp nhiều nơi.
+
+**Chờ API / BE:**
+
+- [ ] BE xác nhận format datetime (UTC / có offset).
+- [ ] Test route guard; E2E tạo/sửa khuyến mãi.
+
+**Khi có API:** thay type viết tay bằng type sinh từ Swagger, nối lại lớp dữ liệu tạm với endpoint thật, chạy E2E, rồi kiểm lại các tiêu chí hoàn thành trong [spec.md](./spec.md).
