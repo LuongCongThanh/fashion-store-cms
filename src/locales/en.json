@@ -132,7 +132,16 @@
     "maxPrice": "Maximum price",
     "publish": "Publish",
     "unpublish": "Unpublish",
-    "delete": "Delete"
+    "delete": "Delete",
+    "sizes": "Sizes (comma separated)",
+    "colors": "Colors (comma separated)",
+    "generate": "Generate variants",
+    "variant": "Variants",
+    "stock": "Stock",
+    "brand": "Brand",
+    "comparePrice": "Compare price",
+    "cost": "Cost",
+    "seo": "SEO"
   },
   "categories": {
     "root": "Drop here to move to root",

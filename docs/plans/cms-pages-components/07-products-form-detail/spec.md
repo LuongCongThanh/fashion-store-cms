@@ -1,6 +1,6 @@
 # Spec 07 — Products — Create / Edit / Detail
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 04, 05, 06
 Nguồn: §4.3 (Form, Detail) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: P5 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 

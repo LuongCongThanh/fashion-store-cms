@@ -132,7 +132,16 @@
     "maxPrice": "Giá tối đa",
     "publish": "Xuất bản",
     "unpublish": "Ẩn",
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "sizes": "Kích thước (cách nhau dấu phẩy)",
+    "colors": "Màu (cách nhau dấu phẩy)",
+    "generate": "Sinh biến thể",
+    "variant": "Biến thể",
+    "stock": "Tồn kho",
+    "brand": "Thương hiệu",
+    "comparePrice": "Giá so sánh",
+    "cost": "Giá vốn",
+    "seo": "SEO"
   },
   "categories": {
     "root": "Kéo vào đây để chuyển về gốc",
