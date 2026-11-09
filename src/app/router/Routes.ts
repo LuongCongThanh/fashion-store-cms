@@ -5,6 +5,7 @@ import { categoryRoutes } from '@features/categories/Categories.routes'
 import { customerRoutes } from '@features/customers/Customers.routes'
 // Nơi DUY NHẤT gộp <Feature>.routes.ts và import views/ (§B.3).
 import { dashboardRoutes } from '@features/dashboard/Dashboard.routes'
+import { inventoryRoutes } from '@features/inventory/Inventory.routes'
 import { orderRoutes } from '@features/orders/Orders.routes'
 import { productRoutes } from '@features/products/Products.routes'
 
@@ -26,6 +27,7 @@ export const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
     children: [
       ...dashboardRoutes,
+      ...inventoryRoutes,
       ...customerRoutes,
       ...orderRoutes,
       ...categoryRoutes,

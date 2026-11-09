@@ -1,6 +1,6 @@
 # Spec 10 — Inventory
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 08
 Nguồn: §4.7 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase: P9 · Spec tổng: [../spec.md](../spec.md) · Chi tiết: [plan.md](./plan.md)
 
