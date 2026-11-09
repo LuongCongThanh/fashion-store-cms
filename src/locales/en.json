@@ -46,7 +46,8 @@
     "clearAll": "Clear filters",
     "createdAt": "Created at",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "saved": "Saved"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -250,5 +251,22 @@
     "title": "Roles",
     "permissions": "Permissions",
     "resource": "Resource"
+  },
+  "settings": {
+    "title": "Settings",
+    "store": "Store settings",
+    "localization": "Localization",
+    "name": "Name",
+    "description": "Description",
+    "contactEmail": "Contact email",
+    "phone": "Phone",
+    "address": "Address",
+    "languages": "Languages (comma separated)",
+    "defaultLanguage": "Default language",
+    "timezone": "Timezone",
+    "currency": "Currency",
+    "numberFormat": "Number format",
+    "dateFormat": "Date format",
+    "invalid": "Invalid configuration"
   }
 }

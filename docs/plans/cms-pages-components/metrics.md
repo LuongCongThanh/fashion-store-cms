@@ -18,7 +18,7 @@ Ngày đo: 2026-11-09. Mỗi dòng là kết quả đo trên đúng nhánh PR n�
 | 10   | Inventory                         | 2        | 199                    | 85.25             | 670.57                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/33 |
 | 11   | Promotions                        | 4        | 203                    | 85.36             | 676.05                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/34 |
 | 12   | Users & Roles                     | 6        | 209                    | 85.0              | 686.77                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/35 |
-| 13   | Settings                          | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
+| 13   | Settings                          | 2        | 211                    | 84.55             | 692.01                  | PASS                     | https://github.com/LuongCongThanh/fashion-store-cms/pull/36 |
 | 14   | Đối chiếu và chốt                 | —        | —                      | —                 | —                       | chưa chạy                | đang chuẩn bị                                               |
 
 E2E: hoãn theo lựa chọn của người phụ trách. Backend: người phụ trách xác nhận chưa có. Coverage là kết quả Vitest tại thời điểm kiểm nhánh, không phải chứng nhận backend hay kiểm UI thủ công.
