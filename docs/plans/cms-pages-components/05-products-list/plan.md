@@ -1,6 +1,6 @@
 # 05 — Products — List
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 03
 Nguồn: §4.3 (List) trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P5 · Spec: [spec.md](./spec.md)
 
