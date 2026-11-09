@@ -4,7 +4,7 @@ import UDropdownMenu from '@nuxt/ui/components/DropdownMenu.vue'
 import { computed } from 'vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
-const props = defineProps<{ actions: { id: string; label: string; allowed: boolean }[] }>()
+const props = defineProps<{ actions: { id: string; label: string; allowed: boolean }[]; label?: string }>()
 const emit = defineEmits<{ action: [id: string] }>()
 const { t } = useT()
 const items = computed(() =>
@@ -21,6 +21,10 @@ const items = computed(() =>
 
 <template>
   <UDropdownMenu v-if="items.length" :items="items"
-    ><UButton data-action="row-actions" icon="i-lucide-ellipsis" :aria-label="t('common.actions')" variant="ghost"
+    ><UButton
+      data-action="row-actions"
+      icon="i-lucide-ellipsis"
+      :aria-label="label ?? t('common.actions')"
+      variant="ghost"
   /></UDropdownMenu>
 </template>

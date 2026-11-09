@@ -8,6 +8,81 @@ import { chooseOption } from '@test/Select'
 
 import ProductListView from './ProductListView.vue'
 
+it('changes the saved product view through the URL', async () => {
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path: '/products', component: { render: () => null } },
+      { path: '/products/:id', component: { render: () => null } },
+    ],
+  })
+  await router.push('/products?page=3')
+  const { wrapper, http } = renderWithPlugins(ProductListView, { router })
+  http.onGet(/\/products$/).reply(200, {
+    data: [],
+    meta: { page: 3, pageSize: 20, total: 24, totalPages: 2 },
+  })
+  await flushPromises()
+
+  const all = wrapper.findAll('a').find((link) => link.text().includes('Tất cả'))
+  const published = wrapper.findAll('a').find((link) => link.text().includes('Đang bán'))
+  expect(all?.attributes('aria-current')).toBe('page')
+  expect(all?.text()).toContain('24')
+  expect(published?.text()).toContain('24')
+
+  await published?.trigger('click')
+  await flushPromises()
+  expect(router.currentRoute.value.query).toMatchObject({ status: 'published', page: '1' })
+  expect(router.currentRoute.value.query.page).toBe('1')
+})
+
+it('removes one active filter without dropping the others', async () => {
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: '/products', component: { render: () => null } }],
+  })
+  await router.push('/products?status=published&categoryId=linen&minPrice=15500000&page=2')
+  const { wrapper, http } = renderWithPlugins(ProductListView, { router })
+  http.onGet(/\/categories$/).reply(200, [{ id: 'linen', name: 'Linen', parentId: null }])
+  http.onGet(/\/products$/).reply(200, {
+    data: [],
+    meta: { page: 2, pageSize: 20, total: 1, totalPages: 1 },
+  })
+  await flushPromises()
+
+  expect(plainSpaces(wrapper.text())).toContain('Giá tối thiểu: 15.500.000 ₫')
+  const removeStatus = wrapper.find('button[aria-label="Bỏ lọc Trạng thái"]')
+  expect(removeStatus.exists()).toBe(true)
+  await removeStatus.trigger('click')
+  await flushPromises()
+  expect(router.currentRoute.value.query.status).toBeUndefined()
+  expect(router.currentRoute.value.query).toMatchObject({ categoryId: 'linen', page: '1' })
+})
+
+it('keeps row actions accessible for a long product name without an image', async () => {
+  const longName = 'Đầm midi lụa xếp ly cổ yếm phối nơ lưng — phiên bản giới hạn Thu Đông 2026'
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [{ path: '/products', component: { render: () => null } }],
+  })
+  await router.push('/products')
+  const { wrapper, http } = renderWithPlugins(ProductListView, { router })
+  http.onGet(/\/products$/).reply(200, {
+    data: [{ id: 'p9', name: longName, status: 'published', price: 15_500_000 }],
+    meta: { page: 1, pageSize: 20, total: 1, totalPages: 1 },
+  })
+  await flushPromises()
+
+  expect(wrapper.find('[data-product-thumbnail="fallback"]').text()).toBe('Đ')
+  expect(wrapper.find(`[aria-label="Thao tác ${longName}"]`).exists()).toBe(true)
+  expect(
+    wrapper
+      .findAll('a')
+      .find((link) => link.text() === longName)
+      ?.attributes('title'),
+  ).toBe(longName)
+})
+
 it('renders server products and changes filters, sort and page through the URL', async () => {
   const router = createRouter({
     history: createMemoryHistory(),

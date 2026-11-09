@@ -45,6 +45,7 @@
     "from": "Từ ngày",
     "to": "Đến ngày",
     "clearAll": "Xóa bộ lọc",
+    "removeFilter": "Bỏ lọc {label}",
     "createdAt": "Ngày tạo",
     "active": "Hoạt động",
     "inactive": "Ngừng hoạt động",
@@ -129,6 +130,10 @@
     "cancelled": "Đã hủy tải ảnh"
   },
   "products": {
+    "savedViews": {
+      "label": "Bộ lọc sản phẩm đã lưu",
+      "published": "Đang bán"
+    },
     "status": {
       "draft": "Bản nháp",
       "published": "Đã xuất bản",

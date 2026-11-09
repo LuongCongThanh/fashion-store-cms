@@ -14,6 +14,7 @@ import { useT } from '@shared/lib/i18n/I18n'
 import type { Product } from '@features/products/types/Product.types'
 
 import ProductStatusBadge from './ProductStatusBadge.vue'
+import ProductThumbnail from './ProductThumbnail.vue'
 const props = defineProps<{
   data: Product[]
   loading: boolean
@@ -55,10 +56,14 @@ const columns = computed<TableColumn<Product>[]>(() => [
     accessorKey: 'name',
     header: ({ column }) => sortHeader(column, t('common.name')),
     cell: ({ row }) =>
-      h(TableLink, { to: `/products/${encodeURIComponent(row.original.id)}`, label: row.original.name }),
+      h('div', { class: 'flex min-w-48 items-center gap-3' }, [
+        h(ProductThumbnail, { name: row.original.name, src: row.original.imageUrl }),
+        h(TableLink, { to: `/products/${encodeURIComponent(row.original.id)}`, label: row.original.name }),
+      ]),
   },
   {
     accessorKey: 'price',
+    meta: { class: { th: 'hidden sm:table-cell', td: 'hidden sm:table-cell' } },
     header: ({ column }) => sortHeader(column, t('products.price'), { align: 'right' }),
     cell: ({ row }) =>
       h('span', { 'data-cell': 'price', class: 'block text-right tabular-nums' }, format.money(row.original.price)),
@@ -73,6 +78,7 @@ const columns = computed<TableColumn<Product>[]>(() => [
     header: t('common.actions'),
     cell: ({ row }) =>
       h(RowActions, {
+        label: `${t('common.actions')} ${row.original.name}`,
         actions: [
           { id: 'view', label: t('common.view'), allowed: true },
           { id: 'edit', label: t('common.edit'), allowed: props.canWrite },
