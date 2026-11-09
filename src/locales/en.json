@@ -222,5 +222,25 @@
       "out": "Out",
       "adjustment": "Adjustment"
     }
+  },
+  "promotions": {
+    "status": {
+      "draft": "Draft",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "title": "Promotions",
+    "type": "Type",
+    "coupon": "Coupon",
+    "auto": "Automatic",
+    "code": "Code",
+    "discountType": "Discount type",
+    "fixed": "Fixed amount",
+    "value": "Value",
+    "minimumOrder": "Minimum order",
+    "usageLimit": "Usage limit",
+    "startAt": "Start",
+    "endAt": "End",
+    "invalid": "Invalid input; check code, value and dates"
   }
 }

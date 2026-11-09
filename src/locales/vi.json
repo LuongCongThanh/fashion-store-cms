@@ -222,5 +222,25 @@
       "out": "Xuất",
       "adjustment": "Điều chỉnh"
     }
+  },
+  "promotions": {
+    "status": {
+      "draft": "Bản nháp",
+      "active": "Hoạt động",
+      "inactive": "Ngừng hoạt động"
+    },
+    "title": "Khuyến mãi",
+    "type": "Loại",
+    "coupon": "Mã giảm giá",
+    "auto": "Tự động",
+    "code": "Mã",
+    "discountType": "Loại giảm giá",
+    "fixed": "Số tiền cố định",
+    "value": "Giá trị",
+    "minimumOrder": "Đơn tối thiểu",
+    "usageLimit": "Lượt sử dụng tối đa",
+    "startAt": "Bắt đầu",
+    "endAt": "Kết thúc",
+    "invalid": "Dữ liệu không hợp lệ; kiểm tra mã, giá trị và thời gian"
   }
 }

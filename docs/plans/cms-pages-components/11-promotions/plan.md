@@ -1,6 +1,6 @@
 # 11 — Promotions
 
-Status: ready-for-agent
+Status: in-progress
 Blocked by: 03, 04
 Nguồn: §4.8 trong [danh mục page & component](../../fashion-store-cms-pages-components.md) · Phase P10 · Spec: [spec.md](./spec.md)
 
