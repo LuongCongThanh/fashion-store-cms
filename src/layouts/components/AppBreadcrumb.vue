@@ -21,12 +21,12 @@ const items = computed(() => navigation.value.breadcrumbs(route))
         v-if="index"
         name="i-lucide-chevron-right"
         aria-hidden="true"
-        class="hidden size-4 shrink-0 text-dimmed sm:inline-block"
+        class="hidden size-4 shrink-0 text-dimmed lg:inline-block"
       />
       <RouterLink
         v-if="index < items.length - 1"
         :to="item.path"
-        class="hidden rounded-md px-1.5 py-1 text-muted transition-colors hover:bg-elevated hover:text-highlighted focus-visible:outline-2 focus-visible:outline-primary sm:inline"
+        class="hidden rounded-md px-1.5 py-1 text-muted transition-colors duration-150 hover:bg-elevated hover:text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none lg:inline"
         >{{ t(item.titleKey as MessageKey) }}</RouterLink
       >
       <span v-else aria-current="page" class="truncate px-1.5 py-1 font-semibold text-highlighted">{{

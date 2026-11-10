@@ -41,7 +41,7 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-5" @submit="onSubmit">
+  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
     <UFormField name="email" :label="t('auth.login.email')" required>
       <UInput
         v-model="state.email"
@@ -55,7 +55,6 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
         size="xl"
         placeholder="you@example.com"
         class="w-full"
-        :ui="{ base: 'rounded-xl transition-shadow focus-visible:shadow-md focus-visible:shadow-primary/10' }"
         autofocus
       />
     </UFormField>
@@ -64,7 +63,7 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
       <template #hint>
         <ULink
           :to="{ name: 'auth.forgot-password' }"
-          class="text-sm font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary"
+          class="text-sm font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           {{ t('auth.login.forgot') }}
         </ULink>
@@ -77,10 +76,7 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
         icon="i-lucide-lock"
         size="xl"
         class="w-full"
-        :ui="{
-          base: 'rounded-xl transition-shadow focus-visible:shadow-md focus-visible:shadow-primary/10',
-          trailing: 'pe-1.5',
-        }"
+        :ui="{ trailing: 'pe-1.5' }"
         @keydown="trackCapsLock"
         @keyup="trackCapsLock"
         @blur="capsLock = false"
@@ -91,7 +87,7 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
             color="neutral"
             variant="ghost"
             size="sm"
-            class="cursor-pointer rounded-lg"
+            class="cursor-pointer"
             :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
             :aria-label="showPassword ? t('auth.login.hidePassword') : t('auth.login.showPassword')"
             :aria-pressed="showPassword"
@@ -100,8 +96,8 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
         </template>
       </UInput>
       <template v-if="capsLock" #help>
-        <span role="status" class="flex items-center gap-1.5 text-warning">
-          <UIcon name="i-lucide-arrow-big-up-dash" class="size-4" aria-hidden="true" />
+        <span role="status" class="flex items-center gap-1.5 text-default">
+          <UIcon name="i-lucide-arrow-big-up-dash" class="size-4 text-warning" aria-hidden="true" />
           {{ t('auth.login.capsLock') }}
         </span>
       </template>
@@ -118,8 +114,7 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
       block
       size="xl"
       :trailingIcon="submitting ? undefined : 'i-lucide-arrow-right'"
-      class="group cursor-pointer justify-center rounded-xl bg-linear-to-r from-primary-600 to-primary-500 font-semibold shadow-lg shadow-primary/25 transition-[box-shadow,filter] hover:shadow-primary/40 hover:brightness-110 disabled:brightness-100"
-      :ui="{ trailingIcon: 'transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none' }"
+      class="cursor-pointer justify-center"
       :loading="submitting"
       :disabled="submitting"
     >

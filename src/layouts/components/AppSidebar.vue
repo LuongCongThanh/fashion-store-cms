@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import UDashboardSidebar from '@nuxt/ui/components/DashboardSidebar.vue'
 import UDashboardSidebarCollapse from '@nuxt/ui/components/DashboardSidebarCollapse.vue'
-import UIcon from '@nuxt/ui/components/Icon.vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
 
@@ -34,27 +33,14 @@ const COLLAPSED_WIDTH = 64
       footer: 'hidden border-t border-default px-0 py-2 lg:flex',
     }"
   >
+    <!-- DESIGN.md: store switcher ở đầu sidebar; hàng này cao bằng navbar nên viền dưới thẳng hàng. -->
     <template #header="{ collapsed }">
-      <RouterLink
-        to="/"
-        class="flex min-w-0 flex-1 items-center gap-2.5 rounded-md p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-        :class="collapsed && 'justify-center'"
-        :aria-label="collapsed ? t('common.appName') : undefined"
-      >
-        <span class="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-inverted">
-          <UIcon name="i-lucide-shirt" class="size-4.5" aria-hidden="true" />
-        </span>
-        <span v-if="!collapsed" class="min-w-0 leading-tight">
-          <span class="block truncate text-sm font-semibold text-highlighted">{{ t('common.brandName') }}</span>
-          <span class="block truncate text-xs text-muted">{{ t('common.adminConsole') }}</span>
-        </span>
-      </RouterLink>
+      <div class="min-w-0 flex-1" :class="collapsed && 'flex justify-center'">
+        <StoreSwitcher :collapsed="collapsed" />
+      </div>
     </template>
 
     <template #default="{ collapsed }">
-      <div :class="collapsed ? 'px-2' : 'px-3'">
-        <StoreSwitcher :collapsed="collapsed" />
-      </div>
       <nav :aria-label="t('nav.menu')" :class="collapsed ? 'px-2' : 'px-3'">
         <SidebarNav :collapsed="collapsed" />
       </nav>
