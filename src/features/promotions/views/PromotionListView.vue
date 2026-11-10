@@ -33,6 +33,11 @@ const query = usePromotionsQuery(params)
       @sort="setSort"
       @retry="query.refetch()"
     />
-    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
+    <DataTablePagination
+      v-if="!query.isPending.value && !query.isError.value && query.data.value?.meta"
+      :meta="query.data.value?.meta"
+      @page="setPage"
+      @pageSize="setFilter('pageSize', $event)"
+    />
   </div>
 </template>

@@ -13,4 +13,6 @@ export const uiConfig = {
   input: { defaultVariants: { size: 'md' } },
   table: { slots: { th: 'text-sm', td: 'text-sm tabular-nums' } },
   badge: { defaultVariants: { variant: 'subtle' } },
+  // Chữ lỗi của UFormField: bước đậm thay cho `text-error` (500, ≈3.8:1), xem DESIGN.md "Tương phản của màu trạng thái".
+  formField: { slots: { error: 'mt-2 text-red-700 dark:text-red-400' } },
 } as const

@@ -1,7 +1,9 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { setNumber } from '@test/NumberField'
 import { renderFeature } from '@test/RenderFeature'
+import { chooseOption } from '@test/Select'
 
 import PromotionCreateView from './PromotionCreateView.vue'
 
@@ -14,8 +16,10 @@ it('creates an automatic promotion without a coupon code', async () => {
     },
   })
   await wrapper.find('input[name="name"]').setValue('Mùa hè')
-  await wrapper.find('select[name="type"]').setValue('auto')
-  await wrapper.find('input[name="value"]').setValue('10')
+  await chooseOption(wrapper, 'Loại', 'Tự động')
+  await setNumber(wrapper, 'value', '10,1256')
+  await setNumber(wrapper, 'minimumOrder', '25,5')
+  await setNumber(wrapper, 'usageLimit', '5')
   await wrapper.find('input[name="startAt"]').setValue('2026-01-01T00:00')
   await wrapper.find('input[name="endAt"]').setValue('2026-02-01T00:00')
   await wrapper.find('form').trigger('submit')
@@ -23,7 +27,9 @@ it('creates an automatic promotion without a coupon code', async () => {
   expect(JSON.parse(http.history.post[0]?.data as string)).toMatchObject({
     type: 'auto',
     code: '',
-    value: 10,
+    value: 10.1256,
+    minimumOrder: 25.5,
+    usageLimit: 5,
   })
   expect(router.currentRoute.value.path).toBe('/promotions')
 })

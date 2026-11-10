@@ -74,14 +74,14 @@ const cards = computed(() => widgets.value.map((widget, index) => ({ ...widget, 
     <PageHeader :title="t('nav.dashboard')" />
     <LoadingState v-if="loadingUser" />
     <EmptyState v-else-if="!cards.length" :title="t('common.empty')" />
-    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div v-else class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <section
         v-for="card in cards"
         :key="card.key"
         :data-widget="card.key"
-        class="space-y-3 rounded-lg border border-default bg-default p-5"
+        class="space-y-4 rounded-lg border border-default bg-default p-5"
       >
-        <h2 class="font-semibold">{{ t(card.title as MessageKey) }}</h2>
+        <h2 class="text-base font-semibold">{{ t(card.title as MessageKey) }}</h2>
         <LoadingState v-if="card.result?.isPending" />
         <ErrorState v-else-if="card.result?.isError" :error="card.result.error" @retry="card.result.refetch()" />
         <StatCard

@@ -97,7 +97,7 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
       </UInput>
       <template v-if="capsLock" #help>
         <span role="status" class="flex items-center gap-1.5 text-default">
-          <UIcon name="i-lucide-arrow-big-up-dash" class="size-4 text-warning" aria-hidden="true" />
+          <UIcon name="i-lucide-arrow-big-up-dash" class="size-4 text-default" aria-hidden="true" />
           {{ t('auth.login.capsLock') }}
         </span>
       </template>

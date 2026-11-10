@@ -140,7 +140,12 @@
     "moveLeft": "Move left",
     "moveRight": "Move right",
     "tooMany": "Maximum 10 images",
-    "cancelled": "Upload cancelled"
+    "cancelled": "Upload cancelled",
+    "hint": "JPG, PNG or WebP, up to 5 MB",
+    "mainImage": "Main image",
+    "actions": "Image actions for {name}",
+    "deleteTitle": "Delete image?",
+    "deleteDescription": "Delete image {name}?"
   },
   "products": {
     "statusPresets": {
@@ -167,7 +172,10 @@
     "brand": "Brand",
     "comparePrice": "Compare price",
     "cost": "Cost",
-    "seo": "SEO"
+    "seo": "SEO",
+    "sku": "SKU",
+    "skuPrefix": "SKU prefix",
+    "sizesPlaceholder": "S,M,L"
   },
   "categories": {
     "root": "Drop here to move to root",

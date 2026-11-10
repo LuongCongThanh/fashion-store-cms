@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
 import { renderFeature } from '@test/RenderFeature'
+import { setChecked } from '@test/Select'
 
 import UserCreateView from './UserCreateView.vue'
 
@@ -20,8 +21,8 @@ it('creates a user with explicitly selected role and Store assignments', async (
   })
   await wrapper.find('input[name="name"]').setValue('Lan')
   await wrapper.find('input[name="email"]').setValue('lan@shop.vn')
-  await wrapper.find('input[name="role:r1"]').setValue(true)
-  await wrapper.find('input[name="store:store-1"]').setValue(true)
+  await setChecked(wrapper, 'role:r1', true)
+  await setChecked(wrapper, 'store:store-1', true)
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   expect(JSON.parse(http.history.post[0]?.data as string)).toEqual({

@@ -62,7 +62,12 @@ function openAdjust(item: InventoryItem) {
       @retry="query.refetch()"
       @adjust="openAdjust"
     />
-    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
+    <DataTablePagination
+      v-if="!query.isPending.value && !query.isError.value && query.data.value?.meta"
+      :meta="query.data.value?.meta"
+      @page="setPage"
+      @pageSize="setFilter('pageSize', $event)"
+    />
     <StockAdjustDialog
       v-if="selected"
       :key="selected.id"

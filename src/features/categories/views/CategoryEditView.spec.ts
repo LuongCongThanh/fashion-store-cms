@@ -1,7 +1,9 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import CategoryForm from '@features/categories/components/CategoryForm.vue'
 import { renderFeature } from '@test/RenderFeature'
+import { findCombobox } from '@test/Select'
 
 import CategoryEditView from './CategoryEditView.vue'
 
@@ -27,11 +29,15 @@ it('excludes descendants from parent choices and rejects a stale cyclic parent s
       })
     },
   })
-  const select = wrapper.find('select[name="parentId"]')
-  expect(select.findAll('option').map((option) => option.attributes('value'))).toEqual(['', 'd'])
-  // Simulate a choice that became invalid after the form was opened.
-  ;(select.element as HTMLSelectElement).add(new Option('Linen', 'b'))
-  await select.setValue('b')
+  await findCombobox(wrapper, 'Danh mục cha').trigger('keydown', { key: 'Enter' })
+  await flushPromises()
+  const choices = Array.from(document.body.querySelectorAll('[role="option"]'), (option) => option.textContent.trim())
+  expect(choices).toEqual(['Không có', 'Quần'])
+  await findCombobox(wrapper, 'Danh mục cha').trigger('keydown', { key: 'Escape' })
+  // Simulate a choice that became invalid after the form was opened (UI no longer offers it).
+  const form = wrapper.findComponent(CategoryForm)
+  form.vm.$emit('update:modelValue', { ...form.props('modelValue'), parentId: 'b' })
+  await flushPromises()
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   expect(http.history.put).toHaveLength(0)

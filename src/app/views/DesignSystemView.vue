@@ -84,7 +84,8 @@ const TEXTS = ['text-highlighted', 'text-default', 'text-muted', 'text-dimmed'] 
 
     <section class="flex flex-col gap-3">
       <h2 class="font-display text-lg font-semibold">Typography</h2>
-      <p class="font-display text-3xl font-bold tabular-nums">1.234.567 ₫</p>
+      <p class="font-display text-4xl font-bold tabular-nums">1.234.567 ₫</p>
+      <p class="font-display text-2xl font-semibold tabular-nums">1.842</p>
       <p class="text-sm">Inter — Thời trang Việt Nam, áo dài, quần jean.</p>
       <p class="font-mono text-xs">SKU-0001-VN</p>
     </section>

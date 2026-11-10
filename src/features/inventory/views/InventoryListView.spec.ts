@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { setNumber } from '@test/NumberField'
 import { renderFeature } from '@test/RenderFeature'
 
 import InventoryListView from './InventoryListView.vue'
@@ -36,7 +37,7 @@ it('requires a reason before adjusting a variant and refreshes stock after savin
   })
   await wrapper.find('button[data-action="adjust"]').trigger('click')
   await flushPromises()
-  await wrapper.find('input[name="quantity"]').setValue('3')
+  await setNumber(wrapper, 'quantity', '3')
   await wrapper.find('form[data-stock-adjust]').trigger('submit')
   expect(http.history.post).toHaveLength(0)
   await wrapper.find('input[name="reason"]').setValue('Nhập bổ sung')

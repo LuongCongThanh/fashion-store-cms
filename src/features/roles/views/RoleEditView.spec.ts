@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
 import { renderFeature } from '@test/RenderFeature'
+import { findCheckbox, setChecked } from '@test/Select'
 
 import RoleEditView from './RoleEditView.vue'
 
@@ -16,9 +17,9 @@ it('loads an existing role and saves a renamed role with its permissions removed
       http.onPut(/\/roles\/r1$/).reply(200, {})
     },
   })
-  expect(wrapper.find('input[name="permission:order:read"]').element).toHaveProperty('checked', true)
+  expect(findCheckbox(wrapper, 'permission:order:read').attributes('aria-checked')).toBe('true')
   await wrapper.find('input[name="name"]').setValue('Chờ phân quyền')
-  await wrapper.find('input[name="column:read"]').setValue(false)
+  await setChecked(wrapper, 'column:read', false)
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   expect(JSON.parse(http.history.put[0]?.data as string)).toEqual({

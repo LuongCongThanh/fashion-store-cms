@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import UFormField from '@nuxt/ui/components/FormField.vue'
+import UInput from '@nuxt/ui/components/Input.vue'
+import UTextarea from '@nuxt/ui/components/Textarea.vue'
+
 import { ImageUploader } from '@features/media/UseMediaComponents'
 import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { StoreSettingsInput } from '@features/settings/schemas/Settings.schema'
-defineProps<{
+const props = defineProps<{
   modelValue: StoreSettingsInput
   errors: Record<string, string | undefined>
   pending: boolean
@@ -24,31 +28,59 @@ const emit = defineEmits<{
   cancel: []
 }>()
 const { t } = useT()
+function set(
+  key: 'name' | 'description' | 'contactEmail' | 'phone' | 'address',
+  value: string | number | null | undefined,
+) {
+  emit('update:modelValue', { ...props.modelValue, [key]: String(value ?? '') })
+}
 </script>
 
 <template>
   <form class="space-y-6" @submit.prevent="emit('submit')">
     <fieldset :disabled="!canWrite || pending">
       <FormSection :title="t('settings.store')">
-        <label
-          v-for="key in ['name', 'description', 'contactEmail', 'phone', 'address'] as const"
-          :key="key"
-          class="block"
-          >{{ t(`settings.${key}`)
-          }}<input
-            :name="key"
-            :type="key === 'contactEmail' ? 'email' : 'text'"
-            :value="modelValue[key]"
-            class="block w-full rounded border border-default bg-default p-2"
-            @input="
-              emit('update:modelValue', {
-                ...modelValue,
-                [key]: ($event.target as HTMLInputElement).value,
-              })
-            "
+        <UFormField :label="t('settings.name')" name="name" :error="errors.name">
+          <UInput name="name" :modelValue="modelValue.name" class="w-full" @update:modelValue="set('name', $event)" />
+        </UFormField>
+        <UFormField :label="t('settings.description')" name="description" :error="errors.description">
+          <UTextarea
+            name="description"
+            :modelValue="modelValue.description"
+            :rows="3"
+            autoresize
+            class="w-full"
+            @update:modelValue="set('description', $event)"
           />
-          <span v-if="errors[key]" role="alert">{{ errors[key] }}</span>
-        </label>
+        </UFormField>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <UFormField :label="t('settings.contactEmail')" name="contactEmail" :error="errors.contactEmail">
+            <UInput
+              name="contactEmail"
+              type="email"
+              :modelValue="modelValue.contactEmail"
+              class="w-full"
+              @update:modelValue="set('contactEmail', $event)"
+            />
+          </UFormField>
+          <UFormField :label="t('settings.phone')" name="phone" :error="errors.phone">
+            <UInput
+              name="phone"
+              type="tel"
+              :modelValue="modelValue.phone"
+              class="w-full"
+              @update:modelValue="set('phone', $event)"
+            />
+          </UFormField>
+        </div>
+        <UFormField :label="t('settings.address')" name="address" :error="errors.address">
+          <UInput
+            name="address"
+            :modelValue="modelValue.address"
+            class="w-full"
+            @update:modelValue="set('address', $event)"
+          />
+        </UFormField>
         <ImageUploader
           :uploading="uploading"
           :error="uploadError"

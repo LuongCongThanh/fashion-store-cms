@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UCheckbox from '@nuxt/ui/components/Checkbox.vue'
 import { computed } from 'vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
@@ -16,63 +17,66 @@ function keys(resource?: string, action?: string) {
     )
     .map((permission) => permission.key)
 }
-function selected(keys: string[]) {
-  return keys.length > 0 && keys.every((key) => props.modelValue.includes(key))
+/** Trạng thái checkbox nhóm: chọn hết, chọn một phần (indeterminate) hoặc chưa chọn. */
+function state(keys: string[]): boolean | 'indeterminate' {
+  const count = keys.filter((key) => props.modelValue.includes(key)).length
+  if (keys.length > 0 && count === keys.length) return true
+  return count > 0 ? 'indeterminate' : false
 }
-function toggle(keys: string[], checked: boolean) {
+function toggle(keys: string[], checked: boolean | 'indeterminate') {
   const values = new Set(props.modelValue)
   for (const key of keys)
-    if (checked) values.add(key)
+    if (checked === true) values.add(key)
     else values.delete(key)
   emit('update:modelValue', [...values])
 }
 </script>
 
 <template>
-  <table class="w-full border-collapse">
-    <caption>
-      {{
-        t('roles.permissions')
-      }}
-    </caption>
-    <thead>
-      <tr>
-        <th>{{ t('roles.resource') }}</th>
-        <th v-for="action in actions" :key="action">
-          <label>
-            <input
-              type="checkbox"
-              :name="`column:${action}`"
-              :checked="selected(keys(undefined, action))"
-              @change="toggle(keys(undefined, action), ($event.target as HTMLInputElement).checked)"
-            />{{ action }}</label
-          >
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="resource in resources" :key="resource">
-        <th>
-          <label>
-            <input
-              type="checkbox"
-              :name="`row:${resource}`"
-              :checked="selected(keys(resource))"
-              @change="toggle(keys(resource), ($event.target as HTMLInputElement).checked)"
-            />{{ resource }}</label
-          >
-        </th>
-        <td v-for="action in actions" :key="action">
-          <input
-            v-if="keys(resource, action).length"
-            type="checkbox"
-            :name="`permission:${keys(resource, action)[0]}`"
-            :aria-label="`${resource}:${action}`"
-            :checked="selected(keys(resource, action))"
-            @change="toggle(keys(resource, action), ($event.target as HTMLInputElement).checked)"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="overflow-x-auto rounded-lg border border-default">
+    <table class="w-full text-sm">
+      <caption class="sr-only">
+        {{
+          t('roles.permissions')
+        }}
+      </caption>
+      <thead class="bg-elevated text-xs text-muted">
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left font-medium">{{ t('roles.resource') }}</th>
+          <th v-for="action in actions" :key="action" scope="col" class="px-3 py-2 text-left font-medium">
+            <UCheckbox
+              :id="`column:${action}`"
+              :label="action"
+              size="sm"
+              :modelValue="state(keys(undefined, action))"
+              @update:modelValue="toggle(keys(undefined, action), $event)"
+            />
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-default">
+        <tr v-for="resource in resources" :key="resource" class="hover:bg-elevated/50">
+          <th scope="row" class="px-3 py-1.5 text-left font-normal">
+            <UCheckbox
+              :id="`row:${resource}`"
+              :label="resource"
+              size="sm"
+              :modelValue="state(keys(resource))"
+              @update:modelValue="toggle(keys(resource), $event)"
+            />
+          </th>
+          <td v-for="action in actions" :key="action" class="px-3 py-1.5">
+            <UCheckbox
+              v-if="keys(resource, action).length"
+              :id="`permission:${keys(resource, action)[0]}`"
+              size="sm"
+              :aria-label="`${resource}:${action}`"
+              :modelValue="state(keys(resource, action))"
+              @update:modelValue="toggle(keys(resource, action), $event)"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>

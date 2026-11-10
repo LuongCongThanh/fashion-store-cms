@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import UFormField from '@nuxt/ui/components/FormField.vue'
+import UInput from '@nuxt/ui/components/Input.vue'
+import UInputNumber from '@nuxt/ui/components/InputNumber.vue'
 import { defineAsyncComponent } from 'vue'
 
 import { CategorySelector } from '@features/categories/UseCategories'
@@ -13,7 +16,7 @@ import type { ProductInput } from '@features/products/schemas/Product.schema'
 
 import ProductSeoFields from './ProductSeoFields.vue'
 import ProductVariantTable from './ProductVariantTable.vue'
-defineProps<{
+const props = defineProps<{
   modelValue: ProductInput
   errors: Record<string, string | undefined>
   pending: boolean
@@ -33,62 +36,55 @@ const emit = defineEmits<{
   uploadRetry: []
 }>()
 const { t } = useT()
+function set<K extends keyof ProductInput>(key: K, value: ProductInput[K]) {
+  emit('update:modelValue', { ...props.modelValue, [key]: value })
+}
 const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptionEditor.vue'))
 </script>
 
 <template>
   <form class="space-y-6" @submit.prevent="emit('submit', 'published')">
     <FormSection :title="t('dashboard.products')">
-      <label
-        >{{ t('common.name')
-        }}<input
+      <UFormField :label="t('common.name')" name="name" :error="errors.name">
+        <UInput
           name="name"
-          :value="modelValue.name"
-          class="block w-full rounded border border-default bg-default p-2"
-          @input="
-            emit('update:modelValue', {
-              ...modelValue,
-              name: ($event.target as HTMLInputElement).value,
-            })
-          "
+          :modelValue="modelValue.name"
+          class="w-full"
+          @update:modelValue="set('name', String($event))"
         />
-      </label>
-      <p v-if="errors.name" role="alert">{{ errors.name }}</p>
-      <label
-        >{{ t('products.brand')
-        }}<input
+      </UFormField>
+      <UFormField :label="t('products.brand')" name="brand" :error="errors.brand">
+        <UInput
           name="brand"
-          :value="modelValue.brand"
-          @input="
-            emit('update:modelValue', {
-              ...modelValue,
-              brand: ($event.target as HTMLInputElement).value,
-            })
-          "
+          :modelValue="modelValue.brand"
+          class="w-full"
+          @update:modelValue="set('brand', String($event))"
         />
-      </label>
-      <DescriptionEditor
-        :modelValue="modelValue.description"
-        @update:modelValue="emit('update:modelValue', { ...modelValue, description: $event })"
-      />
+      </UFormField>
+      <DescriptionEditor :modelValue="modelValue.description" @update:modelValue="set('description', $event)" />
     </FormSection>
     <FormSection :title="t('products.price')">
-      <label v-for="key in ['price', 'comparePrice', 'cost'] as const" :key="key"
-        >{{ t(`products.${key}`)
-        }}<input
+      <div class="grid gap-4 sm:grid-cols-3">
+        <UFormField
+          v-for="key in ['price', 'comparePrice', 'cost'] as const"
+          :key="key"
+          :label="t(`products.${key}`)"
           :name="key"
-          type="number"
-          min="0"
-          :value="modelValue[key]"
-          @input="
-            emit('update:modelValue', {
-              ...modelValue,
-              [key]: Number(($event.target as HTMLInputElement).value),
-            })
-          "
-        />
-        <span v-if="errors[key]" role="alert">{{ errors[key] }}</span>
-      </label>
+          :error="errors[key]"
+        >
+          <UInputNumber
+            :name="key"
+            :data-field="key"
+            :min="0"
+            :stepSnapping="false"
+            :formatOptions="{ maximumFractionDigits: 20 }"
+            :modelValue="modelValue[key]"
+            class="w-full"
+            :ui="{ base: 'tabular-nums text-right' }"
+            @update:modelValue="set(key, $event ?? 0)"
+          />
+        </UFormField>
+      </div>
     </FormSection>
     <FormSection :title="t('products.category')">
       <CategorySelector

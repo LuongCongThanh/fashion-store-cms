@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import UFormField from '@nuxt/ui/components/FormField.vue'
+import UInput from '@nuxt/ui/components/Input.vue'
+
 import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
@@ -20,20 +23,14 @@ const { t } = useT()
 <template>
   <form class="space-y-6" @submit.prevent="emit('submit')">
     <FormSection :title="t('roles.title')">
-      <label
-        >{{ t('common.name')
-        }}<input
+      <UFormField :label="t('common.name')" name="name" :error="errors.name">
+        <UInput
           name="name"
-          :value="modelValue.name"
-          @input="
-            emit('update:modelValue', {
-              ...modelValue,
-              name: ($event.target as HTMLInputElement).value,
-            })
-          "
+          :modelValue="modelValue.name"
+          class="w-full sm:w-96"
+          @update:modelValue="emit('update:modelValue', { ...modelValue, name: String($event) })"
         />
-      </label>
-      <p v-if="errors.name" role="alert">{{ errors.name }}</p>
+      </UFormField>
       <PermissionMatrix
         :modelValue="modelValue.permissions"
         :permissions="permissions"

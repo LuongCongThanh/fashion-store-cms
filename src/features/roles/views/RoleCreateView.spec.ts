@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
 import { renderFeature } from '@test/RenderFeature'
+import { setChecked } from '@test/Select'
 
 import RoleCreateView from './RoleCreateView.vue'
 
@@ -20,10 +21,10 @@ it('builds the permission matrix from backend resources/actions and toggles rows
     },
   })
   await wrapper.find('input[name="name"]').setValue('Nhân viên')
-  await wrapper.find('input[name="row:product"]').setValue(true)
-  await wrapper.find('input[name="column:read"]').setValue(true)
-  await wrapper.find('input[name="row:product"]').setValue(false)
-  await wrapper.find('input[name="permission:report:export"]').setValue(true)
+  await setChecked(wrapper, 'row:product', true)
+  await setChecked(wrapper, 'column:read', true)
+  await setChecked(wrapper, 'row:product', false)
+  await setChecked(wrapper, 'permission:report:export', true)
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   expect(JSON.parse(http.history.post[0]?.data as string)).toEqual({

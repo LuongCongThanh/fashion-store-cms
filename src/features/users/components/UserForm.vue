@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import UFormField from '@nuxt/ui/components/FormField.vue'
+import UInput from '@nuxt/ui/components/Input.vue'
+import USelect from '@nuxt/ui/components/Select.vue'
+import { computed } from 'vue'
+
 import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
@@ -9,7 +14,7 @@ import type { UserInput } from '@features/users/schemas/User.schema'
 
 import UserRoleSelector from './UserRoleSelector.vue'
 import UserStoreSelector from './UserStoreSelector.vue'
-defineProps<{
+const props = defineProps<{
   modelValue: UserInput
   roles: Role[]
   stores: StoreSummary[]
@@ -18,65 +23,67 @@ defineProps<{
 }>()
 const emit = defineEmits<{ 'update:modelValue': [value: UserInput]; submit: []; cancel: [] }>()
 const { t } = useT()
+
+const FIELDS = ['name', 'email', 'status', 'roleIds', 'storeIds']
+/** Lỗi không gắn được vào field nào vẫn phải hiện. */
+const otherErrors = computed(() =>
+  Object.entries(props.errors).filter(([key, error]) => error && !FIELDS.includes(key)),
+)
+
+function set<K extends keyof UserInput>(key: K, value: UserInput[K]) {
+  emit('update:modelValue', { ...props.modelValue, [key]: value })
+}
 </script>
 
 <template>
   <form class="space-y-6" @submit.prevent="emit('submit')">
     <FormSection :title="t('users.title')">
-      <label
-        >{{ t('common.name')
-        }}<input
-          name="name"
-          :value="modelValue.name"
-          @input="
-            emit('update:modelValue', {
-              ...modelValue,
-              name: ($event.target as HTMLInputElement).value,
-            })
-          "
+      <div class="grid gap-4 sm:grid-cols-2">
+        <UFormField :label="t('common.name')" name="name" :error="errors.name">
+          <UInput
+            name="name"
+            :modelValue="modelValue.name"
+            class="w-full"
+            @update:modelValue="set('name', String($event))"
+          />
+        </UFormField>
+        <UFormField :label="t('auth.login.email')" name="email" :error="errors.email">
+          <UInput
+            name="email"
+            type="email"
+            autocomplete="off"
+            :modelValue="modelValue.email"
+            class="w-full"
+            @update:modelValue="set('email', String($event))"
+          />
+        </UFormField>
+      </div>
+      <UFormField :label="t('common.status')" name="status" :error="errors.status">
+        <USelect
+          :modelValue="modelValue.status"
+          :items="[
+            { label: t('common.active'), value: 'active' },
+            { label: t('common.inactive'), value: 'inactive' },
+          ]"
+          class="w-full sm:w-60"
+          @update:modelValue="set('status', $event as UserInput['status'])"
         />
-      </label>
-      <label
-        >{{ t('auth.login.email')
-        }}<input
-          name="email"
-          type="email"
-          :value="modelValue.email"
-          @input="
-            emit('update:modelValue', {
-              ...modelValue,
-              email: ($event.target as HTMLInputElement).value,
-            })
-          "
+      </UFormField>
+      <UFormField name="roleIds" :error="errors.roleIds">
+        <UserRoleSelector
+          :options="roles"
+          :modelValue="modelValue.roleIds"
+          @update:modelValue="set('roleIds', $event)"
         />
-      </label>
-      <label
-        >{{ t('common.status')
-        }}<select
-          name="status"
-          :value="modelValue.status"
-          @change="
-            emit('update:modelValue', {
-              ...modelValue,
-              status: ($event.target as HTMLSelectElement).value as UserInput['status'],
-            })
-          "
-        >
-          <option value="active">{{ t('common.active') }}</option>
-          <option value="inactive">{{ t('common.inactive') }}</option>
-        </select>
-      </label>
-      <UserRoleSelector
-        :options="roles"
-        :modelValue="modelValue.roleIds"
-        @update:modelValue="emit('update:modelValue', { ...modelValue, roleIds: $event })"
-      />
-      <UserStoreSelector
-        :options="stores"
-        :modelValue="modelValue.storeIds"
-        @update:modelValue="emit('update:modelValue', { ...modelValue, storeIds: $event })"
-      />
-      <p v-for="(error, key) in errors" :key="key" :data-error="key" role="alert">
+      </UFormField>
+      <UFormField name="storeIds" :error="errors.storeIds">
+        <UserStoreSelector
+          :options="stores"
+          :modelValue="modelValue.storeIds"
+          @update:modelValue="set('storeIds', $event)"
+        />
+      </UFormField>
+      <p v-for="[key, error] in otherErrors" :key="key" :data-error="key" role="alert" class="text-sm">
         {{ error }}
       </p>
     </FormSection>

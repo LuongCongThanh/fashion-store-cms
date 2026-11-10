@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import UFormField from '@nuxt/ui/components/FormField.vue'
+import UInput from '@nuxt/ui/components/Input.vue'
+import USelect from '@nuxt/ui/components/Select.vue'
+import UTextarea from '@nuxt/ui/components/Textarea.vue'
+import { computed } from 'vue'
+
 import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
@@ -14,21 +20,23 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ 'update:modelValue': [value: CategoryInput]; submit: []; cancel: [] }>()
 const { t } = useT()
-function field(key: 'name' | 'slug' | 'metaTitle' | 'metaDescription', event: Event) {
-  emit('update:modelValue', {
-    ...props.modelValue,
-    [key]: (event.target as HTMLInputElement).value,
-  })
+
+/** reka-ui không cho option value rỗng, nên "Không có" dùng giá trị riêng và đổi về null khi emit. */
+const NONE = '__none__'
+const parents = computed(() => [
+  { label: t('common.none'), value: NONE },
+  ...props.categories.filter((item) => item.id !== props.id).map((item) => ({ label: item.name, value: item.id })),
+])
+
+function field(key: 'name' | 'slug' | 'metaTitle' | 'metaDescription', value: string | number | null | undefined) {
+  emit('update:modelValue', { ...props.modelValue, [key]: String(value ?? '') })
 }
-function localized(lang: 'vi' | 'en', key: 'name' | 'description', event: Event) {
+function localized(lang: 'vi' | 'en', key: 'name' | 'description', value: string | number | null | undefined) {
   emit('update:modelValue', {
     ...props.modelValue,
     translations: {
       ...props.modelValue.translations,
-      [lang]: {
-        ...props.modelValue.translations[lang],
-        [key]: (event.target as HTMLInputElement).value,
-      },
+      [lang]: { ...props.modelValue.translations[lang], [key]: String(value ?? '') },
     },
   })
 }
@@ -37,50 +45,51 @@ function localized(lang: 'vi' | 'en', key: 'name' | 'description', event: Event)
 <template>
   <form class="space-y-6" @submit.prevent="emit('submit')">
     <FormSection :title="t('products.category')">
-      <label v-for="key in ['name', 'slug', 'metaTitle', 'metaDescription'] as const" :key="key" class="block"
-        >{{ t(`categories.${key}`)
-        }}<input
-          :name="key"
-          :value="modelValue[key]"
-          class="block w-full rounded border border-default bg-default p-2"
-          @input="field(key, $event)"
-        />
-        <span v-if="errors[key]" :data-error="key" role="alert">{{ errors[key] }}</span>
-      </label>
-      <label
-        >{{ t('categories.parent')
-        }}<select
-          name="parentId"
-          :value="modelValue.parentId ?? ''"
-          @change="
-            emit('update:modelValue', {
-              ...modelValue,
-              parentId: ($event.target as HTMLSelectElement).value || null,
-            })
+      <UFormField
+        v-for="key in ['name', 'slug', 'metaTitle', 'metaDescription'] as const"
+        :key="key"
+        :label="t(`categories.${key}`)"
+        :name="key"
+        :error="errors[key]"
+      >
+        <UInput :name="key" :modelValue="modelValue[key]" class="w-full" @update:modelValue="field(key, $event)" />
+        <template #error="{ error }">
+          <span :data-error="key">{{ error }}</span>
+        </template>
+      </UFormField>
+      <UFormField :label="t('categories.parent')" name="parentId" :error="errors.parentId">
+        <USelect
+          :modelValue="modelValue.parentId ?? NONE"
+          :items="parents"
+          class="w-full"
+          @update:modelValue="
+            emit('update:modelValue', { ...modelValue, parentId: $event === NONE ? null : String($event) })
           "
-        >
-          <option value="">{{ t('common.none') }}</option>
-          <option
-            v-for="category in categories.filter((item) => item.id !== id)"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ category.name }}
-          </option>
-        </select>
-        <span v-if="errors.parentId" data-error="parentId" role="alert">{{ errors.parentId }}</span>
-      </label>
+        />
+        <template #error="{ error }">
+          <span data-error="parentId">{{ error }}</span>
+        </template>
+      </UFormField>
     </FormSection>
     <FormSection v-for="lang in ['vi', 'en'] as const" :key="lang" :title="t(`common.language.${lang}`)">
-      <label v-for="key in ['name', 'description'] as const" :key="key" class="block"
-        >{{ t(`categories.${key}`)
-        }}<input
-          :name="`${lang}.${key}`"
-          :value="modelValue.translations[lang][key]"
-          class="block w-full rounded border border-default bg-default p-2"
-          @input="localized(lang, key, $event)"
+      <UFormField :label="t('categories.name')" :name="`${lang}.name`">
+        <UInput
+          :name="`${lang}.name`"
+          :modelValue="modelValue.translations[lang].name"
+          class="w-full"
+          @update:modelValue="localized(lang, 'name', $event)"
         />
-      </label>
+      </UFormField>
+      <UFormField :label="t('categories.description')" :name="`${lang}.description`">
+        <UTextarea
+          :name="`${lang}.description`"
+          :modelValue="modelValue.translations[lang].description"
+          :rows="3"
+          autoresize
+          class="w-full"
+          @update:modelValue="localized(lang, 'description', $event)"
+        />
+      </UFormField>
     </FormSection>
     <FormActions :pending="pending" @cancel="emit('cancel')" />
   </form>

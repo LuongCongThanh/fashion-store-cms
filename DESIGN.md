@@ -60,6 +60,7 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 - Màu trạng thái chỉ dùng làm nền, viền hoặc badge `subtle`/`soft`. Chữ của các badge này dùng bước đậm, nên đạt AA.
 - Delta (▲/▼ %), tồn kho và số đếm phải hiển thị **qua badge `subtle`**, hoặc dùng chữ `text-default` kèm ký hiệu ▲/▼.
 - Ngoại lệ là `text-primary` (đã đẩy lên bước 600, ≈ 4.7:1). Chỉ dùng nó cho link và chữ ≥ `text-sm`.
+- Chữ lỗi dưới field (`UFormField :error`) dùng bước đậm `red-700` / dark `red-400` (≈ 6.5:1), khai báo một lần ở slot `formField.error` trong `Ui.config.ts`. Trong `.vue` vẫn không viết class màu lỗi trực tiếp.
 
 | Đối tượng | Map                                                                                                                         |
 | --------- | --------------------------------------------------------------------------------------------------------------------------- |
