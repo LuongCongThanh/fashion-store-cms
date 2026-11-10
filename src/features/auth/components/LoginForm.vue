@@ -27,12 +27,6 @@ function trackCapsLock(event: KeyboardEvent) {
   capsLock.value = event.getModifierState('CapsLock')
 }
 
-/** Cho trang cha điền sẵn (vd. tài khoản demo ở chế độ mock). */
-function fill(credentials: LoginInput) {
-  Object.assign(state, credentials)
-}
-defineExpose({ fill })
-
 function onSubmit(event: FormSubmitEvent<LoginInput>) {
   emit('submit', event.data)
 }

@@ -43,6 +43,9 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
   const router = overrides.router ?? createAppRouter({ translate: i18n.translate })
   const notifier = overrides.notifier ?? createNotifier({ toast: useToast(), t: i18n.translate, te: i18n.has })
   const toLogin = () => void router.push({ name: 'auth.login' })
+  /** Hết phiên giữa chừng: giữ trang hiện tại để quay lại sau khi đăng nhập. */
+  const toLoginWithRedirect = () =>
+    void router.push({ name: 'auth.login', query: { redirect: router.currentRoute.value.fullPath } })
   const queryClient = createAppQueryClient({
     onMutationError: (error) => {
       notifier.error(error)
@@ -56,8 +59,9 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
     // Refresh is runtime wiring: Session owns the lifecycle while this root owns the HTTP transport.
     callRefresh: () => http.post('/auth/refresh', undefined, { skipAuth: true }) as Promise<{ accessToken: string }>,
     onAuthFailure: () => {
-      notifier.error(new ApiError(401, ErrorCode.UNAUTHORIZED, 'Session expired'))
-      toLogin()
+      // Notifier dịch theo ErrorCode; message chỉ phục vụ log.
+      notifier.error(new ApiError(401, ErrorCode.UNAUTHORIZED, 'Refresh token rejected'))
+      toLoginWithRedirect()
     },
     onLoggedOut: toLogin,
     initial: overrides.session,
@@ -78,5 +82,5 @@ export function createAppRuntime(overrides: RuntimeOverrides = {}) {
       installErrorHandling(app, { router, notifier })
     },
   }
-  return { plugin, router, session, http, queryClient, notifier }
+  return { plugin, pinia, router, session, http, queryClient, notifier }
 }

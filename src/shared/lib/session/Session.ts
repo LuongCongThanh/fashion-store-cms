@@ -47,26 +47,30 @@ export function createSession(deps: SessionDeps): Session {
 
   let inflight: Promise<string | null> | null = null
   let restoreAttempted = false
+  /** true khi BẤT KỲ caller nào của lượt refresh đang chạy cần phát `authFailure` (không chỉ caller đầu tiên). */
+  let notifyOnFailure = false
 
   function clearTokens() {
     store.accessToken = null
   }
 
-  async function doRefresh(emitFailure: boolean): Promise<string | null> {
+  async function doRefresh(): Promise<string | null> {
     try {
       const tokens = await deps.callRefresh()
       store.accessToken = tokens.accessToken
       return tokens.accessToken
     } catch {
       clearTokens()
-      if (emitFailure) deps.onAuthFailure?.()
+      if (notifyOnFailure) deps.onAuthFailure?.()
       return null
     }
   }
 
   function refreshOnce(emitFailure: boolean) {
-    inflight ??= doRefresh(emitFailure).finally(() => {
+    notifyOnFailure ||= emitFailure
+    inflight ??= doRefresh().finally(() => {
       inflight = null
+      notifyOnFailure = false
     })
     return inflight
   }

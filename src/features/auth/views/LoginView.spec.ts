@@ -88,6 +88,22 @@ describe('LoginView', () => {
     expect(notifier.error).not.toHaveBeenCalled()
   })
 
+  it('tells a customer account inline that it cannot use the CMS and revokes its cookie', async () => {
+    const { wrapper, http, router, notifier } = await renderLogin()
+    http.onPost(/\/auth\/login$/).reply(200, {
+      accessToken: 'at-1',
+      user: { id: 'c1', email: 'c@shop.vn', fullName: 'Khách', role: 'CUSTOMER', emailVerified: true },
+    })
+    http.onPost(/\/auth\/logout$/).reply(204)
+
+    await fill(wrapper, 'c@shop.vn', 'secret')
+
+    expect(wrapper.text()).toContain('Tài khoản này không có quyền truy cập CMS.')
+    expect(http.history.post.map((r) => r.url)).toContain('/auth/logout')
+    expect(router.currentRoute.value.name).toBe('auth.login')
+    expect(notifier.error).not.toHaveBeenCalled()
+  })
+
   it('hands other errors to the notifier', async () => {
     const { wrapper, http, notifier } = await renderLogin()
     http.onPost(/\/auth\/login$/).reply(500, {})

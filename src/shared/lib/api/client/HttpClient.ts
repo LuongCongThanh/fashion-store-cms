@@ -61,6 +61,8 @@ export interface RequestOpts<P, M extends Method> {
   signal?: AbortSignal
   /** true = không gắn token, không vào hàng đợi refresh. Dùng cho request refresh của Session và cho login (401 = sai thông tin, không phải hết phiên). */
   skipAuth?: boolean
+  /** true = vẫn gắn token nhưng 401 KHÔNG kích hoạt refresh/authFailure. Dùng cho logout (phiên chết thì thôi, không báo hết phiên). */
+  noRefresh?: boolean
 }
 
 /** Mọi method trả thẳng `data`; lỗi LUÔN là ApiError (§O.1). */
@@ -86,6 +88,7 @@ export interface HttpClient {
 
 interface Config extends InternalAxiosRequestConfig {
   skipAuth?: boolean
+  noRefresh?: boolean
   /** Đã gửi lại sau refresh một lần — không refresh lần nữa. */
   retried?: boolean
 }
@@ -108,7 +111,7 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
   async function retryAfterRefresh(error: unknown) {
     if (!axios.isAxiosError(error) || error.response?.status !== 401) throw error
     const config = error.config as Config | undefined
-    if (!config || config.skipAuth || config.retried) throw error
+    if (!config || config.skipAuth || config.noRefresh || config.retried) throw error
     const token = await session.refresh()
     if (!token) throw error
     return instance.request({ ...config, retried: true } as Config)
@@ -136,6 +139,7 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
       params: opts.query,
       signal: opts.signal,
       skipAuth: opts.skipAuth,
+      noRefresh: opts.noRefresh,
     } as Config)
     return res.data
   }

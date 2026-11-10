@@ -12,6 +12,7 @@ import type { Router } from 'vue-router'
 import { createAppRuntime } from '@app/Runtime'
 import { useLocale } from '@shared/lib/i18n/I18n'
 
+import type { CurrentUser } from '@features/auth/types/Auth.types'
 import type { Notifier } from '@shared/composables/UseNotify'
 import type { SessionSnapshot } from '@shared/lib/session/Session'
 
@@ -22,6 +23,11 @@ export interface RenderOptions {
   session?: SessionSnapshot
   /** Router riêng; mặc định memory history với route `auth.login`. */
   router?: Router
+  /**
+   * User đã đăng nhập, gán thẳng vào auth store (bỏ qua `/auth/me`).
+   * Dùng khi test cần quyền tuỳ ý mà ma trận role chưa có; test luồng `/auth/me` thì stub DTO bằng `buildUserDto`.
+   */
+  user?: CurrentUser
   /** Props cho component được render. */
   props?: Record<string, unknown>
   mount?: MountOptions
@@ -57,6 +63,8 @@ export function renderWithPlugins(component: Component, options: RenderOptions =
     retry: false,
     router: options.router ?? defaultRouter(),
   })
+  // Hydrate state của store 'auth' qua Pinia, không import store nội bộ feature (§B.3).
+  if (options.user) runtime.pinia.state.value.auth = { user: options.user }
   // Bọc UApp như App.vue ở prod: toast, overlay (useConfirm), locale Nuxt UI cần nó.
   const Root = defineComponent({
     setup() {

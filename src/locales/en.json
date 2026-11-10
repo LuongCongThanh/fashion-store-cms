@@ -71,13 +71,12 @@
       "password": "Password",
       "showPassword": "Show password",
       "hidePassword": "Hide password",
-      "remember": "Remember me",
       "forgot": "Forgot password?",
       "submit": "Sign in",
       "invalidCredentials": "Incorrect email or password",
       "capsLock": "Caps Lock is on",
-      "useDemo": "Fill demo account",
-      "submitting": "Signing in…"
+      "submitting": "Signing in…",
+      "notStaff": "This account cannot access the CMS."
     },
     "forgotPassword": {
       "title": "Forgot password",
@@ -92,7 +91,10 @@
       "password": "New password",
       "confirmPassword": "Confirm new password",
       "submit": "Reset password",
-      "complete": "Your password has been reset. You can now sign in with it."
+      "complete": "Your password has been reset. You can now sign in with it.",
+      "missingToken": "This password reset link is invalid. Please request a new email.",
+      "linkRejected": "This link has expired or was already used.",
+      "requestNewLink": "Send a new email"
     },
     "validation": {
       "emailInvalid": "Invalid email",

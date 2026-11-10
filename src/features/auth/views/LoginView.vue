@@ -20,16 +20,18 @@ const route = useRoute()
 const router = useRouter()
 
 const submitting = ref(false)
-const invalidCredentials = ref(false)
+/** Lỗi hiển thị tại form; lỗi khác (mạng, 5xx) đi qua toast. */
+const formError = ref<'invalidCredentials' | 'notStaff' | null>(null)
 
 async function onSubmit(credentials: LoginInput) {
   submitting.value = true
-  invalidCredentials.value = false
+  formError.value = null
   try {
     await auth.login(credentials)
     await router.push(safeRedirect(route.query.redirect))
   } catch (err) {
-    if (isApiError(err) && err.status === 401) invalidCredentials.value = true
+    if (isApiError(err) && err.status === 401) formError.value = 'invalidCredentials'
+    else if (isApiError(err) && err.status === 403) formError.value = 'notStaff'
     else notifier.error(err)
   } finally {
     submitting.value = false
@@ -42,12 +44,12 @@ async function onSubmit(credentials: LoginInput) {
     <PageHeader :title="t('auth.login.title')" :description="t('auth.login.subtitle')" />
 
     <UAlert
-      v-if="invalidCredentials"
+      v-if="formError"
       role="alert"
       color="error"
       variant="subtle"
       icon="i-lucide-circle-alert"
-      :title="t('auth.login.invalidCredentials')"
+      :title="t(`auth.login.${formError}`)"
     />
 
     <LoginForm :submitting="submitting" @submit="onSubmit" />

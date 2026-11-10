@@ -70,7 +70,8 @@ cms/
 │   ├── features/                           # cấu trúc chi tiết: §Q
 │   │   ├── auth/                           # feature đăng nhập / đăng xuất / thông tin user
 │   │   │   ├── api/                        # hàm gọi API của feature
-│   │   │   │   └── Auth.api.ts             # gọi API login, forgot-password, me
+│   │   │   │   ├── Auth.api.ts             # gọi API login, forgot/reset-password, me, logout
+│   │   │   │   └── Auth.mapper.ts          # AuthUserResponseDto → CurrentUser, ma trận quyền theo role
 │   │   │   ├── components/                 # component nội bộ feature
 │   │   │   │   └── LoginForm.vue           # form đăng nhập (props/emits), view lo gọi API
 │   │   │   ├── schemas/                    # Zod schema của form
@@ -78,12 +79,12 @@ cms/
 │   │   │   ├── stores/                     # Pinia store nội bộ feature
 │   │   │   │   └── Auth.store.ts           # Pinia store thông tin user hiện tại, nội bộ feature
 │   │   │   ├── types/                      # kiểu dữ liệu feature (feature khác được import)
-│   │   │   │   ├── Auth.types.ts           # kiểu dữ liệu của auth (User, LoginPayload…)
-│   │   │   │   └── MockAccount.ts          # tài khoản Mock auth, chỉ tham chiếu sau điều kiện DEV
+│   │   │   │   └── Auth.types.ts           # kiểu dữ liệu của auth (CurrentUser, LoginPayload…)
 │   │   │   ├── views/                      # trang (route component) của feature
 │   │   │   │   ├── LoginView.vue           # trang đăng nhập
-│   │   │   │   └── ForgotPasswordView.vue  # trang quên mật khẩu
-│   │   │   ├── Auth.routes.ts              # khai báo route /login, /forgot-password của feature
+│   │   │   │   ├── ForgotPasswordView.vue  # trang quên mật khẩu
+│   │   │   │   └── ResetPasswordView.vue   # trang đặt lại mật khẩu từ link email
+│   │   │   ├── Auth.routes.ts              # khai báo route /login, /forgot-password, /reset-password
 │   │   │   ├── SafeRedirect.ts             # chọn đích sau login, chặn open redirect
 │   │   │   ├── UseAuth.ts                  # interface công khai duy nhất
 │   │   │   └── UseAuth.spec.ts             # test interface useAuth()

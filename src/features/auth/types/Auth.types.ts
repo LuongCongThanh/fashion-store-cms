@@ -8,3 +8,16 @@ export interface CurrentUser {
   role: AuthRole
   permissions: string[]
 }
+
+/** Thông tin đăng nhập do form gửi lên. */
+export interface LoginPayload {
+  email: string
+  password: string
+}
+
+/** Dữ liệu đặt lại mật khẩu: token lấy từ link email. */
+export interface ResetPasswordPayload {
+  token: string
+  password: string
+  confirmPassword: string
+}

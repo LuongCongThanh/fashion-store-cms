@@ -75,6 +75,21 @@ describe('Session', () => {
     expect(onFailure).toHaveBeenCalledTimes(1)
   })
 
+  it('emits authFailure when a 401 recovery joins a failing restore', async () => {
+    const onFailure = vi.fn()
+    const { session, callRefresh } = setup({
+      callRefresh: async () => Promise.reject(new Error('expired')),
+      onAuthFailure: onFailure,
+    })
+
+    const [restored, refreshed] = await Promise.all([session.restore(), session.refresh()])
+
+    expect(restored).toBeNull()
+    expect(refreshed).toBeNull()
+    expect(callRefresh).toHaveBeenCalledTimes(1)
+    expect(onFailure).toHaveBeenCalledTimes(1)
+  })
+
   it('clears query cache and emits loggedOut on logout', async () => {
     const onLoggedOut = vi.fn()
     const { session, queryClient } = setup({ initial: { accessToken: 'at' }, onLoggedOut })
