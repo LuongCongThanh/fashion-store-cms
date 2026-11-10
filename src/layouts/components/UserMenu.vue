@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import UAvatar from '@nuxt/ui/components/Avatar.vue'
 import UButton from '@nuxt/ui/components/Button.vue'
 import UDropdownMenu from '@nuxt/ui/components/DropdownMenu.vue'
+import { useMediaQuery } from '@vueuse/core'
 import { computed } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
@@ -22,8 +24,10 @@ const THEMES: { icon: string; value: ThemeMode }[] = [
 ]
 const LANGUAGES: AppLocale[] = ['vi', 'en']
 
-const items = computed(() => [
-  [{ label: user.value?.name ?? '', type: 'label' as const }],
+// Từ lg trở lên header đã có LanguageSwitcher + ThemeSwitcher → menu chỉ giữ phần tài khoản, tránh trùng chức năng.
+const isDesktop = useMediaQuery('(min-width: 1024px)')
+
+const themeGroup = computed(() =>
   THEMES.map((theme) => ({
     label: t(`common.theme.${theme.value}`),
     icon: theme.icon,
@@ -33,6 +37,8 @@ const items = computed(() => [
       mode.value = theme.value
     },
   })),
+)
+const languageGroup = computed(() =>
   LANGUAGES.map((lang) => ({
     label: t(`common.language.${lang}`),
     icon: 'i-lucide-languages',
@@ -42,12 +48,40 @@ const items = computed(() => [
       setLocale(lang)
     },
   })),
-  [{ label: t('common.logout'), icon: 'i-lucide-log-out', onSelect: (): void => void logout() }],
+)
+
+const items = computed(() => [
+  [
+    {
+      label: user.value?.name ?? '',
+      description: user.value?.email,
+      avatar: { alt: user.value?.name, icon: 'i-lucide-user-round' },
+      type: 'label' as const,
+    },
+  ],
+  ...(isDesktop.value ? [] : [themeGroup.value, languageGroup.value]),
+  [
+    {
+      label: t('common.logout'),
+      icon: 'i-lucide-log-out',
+      color: 'error' as const,
+      onSelect: (): void => void logout(),
+    },
+  ],
 ])
 </script>
 
 <template>
-  <UDropdownMenu :items="items">
-    <UButton icon="i-lucide-user-round" color="neutral" variant="ghost" :aria-label="t('common.userMenu')" />
+  <UDropdownMenu :items="items" :content="{ align: 'end' }" :ui="{ content: 'min-w-52' }">
+    <UButton
+      color="neutral"
+      variant="ghost"
+      trailingIcon="i-lucide-chevron-down"
+      :aria-label="t('common.userMenu')"
+      :ui="{ base: 'cursor-pointer gap-2 ps-1', trailingIcon: 'hidden size-4 text-dimmed lg:inline-block' }"
+    >
+      <UAvatar :alt="user?.name" icon="i-lucide-user-round" size="sm" />
+      <span class="hidden max-w-32 truncate text-sm font-medium lg:inline">{{ user?.name }}</span>
+    </UButton>
   </UDropdownMenu>
 </template>

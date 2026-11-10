@@ -22,6 +22,8 @@ const ITEMS: { label: string; value: AppLocale }[] = [
     size="sm"
     color="neutral"
     variant="ghost"
+    icon="i-lucide-languages"
+    :ui="{ base: 'cursor-pointer' }"
     @update:modelValue="setLocale($event as AppLocale)"
   />
 </template>

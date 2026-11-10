@@ -16,7 +16,10 @@
     },
     "logout": "Đăng xuất",
     "store": "Cửa hàng",
+    "currentStore": "Đang quản lý",
     "appName": "Fashion Store CMS",
+    "brandName": "Fashion Store",
+    "adminConsole": "CMS quản trị",
     "languageLabel": "Ngôn ngữ",
     "themeLabel": "Giao diện",
     "loading": "Đang tải…",
@@ -74,7 +77,10 @@
       "forgot": "Quên mật khẩu?",
       "submit": "Đăng nhập",
       "invalidCredentials": "Email hoặc mật khẩu không đúng",
-      "mockHint": "Chế độ Mock auth: dùng {email} / {password}"
+      "mockHint": "Chế độ Mock auth: dùng {email} / {password}",
+      "capsLock": "Caps Lock đang bật",
+      "useDemo": "Điền tài khoản demo",
+      "submitting": "Đang đăng nhập…"
     },
     "forgotPassword": {
       "title": "Quên mật khẩu",
@@ -86,6 +92,15 @@
     "validation": {
       "emailInvalid": "Email không hợp lệ",
       "required": "Không được để trống"
+    },
+    "brand": {
+      "tagline": "Quản lý cửa hàng thời trang của bạn, gọn gàng trong một nơi.",
+      "features": {
+        "orders": "Theo dõi đơn hàng theo thời gian thực",
+        "inventory": "Tồn kho chính xác cho từng biến thể",
+        "insights": "Báo cáo doanh thu rõ ràng, dễ hiểu"
+      },
+      "copyright": "© {year} Fashion Store. Bảo lưu mọi quyền."
     }
   },
   "pwa": {
