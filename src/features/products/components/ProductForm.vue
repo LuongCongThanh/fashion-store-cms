@@ -76,6 +76,8 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
             :name="key"
             :data-field="key"
             :min="0"
+            :stepSnapping="false"
+            :formatOptions="{ maximumFractionDigits: 20 }"
             :modelValue="modelValue[key]"
             class="w-full"
             :ui="{ base: 'tabular-nums text-right' }"

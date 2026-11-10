@@ -96,6 +96,8 @@ function set<K extends keyof PromotionInput>(key: K, value: PromotionInput[K]) {
             :name="key"
             :data-field="key"
             :min="0"
+            :stepSnapping="key === 'usageLimit'"
+            :formatOptions="{ maximumFractionDigits: key === 'usageLimit' ? 0 : 20 }"
             :modelValue="modelValue[key]"
             class="w-full"
             :ui="{ base: 'tabular-nums text-right' }"

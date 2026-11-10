@@ -85,6 +85,8 @@ function fieldName(index: number, key: string) {
                   :name="fieldName(index, key)"
                   :data-field="fieldName(index, key)"
                   :min="0"
+                  :stepSnapping="key === 'stock'"
+                  :formatOptions="{ maximumFractionDigits: key === 'price' ? 20 : 0 }"
                   :modelValue="variant[key]"
                   :increment="false"
                   :decrement="false"

@@ -66,13 +66,16 @@ it('rejects invalid images before HTTP and shows a successfully uploaded preview
     value: [new File(['text'], 'file.txt', { type: 'text/plain' })],
   })
   await input.trigger('change')
-  expect(wrapper.find('[role="alert"]').text()).toContain('định dạng')
+  const errorId = input.attributes('aria-describedby')
+  expect(errorId).toBeTruthy()
+  expect(input.attributes('aria-invalid')).toBe('true')
+  expect(wrapper.find(`[id="${errorId}"]`).text()).toContain('định dạng')
   expect(http.history.post).toHaveLength(0)
   const tooLarge = new File(['png'], 'large.png', { type: 'image/png' })
   Object.defineProperty(tooLarge, 'size', { value: 6 * 1024 * 1024 })
   Object.defineProperty(input.element, 'files', { configurable: true, value: [tooLarge] })
   await input.trigger('change')
-  expect(wrapper.find('[role="alert"]').text()).toContain('5 MB')
+  expect(wrapper.find(`[id="${errorId}"]`).text()).toContain('5 MB')
   expect(http.history.post).toHaveLength(0)
   Object.defineProperty(input.element, 'files', {
     configurable: true,
@@ -80,6 +83,8 @@ it('rejects invalid images before HTTP and shows a successfully uploaded preview
   })
   await input.trigger('change')
   await flushPromises()
+  expect(input.attributes('aria-describedby')).toBeUndefined()
+  expect(input.attributes('aria-invalid')).toBeUndefined()
   expect(StorageRequest.requests[0]?.method).toBe('PUT')
   expect(StorageRequest.requests[0]?.url).toBe('https://storage.test/upload')
   expect(StorageRequest.requests[0]?.headers).not.toHaveProperty('Authorization')

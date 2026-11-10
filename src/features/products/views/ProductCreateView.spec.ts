@@ -90,3 +90,27 @@ it('publishes a categorized product with pricing, SEO and generated size/color v
     stock: 5,
   })
 })
+
+it('preserves fractional product and variant prices when saving a draft', async () => {
+  const { wrapper, http } = await renderFeature(ProductCreateView, {
+    path: '/products/new',
+    permissions: ['product:write'],
+    mock(http) {
+      http.onGet(/\/categories$/).reply(200, [])
+      http.onPost(/\/products$/).reply(201, { id: 'p1' })
+    },
+  })
+  await wrapper.find('input[name="name"]').setValue('Áo mới')
+  await setNumber(wrapper, 'price', '25,1256')
+  await setNumber(wrapper, 'comparePrice', '30,75')
+  await setNumber(wrapper, 'cost', '12,5')
+  await setNumber(wrapper, 'variants.0.price', '26,25')
+  await wrapper.find('button[data-action="save-draft"]').trigger('click')
+  await flushPromises()
+  expect(JSON.parse(http.history.post[0]?.data as string)).toMatchObject({
+    price: 25.1256,
+    comparePrice: 30.75,
+    cost: 12.5,
+    variants: [{ price: 26.25 }],
+  })
+})
