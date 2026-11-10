@@ -22,17 +22,27 @@ const items = computed(() =>
 </script>
 
 <template>
-  <UDropdownMenu :items="items">
-    <UButton
-      icon="i-lucide-store"
-      color="neutral"
-      variant="ghost"
-      :trailingIcon="collapsed ? undefined : 'i-lucide-chevrons-up-down'"
-      :label="collapsed ? undefined : (current?.name ?? t('common.store'))"
-      :aria-label="collapsed ? (current?.name ?? t('common.store')) : undefined"
-      :block="!collapsed"
-      :square="collapsed"
-      :ui="{ label: 'truncate', trailingIcon: 'ms-auto' }"
-    />
-  </UDropdownMenu>
+  <div :class="collapsed ? 'flex justify-center' : 'space-y-1.5'">
+    <p v-if="!collapsed" class="px-1 text-[10px] font-semibold tracking-[0.14em] text-muted uppercase">
+      {{ t('common.currentStore') }}
+    </p>
+    <UDropdownMenu :items="items">
+      <UButton
+        icon="i-lucide-store"
+        color="neutral"
+        :variant="collapsed ? 'ghost' : 'outline'"
+        :trailingIcon="collapsed ? undefined : 'i-lucide-chevrons-up-down'"
+        :label="collapsed ? undefined : (current?.name ?? t('common.store'))"
+        :aria-label="collapsed ? (current?.name ?? t('common.store')) : undefined"
+        :block="!collapsed"
+        :square="collapsed"
+        :ui="{
+          base: collapsed ? 'size-10' : 'h-10 justify-start bg-default',
+          label: 'truncate text-left',
+          leadingIcon: 'text-primary',
+          trailingIcon: 'ms-auto text-dimmed',
+        }"
+      />
+    </UDropdownMenu>
+  </div>
 </template>

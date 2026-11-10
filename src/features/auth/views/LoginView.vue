@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UAlert from '@nuxt/ui/components/Alert.vue'
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import LoginForm from '@features/auth/components/LoginForm.vue'
@@ -20,10 +20,13 @@ const notifier = useNotify()
 const route = useRoute()
 const router = useRouter()
 
+const form = useTemplateRef<InstanceType<typeof LoginForm>>('form')
 const submitting = ref(false)
 const invalidCredentials = ref(false)
 
 // Điều kiện DEV đứng trước → MOCK_ACCOUNT bị loại khỏi bản build production.
+// Tài khoản demo cũng phải đứng sau điều kiện DEV để bị loại khỏi bản build production.
+const demoAccount = import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === 'true' ? MOCK_ACCOUNT : null
 const mockHint =
   import.meta.env.DEV && import.meta.env.VITE_MOCK_AUTH === 'true' ? t('auth.login.mockHint', MOCK_ACCOUNT) : null
 
@@ -43,18 +46,54 @@ async function onSubmit(credentials: LoginInput, opts: { remember: boolean }) {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="auth-enter space-y-6">
     <PageHeader :title="t('auth.login.title')" :description="t('auth.login.subtitle')" />
 
-    <UAlert v-if="mockHint" color="info" variant="subtle" icon="i-lucide-flask-conical" :title="mockHint" />
+    <UAlert
+      v-if="mockHint"
+      color="info"
+      variant="subtle"
+      icon="i-lucide-flask-conical"
+      :title="mockHint"
+      :actions="[
+        {
+          label: t('auth.login.useDemo'),
+          color: 'info',
+          variant: 'outline',
+          size: 'xs',
+          onClick: () => demoAccount && form?.fill({ ...demoAccount }),
+        },
+      ]"
+      orientation="horizontal"
+      class="rounded-xl"
+    />
     <UAlert
       v-if="invalidCredentials"
+      role="alert"
       color="error"
       variant="subtle"
       icon="i-lucide-circle-alert"
       :title="t('auth.login.invalidCredentials')"
+      class="rounded-xl"
     />
 
-    <LoginForm :submitting="submitting" @submit="onSubmit" />
+    <LoginForm ref="form" :submitting="submitting" @submit="onSubmit" />
   </div>
 </template>
+
+<style scoped>
+@keyframes auth-enter {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+}
+.auth-enter {
+  animation: auth-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-enter {
+    animation: none;
+  }
+}
+</style>

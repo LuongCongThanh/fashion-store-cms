@@ -16,7 +16,10 @@
     },
     "logout": "Sign out",
     "store": "Store",
+    "currentStore": "Current store",
     "appName": "Fashion Store CMS",
+    "brandName": "Fashion Store",
+    "adminConsole": "Admin CMS",
     "languageLabel": "Language",
     "themeLabel": "Theme",
     "loading": "Loading…",
@@ -74,7 +77,10 @@
       "forgot": "Forgot password?",
       "submit": "Sign in",
       "invalidCredentials": "Incorrect email or password",
-      "mockHint": "Mock auth mode: use {email} / {password}"
+      "mockHint": "Mock auth mode: use {email} / {password}",
+      "capsLock": "Caps Lock is on",
+      "useDemo": "Fill demo account",
+      "submitting": "Signing in…"
     },
     "forgotPassword": {
       "title": "Forgot password",
@@ -86,6 +92,15 @@
     "validation": {
       "emailInvalid": "Invalid email",
       "required": "Required"
+    },
+    "brand": {
+      "tagline": "Run your fashion store, neatly in one place.",
+      "features": {
+        "orders": "Track orders in real time",
+        "inventory": "Accurate stock for every variant",
+        "insights": "Clear, easy-to-read revenue reports"
+      },
+      "copyright": "© {year} Fashion Store. All rights reserved."
     }
   },
   "pwa": {

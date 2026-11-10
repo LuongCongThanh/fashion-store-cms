@@ -9,8 +9,9 @@ import type { ThemeMode } from '@shared/composables/UseTheme'
 const { mode } = useTheme()
 const { t } = useT()
 
+const ICONS: Record<ThemeMode, string> = { light: 'i-lucide-sun', dark: 'i-lucide-moon', auto: 'i-lucide-monitor' }
 const MODES: ThemeMode[] = ['light', 'dark', 'auto']
-const items = computed(() => MODES.map((value) => ({ label: t(`common.theme.${value}`), value })))
+const items = computed(() => MODES.map((value) => ({ label: t(`common.theme.${value}`), value, icon: ICONS[value] })))
 </script>
 
 <template>
@@ -21,5 +22,7 @@ const items = computed(() => MODES.map((value) => ({ label: t(`common.theme.${va
     size="sm"
     color="neutral"
     variant="ghost"
+    :icon="ICONS[mode]"
+    :ui="{ base: 'cursor-pointer' }"
   />
 </template>

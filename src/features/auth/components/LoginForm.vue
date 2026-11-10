@@ -3,6 +3,7 @@ import UButton from '@nuxt/ui/components/Button.vue'
 import UCheckbox from '@nuxt/ui/components/Checkbox.vue'
 import UForm from '@nuxt/ui/components/Form.vue'
 import UFormField from '@nuxt/ui/components/FormField.vue'
+import UIcon from '@nuxt/ui/components/Icon.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
 import ULink from '@nuxt/ui/components/Link.vue'
 import { computed, reactive, ref } from 'vue'
@@ -22,6 +23,17 @@ const schema = computed(() => loginSchema(t))
 const state = reactive({ email: '', password: '' })
 const remember = ref(true)
 const showPassword = ref(false)
+const capsLock = ref(false)
+
+function trackCapsLock(event: KeyboardEvent) {
+  capsLock.value = event.getModifierState('CapsLock')
+}
+
+/** Cho trang cha điền sẵn (vd. tài khoản demo ở chế độ mock). */
+function fill(credentials: LoginInput) {
+  Object.assign(state, credentials)
+}
+defineExpose({ fill })
 
 function onSubmit(event: FormSubmitEvent<LoginInput>) {
   emit('submit', event.data, { remember: remember.value })
@@ -29,26 +41,57 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-    <UFormField name="email" :label="t('auth.login.email')">
-      <UInput v-model="state.email" name="email" type="email" autocomplete="username" class="w-full" autofocus />
+  <UForm :schema="schema" :state="state" class="space-y-5" @submit="onSubmit">
+    <UFormField name="email" :label="t('auth.login.email')" required>
+      <UInput
+        v-model="state.email"
+        name="email"
+        type="email"
+        inputmode="email"
+        autocomplete="username"
+        autocapitalize="off"
+        spellcheck="false"
+        icon="i-lucide-mail"
+        size="xl"
+        placeholder="you@example.com"
+        class="w-full"
+        :ui="{ base: 'rounded-xl transition-shadow focus-visible:shadow-md focus-visible:shadow-primary/10' }"
+        autofocus
+      />
     </UFormField>
 
-    <UFormField name="password" :label="t('auth.login.password')">
+    <UFormField name="password" :label="t('auth.login.password')" required>
+      <template #hint>
+        <ULink
+          :to="{ name: 'auth.forgot-password' }"
+          class="text-sm font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-primary"
+        >
+          {{ t('auth.login.forgot') }}
+        </ULink>
+      </template>
       <UInput
         v-model="state.password"
         name="password"
         :type="showPassword ? 'text' : 'password'"
         autocomplete="current-password"
+        icon="i-lucide-lock"
+        size="xl"
         class="w-full"
-        :ui="{ trailing: 'pe-1' }"
+        :ui="{
+          base: 'rounded-xl transition-shadow focus-visible:shadow-md focus-visible:shadow-primary/10',
+          trailing: 'pe-1.5',
+        }"
+        @keydown="trackCapsLock"
+        @keyup="trackCapsLock"
+        @blur="capsLock = false"
       >
         <template #trailing>
           <UButton
             data-action="toggle-password"
             color="neutral"
-            variant="link"
+            variant="ghost"
             size="sm"
+            class="cursor-pointer rounded-lg"
             :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
             :aria-label="showPassword ? t('auth.login.hidePassword') : t('auth.login.showPassword')"
             :aria-pressed="showPassword"
@@ -56,17 +99,31 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
           />
         </template>
       </UInput>
+      <template v-if="capsLock" #help>
+        <span role="status" class="flex items-center gap-1.5 text-warning">
+          <UIcon name="i-lucide-arrow-big-up-dash" class="size-4" aria-hidden="true" />
+          {{ t('auth.login.capsLock') }}
+        </span>
+      </template>
     </UFormField>
 
-    <div class="flex items-center justify-between">
-      <UCheckbox v-model="remember" :label="t('auth.login.remember')" />
-      <ULink :to="{ name: 'auth.forgot-password' }" class="text-sm text-primary">
-        {{ t('auth.login.forgot') }}
-      </ULink>
-    </div>
+    <UCheckbox
+      v-model="remember"
+      :label="t('auth.login.remember')"
+      :ui="{ base: 'cursor-pointer', label: 'cursor-pointer' }"
+    />
 
-    <UButton type="submit" block :loading="submitting" :disabled="submitting">
-      {{ t('auth.login.submit') }}
+    <UButton
+      type="submit"
+      block
+      size="xl"
+      :trailingIcon="submitting ? undefined : 'i-lucide-arrow-right'"
+      class="group cursor-pointer justify-center rounded-xl bg-linear-to-r from-primary-600 to-primary-500 font-semibold shadow-lg shadow-primary/25 transition-[box-shadow,filter] hover:shadow-primary/40 hover:brightness-110 disabled:brightness-100"
+      :ui="{ trailingIcon: 'transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none' }"
+      :loading="submitting"
+      :disabled="submitting"
+    >
+      {{ submitting ? t('auth.login.submitting') : t('auth.login.submit') }}
     </UButton>
   </UForm>
 </template>

@@ -31,10 +31,14 @@ const { t } = useT()
 
 // DESIGN.md mục Bảng: compact (row ~36px), thead dính, bảng cuộn trong khung của nó (trang không cuộn ngang).
 const TABLE_UI = {
-  root: 'max-h-[calc(100dvh-16rem)] overflow-auto rounded-lg border border-default',
-  thead: 'bg-elevated',
-  th: 'py-2 text-xs font-medium text-muted whitespace-nowrap',
-  td: 'py-1.5 text-sm',
+  root: 'max-h-[calc(100dvh-16rem)] overflow-auto rounded-xl border border-default bg-default shadow-xs',
+  base: 'border-separate border-spacing-0',
+  thead: 'bg-elevated/80 backdrop-blur [&>tr]:after:hidden',
+  th: 'h-10 border-b border-default py-2 text-xs font-semibold tracking-wide text-muted uppercase whitespace-nowrap first:ps-4 last:pe-4',
+  tbody: 'divide-y-0',
+  tr: 'transition-colors hover:bg-elevated/50 data-[selected=true]:bg-primary/5 [&:not(:last-child)>td]:border-b [&>td]:border-default',
+  td: 'h-11 py-1.5 text-sm text-default first:ps-4 last:pe-4',
+  empty: 'py-10',
 }
 
 const sorting = computed<SortingState>({
