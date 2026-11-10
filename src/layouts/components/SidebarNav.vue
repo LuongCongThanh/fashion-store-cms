@@ -26,10 +26,24 @@ const groups = computed(() =>
 </script>
 
 <template>
-  <div v-for="(group, index) in groups" :key="index" class="py-2">
-    <p v-if="group.title && !collapsed" class="px-4 text-xs font-semibold text-muted">
+  <section v-for="(group, index) in groups" :key="index" class="px-2 py-1.5">
+    <p
+      v-if="group.title && !collapsed"
+      class="mb-1.5 px-3 pt-2 text-[10px] font-semibold tracking-[0.14em] text-muted uppercase"
+    >
       {{ group.title }}
     </p>
-    <UNavigationMenu :items="group.items" orientation="vertical" :collapsed="collapsed" class="px-2" />
-  </div>
+    <div v-else-if="index" aria-hidden="true" class="mx-3 my-2 h-px bg-(--ui-border)" />
+    <UNavigationMenu
+      :items="group.items"
+      orientation="vertical"
+      :collapsed="collapsed"
+      tooltip
+      :ui="{
+        list: 'gap-1',
+        link: 'min-h-10 cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-muted before:rounded-md hover:text-highlighted hover:before:bg-elevated data-active:text-primary data-active:before:bg-default data-active:before:ring-1 data-active:before:ring-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+        linkLeadingIcon: 'size-[18px] text-dimmed group-data-active:text-primary',
+      }"
+    />
+  </section>
 </template>
