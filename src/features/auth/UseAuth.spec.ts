@@ -126,6 +126,7 @@ describe('useAuth', () => {
 
   it('does not call /auth/me without a session', async () => {
     const { http, auth } = renderAuth()
+    http.onPost(/\/auth\/refresh$/).reply(401, { message: 'Missing refresh token' })
 
     await auth().ensureUser()
 

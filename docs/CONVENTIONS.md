@@ -32,6 +32,13 @@ cms/
 │   ├── archive/                            # tài liệu đã xong, giữ để tra lý do
 │   │   ├── scaffold/                       # 14 plan con của scaffold (spec, plan, report) — đã xong
 │   │   └── scaffold-plan.md                # plan dựng khung: quyết định D1–D41, lý do §V
+│   ├── plans/                              # plan theo feature
+│   │   ├── <feature>-plan.md               # plan tổng: mục tiêu, trạng thái, link tới thư mục feature
+│   │   └── <feature>/                      # thư mục tên feature
+│   │       ├── spec.md                     # contract, yêu cầu
+│   │       ├── plan.md                     # phạm vi, các bước
+│   │       ├── decisions.md                # quyết định khó đảo ngược (bối cảnh → quyết định → hệ quả); thay cho ADR
+│   │       └── report.md                   # kết quả, rủi ro, cách chạy, số liệu
 │   ├── CONVENTIONS.md                      # tài liệu này — quy ước kỹ thuật
 │   └── FE_architecture.md                  # kiến trúc FE (nguồn quyết định)
 ├── e2e/                                    # test end-to-end Playwright

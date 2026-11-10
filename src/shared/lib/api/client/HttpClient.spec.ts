@@ -85,7 +85,7 @@ describe('HttpClient', () => {
   it('rejects with UNAUTHORIZED and lets Session emit authFailure when refresh fails', async () => {
     const onFailure = vi.fn()
     const { mock, http } = setup({
-      callRefresh: async () => Promise.reject(new Error('expired')),
+      callRefresh: async () => Promise.reject(new ApiError(401, 'UNAUTHORIZED', 'Invalid refresh token')),
       onAuthFailure: onFailure,
     })
     mock.onGet(`${BASE}/me`).reply(401, {})

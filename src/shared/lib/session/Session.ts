@@ -4,6 +4,8 @@ import type { QueryClient } from '@tanstack/vue-query'
 import type { Pinia } from 'pinia'
 import type { InjectionKey } from 'vue'
 
+import { isApiError } from '@shared/lib/api/errors/ApiError'
+
 import { useSessionStore } from './Session.store'
 
 export interface AuthTokens {
@@ -20,9 +22,9 @@ export interface Session {
   getAccessToken(): string | null
   getStoreId(): string | null
   switchStore(id: string): Promise<void>
-  /** Khôi phục phiên một lần bằng refresh cookie; thất bại là guest bình thường. */
+  /** Khôi phục phiên một lần bằng refresh cookie; BE từ chối (401) là guest bình thường. Lỗi mạng/5xx ném tiếp. */
   restore(): Promise<string | null>
-  /** Lấy access token mới bằng refresh cookie; thất bại phát `authFailure`. */
+  /** Lấy access token mới bằng refresh cookie; BE từ chối (401) = Hết phiên, phát `authFailure`. Lỗi mạng/5xx ném tiếp, giữ phiên. */
   refresh(): Promise<string | null>
   signIn(tokens: AuthTokens): void
   logout(): Promise<void>
@@ -59,7 +61,9 @@ export function createSession(deps: SessionDeps): Session {
       const tokens = await deps.callRefresh()
       store.accessToken = tokens.accessToken
       return tokens.accessToken
-    } catch {
+    } catch (error) {
+      // Chỉ 401 từ refresh mới là Hết phiên (GLOSSARY). Mất mạng/5xx: giữ token, để request gốc báo lỗi mạng.
+      if (!isApiError(error) || error.status !== 401) throw error
       clearTokens()
       if (notifyOnFailure) deps.onAuthFailure?.()
       return null

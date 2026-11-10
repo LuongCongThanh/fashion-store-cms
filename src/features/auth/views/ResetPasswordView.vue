@@ -35,7 +35,7 @@ watch(
 )
 const submitting = ref(false)
 const complete = ref(false)
-/** BE từ chối token (hết hạn/đã dùng): báo tại chỗ + dẫn sang yêu cầu link mới, không toast chung chung. */
+/** BE từ chối token (400: sai/hết hạn/đã dùng): báo tại chỗ + dẫn sang yêu cầu link mới, không toast chung chung. */
 const linkRejected = ref(false)
 const requestNewLink = computed(() => [
   { label: t('auth.resetPassword.requestNewLink'), to: { name: 'auth.forgot-password' } },
@@ -48,7 +48,8 @@ async function onSubmit(event: FormSubmitEvent<ResetPasswordInput>) {
     await auth.resetPassword(event.data)
     complete.value = true
   } catch (error) {
-    if (isApiError(error) && [400, 404, 410].includes(error.status)) linkRejected.value = true
+    // BE trả 400 'Invalid or expired token' cho token sai/hết hạn/đã dùng.
+    if (isApiError(error) && error.status === 400) linkRejected.value = true
     else notifier.error(error)
   } finally {
     submitting.value = false

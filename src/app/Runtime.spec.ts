@@ -47,6 +47,7 @@ describe('createAppRuntime', () => {
       session: { accessToken: 'expired' },
     })
     mock.onGet(/\/me$/).reply(401, {})
+    mock.onPost(/\/auth\/refresh$/).reply(401, { message: 'Invalid refresh token' })
 
     await runtime.http.get('/me').catch(() => undefined)
     await router.isReady()
@@ -119,6 +120,7 @@ describe('createAppRuntime', () => {
       session: { accessToken: 'expired' },
     })
     mock.onGet(/\/me$/).reply(401, {})
+    mock.onPost(/\/auth\/refresh$/).reply(401, { message: 'Invalid refresh token' })
 
     await runtime.http.get('/me').catch(() => undefined)
 
