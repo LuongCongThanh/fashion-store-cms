@@ -57,6 +57,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "menu": "Navigation menu",
+    "collapse": "Collapse",
     "orders": "Orders",
     "groups": {
       "store": "Store",

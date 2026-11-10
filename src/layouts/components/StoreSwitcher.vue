@@ -22,11 +22,11 @@ const items = computed(() =>
 </script>
 
 <template>
-  <div :class="collapsed ? 'flex justify-center' : 'space-y-1.5'">
-    <p v-if="!collapsed" class="px-1 text-[10px] font-semibold tracking-[0.14em] text-muted uppercase">
+  <div :class="collapsed ? 'flex justify-center' : 'space-y-1'">
+    <p v-if="!collapsed" class="px-2.5 text-xs font-semibold tracking-wider text-muted uppercase">
       {{ t('common.currentStore') }}
     </p>
-    <UDropdownMenu :items="items">
+    <UDropdownMenu :items="items" :content="{ align: 'start' }" :ui="{ content: 'min-w-56' }">
       <UButton
         icon="i-lucide-store"
         color="neutral"
@@ -36,11 +36,12 @@ const items = computed(() =>
         :aria-label="collapsed ? (current?.name ?? t('common.store')) : undefined"
         :block="!collapsed"
         :square="collapsed"
+        class="min-h-9 cursor-pointer transition-colors duration-150 motion-reduce:transition-none"
+        :class="!collapsed && 'justify-start bg-default px-2.5'"
         :ui="{
-          base: collapsed ? 'size-10' : 'h-10 justify-start bg-default',
-          label: 'truncate text-left',
-          leadingIcon: 'text-primary',
-          trailingIcon: 'ms-auto text-dimmed',
+          label: 'truncate text-left font-medium text-highlighted',
+          leadingIcon: 'size-5 text-muted',
+          trailingIcon: 'ms-auto size-4 text-muted',
         }"
       />
     </UDropdownMenu>

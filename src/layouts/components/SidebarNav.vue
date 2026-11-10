@@ -20,30 +20,28 @@ const groups = computed(() =>
       label: t(item.titleKey as MessageKey),
       icon: item.icon,
       to: item.path,
+      // "/" là tiền tố của mọi route → chỉ active khi khớp chính xác, tránh "Tổng quan" sáng cùng mục khác.
+      exact: item.path === '/',
     })),
   })),
 )
+
+// Một kiểu item cho mọi nhóm: idle muted, hover nền elevated, active nền primary/10 + chữ primary (DESIGN.md: item nav active).
+const LINK_UI = {
+  list: 'gap-0.5',
+  link: 'min-h-9 cursor-pointer rounded-md px-2.5 py-2 text-sm font-medium text-muted transition-colors duration-150 before:rounded-md before:transition-colors before:duration-150 hover:text-highlighted hover:before:bg-elevated data-active:text-primary data-active:before:bg-primary/10 data-active:hover:before:bg-primary/10 focus-visible:before:outline-2 focus-visible:before:outline-offset-0 focus-visible:before:outline-primary motion-reduce:transition-none motion-reduce:before:transition-none',
+  linkLeadingIcon: 'size-5 text-muted group-hover:text-highlighted group-data-active:text-primary',
+}
 </script>
 
 <template>
-  <section v-for="(group, index) in groups" :key="index" class="px-2 py-1.5">
-    <p
-      v-if="group.title && !collapsed"
-      class="mb-1.5 px-3 pt-2 text-[10px] font-semibold tracking-[0.14em] text-muted uppercase"
-    >
-      {{ group.title }}
-    </p>
-    <div v-else-if="index" aria-hidden="true" class="mx-3 my-2 h-px bg-(--ui-border)" />
-    <UNavigationMenu
-      :items="group.items"
-      orientation="vertical"
-      :collapsed="collapsed"
-      tooltip
-      :ui="{
-        list: 'gap-1',
-        link: 'min-h-10 cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-muted before:rounded-md hover:text-highlighted hover:before:bg-elevated data-active:text-primary data-active:before:bg-default data-active:before:ring-1 data-active:before:ring-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
-        linkLeadingIcon: 'size-[18px] text-dimmed group-data-active:text-primary',
-      }"
-    />
-  </section>
+  <div class="space-y-4">
+    <section v-for="(group, index) in groups" :key="index">
+      <p v-if="group.title && !collapsed" class="mb-1 px-2.5 text-xs font-semibold tracking-wider text-muted uppercase">
+        {{ group.title }}
+      </p>
+      <div v-else-if="index" aria-hidden="true" class="mx-2 mb-3 border-t border-default" />
+      <UNavigationMenu :items="group.items" orientation="vertical" :collapsed="collapsed" tooltip :ui="LINK_UI" />
+    </section>
+  </div>
 </template>
