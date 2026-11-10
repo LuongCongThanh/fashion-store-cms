@@ -20,6 +20,9 @@ Người dùng CMS đăng nhập bằng email + mật khẩu và vào `/admin`. 
 | Q8  | Quên mật khẩu                                | Trang `/forgot-password` (AuthLayout): nhập email → `POST /auth/forgot-password` → luôn hiện "Nếu email tồn tại, chúng tôi đã gửi hướng dẫn". Có link quay lại login. Trang reset mật khẩu để sau.                                                                                                                                                                                                                                                                                             |
 | Q9  | Tài khoản dummy                              | `VITE_MOCK_AUTH=true` **và** `import.meta.env.DEV` → `main.ts` truyền adapter giả lập `/auth/*` (`src/app/dev/MockAuth.ts`, axios-mock-adapter) vào Runtime; request khác đi thẳng backend. `Auth.api.ts` không đổi. Tài khoản `admin@cms.local` / `admin123`, có mọi quyền khai báo trong route. Giả lập login, me, refresh, forgot-password (độ trễ ~300ms). Import động sau điều kiện DEV để bản build production không chứa code mock. Thêm vào `.env.development`: `VITE_MOCK_AUTH=true`. |
 | Q10 | Glossary                                     | Thêm **Mock auth**, **Remember me**.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Q11 | Cảnh báo Caps Lock (bổ sung 2026-11-10, PR #55) | Ô mật khẩu đọc `KeyboardEvent.getModifierState('CapsLock')` khi `keydown`/`keyup`, ẩn khi `blur`. Hiện ở slot `help` của `UFormField`: `role="status"`, chữ `text-default`, icon `text-warning` `aria-hidden`. i18n `auth.login.capsLock`. Nút submit đổi chữ thành `auth.login.submitting` khi đang gửi. |
+| Q12 | Nút điền tài khoản demo (bổ sung 2026-11-10, PR #55) | Chỉ khi `import.meta.env.DEV && VITE_MOCK_AUTH === 'true'` (cùng điều kiện với Q9, đặt trước để bị loại khỏi build production). Alert mock auth có action `auth.login.useDemo` → gọi `LoginForm.fill()` (expose qua `defineExpose`) để điền sẵn `MOCK_ACCOUNT`, **không tự submit**. |
+| Q13 | Bố cục AuthLayout (bổ sung 2026-11-10, PR #55) | Từ `lg`: 2 cột. Trái là panel thương hiệu `bg-muted` + viền `border-default`: logo + tên app, tagline (`font-display`), 3 tính năng có icon (`auth.brand.*`), copyright có năm hiện tại. Phải là form `max-w-sm`. Dưới `lg` chỉ có form, logo đặt trên form. Chất editorial chỉ qua chữ, khoảng trắng và accent `primary`; **không** gradient, bóng, blur, cảnh 3D hay animation trang trí (DESIGN.md). Áp cho cả `/forgot-password`. |
 
 ## Ngoài phạm vi
 
@@ -32,5 +35,7 @@ Trang reset mật khẩu, SSO/OAuth, captcha, khoá tài khoản sau nhiều l�
 - `/login?redirect=/admin/design-system` → login xong vào đúng trang đó. `?redirect=//evil.com` → vào `/admin`.
 - Bỏ tick remember → đóng tab, mở lại → phải login lại.
 - `npm run build` → không còn chuỗi `admin@cms.local` trong `dist/`.
+- Bật Caps Lock khi gõ mật khẩu → hiện cảnh báo; blur → ẩn (Q11).
+- DEV + mock auth: bấm "Điền tài khoản demo" → điền email/mật khẩu, chưa submit. `npm run build` → không có nút này (Q12).
 - `npm run typecheck && npm run lint && npm test` đều pass.
 - Cập nhật `docs/navigation-flow.md`: đóng câu hỏi mở số 1, thêm `/forgot-password`.
