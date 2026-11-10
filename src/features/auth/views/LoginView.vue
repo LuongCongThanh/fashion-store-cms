@@ -65,7 +65,6 @@ async function onSubmit(credentials: LoginInput, opts: { remember: boolean }) {
         },
       ]"
       orientation="horizontal"
-      class="rounded-xl"
     />
     <UAlert
       v-if="invalidCredentials"
@@ -74,7 +73,6 @@ async function onSubmit(credentials: LoginInput, opts: { remember: boolean }) {
       variant="subtle"
       icon="i-lucide-circle-alert"
       :title="t('auth.login.invalidCredentials')"
-      class="rounded-xl"
     />
 
     <LoginForm ref="form" :submitting="submitting" @submit="onSubmit" />

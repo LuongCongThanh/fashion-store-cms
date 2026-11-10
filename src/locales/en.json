@@ -16,10 +16,7 @@
     },
     "logout": "Sign out",
     "store": "Store",
-    "currentStore": "Current store",
     "appName": "Fashion Store CMS",
-    "brandName": "Fashion Store",
-    "adminConsole": "Admin CMS",
     "languageLabel": "Language",
     "themeLabel": "Theme",
     "loading": "Loading…",
@@ -57,6 +54,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "menu": "Navigation menu",
+    "collapse": "Collapse",
     "orders": "Orders",
     "groups": {
       "store": "Store",

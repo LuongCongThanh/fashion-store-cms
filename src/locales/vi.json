@@ -16,10 +16,7 @@
     },
     "logout": "Đăng xuất",
     "store": "Cửa hàng",
-    "currentStore": "Đang quản lý",
     "appName": "Fashion Store CMS",
-    "brandName": "Fashion Store",
-    "adminConsole": "CMS quản trị",
     "languageLabel": "Ngôn ngữ",
     "themeLabel": "Giao diện",
     "loading": "Đang tải…",
@@ -57,6 +54,7 @@
   "nav": {
     "dashboard": "Tổng quan",
     "menu": "Menu điều hướng",
+    "collapse": "Thu gọn",
     "orders": "Đơn hàng",
     "groups": {
       "store": "Cửa hàng",

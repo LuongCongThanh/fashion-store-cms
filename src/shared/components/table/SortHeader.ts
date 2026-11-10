@@ -17,7 +17,7 @@ export function sortHeader(column: SortableColumn, label: string, options: { ali
       type: 'button',
       'data-sorted': sorted || undefined,
       class: [
-        'group -mx-1.5 inline-flex cursor-pointer items-center gap-1 rounded-md px-1.5 py-1 uppercase transition-colors hover:bg-accented/50 hover:text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+        'group -mx-1.5 inline-flex cursor-pointer items-center gap-1 rounded-md px-1.5 py-1 uppercase transition-colors duration-150 motion-reduce:transition-none hover:bg-accented/50 hover:text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
         sorted ? 'text-highlighted' : '',
         options.align === 'right' ? 'ml-auto flex-row-reverse' : '',
       ],
