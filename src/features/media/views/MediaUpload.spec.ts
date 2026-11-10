@@ -83,7 +83,7 @@ it('rejects invalid images before HTTP and shows a successfully uploaded preview
   expect(StorageRequest.requests[0]?.method).toBe('PUT')
   expect(StorageRequest.requests[0]?.url).toBe('https://storage.test/upload')
   expect(StorageRequest.requests[0]?.headers).not.toHaveProperty('Authorization')
-  expect(wrapper.find('progress').attributes('value')).toBe('50')
+  expect(wrapper.find('[role="progressbar"]').attributes('aria-valuenow')).toBe('50')
   expect(http.history.post).toHaveLength(1)
   StorageRequest.requests[0]?.finish()
   await flushPromises()

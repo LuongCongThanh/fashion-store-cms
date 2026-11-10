@@ -140,7 +140,8 @@
     "moveLeft": "Di chuyển trái",
     "moveRight": "Di chuyển phải",
     "tooMany": "Tối đa 10 ảnh",
-    "cancelled": "Đã hủy tải ảnh"
+    "cancelled": "Đã hủy tải ảnh",
+    "hint": "JPG, PNG hoặc WebP, tối đa 5 MB"
   },
   "products": {
     "statusPresets": {

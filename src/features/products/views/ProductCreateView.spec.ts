@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
 import { renderFeature } from '@test/RenderFeature'
+import { chooseOption } from '@test/Select'
 
 import ProductCreateView from './ProductCreateView.vue'
 
@@ -52,7 +53,7 @@ it('publishes a categorized product with pricing, SEO and generated size/color v
   await wrapper.find('input[name="price"]').setValue('200000')
   await wrapper.find('input[name="comparePrice"]').setValue('250000')
   await wrapper.find('input[name="cost"]').setValue('100000')
-  await wrapper.find('select[name="categoryIds"]').setValue(['linen'])
+  await chooseOption(wrapper, 'Danh mục', 'Linen')
   await wrapper.find('input[name="slug"]').setValue('ao-linen')
   await wrapper.find('input[name="metaTitle"]').setValue('Áo linen Fashion')
   await wrapper.find('input[name="metaDescription"]').setValue('Áo thoáng mát')

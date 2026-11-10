@@ -12,3 +12,8 @@ afterEach(() => {
   globalThis.sessionStorage?.clear()
   /* eslint-enable @typescript-eslint/no-unnecessary-condition */
 })
+
+// jsdom không có `scrollIntoView`; listbox của USelectMenu gọi nó khi highlight option.
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+if (typeof Element !== 'undefined' && !Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => {}
+/* eslint-enable @typescript-eslint/no-unnecessary-condition */

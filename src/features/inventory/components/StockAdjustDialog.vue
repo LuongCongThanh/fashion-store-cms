@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import UButton from '@nuxt/ui/components/Button.vue'
+import UFormField from '@nuxt/ui/components/FormField.vue'
+import UInput from '@nuxt/ui/components/Input.vue'
 import UModal from '@nuxt/ui/components/Modal.vue'
 import { ref } from 'vue'
 
@@ -19,13 +21,24 @@ const reason = ref('')
     @update:open="!$event && emit('close')"
   >
     <template #body>
-      <form data-stock-adjust class="space-y-3" @submit.prevent="emit('submit', { quantity, reason })">
-        <label>{{ t('orders.quantity') }}<input v-model.number="quantity" type="number" name="quantity" /> </label>
-        <p v-if="errors.quantity" role="alert">{{ errors.quantity }}</p>
-        <label>{{ t('inventory.reason') }}<input v-model="reason" name="reason" /> </label>
-        <p v-if="errors.reason" role="alert">{{ errors.reason }}</p>
-        <UButton type="submit" :loading="pending">{{ t('common.save') }}</UButton>
-        <UButton variant="outline" @click="emit('close')">{{ t('common.cancel') }}</UButton>
+      <form data-stock-adjust class="space-y-4" @submit.prevent="emit('submit', { quantity, reason })">
+        <UFormField :label="t('orders.quantity')" name="quantity" :error="errors.quantity">
+          <UInput
+            :modelValue="quantity"
+            type="number"
+            name="quantity"
+            class="w-40"
+            :ui="{ base: 'tabular-nums text-right' }"
+            @update:modelValue="quantity = Number($event)"
+          />
+        </UFormField>
+        <UFormField :label="t('inventory.reason')" name="reason" :error="errors.reason">
+          <UInput v-model="reason" name="reason" class="w-full" />
+        </UFormField>
+        <div class="flex justify-end gap-2">
+          <UButton color="neutral" variant="outline" @click="emit('close')">{{ t('common.cancel') }}</UButton>
+          <UButton type="submit" :loading="pending">{{ t('common.save') }}</UButton>
+        </div>
       </form>
     </template>
   </UModal>

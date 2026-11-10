@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
 import { renderFeature } from '@test/RenderFeature'
+import { chooseOption } from '@test/Select'
 
 import PromotionEditView from './PromotionEditView.vue'
 
@@ -28,15 +29,15 @@ it('edits an automatic promotion into a fixed-value coupon with a new usage wind
     },
   })
   await wrapper.find('input[name="name"]').setValue('Tết')
-  await wrapper.find('select[name="type"]').setValue('coupon')
+  await chooseOption(wrapper, 'Loại', 'Mã giảm giá')
   await wrapper.find('input[name="code"]').setValue('TET50')
-  await wrapper.find('select[name="discountType"]').setValue('fixed')
+  await chooseOption(wrapper, 'Loại giảm giá', 'Số tiền cố định')
   await wrapper.find('input[name="value"]').setValue('50000')
   await wrapper.find('input[name="minimumOrder"]').setValue('100000')
   await wrapper.find('input[name="usageLimit"]').setValue('2')
   await wrapper.find('input[name="startAt"]').setValue('2026-03-01T00:00')
   await wrapper.find('input[name="endAt"]').setValue('2026-04-01T00:00')
-  await wrapper.find('select[name="status"]').setValue('active')
+  await chooseOption(wrapper, 'Trạng thái', 'Hoạt động')
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   expect(JSON.parse(http.history.put[0]?.data as string)).toMatchObject({

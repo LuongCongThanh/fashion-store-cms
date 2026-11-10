@@ -1,28 +1,33 @@
 <script setup lang="ts">
+import UFormField from '@nuxt/ui/components/FormField.vue'
+import UInput from '@nuxt/ui/components/Input.vue'
+
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { ProductInput } from '@features/products/schemas/Product.schema'
-defineProps<{ modelValue: ProductInput; errors: Record<string, string | undefined> }>()
+const props = defineProps<{ modelValue: ProductInput; errors: Record<string, string | undefined> }>()
 const emit = defineEmits<{ 'update:modelValue': [value: ProductInput] }>()
 const { t } = useT()
 </script>
 
 <template>
-  <div>
-    <label v-for="key in ['slug', 'metaTitle', 'metaDescription'] as const" :key="key" class="block"
-      >{{ t(`categories.${key}`)
-      }}<input
+  <div class="space-y-4">
+    <UFormField
+      v-for="key in ['slug', 'metaTitle', 'metaDescription'] as const"
+      :key="key"
+      :label="t(`categories.${key}`)"
+      :name="key"
+      :error="errors[key]"
+    >
+      <UInput
         :name="key"
-        :value="modelValue[key]"
-        class="block w-full rounded border border-default bg-default p-2"
-        @input="
-          emit('update:modelValue', {
-            ...modelValue,
-            [key]: ($event.target as HTMLInputElement).value,
-          })
-        "
+        :modelValue="modelValue[key]"
+        class="w-full"
+        @update:modelValue="emit('update:modelValue', { ...props.modelValue, [key]: String($event) })"
       />
-      <span v-if="errors[key]" :data-error="key" role="alert">{{ errors[key] }}</span>
-    </label>
+      <template #error="{ error }">
+        <span :data-error="key">{{ error }}</span>
+      </template>
+    </UFormField>
   </div>
 </template>

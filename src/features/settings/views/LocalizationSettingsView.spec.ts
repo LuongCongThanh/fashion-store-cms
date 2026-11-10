@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
 import { renderFeature } from '@test/RenderFeature'
+import { chooseOption } from '@test/Select'
 
 import LocalizationSettingsView from './LocalizationSettingsView.vue'
 
@@ -21,7 +22,7 @@ it('saves localization preferences without changing the CMS interface language',
       http.onPut(/\/settings\/localization$/).reply(200, {})
     },
   })
-  await wrapper.find('select[name="defaultLanguage"]').setValue('en')
+  await chooseOption(wrapper, 'Ngôn ngữ mặc định', 'en')
   await wrapper.find('input[name="currency"]').setValue('USD')
   await wrapper.find('form').trigger('submit')
   await flushPromises()

@@ -140,7 +140,8 @@
     "moveLeft": "Move left",
     "moveRight": "Move right",
     "tooMany": "Maximum 10 images",
-    "cancelled": "Upload cancelled"
+    "cancelled": "Upload cancelled",
+    "hint": "JPG, PNG or WebP, up to 5 MB"
   },
   "products": {
     "statusPresets": {

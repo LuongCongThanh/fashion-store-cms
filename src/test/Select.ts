@@ -4,11 +4,11 @@ import { vi } from 'vitest'
 import type { DOMWrapper, VueWrapper } from '@vue/test-utils'
 
 /**
- * Tìm combobox (USelect) theo accessible name: `aria-label`, hoặc `<label for>` trỏ tới nó.
+ * Tìm combobox (USelect, hoặc nút mở listbox của USelectMenu) theo accessible name: `aria-label`, hoặc `<label for>` trỏ tới nó.
  * Test thao tác như người dùng: theo role + tên, không theo tag `<select>`.
  */
 export function findCombobox(wrapper: VueWrapper, name: string): DOMWrapper<HTMLElement> {
-  const boxes = wrapper.findAll<HTMLElement>('[role="combobox"]')
+  const boxes = wrapper.findAll<HTMLElement>('[role="combobox"], button[aria-haspopup="listbox"]')
   const labelledIds = wrapper
     .findAll('label')
     .filter((label) => label.text().trim() === name)
@@ -37,7 +37,8 @@ export function findField(wrapper: VueWrapper, name: string): DOMWrapper<HTMLInp
  */
 export async function chooseOption(wrapper: VueWrapper, name: string, option: string): Promise<void> {
   const box = findCombobox(wrapper, name)
-  await box.trigger('keydown', { key: 'Enter' })
+  // USelect mở bằng Enter; nút của USelectMenu mở bằng mũi tên xuống.
+  await box.trigger('keydown', { key: box.attributes('role') === 'combobox' ? 'Enter' : 'ArrowDown' })
   const target = await vi.waitFor(() => {
     const found = Array.from(document.body.querySelectorAll<HTMLElement>('[role="option"]')).find(
       (el) => el.textContent.trim() === option,
@@ -64,5 +65,19 @@ export async function chooseMenuItem(wrapper: VueWrapper, trigger: string, item:
   })
   target.focus()
   target.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+  await flushPromises()
+}
+
+/** Checkbox (UCheckbox) theo `id`: reka-ui render `<button role="checkbox">`, nên bấm thay vì setValue. */
+export function findCheckbox(wrapper: VueWrapper, id: string): DOMWrapper<HTMLElement> {
+  const box = wrapper.find<HTMLElement>(`[role="checkbox"][id="${id}"]`)
+  if (!box.exists()) throw new Error(`Không thấy checkbox "${id}"`)
+  return box
+}
+
+/** Đặt checkbox về trạng thái `checked` (bấm nếu đang khác), như người dùng tick/bỏ tick. */
+export async function setChecked(wrapper: VueWrapper, id: string, checked: boolean): Promise<void> {
+  const box = findCheckbox(wrapper, id)
+  if ((box.attributes('aria-checked') === 'true') !== checked) await box.trigger('click')
   await flushPromises()
 }
