@@ -92,3 +92,10 @@ it('formats revenue as money and counts with the locale separator', async () => 
   expect(shown('recent-orders')).toContain('12.350.000 ₫')
   expect(shown('top-products')).toContain('312')
 })
+
+it('shows only the empty state when the user cannot access any widgets', async () => {
+  const { wrapper, http } = await renderDashboard([])
+  expect(wrapper.text()).toContain('Chưa có dữ liệu')
+  expect(wrapper.find('.grid').exists()).toBe(false)
+  expect(http.history.get.some((request) => request.url?.includes('/dashboard/'))).toBe(false)
+})

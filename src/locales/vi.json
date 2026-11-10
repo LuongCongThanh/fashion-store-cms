@@ -141,7 +141,11 @@
     "moveRight": "Di chuyển phải",
     "tooMany": "Tối đa 10 ảnh",
     "cancelled": "Đã hủy tải ảnh",
-    "hint": "JPG, PNG hoặc WebP, tối đa 5 MB"
+    "hint": "JPG, PNG hoặc WebP, tối đa 5 MB",
+    "mainImage": "Ảnh chính",
+    "actions": "Thao tác ảnh {name}",
+    "deleteTitle": "Xóa ảnh?",
+    "deleteDescription": "Xóa ảnh {name}?"
   },
   "products": {
     "statusPresets": {

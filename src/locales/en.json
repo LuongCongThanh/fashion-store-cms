@@ -141,7 +141,11 @@
     "moveRight": "Move right",
     "tooMany": "Maximum 10 images",
     "cancelled": "Upload cancelled",
-    "hint": "JPG, PNG or WebP, up to 5 MB"
+    "hint": "JPG, PNG or WebP, up to 5 MB",
+    "mainImage": "Main image",
+    "actions": "Image actions for {name}",
+    "deleteTitle": "Delete image?",
+    "deleteDescription": "Delete image {name}?"
   },
   "products": {
     "statusPresets": {

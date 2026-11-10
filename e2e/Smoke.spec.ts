@@ -15,6 +15,7 @@ test('signed-in user reaches the dashboard with store switcher and user menu', a
     localStorage.setItem('cms.session.storeId', 'store-1')
   })
 
+  await page.route('/api/auth/me', (route) => route.fulfill({ json: { id: 'smoke-user', name: 'Smoke User', email: 'smoke@example.com', permissions: [] } }))
   await page.goto('/')
 
   await expect(page).toHaveURL(/:\d+\/$/)

@@ -68,3 +68,32 @@ it('shows the order total as right-aligned money', async () => {
   const cell = wrapper.findAll('td span.text-right').find((span) => span.text().includes('1.500.000'))
   expect(cell?.text()).toMatch(/1\.500\.000\s*₫/)
 })
+
+it('hides pagination while loading and after a failed refresh, then restores it on retry', async () => {
+  let resolvePage!: (response: [number, unknown]) => void
+  const { wrapper, http, runtime } = await renderFeature(OrderListView, {
+    path: '/orders',
+    mock(http) {
+      http.onGet(/\/orders$/).reply(
+        () =>
+          new Promise((resolve) => {
+            resolvePage = resolve
+          }),
+      )
+    },
+  })
+  const pagination = () => wrapper.find('nav[aria-label="Phân trang"]')
+  expect(pagination().exists()).toBe(false)
+  const page = { data: [], meta: { page: 1, pageSize: 20, total: 50, totalPages: 3 } }
+  resolvePage([200, page])
+  await flushPromises()
+  expect(pagination().exists()).toBe(true)
+  http.onGet(/\/orders$/).reply(500, {})
+  await runtime.queryClient.invalidateQueries()
+  await flushPromises()
+  expect(pagination().exists()).toBe(false)
+  http.onGet(/\/orders$/).reply(200, page)
+  await wrapper.find('button[data-action="retry"]').trigger('click')
+  await flushPromises()
+  expect(pagination().exists()).toBe(true)
+})

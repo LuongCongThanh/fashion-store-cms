@@ -111,6 +111,11 @@ function rowAction(action: string, id: string) {
       @retry="query.refetch()"
       @action="rowAction"
     />
-    <DataTablePagination :meta="query.data.value?.meta" @page="setPage" @pageSize="setFilter('pageSize', $event)" />
+    <DataTablePagination
+      v-if="!query.isPending.value && !query.isError.value && query.data.value?.meta"
+      :meta="query.data.value?.meta"
+      @page="setPage"
+      @pageSize="setFilter('pageSize', $event)"
+    />
   </div>
 </template>

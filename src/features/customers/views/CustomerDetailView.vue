@@ -62,7 +62,7 @@ const orders = useOrdersQuery(
       />
       <CustomerActivity v-else :activity="query.data.value.activity" />
       <DataTablePagination
-        v-if="tab === 'orders'"
+        v-if="tab === 'orders' && !orders.isPending.value && !orders.isError.value && orders.data.value?.meta"
         :meta="orders.data.value?.meta"
         @page="setPage"
         @pageSize="setFilter('pageSize', $event)"
