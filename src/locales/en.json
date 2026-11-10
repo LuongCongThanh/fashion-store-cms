@@ -75,7 +75,6 @@
       "forgot": "Forgot password?",
       "submit": "Sign in",
       "invalidCredentials": "Incorrect email or password",
-      "mockHint": "Mock auth mode: use {email} / {password}",
       "capsLock": "Caps Lock is on",
       "useDemo": "Fill demo account",
       "submitting": "Signing in…"
@@ -87,9 +86,18 @@
       "sent": "If the email exists, we've sent password reset instructions.",
       "backToLogin": "Back to sign in"
     },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Create a new password for your account",
+      "password": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Reset password",
+      "complete": "Your password has been reset. You can now sign in with it."
+    },
     "validation": {
       "emailInvalid": "Invalid email",
-      "required": "Required"
+      "required": "Required",
+      "passwordMismatch": "Passwords do not match"
     },
     "brand": {
       "tagline": "Run your fashion store, neatly in one place.",

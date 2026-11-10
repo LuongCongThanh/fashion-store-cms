@@ -1,6 +1,6 @@
 # Hợp đồng API tạm — CMS pages
 
-Ngày đối chiếu: 2026-11-09. Người phụ trách xác nhận **chưa có API backend**. `OPENAPI_URL` chưa được cấu hình; `Api.generated.ts` giữ nguyên placeholder. Tài liệu này mô tả những gì frontend đang gọi, không phải xác nhận backend đã triển khai.
+Ngày đối chiếu: 2026-11-10. BE đã có OpenAPI tại `http://localhost:8080/docs-json`; `Api.generated.ts` được sinh từ đó. Contract hiện xác nhận auth, staff, categories, products và size/color. Các feature trong bảng dưới chưa xuất hiện trong Swagger vẫn là placeholder frontend, không phải endpoint BE đã xác nhận.
 
 Base URL lấy từ `VITE_API_BASE_URL`. HttpClient gắn Session token, `X-Store-Id` và `Accept-Language`. Query keys không chứa Store ID; Session xoá cache khi đổi Store. Tất cả list phân trang trả `{ data: T[], meta: { page, pageSize, total, totalPages } }`.
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import UButton from '@nuxt/ui/components/Button.vue'
-import UCheckbox from '@nuxt/ui/components/Checkbox.vue'
 import UForm from '@nuxt/ui/components/Form.vue'
 import UFormField from '@nuxt/ui/components/FormField.vue'
 import UIcon from '@nuxt/ui/components/Icon.vue'
@@ -16,12 +15,11 @@ import { useT } from '@shared/lib/i18n/I18n'
 import type { LoginInput } from '@features/auth/schemas/Login.schema'
 
 defineProps<{ submitting: boolean }>()
-const emit = defineEmits<{ submit: [credentials: LoginInput, opts: { remember: boolean }] }>()
+const emit = defineEmits<{ submit: [credentials: LoginInput] }>()
 
 const { t } = useT()
 const schema = computed(() => loginSchema(t))
 const state = reactive({ email: '', password: '' })
-const remember = ref(true)
 const showPassword = ref(false)
 const capsLock = ref(false)
 
@@ -36,7 +34,7 @@ function fill(credentials: LoginInput) {
 defineExpose({ fill })
 
 function onSubmit(event: FormSubmitEvent<LoginInput>) {
-  emit('submit', event.data, { remember: remember.value })
+  emit('submit', event.data)
 }
 </script>
 
@@ -102,12 +100,6 @@ function onSubmit(event: FormSubmitEvent<LoginInput>) {
         </span>
       </template>
     </UFormField>
-
-    <UCheckbox
-      v-model="remember"
-      :label="t('auth.login.remember')"
-      :ui="{ base: 'cursor-pointer', label: 'cursor-pointer' }"
-    />
 
     <UButton
       type="submit"

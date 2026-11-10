@@ -45,8 +45,6 @@ cms/
 │   ├── app/                                # composition root — CHỈ main.ts (và src/test/) import
 │   │   ├── Runtime.ts                      # createAppRuntime() — dựng toàn bộ runtime (D37)
 │   │   ├── Runtime.spec.ts                 # test wiring prod
-│   │   ├── dev/                            # chỉ DEV, import động sau `import.meta.env.DEV` (không vào build prod)
-│   │   │   └── MockAuth.ts                 # Mock auth: adapter giả lập /auth/* (GLOSSARY)
 │   │   ├── config/                         # cấu hình đọc lúc khởi động
 │   │   │   ├── Env.config.ts               # validate VITE_* bằng Zod
 │   │   │   ├── Env.config.spec.ts          # test thiếu/sai biến env

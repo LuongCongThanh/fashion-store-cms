@@ -268,7 +268,7 @@ FE kết nối tới API contract qua **Swagger (OpenAPI) URL** do NestJS expose
 ```text
 NestJS (@nestjs/swagger)
     │
-    │  GET {API_SWAGGER_URL}   (ví dụ http://localhost:3000/api/docs-json)
+    │  GET {API_SWAGGER_URL}   (ví dụ http://localhost:8080/docs-json)
     ▼
 openapi-typescript
     │
@@ -1046,10 +1046,10 @@ Commit `.env.example`, đưa `.env*.local` và `.env` vào `.gitignore`.
 
 ```env
 # Runtime (expose ra browser)
-VITE_API_BASE_URL=http://localhost:3000/api/v1
+VITE_API_BASE_URL=http://localhost:8080/api/v1
 
 # Dev tooling (chỉ dùng khi chạy gen:api, không expose)
-API_SWAGGER_URL=http://localhost:3000/api/docs-json
+API_SWAGGER_URL=http://localhost:8080/docs-json
 ```
 
 Không commit secret.

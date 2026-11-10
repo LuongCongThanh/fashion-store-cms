@@ -8,6 +8,7 @@ export function buildUser(overrides: Partial<CurrentUser> = {}): CurrentUser {
     id: faker.string.uuid(),
     name: faker.person.fullName(),
     email: faker.internet.email(),
+    role: 'STAFF',
     permissions: [],
     ...overrides,
   }

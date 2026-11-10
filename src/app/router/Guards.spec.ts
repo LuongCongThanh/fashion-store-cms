@@ -15,6 +15,7 @@ vi.mock('@features/auth/UseAuth', () => ({
   useAuth: () => ({
     isAuthenticated: computed(() => auth.isAuthenticated.value),
     can: (p: string) => auth.permissions.value.includes(p),
+    restoreSession: async () => false,
     ensureUser: async () => {
       auth.permissions.value = [...auth.permissions.value, ...auth.permissionsAfterLoad]
     },

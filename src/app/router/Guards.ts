@@ -9,6 +9,7 @@ import { useAuth } from '@features/auth/UseAuth'
  */
 export async function authGuard(to: RouteLocationNormalized) {
   const auth = useAuth()
+  if ((to.meta.guestOnly || to.meta.requiresAuth) && !auth.isAuthenticated.value) await auth.restoreSession()
   if (to.meta.guestOnly && auth.isAuthenticated.value) return { name: 'home' }
   if (to.meta.requiresAuth && !auth.isAuthenticated.value) {
     return { name: 'auth.login', query: { redirect: to.fullPath } }
