@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { setNumber } from '@test/NumberField'
 import { renderFeature } from '@test/RenderFeature'
 import { chooseOption } from '@test/Select'
 
@@ -50,9 +51,9 @@ it('publishes a categorized product with pricing, SEO and generated size/color v
   })
   await wrapper.find('input[name="name"]').setValue('Áo linen')
   await wrapper.find('input[name="brand"]').setValue('Fashion')
-  await wrapper.find('input[name="price"]').setValue('200000')
-  await wrapper.find('input[name="comparePrice"]').setValue('250000')
-  await wrapper.find('input[name="cost"]').setValue('100000')
+  await setNumber(wrapper, 'price', '200000')
+  await setNumber(wrapper, 'comparePrice', '250000')
+  await setNumber(wrapper, 'cost', '100000')
   await chooseOption(wrapper, 'Danh mục', 'Linen')
   await wrapper.find('input[name="slug"]').setValue('ao-linen')
   await wrapper.find('input[name="metaTitle"]').setValue('Áo linen Fashion')
@@ -64,8 +65,8 @@ it('publishes a categorized product with pricing, SEO and generated size/color v
     .findAll('button')
     .find((button) => button.text() === 'Sinh biến thể')
     ?.trigger('click')
-  await wrapper.find('input[name="variants.0.stock"]').setValue('5')
-  await wrapper.find('input[name="variants.0.price"]').setValue('210000')
+  await setNumber(wrapper, 'variants.0.stock', '5')
+  await setNumber(wrapper, 'variants.0.price', '210000')
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   const payload = JSON.parse(http.history.post[0]?.data as string)

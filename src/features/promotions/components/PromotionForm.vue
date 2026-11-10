@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UFormField from '@nuxt/ui/components/FormField.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
+import UInputNumber from '@nuxt/ui/components/InputNumber.vue'
 import USelect from '@nuxt/ui/components/Select.vue'
 import { computed } from 'vue'
 
@@ -91,14 +92,14 @@ function set<K extends keyof PromotionInput>(key: K, value: PromotionInput[K]) {
           :name="key"
           :error="errors[key]"
         >
-          <UInput
+          <UInputNumber
             :name="key"
-            type="number"
-            min="0"
+            :data-field="key"
+            :min="0"
             :modelValue="modelValue[key]"
             class="w-full"
             :ui="{ base: 'tabular-nums text-right' }"
-            @update:modelValue="set(key, Number($event))"
+            @update:modelValue="set(key, $event ?? 0)"
           />
         </UFormField>
       </div>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UFormField from '@nuxt/ui/components/FormField.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
+import UInputNumber from '@nuxt/ui/components/InputNumber.vue'
 import { defineAsyncComponent } from 'vue'
 
 import { CategorySelector } from '@features/categories/UseCategories'
@@ -71,14 +72,14 @@ const DescriptionEditor = defineAsyncComponent(() => import('./ProductDescriptio
           :name="key"
           :error="errors[key]"
         >
-          <UInput
+          <UInputNumber
             :name="key"
-            type="number"
-            min="0"
+            :data-field="key"
+            :min="0"
             :modelValue="modelValue[key]"
             class="w-full"
             :ui="{ base: 'tabular-nums text-right' }"
-            @update:modelValue="set(key, Number($event))"
+            @update:modelValue="set(key, $event ?? 0)"
           />
         </UFormField>
       </div>

@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { setNumber } from '@test/NumberField'
 import { renderFeature } from '@test/RenderFeature'
 import { chooseOption } from '@test/Select'
 
@@ -16,7 +17,7 @@ it('creates an automatic promotion without a coupon code', async () => {
   })
   await wrapper.find('input[name="name"]').setValue('Mùa hè')
   await chooseOption(wrapper, 'Loại', 'Tự động')
-  await wrapper.find('input[name="value"]').setValue('10')
+  await setNumber(wrapper, 'value', '10')
   await wrapper.find('input[name="startAt"]').setValue('2026-01-01T00:00')
   await wrapper.find('input[name="endAt"]').setValue('2026-02-01T00:00')
   await wrapper.find('form').trigger('submit')

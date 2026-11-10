@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { setNumber } from '@test/NumberField'
 import { renderFeature } from '@test/RenderFeature'
 import { chooseOption } from '@test/Select'
 
@@ -32,9 +33,9 @@ it('edits an automatic promotion into a fixed-value coupon with a new usage wind
   await chooseOption(wrapper, 'Loại', 'Mã giảm giá')
   await wrapper.find('input[name="code"]').setValue('TET50')
   await chooseOption(wrapper, 'Loại giảm giá', 'Số tiền cố định')
-  await wrapper.find('input[name="value"]').setValue('50000')
-  await wrapper.find('input[name="minimumOrder"]').setValue('100000')
-  await wrapper.find('input[name="usageLimit"]').setValue('2')
+  await setNumber(wrapper, 'value', '50000')
+  await setNumber(wrapper, 'minimumOrder', '100000')
+  await setNumber(wrapper, 'usageLimit', '2')
   await wrapper.find('input[name="startAt"]').setValue('2026-03-01T00:00')
   await wrapper.find('input[name="endAt"]').setValue('2026-04-01T00:00')
   await chooseOption(wrapper, 'Trạng thái', 'Hoạt động')

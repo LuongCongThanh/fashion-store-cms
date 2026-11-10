@@ -168,7 +168,10 @@
     "brand": "Thương hiệu",
     "comparePrice": "Giá so sánh",
     "cost": "Giá vốn",
-    "seo": "SEO"
+    "seo": "SEO",
+    "sku": "SKU",
+    "skuPrefix": "Tiền tố SKU",
+    "sizesPlaceholder": "S,M,L"
   },
   "categories": {
     "root": "Kéo vào đây để chuyển về gốc",

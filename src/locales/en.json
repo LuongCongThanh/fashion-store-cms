@@ -168,7 +168,10 @@
     "brand": "Brand",
     "comparePrice": "Compare price",
     "cost": "Cost",
-    "seo": "SEO"
+    "seo": "SEO",
+    "sku": "SKU",
+    "skuPrefix": "SKU prefix",
+    "sizesPlaceholder": "S,M,L"
   },
   "categories": {
     "root": "Drop here to move to root",
