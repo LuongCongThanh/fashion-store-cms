@@ -1,7 +1,10 @@
 import { expect, test } from '@playwright/test'
 
-// Smoke: app khởi động được và luồng chính chạy. Form đăng nhập thật có ở P2 → hiện seed Session.
+import { mockApi } from './MockApi.js'
+
+// Smoke: app khởi động được và luồng chính chạy. Phiên được giả lập qua refresh cookie của BE.
 test('unauthenticated visitor is sent to the login page', async ({ page }) => {
+  await mockApi(page)
   await page.goto('/')
 
   await expect(page).toHaveURL(/\/login\?redirect=\/$/)
@@ -9,13 +12,8 @@ test('unauthenticated visitor is sent to the login page', async ({ page }) => {
 })
 
 test('signed-in user reaches the dashboard with store switcher and user menu', async ({ page }) => {
-  await page.addInitScript(() => {
-    localStorage.setItem('cms.session.accessToken', 'e2e-token')
-    localStorage.setItem('cms.session.refreshToken', 'e2e-refresh')
-    localStorage.setItem('cms.session.storeId', 'store-1')
-  })
-
-  await page.route('/api/auth/me', (route) => route.fulfill({ json: { id: 'smoke-user', name: 'Smoke User', email: 'smoke@example.com', permissions: [] } }))
+  await page.addInitScript(() => { localStorage.setItem('cms.session.storeId', 'store-1'); })
+  await mockApi(page, { role: 'ADMIN' })
   await page.goto('/')
 
   await expect(page).toHaveURL(/:\d+\/$/)
