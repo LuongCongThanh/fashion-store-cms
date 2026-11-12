@@ -71,14 +71,12 @@
       "password": "Password",
       "showPassword": "Show password",
       "hidePassword": "Hide password",
-      "remember": "Remember me",
       "forgot": "Forgot password?",
       "submit": "Sign in",
       "invalidCredentials": "Incorrect email or password",
-      "mockHint": "Mock auth mode: use {email} / {password}",
       "capsLock": "Caps Lock is on",
-      "useDemo": "Fill demo account",
-      "submitting": "Signing in…"
+      "submitting": "Signing in…",
+      "notStaff": "This account cannot access the CMS."
     },
     "forgotPassword": {
       "title": "Forgot password",
@@ -87,9 +85,21 @@
       "sent": "If the email exists, we've sent password reset instructions.",
       "backToLogin": "Back to sign in"
     },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Create a new password for your account",
+      "password": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Reset password",
+      "complete": "Your password has been reset. You can now sign in with it.",
+      "missingToken": "This password reset link is invalid. Please request a new email.",
+      "linkRejected": "This link has expired or was already used.",
+      "requestNewLink": "Send a new email"
+    },
     "validation": {
       "emailInvalid": "Invalid email",
-      "required": "Required"
+      "required": "Required",
+      "passwordMismatch": "Passwords do not match"
     },
     "brand": {
       "tagline": "Run your fashion store, neatly in one place.",

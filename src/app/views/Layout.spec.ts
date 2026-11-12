@@ -33,7 +33,7 @@ async function drawerClosed(): Promise<void> {
   })
 }
 
-async function renderLayout() {
+async function renderLayout(permissions: string[] = []) {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
@@ -69,9 +69,12 @@ async function renderLayout() {
     ],
   })
   await router.push('/products?status=draft')
-  const result = renderWithPlugins(RouterView, { router, mount: { attachTo: document.body } })
+  const result = renderWithPlugins(RouterView, {
+    router,
+    user: buildUser({ permissions }),
+    mount: { attachTo: document.body },
+  })
   mounted.push(result.wrapper)
-  result.http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: [] }))
   return { ...result, router }
 }
 
@@ -94,15 +97,13 @@ describe('Layout navigation', () => {
     expect(localStorage.getItem('cms.colorMode')).toBe('auto')
   })
   it('groups permitted links under their domain', async () => {
-    const { wrapper, http } = await renderLayout()
-    http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
+    const { wrapper } = await renderLayout(['order:read'])
     await flushPromises()
     expect(wrapper.find('nav[aria-label="Menu điều hướng"]').text()).toContain('Cửa hàng')
     expect(wrapper.find('nav[aria-label="Menu điều hướng"] a[href="/orders"]').exists()).toBe(true)
   })
   it('opens a navigation drawer from the header menu button', async () => {
-    const { wrapper, http } = await renderLayout()
-    http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
+    const { wrapper } = await renderLayout(['order:read'])
     await flushPromises()
     await wrapper.find('button[aria-label="Mở thanh bên"]').trigger('click')
     const dialog = await openedDrawer()

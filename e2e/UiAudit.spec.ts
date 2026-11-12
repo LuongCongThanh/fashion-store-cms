@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 
+import { mockApi } from './MockApi.js'
+
 const product = {
   id: 'audit-product',
   name: 'Áo linen',
@@ -27,7 +29,6 @@ for (const width of [375, 1280]) {
     test(`Product gallery and Variant table fit ${width}px in ${theme}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 })
       await page.addInitScript((mode) => {
-        localStorage.setItem('cms.session.accessToken', 'audit-token')
         localStorage.setItem('cms.session.storeId', 'store-1')
         localStorage.setItem('cms.colorMode', mode)
       }, theme)
@@ -37,14 +38,9 @@ for (const width of [375, 1280]) {
           body: '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="400"><rect width="300" height="400" fill="silver"/></svg>',
         }),
       )
-      await page.route('/api/**', (route) => {
-        const path = new URL(route.request().url()).pathname
-        const data = path.endsWith('/auth/me')
-          ? { id: 'u1', name: 'Audit User', email: 'audit@example.com', permissions: ['product:read', 'product:write'] }
-          : path.endsWith('/products/audit-product')
-            ? product
-            : []
-        return route.fulfill({ json: data })
+      await mockApi(page, {
+        role: 'ADMIN',
+        handle: (path) => (path.endsWith('/products/audit-product') ? product : undefined),
       })
       for (const path of ['/products/audit-product', '/products/audit-product/edit']) {
         await page.goto(path)

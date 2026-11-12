@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h, onMounted } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
-import { buildUser } from '@test/factories/User.factory'
+import { buildUser, buildUserDto } from '@test/factories/User.factory'
 import { plainSpaces } from '@test/Intl'
 import { renderWithPlugins } from '@test/Render'
 
@@ -17,8 +17,7 @@ async function renderDashboard(permissions: string[], failRevenue = false) {
       return () => h(DashboardView)
     },
   })
-  const result = renderWithPlugins(Host)
-  result.http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions }))
+  const result = renderWithPlugins(Host, { user: buildUser({ permissions }) })
   if (failRevenue) result.http.onGet(/\/dashboard\/revenue$/).reply(500, {})
   result.http.onGet(/\/dashboard\//).reply(200, { value: 42, points: [], items: [] })
   await flushPromises()
@@ -35,7 +34,7 @@ describe('DashboardView', () => {
       },
     })
     const { wrapper, http } = renderWithPlugins(Host)
-    http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
+    http.onGet(/\/auth\/me$/).reply(200, buildUserDto())
     expect(wrapper.find('[role="status"][aria-label="Đang tải…"]').exists()).toBe(true)
     expect(wrapper.text()).not.toContain('Đang tải…')
   })
@@ -62,15 +61,14 @@ describe('DashboardView', () => {
 
 it('loads the current user when opening the dashboard directly after a reload', async () => {
   const { wrapper, http } = renderWithPlugins(DashboardView)
-  http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['product:read'] }))
+  http.onGet(/\/auth\/me$/).reply(200, buildUserDto({ role: 'STAFF' }))
   http.onGet(/\/dashboard\//).reply(200, { value: 12, points: [], items: [] })
   await flushPromises()
   expect(wrapper.find('[data-widget="products"]').text()).toContain('12')
 })
 
 it('links a recent order directly to its detail page', async () => {
-  const { wrapper, http } = renderWithPlugins(DashboardView)
-  http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read'] }))
+  const { wrapper, http } = renderWithPlugins(DashboardView, { user: buildUser({ permissions: ['order:read'] }) })
   http.onGet(/\/dashboard\/recent-orders$/).reply(200, { items: [{ id: 'o1', label: 'ORD-001', value: 200000 }] })
   http.onGet(/\/dashboard\//).reply(200, { value: 12, points: [], items: [] })
   await flushPromises()
@@ -78,8 +76,9 @@ it('links a recent order directly to its detail page', async () => {
 })
 
 it('formats revenue as money and counts with the locale separator', async () => {
-  const { wrapper, http } = renderWithPlugins(DashboardView)
-  http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: ['order:read', 'product:read'] }))
+  const { wrapper, http } = renderWithPlugins(DashboardView, {
+    user: buildUser({ permissions: ['order:read', 'product:read'] }),
+  })
   http.onGet(/\/dashboard\/revenue$/).reply(200, { value: 1_284_560_000 })
   http.onGet(/\/dashboard\/orders$/).reply(200, { value: 1_842 })
   http.onGet(/\/dashboard\/recent-orders$/).reply(200, { items: [{ id: 'o1', label: 'ORD-001', value: 12_350_000 }] })

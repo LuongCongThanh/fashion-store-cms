@@ -32,6 +32,13 @@ cms/
 │   ├── archive/                            # tài liệu đã xong, giữ để tra lý do
 │   │   ├── scaffold/                       # 14 plan con của scaffold (spec, plan, report) — đã xong
 │   │   └── scaffold-plan.md                # plan dựng khung: quyết định D1–D41, lý do §V
+│   ├── plans/                              # plan theo feature
+│   │   ├── <feature>-plan.md               # plan tổng: mục tiêu, trạng thái, link tới thư mục feature
+│   │   └── <feature>/                      # thư mục tên feature
+│   │       ├── spec.md                     # contract, yêu cầu
+│   │       ├── plan.md                     # phạm vi, các bước
+│   │       ├── decisions.md                # quyết định khó đảo ngược (bối cảnh → quyết định → hệ quả); thay cho ADR
+│   │       └── report.md                   # kết quả, rủi ro, cách chạy, số liệu
 │   ├── CONVENTIONS.md                      # tài liệu này — quy ước kỹ thuật
 │   └── FE_architecture.md                  # kiến trúc FE (nguồn quyết định)
 ├── e2e/                                    # test end-to-end Playwright
@@ -45,8 +52,6 @@ cms/
 │   ├── app/                                # composition root — CHỈ main.ts (và src/test/) import
 │   │   ├── Runtime.ts                      # createAppRuntime() — dựng toàn bộ runtime (D37)
 │   │   ├── Runtime.spec.ts                 # test wiring prod
-│   │   ├── dev/                            # chỉ DEV, import động sau `import.meta.env.DEV` (không vào build prod)
-│   │   │   └── MockAuth.ts                 # Mock auth: adapter giả lập /auth/* (GLOSSARY)
 │   │   ├── config/                         # cấu hình đọc lúc khởi động
 │   │   │   ├── Env.config.ts               # validate VITE_* bằng Zod
 │   │   │   ├── Env.config.spec.ts          # test thiếu/sai biến env
@@ -72,7 +77,8 @@ cms/
 │   ├── features/                           # cấu trúc chi tiết: §Q
 │   │   ├── auth/                           # feature đăng nhập / đăng xuất / thông tin user
 │   │   │   ├── api/                        # hàm gọi API của feature
-│   │   │   │   └── Auth.api.ts             # gọi API login, forgot-password, me
+│   │   │   │   ├── Auth.api.ts             # gọi API login, forgot/reset-password, me, logout
+│   │   │   │   └── Auth.mapper.ts          # AuthUserResponseDto → CurrentUser, ma trận quyền theo role
 │   │   │   ├── components/                 # component nội bộ feature
 │   │   │   │   └── LoginForm.vue           # form đăng nhập (props/emits), view lo gọi API
 │   │   │   ├── schemas/                    # Zod schema của form
@@ -80,12 +86,12 @@ cms/
 │   │   │   ├── stores/                     # Pinia store nội bộ feature
 │   │   │   │   └── Auth.store.ts           # Pinia store thông tin user hiện tại, nội bộ feature
 │   │   │   ├── types/                      # kiểu dữ liệu feature (feature khác được import)
-│   │   │   │   ├── Auth.types.ts           # kiểu dữ liệu của auth (User, LoginPayload…)
-│   │   │   │   └── MockAccount.ts          # tài khoản Mock auth, chỉ tham chiếu sau điều kiện DEV
+│   │   │   │   └── Auth.types.ts           # kiểu dữ liệu của auth (CurrentUser, LoginPayload…)
 │   │   │   ├── views/                      # trang (route component) của feature
 │   │   │   │   ├── LoginView.vue           # trang đăng nhập
-│   │   │   │   └── ForgotPasswordView.vue  # trang quên mật khẩu
-│   │   │   ├── Auth.routes.ts              # khai báo route /login, /forgot-password của feature
+│   │   │   │   ├── ForgotPasswordView.vue  # trang quên mật khẩu
+│   │   │   │   └── ResetPasswordView.vue   # trang đặt lại mật khẩu từ link email
+│   │   │   ├── Auth.routes.ts              # khai báo route /login, /forgot-password, /reset-password
 │   │   │   ├── SafeRedirect.ts             # chọn đích sau login, chặn open redirect
 │   │   │   ├── UseAuth.ts                  # interface công khai duy nhất
 │   │   │   └── UseAuth.spec.ts             # test interface useAuth()

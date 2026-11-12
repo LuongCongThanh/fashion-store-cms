@@ -9,11 +9,13 @@ import { useAuth } from '@features/auth/UseAuth'
  */
 export async function authGuard(to: RouteLocationNormalized) {
   const auth = useAuth()
+  const needsUser = Boolean(to.meta.requiresAuth || to.meta.permission)
+  if (needsUser) await auth.ensureUser()
+  else if (to.meta.guestOnly) await auth.restoreSession()
   if (to.meta.guestOnly && auth.isAuthenticated.value) return { name: 'home' }
   if (to.meta.requiresAuth && !auth.isAuthenticated.value) {
     return { name: 'auth.login', query: { redirect: to.fullPath } }
   }
-  if (to.meta.permission) await auth.ensureUser()
   if (to.meta.permission && !auth.can(to.meta.permission)) {
     return { name: 'forbidden' }
   }

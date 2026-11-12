@@ -42,8 +42,11 @@ describe('LoginView', () => {
 
   it('signs in and goes to the safe redirect target', async () => {
     const { wrapper, http, router } = await renderLogin('?redirect=/design-system')
-    http.onPost(/\/auth\/login$/).reply(200, { accessToken: 'at-1', refreshToken: 'rt-1' })
-    http.onGet(/\/auth\/me$/).reply(200, buildUser())
+    const user = buildUser()
+    http.onPost(/\/auth\/login$/).reply(200, {
+      accessToken: 'at-1',
+      user: { id: user.id, email: user.email, fullName: user.name, role: user.role, emailVerified: true },
+    })
 
     await fill(wrapper, 'lan@shop.vn', 'secret')
 
@@ -52,29 +55,26 @@ describe('LoginView', () => {
       password: 'secret',
     })
     expect(router.currentRoute.value.fullPath).toBe('/design-system')
-    expect(localStorage.getItem('cms.session.accessToken')).toBe('at-1')
+    expect(localStorage.getItem('cms.session.accessToken')).toBeNull()
   })
 
   it('ignores an external redirect and goes to /', async () => {
     const { wrapper, http, router } = await renderLogin('?redirect=//evil.com')
-    http.onPost(/\/auth\/login$/).reply(200, { accessToken: 'at-1', refreshToken: 'rt-1' })
-    http.onGet(/\/auth\/me$/).reply(200, buildUser())
+    const user = buildUser()
+    http.onPost(/\/auth\/login$/).reply(200, {
+      accessToken: 'at-1',
+      user: { id: user.id, email: user.email, fullName: user.name, role: user.role, emailVerified: true },
+    })
 
     await fill(wrapper, 'lan@shop.vn', 'secret')
 
     expect(router.currentRoute.value.fullPath).toBe('/')
   })
 
-  it('keeps the session only in this tab when Remember me is unchecked', async () => {
-    const { wrapper, http } = await renderLogin()
-    http.onPost(/\/auth\/login$/).reply(200, { accessToken: 'at-1', refreshToken: 'rt-1' })
-    http.onGet(/\/auth\/me$/).reply(200, buildUser())
+  it('does not expose the obsolete Remember me control', async () => {
+    const { wrapper } = await renderLogin()
 
-    await wrapper.find('[role="checkbox"]').trigger('click')
-    await fill(wrapper, 'lan@shop.vn', 'secret')
-
-    expect(sessionStorage.getItem('cms.session.accessToken')).toBe('at-1')
-    expect(localStorage.getItem('cms.session.accessToken')).toBeNull()
+    expect(wrapper.find('[role="checkbox"]').exists()).toBe(false)
   })
 
   it('shows one generic message on wrong credentials', async () => {
@@ -84,6 +84,22 @@ describe('LoginView', () => {
     await fill(wrapper, 'lan@shop.vn', 'wrong')
 
     expect(wrapper.text()).toContain('Email hoặc mật khẩu không đúng')
+    expect(router.currentRoute.value.name).toBe('auth.login')
+    expect(notifier.error).not.toHaveBeenCalled()
+  })
+
+  it('tells a customer account inline that it cannot use the CMS and revokes its cookie', async () => {
+    const { wrapper, http, router, notifier } = await renderLogin()
+    http.onPost(/\/auth\/login$/).reply(200, {
+      accessToken: 'at-1',
+      user: { id: 'c1', email: 'c@shop.vn', fullName: 'Khách', role: 'CUSTOMER', emailVerified: true },
+    })
+    http.onPost(/\/auth\/logout$/).reply(204)
+
+    await fill(wrapper, 'c@shop.vn', 'secret')
+
+    expect(wrapper.text()).toContain('Tài khoản này không có quyền truy cập CMS.')
+    expect(http.history.post.map((r) => r.url)).toContain('/auth/logout')
     expect(router.currentRoute.value.name).toBe('auth.login')
     expect(notifier.error).not.toHaveBeenCalled()
   })

@@ -14,13 +14,16 @@ import { createHttpClient } from './HttpClient'
 const BASE = 'http://api.test'
 
 /** Chỉ test qua interface: createHttpClient({ transport: mock.adapter() }) (§O.3). */
-function setup(opts: { callRefresh?: (rt: string) => Promise<AuthTokens>; initial?: SessionSnapshot } = {}) {
+function setup(
+  opts: { callRefresh?: () => Promise<AuthTokens>; initial?: SessionSnapshot; onAuthFailure?: () => void } = {},
+) {
   const mock = new MockAdapter(axios.create())
   const session = createSession({
     pinia: createPinia(),
     queryClient: new QueryClient(),
-    callRefresh: vi.fn(opts.callRefresh ?? (async () => ({ accessToken: 'fresh', refreshToken: 'rt-2' }))),
-    initial: opts.initial ?? { accessToken: 'token-1', refreshToken: 'rt-1', storeId: 'store-1' },
+    callRefresh: vi.fn(opts.callRefresh ?? (async () => ({ accessToken: 'fresh' }))),
+    onAuthFailure: opts.onAuthFailure,
+    initial: opts.initial ?? { accessToken: 'token-1', storeId: 'store-1' },
   })
   const http = createHttpClient({
     baseURL: BASE,
@@ -43,13 +46,14 @@ describe('HttpClient', () => {
     expect(headers.Authorization).toBe('Bearer token-1')
     expect(headers['X-Store-Id']).toBe('store-1')
     expect(headers['Accept-Language']).toBe('vi')
+    expect(mock.history.get[0]?.withCredentials).toBe(true)
   })
 
   it('omits Authorization for skipAuth requests but keeps the other headers', async () => {
     const { mock, http } = setup()
     mock.onPost(`${BASE}/auth/refresh`).reply(200, {})
 
-    await http.post('/auth/refresh', { refreshToken: 'rt' }, { skipAuth: true })
+    await http.post('/auth/refresh', undefined, { skipAuth: true })
 
     const headers = mock.history.post[0]?.headers ?? {}
     expect(headers.Authorization).toBeUndefined()
@@ -66,7 +70,7 @@ describe('HttpClient', () => {
   })
 
   it('refreshes once for concurrent 401s and retries each request with the new token', async () => {
-    const callRefresh = vi.fn(async () => ({ accessToken: 'fresh', refreshToken: 'rt-2' }))
+    const callRefresh = vi.fn(async () => ({ accessToken: 'fresh' }))
     const { mock, http } = setup({ callRefresh })
     mock
       .onGet(new RegExp(`${BASE}/items/\\d`))
@@ -79,11 +83,11 @@ describe('HttpClient', () => {
   })
 
   it('rejects with UNAUTHORIZED and lets Session emit authFailure when refresh fails', async () => {
-    const { mock, http, session } = setup({
-      callRefresh: async () => Promise.reject(new Error('expired')),
-    })
     const onFailure = vi.fn()
-    session.on('authFailure', onFailure)
+    const { mock, http } = setup({
+      callRefresh: async () => Promise.reject(new ApiError(401, 'UNAUTHORIZED', 'Invalid refresh token')),
+      onAuthFailure: onFailure,
+    })
     mock.onGet(`${BASE}/me`).reply(401, {})
 
     const error = await http.get('/me').catch((e: unknown) => e)
@@ -114,6 +118,18 @@ describe('HttpClient', () => {
       message: 'slug taken',
       fields: { slug: ['taken'] },
       requestId: 'req-42',
+    })
+  })
+
+  it('maps the documented BE error shape including requestId', async () => {
+    const { mock, http } = setup()
+    mock.onGet(`${BASE}/x`).reply(400, { statusCode: 400, message: ['email must be valid'], requestId: 'be-42' })
+
+    await expect(http.get('/x')).rejects.toMatchObject({
+      status: 400,
+      code: 'VALIDATION_FAILED',
+      message: 'email must be valid',
+      requestId: 'be-42',
     })
   })
 

@@ -71,14 +71,12 @@
       "password": "Mật khẩu",
       "showPassword": "Hiện mật khẩu",
       "hidePassword": "Ẩn mật khẩu",
-      "remember": "Ghi nhớ đăng nhập",
       "forgot": "Quên mật khẩu?",
       "submit": "Đăng nhập",
       "invalidCredentials": "Email hoặc mật khẩu không đúng",
-      "mockHint": "Chế độ Mock auth: dùng {email} / {password}",
       "capsLock": "Caps Lock đang bật",
-      "useDemo": "Điền tài khoản demo",
-      "submitting": "Đang đăng nhập…"
+      "submitting": "Đang đăng nhập…",
+      "notStaff": "Tài khoản này không có quyền truy cập CMS."
     },
     "forgotPassword": {
       "title": "Quên mật khẩu",
@@ -87,9 +85,21 @@
       "sent": "Nếu email tồn tại, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu.",
       "backToLogin": "Quay lại đăng nhập"
     },
+    "resetPassword": {
+      "title": "Đặt lại mật khẩu",
+      "subtitle": "Tạo mật khẩu mới cho tài khoản của bạn",
+      "password": "Mật khẩu mới",
+      "confirmPassword": "Xác nhận mật khẩu mới",
+      "submit": "Đặt lại mật khẩu",
+      "complete": "Mật khẩu đã được đặt lại. Bạn có thể đăng nhập bằng mật khẩu mới.",
+      "missingToken": "Liên kết đặt lại mật khẩu không hợp lệ. Hãy yêu cầu gửi lại email.",
+      "linkRejected": "Liên kết đã hết hạn hoặc đã được sử dụng.",
+      "requestNewLink": "Gửi lại email"
+    },
     "validation": {
       "emailInvalid": "Email không hợp lệ",
-      "required": "Không được để trống"
+      "required": "Không được để trống",
+      "passwordMismatch": "Mật khẩu xác nhận không khớp"
     },
     "brand": {
       "tagline": "Quản lý cửa hàng thời trang của bạn, gọn gàng trong một nơi.",

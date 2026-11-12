@@ -14,4 +14,11 @@ export const authRoutes: RouteRecordRaw[] = [
     component: () => import('./views/ForgotPasswordView.vue'),
     meta: { titleKey: 'auth.forgotPassword.title', guestOnly: true },
   },
+  {
+    path: 'reset-password',
+    name: 'auth.reset-password',
+    component: () => import('./views/ResetPasswordView.vue'),
+    // Không guestOnly: staff đang đăng nhập vẫn phải dùng được link reset trong email.
+    meta: { titleKey: 'auth.resetPassword.title' },
+  },
 ]

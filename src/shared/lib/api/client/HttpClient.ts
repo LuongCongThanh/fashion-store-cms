@@ -13,7 +13,9 @@ import type { Session } from '@shared/lib/session/Session'
 import type { paths } from '@shared/types/Api.generated'
 
 type Method = 'delete' | 'get' | 'patch' | 'post' | 'put'
-type HasPaths = [keyof paths] extends [never] ? false : true
+// CMS còn có nhiều feature chưa tồn tại trong BE hiện tại. Chỉ feature đã có contract
+// mới dùng DTO generated tại boundary của nó; HttpClient vẫn chấp nhận path tự do.
+type HasPaths = false
 type PathsWith<M extends Method> = HasPaths extends true
   ? { [P in keyof paths]: paths[P] extends Record<M, object> ? P : never }[keyof paths]
   : string
@@ -48,7 +50,7 @@ export interface HttpClientDeps {
   session: Session
   /** Trả locale hiện tại để gắn header Accept-Language. */
   getLocale: () => string
-  /** CHỈ dành cho test và Mock auth ở DEV: adapter của axios-mock-adapter. `unknown` có chủ đích → không lộ kiểu axios. */
+  /** CHỈ dành cho test: adapter của axios-mock-adapter. `unknown` có chủ đích → không lộ kiểu axios. */
   transport?: unknown
 }
 
@@ -59,6 +61,8 @@ export interface RequestOpts<P, M extends Method> {
   signal?: AbortSignal
   /** true = không gắn token, không vào hàng đợi refresh. Dùng cho request refresh của Session và cho login (401 = sai thông tin, không phải hết phiên). */
   skipAuth?: boolean
+  /** true = vẫn gắn token nhưng 401 KHÔNG kích hoạt refresh/authFailure. Dùng cho logout (phiên chết thì thôi, không báo hết phiên). */
+  noRefresh?: boolean
 }
 
 /** Mọi method trả thẳng `data`; lỗi LUÔN là ApiError (§O.1). */
@@ -84,6 +88,7 @@ export interface HttpClient {
 
 interface Config extends InternalAxiosRequestConfig {
   skipAuth?: boolean
+  noRefresh?: boolean
   /** Đã gửi lại sau refresh một lần — không refresh lần nữa. */
   retried?: boolean
 }
@@ -93,6 +98,7 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
   const instance = axios.create({
     baseURL: deps.baseURL,
     timeout: 15_000,
+    withCredentials: true,
     adapter: deps.transport as AxiosAdapter | undefined,
   })
 
@@ -105,7 +111,7 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
   async function retryAfterRefresh(error: unknown) {
     if (!axios.isAxiosError(error) || error.response?.status !== 401) throw error
     const config = error.config as Config | undefined
-    if (!config || config.skipAuth || config.retried) throw error
+    if (!config || config.skipAuth || config.noRefresh || config.retried) throw error
     const token = await session.refresh()
     if (!token) throw error
     return instance.request({ ...config, retried: true } as Config)
@@ -133,6 +139,7 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
       params: opts.query,
       signal: opts.signal,
       skipAuth: opts.skipAuth,
+      noRefresh: opts.noRefresh,
     } as Config)
     return res.data
   }
@@ -147,13 +154,19 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
 }
 
 interface ErrorBody {
-  code: string
-  message?: string
+  code?: string
+  statusCode?: number
+  message?: string | string[]
+  requestId?: string
   details?: { fields?: Record<string, string[]> }
 }
 
 function isErrorBody(data: unknown): data is ErrorBody {
-  return typeof data === 'object' && data !== null && typeof (data as ErrorBody).code === 'string'
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    (typeof (data as ErrorBody).code === 'string' || typeof (data as ErrorBody).statusCode === 'number')
+  )
 }
 
 /** Mọi lỗi → ApiError (bảng §O.3). */
@@ -164,11 +177,12 @@ function toApiError(error: unknown): never {
   const res = error.response
   if (res) {
     const body = isErrorBody(res.data) ? res.data : undefined
-    const requestId = res.headers['x-request-id'] as string | undefined
+    const message = Array.isArray(body?.message) ? body.message.join(', ') : body?.message
+    const requestId = (res.headers['x-request-id'] as string | undefined) ?? body?.requestId
     throw new ApiError(
       res.status,
       body?.code ?? codeFromStatus(res.status),
-      body?.message ?? error.message,
+      message ?? error.message,
       body?.details?.fields,
       requestId,
     )

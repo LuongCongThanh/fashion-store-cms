@@ -57,4 +57,4 @@ Guard tải current user trước khi kiểm quyền. Dashboard cũng tải user
 
 ## Trạng thái tích hợp
 
-Người phụ trách xác nhận backend chưa có. Các View test dùng HTTP giả tại boundary; các endpoint/model hiện là [hợp đồng tạm](./plans/cms-pages-components/api-contracts.md). Mock auth ở DEV chỉ giả lập auth; nó không tạo dữ liệu giả cho các feature CMS. E2E được hoãn theo lựa chọn của người phụ trách.
+BE đã có OpenAPI; contract xác nhận tại [API contracts](./plans/cms-pages-components/api-contracts.md). View test vẫn dùng HTTP adapter giả tại boundary, nhưng development và production đều gọi BE thật. E2E được hoãn theo lựa chọn của người phụ trách.

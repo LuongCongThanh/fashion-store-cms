@@ -10,8 +10,7 @@ import { renderWithPlugins } from '@test/Render'
 async function renderCms(permissions: string[]) {
   const router = createRouter({ history: createMemoryHistory(), routes })
   await router.push('/login')
-  const result = renderWithPlugins(RouterView, { router })
-  result.http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions }))
+  const result = renderWithPlugins(RouterView, { router, user: buildUser({ permissions }) })
   router.beforeEach(authGuard)
   return { ...result, router }
 }

@@ -33,8 +33,11 @@ export async function renderFeature(
     ],
   })
   await router.push(options.path)
-  const result = renderWithPlugins(RouterView, { router, mount: { attachTo: document.body } })
-  result.http.onGet(/\/auth\/me$/).reply(200, buildUser({ permissions: options.permissions ?? [] }))
+  const result = renderWithPlugins(RouterView, {
+    router,
+    user: buildUser({ permissions: options.permissions ?? [] }),
+    mount: { attachTo: document.body },
+  })
   options.mock(result.http)
   await flushPromises()
   return { ...result, router }

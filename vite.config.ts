@@ -62,4 +62,12 @@ export default defineConfig(({ command, mode }) => ({
     // `npm run analyze` → dist/stats.html
     mode === 'analyze' && visualizer({ filename: 'dist/stats.html', gzipSize: true, open: false }),
   ],
+  server: {
+    proxy: {
+      '/api/v1': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+    },
+  },
 }))
