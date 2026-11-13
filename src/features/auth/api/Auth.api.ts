@@ -5,8 +5,8 @@ import { ApiError } from '@shared/lib/api/errors/ApiError'
 import { ErrorCode } from '@shared/lib/api/errors/ErrorCode'
 
 import type { CurrentUser, LoginPayload, ResetPasswordPayload } from '@features/auth/types/Auth.types'
+import type { components } from '@shared/lib/api/Api.generated'
 import type { HttpClient } from '@shared/lib/api/client/HttpClient'
-import type { components } from '@shared/types/Api.generated'
 
 import { toCurrentUser } from './Auth.mapper'
 

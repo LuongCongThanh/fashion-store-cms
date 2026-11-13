@@ -7,7 +7,7 @@ import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
 import type { SizeInput } from '@features/sizes/schemas/Size.schema'
 import type { Size } from '@features/sizes/types/Size.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 import { toSize } from './Size.mapper'
 

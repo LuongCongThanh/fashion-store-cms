@@ -145,6 +145,8 @@ cms/
 │   │   │   └── UseTheme.ts                 # color mode, key cms.colorMode
 │   │   ├── lib/                            # hạ tầng thuần, không import components/, composables/
 │   │   │   ├── api/                        # giao tiếp HTTP
+│   │   │   │   ├── Api.generated.ts        # sinh từ OpenAPI (npm run gen:api), KHÔNG sửa tay
+│   │   │   │   ├── Permission.ts           # Permission (enum API), PendingPermission
 │   │   │   │   ├── client/                 # HTTP client duy nhất của app
 │   │   │   │   │   ├── HttpClient.ts       # createHttpClient, useHttpClient, HTTP_CLIENT_KEY; bên trong: header, gom 401, chuẩn hoá lỗi (§M.1, §O.3)
 │   │   │   │   │   └── HttpClient.spec.ts  # test MỌI hành vi qua interface, gồm các ca §O.3
@@ -169,7 +171,7 @@ cms/
 │   │   │       ├── Session.store.ts        # useSessionStore — token, nội bộ
 │   │   │       └── Session.spec.ts         # test refresh token, logout
 │   │   ├── types/                          # kiểu dùng chung
-│   │   │   └── Api.generated.ts            # sinh từ Swagger, KHÔNG sửa tay
+│   │   │   └── Pagination.types.ts
 │   │   └── utils/                          # hàm thuần, tạo khi có hàm đầu tiên
 │   │       └── Money.ts                    # (P5) ví dụ
 │   ├── test/                               # hạ tầng test dùng chung (không phải test của module)
@@ -760,7 +762,7 @@ Mỗi thư mục cấp 1 trong `src/` có một alias (7 alias: `@app`, `@assets
 | `@assets/*`   | `src/assets/*`   | `@assets/images/Logo.svg`                                                                                      |
 | `@features/*` | `src/features/*` | `@features/auth/UseAuth`                                                                                       |
 | `@layouts/*`  | `src/layouts/*`  | `@layouts/DashboardLayout.vue`                                                                                 |
-| `@shared/*`   | `src/shared/*`   | `@shared/components/feedback/ErrorState.vue`, `@shared/lib/api/errors/ApiError`, `@shared/types/Api.generated` |
+| `@shared/*`   | `src/shared/*`   | `@shared/components/feedback/ErrorState.vue`, `@shared/lib/api/errors/ApiError`, `@shared/lib/api/Api.generated` |
 | `@locales/*`  | `src/locales/*`  | `@locales/vi.json`                                                                                             |
 | `@test/*`     | `src/test/*`     | `@test/Render` (chỉ trong `*.spec.ts` và `src/test/`)                                                                         |
 
@@ -1222,7 +1224,7 @@ Route meta dùng chung (khai báo kiểu trong `src/app/router/RouteMeta.d.ts`):
 
 ```ts
 // features/products/api/Product.mapper.ts
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 import type { Product, ProductInput } from '../types/Product.types'
 
 type ProductDto = components['schemas']['ProductDto']

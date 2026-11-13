@@ -1,5 +1,5 @@
 import type { Size } from '@features/sizes/types/Size.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type SizeResponseDto = components['schemas']['SizeResponseDto']
 

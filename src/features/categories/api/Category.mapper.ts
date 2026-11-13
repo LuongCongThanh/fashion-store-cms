@@ -1,5 +1,5 @@
 import type { Category } from '@features/categories/types/Category.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type CategoryResponseDto = components['schemas']['CategoryResponseDto']
 

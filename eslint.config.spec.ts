@@ -51,8 +51,8 @@ const CASES: [string, string, boolean][] = [
   ['src/shared/components/feedback/ErrorState.vue', '@shared/composables/UseNotify', false],
   ['src/features/auth/components/LoginForm.vue', '../api/Auth.api', true],
   ['src/features/auth/components/LoginForm.vue', 'vue-router', true],
-  ['src/features/auth/views/LoginView.vue', '@shared/types/Api.generated', true],
-  ['src/features/auth/api/Auth.api.ts', '@shared/types/Api.generated', false],
+  ['src/features/auth/views/LoginView.vue', '@shared/lib/api/Api.generated', true],
+  ['src/features/auth/api/Auth.api.ts', '@shared/lib/api/Api.generated', false],
   ['src/features/auth/views/LoginView.vue', '@test/Render', true],
   ['src/features/auth/views/LoginView.spec.ts', '@test/Render', false],
 ]

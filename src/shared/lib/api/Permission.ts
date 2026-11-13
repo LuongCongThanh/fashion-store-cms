@@ -1,4 +1,4 @@
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 /** Quyền (Permission) do API định nghĩa — enum trong OpenAPI. FE không tự đặt chuỗi quyền. */
 export type Permission = components['schemas']['Permission']

@@ -1,4 +1,4 @@
-// Sinh src/shared/types/Api.generated.ts từ Swagger/OpenAPI của BE (Step 6).
+// Sinh src/shared/lib/api/Api.generated.ts từ Swagger/OpenAPI của BE (Step 6).
 // OPENAPI_URL đọc từ env (.env.local hoặc biến môi trường) — KHÔNG có tiền tố VITE_, không lộ ra browser.
 import { writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import openapiTS, { astToString } from 'openapi-typescript'
 import { loadEnv } from 'vite'
 
-const OUTPUT = fileURLToPath(new URL('../src/shared/types/Api.generated.ts', import.meta.url))
+const OUTPUT = fileURLToPath(new URL('../src/shared/lib/api/Api.generated.ts', import.meta.url))
 
 const HEADER = `/**
  * FILE SINH TỰ ĐỘNG bằng \`npm run gen:api\` — KHÔNG sửa tay.

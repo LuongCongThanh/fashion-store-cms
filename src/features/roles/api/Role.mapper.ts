@@ -1,5 +1,5 @@
 import type { Role } from '@features/roles/types/Role.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type RoleResponseDto = components['schemas']['RoleResponseDto']
 

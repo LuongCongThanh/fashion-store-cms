@@ -11,7 +11,7 @@ import type {
   RenameInternalAccountInput,
 } from '@features/accounts/schemas/InternalAccount.schema'
 import type { InternalAccount } from '@features/accounts/types/InternalAccount.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 import type { Paginated } from '@shared/types/Pagination.types'
 
 import { toInternalAccount } from './InternalAccount.mapper'

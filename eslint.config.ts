@@ -56,7 +56,7 @@ const noUpper: Restriction = {
   message: 'shared/ must not import app/, layouts/, features/.',
 }
 const noDto: Restriction = {
-  group: ['@shared/types/Api.generated'],
+  group: ['@shared/lib/api/Api.generated'],
   message: 'DTOs are only allowed in features/*/api/ and shared/lib/api/ — use Models from types/ (§T.3).',
 }
 // Chặn cả import thẳng thư mục (index) và file ở thư mục con của chính feature.
@@ -174,7 +174,7 @@ export default defineConfig(
       'dev-dist/',
       'playwright-report/',
       'test-results/',
-      'src/shared/types/Api.generated.ts',
+      'src/shared/lib/api/Api.generated.ts',
     ],
   },
   ...tseslint.configs.strictTypeChecked,

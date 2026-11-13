@@ -132,8 +132,8 @@ src/
 ├── shared/              # dùng chung, KHÔNG import app/, layouts/, features/
 │   ├── components/      # confirm/, feedback/, page/, table/…
 │   ├── composables/     # UseListState.ts, UseNotify.ts, UseTheme.ts, UsePwa.ts
-│   ├── lib/             # api/client/HttpClient.ts, api/errors/, query/, i18n/, session/, form/
-│   ├── types/           # Api.generated.ts — sinh từ Swagger, KHÔNG sửa tay
+│   ├── lib/             # api/Api.generated.ts (sinh từ OpenAPI, KHÔNG sửa tay), api/client/HttpClient.ts, api/errors/, query/, i18n/, session/, form/
+│   ├── types/           # Pagination.types.ts
 │   └── utils/
 ├── test/                # Setup.ts, Render.ts, factories/
 ├── App.vue
@@ -184,7 +184,7 @@ Mỗi feature có **một** file `api/<feature>.api.ts` chứa: hàm HTTP, query
 
 ```ts
 // features/products/api/Products.api.ts
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 type Product = components['schemas']['ProductDto']
 
@@ -294,7 +294,7 @@ Quy tắc:
 - `features/*/types/` chỉ chứa type riêng của UI (form model, view model), alias từ type generated:
 
 ```ts
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type Product = components['schemas']['ProductDto']
 ```
