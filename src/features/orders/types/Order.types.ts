@@ -1,4 +1,16 @@
-export type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'refunded'
+/** 9 trạng thái Đơn hàng (be-demo/docs/business/05-order-lifecycle.md §1). Chuyển trạng thái do API quyết định. */
+export const ORDER_STATUSES = [
+  'PENDING_PAYMENT',
+  'PLACED',
+  'CONFIRMED',
+  'PACKING',
+  'SHIPPING',
+  'DELIVERED',
+  'COMPLETED',
+  'CANCELLED',
+  'RETURNED_TO_SENDER',
+] as const
+export type OrderStatus = (typeof ORDER_STATUSES)[number]
 export type PaymentStatus = 'unpaid' | 'paid' | 'refunded'
 export interface Order {
   id: string

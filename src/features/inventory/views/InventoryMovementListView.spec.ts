@@ -2,10 +2,10 @@ import { expect, it } from 'vitest'
 
 import { renderFeature } from '@test/RenderFeature'
 
-import StockMovementListView from './StockMovementListView.vue'
+import InventoryMovementListView from './InventoryMovementListView.vue'
 
 it('loads auditable movements with date and type filters', async () => {
-  const { wrapper, http } = await renderFeature(StockMovementListView, {
+  const { wrapper, http } = await renderFeature(InventoryMovementListView, {
     path: '/inventory/movements?type=adjustment&from=2026-01-01',
     mock(http) {
       http.onGet(/\/inventory\/movements$/).reply(200, {

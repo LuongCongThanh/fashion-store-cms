@@ -230,13 +230,15 @@
   "orders": {
     "noItems": "This order has no items",
     "status": {
-      "pending": "Pending",
-      "confirmed": "Confirmed",
-      "processing": "Processing",
-      "shipped": "Shipped",
-      "delivered": "Delivered",
-      "cancelled": "Cancelled",
-      "refunded": "Refunded"
+      "PENDING_PAYMENT": "Awaiting payment",
+      "PLACED": "Awaiting confirmation",
+      "CONFIRMED": "Confirmed",
+      "PACKING": "Packing",
+      "SHIPPING": "Shipping",
+      "DELIVERED": "Delivered",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled",
+      "RETURNED_TO_SENDER": "Returned to sender"
     },
     "paymentStatus": {
       "unpaid": "Unpaid",
@@ -248,7 +250,6 @@
     "discount": "Discount",
     "shippingCost": "Shipping cost",
     "total": "Total",
-    "cancelConfirm": "Cancel this order?",
     "shipping": "Shipping",
     "payment": "Payment",
     "timeline": "Timeline",
@@ -280,7 +281,7 @@
     "current": "Current",
     "reserved": "Reserved",
     "available": "Available",
-    "movements": "Stock movements",
+    "movements": "Inventory movements",
     "type": "Type",
     "quantity": "Quantity",
     "reference": "Reference",

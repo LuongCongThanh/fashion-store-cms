@@ -6,13 +6,15 @@ import type { OrderStatus } from '@features/orders/types/Order.types'
 defineProps<{ status: OrderStatus }>()
 const { t } = useT()
 const colors = {
-  pending: 'warning',
-  confirmed: 'info',
-  processing: 'primary',
-  shipped: 'info',
-  delivered: 'success',
-  cancelled: 'error',
-  refunded: 'neutral',
+  PENDING_PAYMENT: 'warning',
+  PLACED: 'warning',
+  CONFIRMED: 'info',
+  PACKING: 'primary',
+  SHIPPING: 'info',
+  DELIVERED: 'success',
+  COMPLETED: 'success',
+  CANCELLED: 'error',
+  RETURNED_TO_SENDER: 'neutral',
 } as const
 </script>
 

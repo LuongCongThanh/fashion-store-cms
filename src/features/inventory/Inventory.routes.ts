@@ -14,7 +14,7 @@ export const inventoryRoutes: RouteRecordRaw[] = [
   {
     path: 'inventory/movements',
     name: 'inventory.movements',
-    component: () => import('./views/StockMovementListView.vue'),
+    component: () => import('./views/InventoryMovementListView.vue'),
     meta: { titleKey: 'inventory.movements', permission: 'inventory:read' },
   },
 ]

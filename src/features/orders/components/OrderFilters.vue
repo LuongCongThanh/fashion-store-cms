@@ -3,6 +3,7 @@ import UFormField from '@nuxt/ui/components/FormField.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
 import { computed } from 'vue'
 
+import { ORDER_STATUSES } from '@features/orders/types/Order.types'
 import FilterBar from '@shared/components/list/FilterBar.vue'
 import FilterDateRange from '@shared/components/list/FilterDateRange.vue'
 import FilterSelect from '@shared/components/list/FilterSelect.vue'
@@ -14,9 +15,8 @@ defineProps<{ params: OrderListParams }>()
 const emit = defineEmits<{ filter: [key: string, value: unknown] }>()
 const { t } = useT()
 
-const STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'] as const
 const PAYMENT_STATUSES = ['paid', 'unpaid', 'refunded'] as const
-const statusItems = computed(() => STATUSES.map((value) => ({ label: t(`orders.status.${value}`), value })))
+const statusItems = computed(() => ORDER_STATUSES.map((value) => ({ label: t(`orders.status.${value}`), value })))
 const paymentItems = computed(() =>
   PAYMENT_STATUSES.map((value) => ({ label: t(`orders.paymentStatus.${value}`), value })),
 )
