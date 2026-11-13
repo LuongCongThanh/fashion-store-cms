@@ -340,14 +340,17 @@
     "groups": {
       "CATALOG": "Danh mục hàng hoá",
       "ADMINISTRATION": "Quản trị",
-      "OPERATIONS": "Vận hành"
+      "OPERATIONS": "Vận hành",
+      "PRICING": "Giá & khuyến mãi"
     },
     "resources": {
       "PRODUCT": "Sản phẩm",
       "CATEGORY": "Danh mục",
       "PRODUCT_OPTION": "Size và màu",
       "ROLE": "Vai trò",
-      "INTERNAL_ACCOUNT": "Tài khoản nội bộ"
+      "INTERNAL_ACCOUNT": "Tài khoản nội bộ",
+      "SALE_PRICE": "Giá khuyến mãi",
+      "VOUCHER": "Voucher"
     },
     "actions": {
       "VIEW": "Xem",
@@ -398,5 +401,45 @@
     "visible": "Đang dùng",
     "codeTaken": "Mã màu đã tồn tại",
     "invalid": "Giá trị không hợp lệ"
+  },
+  "salePrices": {
+    "title": "Giá khuyến mãi",
+    "hint": "Giá thấp hơn Giá bán trong một khoảng thời gian. Mỗi Biến thể chỉ có một Giá khuyến mãi tại một thời điểm.",
+    "variants": "Biến thể áp dụng",
+    "variant": "Biến thể",
+    "mode": "Cách giảm",
+    "modePercent": "Giảm theo %",
+    "modePrice": "Giá cố định",
+    "percentOff": "% giảm",
+    "price": "Giá khuyến mãi",
+    "startsAt": "Bắt đầu",
+    "startsAtHint": "Để trống: bắt đầu ngay",
+    "endsAt": "Kết thúc",
+    "period": "Thời gian",
+    "add": "Đặt giá khuyến mãi",
+    "empty": "Chưa có Giá khuyến mãi.",
+    "noActiveVariant": "Cần ít nhất một Biến thể đang bán.",
+    "created": "Đã đặt Giá khuyến mãi",
+    "conflict": "Trùng thời gian với một Giá khuyến mãi khác của cùng Biến thể.",
+    "rejected": "Giá khuyến mãi phải nhỏ hơn Giá bán, thời gian bắt đầu không được ở quá khứ.",
+    "changeEnd": "Đổi kết thúc",
+    "endNow": "Kết thúc ngay",
+    "endTitle": "Kết thúc ngay Giá khuyến mãi của {sku}?",
+    "endDescription": "Giá áp dụng trở về Giá bán ngay lập tức.",
+    "deleteTitle": "Xoá Giá khuyến mãi sắp diễn ra của {sku}?",
+    "deleteDescription": "Giá khuyến mãi này chưa bắt đầu nên xoá được.",
+    "priceBelowSale": "Giá bán phải lớn hơn Giá khuyến mãi đang hoặc sắp áp dụng. Sửa Giá khuyến mãi trước.",
+    "status": {
+      "UPCOMING": "Sắp diễn ra",
+      "ACTIVE": "Đang áp dụng",
+      "ENDED": "Đã kết thúc"
+    },
+    "invalid": {
+      "percent": "% giảm từ 1 đến 99",
+      "after": "Kết thúc phải sau thời điểm bắt đầu",
+      "required": "Bắt buộc"
+    },
+    "discount": "−{percent}%",
+    "range": "{from} → {to}"
   }
 }
