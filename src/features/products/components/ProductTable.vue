@@ -1,72 +1,34 @@
 <script setup lang="ts">
-import UCheckbox from '@nuxt/ui/components/Checkbox.vue'
 import { computed, h } from 'vue'
 
 import type { TableColumn } from '@nuxt/ui/components/Table.vue'
 
 import DataTable from '@shared/components/table/DataTable.vue'
-import RowActions from '@shared/components/table/RowActions.vue'
-import { sortHeader } from '@shared/components/table/SortHeader'
 import TableLink from '@shared/components/table/TableLink.vue'
 import { useFormat } from '@shared/lib/format/Format'
 import { useT } from '@shared/lib/i18n/I18n'
 
+import type { Category } from '@features/categories/types/Category.types'
 import type { ProductListItem } from '@features/products/types/Product.types'
 
 import ProductStatusBadge from './ProductStatusBadge.vue'
-import ProductThumbnail from './ProductThumbnail.vue'
-const props = defineProps<{
-  data: ProductListItem[]
-  loading: boolean
-  error?: unknown
-  sort: string
-  selection: Record<string, boolean>
-  visibility: Record<string, boolean>
-  canWrite: boolean
-}>()
-const emit = defineEmits<{
-  sort: [value: string]
-  'update:selection': [value: Record<string, boolean>]
-  retry: []
-  action: [action: string, id: string]
-}>()
+
+const props = defineProps<{ data: ProductListItem[]; loading: boolean; error?: unknown; categories: Category[] }>()
+const emit = defineEmits<{ retry: [] }>()
 const { t } = useT()
 const format = useFormat()
+const categoryName = computed(() => new Map(props.categories.map((category) => [category.id, category.name])))
 const columns = computed<TableColumn<ProductListItem>[]>(() => [
   {
-    id: 'select',
-    header: ({ table }) =>
-      h(UCheckbox, {
-        modelValue: table.getIsAllPageRowsSelected(),
-        'aria-label': t('common.selectAll'),
-        'onUpdate:modelValue': (value) => {
-          table.toggleAllPageRowsSelected(!!value)
-        },
-      }),
-    cell: ({ row }) =>
-      h(UCheckbox, {
-        modelValue: row.getIsSelected(),
-        'aria-label': row.original.name,
-        'onUpdate:modelValue': (value) => {
-          row.toggleSelected(!!value)
-        },
-      }),
-  },
-  {
     accessorKey: 'name',
-    header: ({ column }) => sortHeader(column, t('common.name')),
+    header: t('common.name'),
     cell: ({ row }) =>
-      h('div', { class: 'flex min-w-48 items-center gap-3' }, [
-        h(ProductThumbnail, { name: row.original.name, src: row.original.imageUrl }),
-        h(TableLink, { to: `/products/${encodeURIComponent(row.original.id)}`, label: row.original.name }),
-      ]),
+      h(TableLink, { to: `/products/${encodeURIComponent(row.original.id)}/edit`, label: row.original.name }),
   },
   {
-    accessorKey: 'price',
-    meta: { class: { th: 'hidden sm:table-cell', td: 'hidden sm:table-cell' } },
-    header: ({ column }) => sortHeader(column, t('products.price'), { align: 'right' }),
-    cell: ({ row }) =>
-      h('span', { 'data-cell': 'price', class: 'block text-right tabular-nums' }, format.money(row.original.price)),
+    accessorKey: 'categoryId',
+    header: t('products.category'),
+    cell: ({ row }) => categoryName.value.get(row.original.categoryId) ?? '—',
   },
   {
     accessorKey: 'status',
@@ -74,36 +36,13 @@ const columns = computed<TableColumn<ProductListItem>[]>(() => [
     cell: ({ row }) => h(ProductStatusBadge, { status: row.original.status }),
   },
   {
-    id: 'actions',
-    header: t('common.actions'),
-    meta: { class: { th: 'sticky right-0 bg-elevated', td: 'sticky right-0 bg-default' } },
-    cell: ({ row }) =>
-      h(RowActions, {
-        label: `${t('common.actions')} ${row.original.name}`,
-        actions: [
-          { id: 'view', label: t('common.view'), allowed: true },
-          { id: 'edit', label: t('common.edit'), allowed: props.canWrite },
-          { id: 'delete', label: t('products.delete'), allowed: props.canWrite },
-        ],
-        onAction: (action: string) => {
-          emit('action', action, row.original.id)
-        },
-      }),
+    accessorKey: 'updatedAt',
+    header: t('products.updatedAt'),
+    cell: ({ row }) => format.dateTime(row.original.updatedAt),
   },
 ])
 </script>
 
 <template>
-  <DataTable
-    :data="data"
-    :columns="canWrite ? columns : columns.filter((column) => column.id !== 'select')"
-    :loading="loading"
-    :error="error"
-    :sort="sort"
-    :selection="selection"
-    :visibility="visibility"
-    @sort="emit('sort', $event)"
-    @update:selection="emit('update:selection', $event)"
-    @retry="emit('retry')"
-  />
+  <DataTable :data="data" :columns="columns" :loading="loading" :error="error" @retry="emit('retry')" />
 </template>

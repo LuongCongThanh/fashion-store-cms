@@ -1,29 +1,31 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useQuery } from '@tanstack/vue-query'
 import { computed, toValue } from 'vue'
 
 import type { MaybeRefOrGetter } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
-import { useLocale } from '@shared/lib/i18n/I18n'
 
 import type { ProductListParams } from '@features/products/schemas/ProductList.schema'
 import type { ProductListItem } from '@features/products/types/Product.types'
+import type { components } from '@shared/types/Api.generated'
 import type { Paginated } from '@shared/types/Pagination.types'
+
+import { toProductListItem } from './Product.mapper'
+
+type PaginatedProductResponseDto = components['schemas']['PaginatedProductResponseDto']
+
 export function useProductsQuery(params: MaybeRefOrGetter<ProductListParams>) {
   const http = useHttpClient()
-  const { locale } = useLocale()
   return useQuery({
-    queryKey: computed(() => ['products', locale.value, toValue(params)]),
-    queryFn: ({ signal }) =>
-      http.get('/products', { query: toValue(params), signal }) as Promise<Paginated<ProductListItem>>,
-  })
-}
-export function useProductBulkMutation() {
-  const http = useHttpClient()
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (input: { ids: string[]; action: 'publish' | 'unpublish' | 'delete' }) =>
-      http.post('/products/bulk', input),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['products'] }),
+    queryKey: computed(() => ['products', 'list', toValue(params)]),
+    queryFn: async ({ signal }): Promise<Paginated<ProductListItem>> => {
+      const { page, pageSize, search, categoryId, status } = toValue(params)
+      const dto = (await http.get('/admin/products', {
+        signal,
+        query: { page, limit: pageSize, q: search || undefined, categoryId, status },
+      })) as PaginatedProductResponseDto
+      const { limit, ...meta } = dto.meta
+      return { data: dto.data.map(toProductListItem), meta: { ...meta, pageSize: limit } }
+    },
   })
 }

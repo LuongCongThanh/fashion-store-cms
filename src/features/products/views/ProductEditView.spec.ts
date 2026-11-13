@@ -1,26 +1,31 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it, vi } from 'vitest'
 
+import { categoryPage } from '@test/factories/Category.factory'
 import { renderFeature } from '@test/RenderFeature'
 
 import ProductEditView from './ProductEditView.vue'
 
+/** JSON `GET /admin/products/:id` (test chỉ mô tả dữ liệu trên dây, §T.3). */
 const product = {
   id: 'p1',
   name: 'Áo ban đầu',
-  description: '',
-  brand: '',
-  price: 100,
-  comparePrice: 0,
-  cost: 0,
-  categoryIds: [],
+  slug: 'ao-ban-dau',
+  description: null,
+  categoryId: 'linen',
+  weightGrams: 200,
+  status: 'DRAFT',
+  publishedAt: null,
+  createdAt: '2026-01-01T00:00:00.000Z',
+  updatedAt: '2026-01-01T00:00:00.000Z',
+  variants: [],
   images: [],
-  mainImageId: '',
-  variants: [{ sku: 'TEE', size: '', color: '', price: 100, stock: 1 }],
-  slug: 'ao',
-  metaTitle: '',
-  metaDescription: '',
-  status: 'draft',
+}
+
+function mockOptions(http: { onGet: (url: RegExp) => { reply: (status: number, body: unknown) => unknown } }) {
+  http.onGet(/\/categories$/).reply(200, categoryPage([]))
+  http.onGet(/\/admin\/sizes$/).reply(200, [])
+  http.onGet(/\/admin\/colors$/).reply(200, [])
 }
 
 it('preserves unsaved edits when a background refresh returns changed server data', async () => {
@@ -31,7 +36,7 @@ it('preserves unsaved edits when a background refresh returns changed server dat
     permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/products\/p1$/).reply(() => [200, { ...product, name }])
-      http.onGet(/\/categories$/).reply(200, [])
+      mockOptions(http)
     },
   })
   await wrapper.find('input[name="name"]').setValue('Bản đang sửa')
@@ -39,7 +44,7 @@ it('preserves unsaved edits when a background refresh returns changed server dat
   vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 31000)
   window.dispatchEvent(new Event('visibilitychange'))
   await flushPromises()
-  expect(http.history.get.filter((request) => request.url === '/products/p1')).toHaveLength(2)
+  expect(http.history.get.filter((request) => request.url === '/admin/products/p1')).toHaveLength(2)
   expect(wrapper.find('input[name="name"]').element).toHaveProperty('value', 'Bản đang sửa')
   const unload = new Event('beforeunload', { cancelable: true })
   window.dispatchEvent(unload)
@@ -54,7 +59,7 @@ it('warns before switching records and then hydrates the newly chosen product', 
     mock(http) {
       http.onGet(/\/products\/p1$/).reply(200, product)
       http.onGet(/\/products\/p2$/).reply(200, { ...product, id: 'p2', name: 'Áo thứ hai' })
-      http.onGet(/\/categories$/).reply(200, [])
+      mockOptions(http)
     },
   })
   await wrapper.find('input[name="name"]').setValue('Bản chưa lưu')

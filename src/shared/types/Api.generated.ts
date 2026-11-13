@@ -189,8 +189,31 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Attach image metadata to a product color; isPrimary replaces that color primary (ADMIN only) */
+        /**
+         * Attach an uploaded image to a product color; isPrimary replaces that color primary
+         * @description The file under `storageKey` is checked in storage: missing, too large or wrong format → 422.
+         */
         post: operations["AdminProductController_createImage_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/images/presign": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign a direct upload of one product image to storage
+         * @description JPEG, PNG or WebP, at most 5 MB. POST `fields` and the file (`file`) as multipart form to `uploadUrl`, then attach it with POST /admin/products/:id/images and the returned `storageKey`.
+         */
+        post: operations["AdminProductController_presignImage_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -207,11 +230,11 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        /** Remove image metadata from a product (ADMIN only) */
+        /** Remove an image from a product and, best effort, from storage */
         delete: operations["AdminProductController_removeImage_v1"];
         options?: never;
         head?: never;
-        /** Update image metadata or make it the primary image of its color (ADMIN only) */
+        /** Update image metadata or make it the primary image of its color */
         patch: operations["AdminProductController_updateImage_v1"];
         trace?: never;
     };
@@ -927,6 +950,11 @@ export interface components {
              * @example 550e8400-e29b-41d4-a716-446655440000
              */
             categoryId: string;
+            /**
+             * @description Plain text, Vietnamese only (BR-CAT-10); empty string clears it
+             * @example Áo thun cotton 100%, form rộng.
+             */
+            description?: string;
             /** @example Wireless Headphones */
             name: string;
             /**
@@ -1034,6 +1062,8 @@ export interface components {
             productId: string;
             sortOrder: number;
             storageKey: string;
+            /** @description Public image URL; null when image storage is not configured */
+            url: string | null;
         };
         LoginDto: {
             /** @example user@example.com */
@@ -1117,6 +1147,33 @@ export interface components {
             group: string;
             permissions: components["schemas"]["Permission"][];
         };
+        PresignImageDto: {
+            /**
+             * @example image/webp
+             * @enum {string}
+             */
+            contentType: "image/jpeg" | "image/png" | "image/webp";
+            /**
+             * @description File size in bytes
+             * @example 524288
+             */
+            size: number;
+        };
+        PresignedImageUploadResponseDto: {
+            /**
+             * Format: date-time
+             * @description The signature stops working after this time
+             */
+            expiresAt: string;
+            /** @description Signed form fields */
+            fields: {
+                [key: string]: string;
+            };
+            /** @description Send this to POST /admin/products/:id/images after the upload succeeds */
+            storageKey: string;
+            /** @description POST a multipart form here: every `fields` entry, then the file as `file` */
+            uploadUrl: string;
+        };
         ProductDetailResponseDto: {
             categoryId: string;
             /** Format: date-time */
@@ -1146,6 +1203,8 @@ export interface components {
             createdAt: string;
             description: string | null;
             id: string;
+            /** @description Card image: a primary image (any color) first, else the first image; null when none */
+            imageUrl: string | null;
             /**
              * @description Highest price among ACTIVE variants, integer VND
              * @example 249000
@@ -1332,6 +1391,11 @@ export interface components {
              * @example 550e8400-e29b-41d4-a716-446655440000
              */
             categoryId?: string;
+            /**
+             * @description Plain text, Vietnamese only (BR-CAT-10); empty string clears it
+             * @example Áo thun cotton 100%, form rộng.
+             */
+            description?: string;
             /** @example Wireless Headphones */
             name?: string;
             /**
@@ -2602,7 +2666,95 @@ export interface operations {
                     "application/json": components["schemas"]["ImageResponseDto"];
                 };
             };
-            /** @description Invalid body or unknown color */
+            /** @description Invalid body, unknown color, or storageKey not issued for this product */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Image not uploaded, larger than 5 MB, or not JPEG/PNG/WebP */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Image storage is not configured or unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_presignImage_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PresignImageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresignedImageUploadResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -2640,6 +2792,15 @@ export interface operations {
             };
             /** @description Rate limit exceeded — retry after the window resets */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Image storage is not configured or unavailable */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
