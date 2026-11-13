@@ -1,6 +1,6 @@
 # Kế hoạch tái cấu trúc CMS
 
-> Trạng thái: **approved — grill 2026-11-14**
+> Trạng thái: **approved — grill 2026-11-14** · Tiến độ: Tier 0 xong (#70–#73), Voucher xong (#74, `openapi-v0.7.0`). Tiếp theo: Tier 1, chờ API (§7).
 > Nguồn: [`THREE-REPO-RESTRUCTURE-PLAN.md`](../../../THREE-REPO-RESTRUCTURE-PLAN.md) (re-plan API-first theo tier, 2026-11-14), [`THREE-REPO-RESTRUCTURE-SPEC.md`](../../../THREE-REPO-RESTRUCTURE-SPEC.md), [`TARGET-REPOSITORY-TREE.md`](../../../TARGET-REPOSITORY-TREE.md) §2, [`GLOSSARY-MAP.md`](../../../GLOSSARY-MAP.md).
 > Thuật ngữ nghiệp vụ theo `be-demo/GLOSSARY.md`; thuật ngữ kỹ thuật theo [`GLOSSARY.md`](../../GLOSSARY.md).
 > Issue con: `.scratch/three-repo-restructure/issues/`, tạo khi bắt đầu từng tier.

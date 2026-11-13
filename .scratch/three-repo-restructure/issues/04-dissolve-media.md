@@ -1,6 +1,6 @@
 # 04 — Dissolve the media feature; drop logo and Localization settings
 
-Status: ready-for-agent
+Status: resolved
 Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.3 (C4, C10)
 
 ## What to build
@@ -14,3 +14,7 @@ Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.3 (C4, C10)
 - `git grep -E "features/media|/media/" -- src` is empty.
 - Product image upload still works against the real API (manual run).
 - `typecheck`, `lint`, `knip`, `build`, `test` pass.
+
+## Comments
+
+- 2026-11-14: done in #72.
