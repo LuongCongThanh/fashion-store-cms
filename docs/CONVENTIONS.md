@@ -60,7 +60,7 @@ cms/
 │   │   │   ├── ErrorHandling.ts            # installErrorHandling() — lỗi global (§O.4)
 │   │   │   └── ErrorHandling.spec.ts       # test bắt lỗi global
 │   │   ├── router/                         # cấu hình vue-router
-│   │   │   ├── Guards.ts                   # navigation guard: yêu cầu đăng nhập, kiểm tra quyền, chọn Store
+│   │   │   ├── Guards.ts                   # navigation guard: yêu cầu đăng nhập, kiểm tra quyền
 │   │   │   ├── Guards.spec.ts              # test các guard
 │   │   │   ├── RouteMeta.d.ts              # RouteMeta (§S.1)
 │   │   │   ├── Router.ts                   # createRouter() + gắn guard
@@ -75,44 +75,34 @@ cms/
 │   │   └── styles/                         # CSS toàn cục
 │   │       └── main.css                    # tailwind + nuxt ui + token (§L.9)
 │   ├── features/                           # cấu trúc chi tiết: §Q
-│   │   ├── auth/                           # feature đăng nhập / đăng xuất / thông tin user
-│   │   │   ├── api/                        # hàm gọi API của feature
-│   │   │   │   ├── Auth.api.ts             # gọi API login, forgot/reset-password, me, logout
-│   │   │   │   └── Auth.mapper.ts          # AuthUserResponseDto → CurrentUser, ma trận quyền theo role
-│   │   │   ├── components/                 # component nội bộ feature
-│   │   │   │   └── LoginForm.vue           # form đăng nhập (props/emits), view lo gọi API
-│   │   │   ├── schemas/                    # Zod schema của form
-│   │   │   │   └── Login.schema.ts         # loginSchema, forgotPasswordSchema
-│   │   │   ├── stores/                     # Pinia store nội bộ feature
-│   │   │   │   └── Auth.store.ts           # Pinia store thông tin user hiện tại, nội bộ feature
-│   │   │   ├── types/                      # kiểu dữ liệu feature (feature khác được import)
-│   │   │   │   └── Auth.types.ts           # kiểu dữ liệu của auth (CurrentUser, LoginPayload…)
-│   │   │   ├── views/                      # trang (route component) của feature
-│   │   │   │   ├── LoginView.vue           # trang đăng nhập
-│   │   │   │   ├── ForgotPasswordView.vue  # trang quên mật khẩu
-│   │   │   │   └── ResetPasswordView.vue   # trang đặt lại mật khẩu từ link email
-│   │   │   ├── Auth.routes.ts              # khai báo route /login, /forgot-password, /reset-password
-│   │   │   ├── SafeRedirect.ts             # chọn đích sau login, chặn open redirect
-│   │   │   ├── UseAuth.ts                  # interface công khai duy nhất
-│   │   │   └── UseAuth.spec.ts             # test interface useAuth()
-│   │   └── StoreScope/                     # Store đang quản lý — mọi feature cần storeId
+│   │   └── auth/                           # feature đăng nhập / đăng xuất / thông tin user
 │   │       ├── api/                        # hàm gọi API của feature
-│   │       │   └── StoreScope.api.ts       # danh sách Store user được truy cập
+│   │       │   ├── Auth.api.ts             # gọi API login, forgot/reset-password, me, logout
+│   │       │   └── Auth.mapper.ts          # AuthUserResponseDto → CurrentUser, ma trận quyền theo role
+│   │       ├── components/                 # component nội bộ feature
+│   │       │   └── LoginForm.vue           # form đăng nhập (props/emits), view lo gọi API
+│   │       ├── schemas/                    # Zod schema của form
+│   │       │   └── Login.schema.ts         # loginSchema, forgotPasswordSchema
 │   │       ├── stores/                     # Pinia store nội bộ feature
-│   │       │   └── StoreScope.store.ts     # danh sách Store; storeId nằm ở Session (D34)
+│   │       │   └── Auth.store.ts           # Pinia store thông tin user hiện tại, nội bộ feature
 │   │       ├── types/                      # kiểu dữ liệu feature (feature khác được import)
-│   │       │   └── StoreScope.types.ts     # kiểu dữ liệu Store
-│   │       ├── UseStoreScope.ts            # useStoreScope() — bọc Session (§M.3)
-│   │       └── UseStoreScope.spec.ts       # test useStoreScope()
+│   │       │   └── Auth.types.ts           # kiểu dữ liệu của auth (CurrentUser, LoginPayload…)
+│   │       ├── views/                      # trang (route component) của feature
+│   │       │   ├── LoginView.vue           # trang đăng nhập
+│   │       │   ├── ForgotPasswordView.vue  # trang quên mật khẩu
+│   │       │   └── ResetPasswordView.vue   # trang đặt lại mật khẩu từ link email
+│   │       ├── Auth.routes.ts              # khai báo route /login, /forgot-password, /reset-password
+│   │       ├── SafeRedirect.ts             # chọn đích sau login, chặn open redirect
+│   │       ├── UseAuth.ts                  # interface công khai duy nhất
+│   │       └── UseAuth.spec.ts             # test interface useAuth()
 │   ├── layouts/                            # khung trang bọc quanh view
 │   │   ├── components/                     # chỉ layout dùng
 │   │   │   ├── AppShell.vue                # UDashboardGroup + sidebar + panel; seam test của layout
 │   │   │   ├── AppHeader.vue               # UDashboardNavbar: breadcrumb, locale/theme (lg), UserMenu
-│   │   │   ├── AppSidebar.vue              # UDashboardSidebar: StoreSwitcher, SidebarNav, nút thu gọn (storage cms.dashboard)
+│   │   │   ├── AppSidebar.vue              # UDashboardSidebar: SidebarNav, nút thu gọn (storage cms.dashboard)
 │   │   │   ├── CommandPalette.vue          # (P5) Ctrl/⌘+K — render useNavigation().commands (§S.1)
 │   │   │   ├── ShortcutsHelpModal.vue      # (P5) render useNavigation().shortcuts
 │   │   │   ├── SidebarNav.vue              # UNavigationMenu render useNavigation().sidebarGroups
-│   │   │   ├── StoreSwitcher.vue           # dùng useStoreScope() (§M.3)
 │   │   │   └── UserMenu.vue                # đổi theme + ngôn ngữ + logout
 │   │   ├── AuthLayout.vue                  # layout trang chưa đăng nhập (login)
 │   │   ├── DashboardLayout.vue             # layout chính sau đăng nhập: header + sidebar + nội dung
@@ -177,8 +167,8 @@ cms/
 │   │   │   │   └── I18n.spec.ts            # test đổi/lưu locale
 │   │   │   └── session/                    # Session (xem GLOSSARY.md)
 │   │   │       ├── Session.ts              # createSession(), useSession(), SESSION_KEY (§M.2)
-│   │   │       ├── Session.store.ts        # useSessionStore — token + storeId, nội bộ
-│   │   │       └── Session.spec.ts         # test refresh token, đổi Store, logout
+│   │   │       ├── Session.store.ts        # useSessionStore — token, nội bộ
+│   │   │       └── Session.spec.ts         # test refresh token, logout
 │   │   ├── types/                          # kiểu dùng chung
 │   │   │   └── Api.generated.ts            # sinh từ Swagger, KHÔNG sửa tay
 │   │   └── utils/                          # hàm thuần, tạo khi có hàm đầu tiên
@@ -233,7 +223,7 @@ trong shared/:  components/ ──► composables/ ──► lib/ ──► type
 - `layouts/` không import `app/`; `features/` không import `app/`, `layouts/`.
 - `shared/` không import `app/`, `layouts/`, `features/` — điều kiện để tái sử dụng được (ESLint, §E).
 - Code đưa vào `shared/` khi có **≥ 2 nơi** dùng thật; trước đó để trong feature. Không đưa code nghiệp vụ (biết `Product`, `Order`, endpoint riêng…) vào `shared/` — VD upload media nằm ở `features/media/` (`useMedia().upload()`).
-- Trạng thái nghiệp vụ dùng chung giữa các feature (Store đang quản lý) là **một feature** (`StoreScope`), không phải store của `app/`.
+- Trạng thái nghiệp vụ dùng chung giữa các feature là **một feature** có interface riêng, không phải store của `app/`.
 - Trong `shared/`: `lib/` không import `components/`, `composables/`; `components/` không gọi API. Một component kèm composable mở nó (VD `confirm/`) đặt chung một thư mục.
 - `shared/utils/`: mỗi file một chủ đề (`Money.ts`, `Slug.ts`), không có `Helpers.ts` gom linh tinh.
 - `shared/types/Common.types.ts`, `Pagination.types.ts` chỉ tạo khi có type dùng chung thật, không tạo file chỉ re-export `Api.generated.ts`.
@@ -542,7 +532,7 @@ VS Code: `.vscode/settings.json` (format on save bằng Prettier, `source.fixAll
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | Unit logic thuần (util, schema, guard) | Không fake                                                                                                                                       | `Product.schema.spec.ts`                                                                         |
 | HTTP client                            | `createHttpClient({ session, transport: mock.adapter() })` trực tiếp trong `HttpClient.spec.ts` (Session dựng bằng `createSession({ initial })`) | N request 401 → 1 lần `session.refresh()`; mất mạng → `ApiError` `NETWORK_ERROR`                 |
-| Session                                | Pinia thật + `axios-mock-adapter` cho endpoint refresh, `QueryClient` thật                                                                       | `Session.spec.ts`: signIn/logout, `switchStore` xoá cache, refresh thất bại → phát `authFailure` |
+| Session                                | Pinia thật + `axios-mock-adapter` cho endpoint refresh, `QueryClient` thật                                                                       | `Session.spec.ts`: signIn/logout, refresh thất bại → phát `authFailure` |
 | Component / composable / view          | `axios-mock-adapter` trên HTTP client mà `renderWithPlugins()` cung cấp — **một seam duy nhất là HTTP**                                          | `ProductTable.spec.ts`                                                                           |
 | Code dùng feature khác                 | Chỉ được mock interface công khai: `vi.mock('@features/x/UseX')`                                                                                 | Guard dùng `useAuth`                                                                             |
 
@@ -706,14 +696,14 @@ Chỉnh tập trung trong `src/app/config/Ui.config.ts`, import vào `vite.confi
 
 **Không làm (giai đoạn này)**
 
-- Theme theo từng Store: cả CMS một màu thương hiệu; store hiện tại hiển thị bằng tên/badge ở header.
+- Theme theo từng cửa hàng: cả CMS một màu thương hiệu (hệ thống chỉ có một Store).
 - Người dùng tự chọn màu primary, nút chuyển mật độ (mật độ theo `DESIGN.md`: màn chung comfortable, bảng nghiệp vụ compact).
 
 ---
 
-## M. HTTP client, seam với auth và StoreScope
+## M. HTTP client và seam với auth
 
-`shared/lib/` không được import `features/`. HttpClient nhận auth/Store qua một collaborator `Session` (`shared/lib/session/`) và locale qua `getLocale`; mọi thứ được nối trong `createAppRuntime()` (`app/Runtime.ts`, D37).
+`shared/lib/` không được import `features/`. HttpClient nhận auth qua một collaborator `Session` (`shared/lib/session/`) và locale qua `getLocale`; mọi thứ được nối trong `createAppRuntime()` (`app/Runtime.ts`, D37).
 
 ### M.1. Interface: hẹp, có kiểu theo Swagger, không lộ axios
 
@@ -729,13 +719,13 @@ Chỉnh tập trung trong `src/app/config/Ui.config.ts`, import vào `vite.confi
 
 ### M.2. Session và composition root
 
-**Session** = ai đang đăng nhập (token) và đang quản lý Store nào, cùng điều xảy ra khi chúng đổi. Một module sâu ở `shared/lib/session/Session.ts`, không phụ thuộc Vue context (interceptor gọi nó ngoài `setup`):
+**Session** = ai đang đăng nhập (token) và điều xảy ra khi token đổi. Một module sâu ở `shared/lib/session/Session.ts`, không phụ thuộc Vue context (interceptor gọi nó ngoài `setup`):
 
 > Nguồn: [`src/shared/lib/session/Session.ts`](../src/shared/lib/session/Session.ts) — tài liệu không chép lại code, đọc file.
 
-- State nằm trong `useSessionStore` (Pinia, nội bộ `session/`), chỉ gồm token + storeId. Thông tin user (`features/auth`) và danh sách Store (`features/StoreScope`) vẫn ở feature của mình.
-- `features/auth` và `features/StoreScope` **bọc** Session: `useAuth().login()` gọi API rồi `session.signIn()`; `useAuth().logout()` = `session.logout()`; `useStoreScope().switchStore` = `session.switchStore`. Không còn `createAuthAdapter` / `createStoreScopeAdapter`.
-- Xoá cache khi logout / đổi Store chỉ xảy ra **trong Session** — một chỗ duy nhất.
+- State nằm trong `useSessionStore` (Pinia, nội bộ `session/`), chỉ gồm token. Thông tin user nằm ở `features/auth`.
+- `features/auth` **bọc** Session: `useAuth().login()` gọi API rồi `session.signIn()`; `useAuth().logout()` = `session.logout()`. Không còn `createAuthAdapter`.
+- Xoá cache khi logout chỉ xảy ra **trong Session** — một chỗ duy nhất.
 - Composable lấy Session qua `useSession()` (inject); Vue component không gọi `useSessionStore` trực tiếp.
 
 **Composition root — `createAppRuntime()` (D37):**
@@ -746,17 +736,13 @@ Chỉnh tập trung trong `src/app/config/Ui.config.ts`, import vào `vite.confi
 
 - `transport` là override nội bộ dành cho test (không lộ kiểu axios ra feature).
 - Một cách duy nhất: `*.api.ts` lấy client bằng `useHttpClient()` trong composable; không nhận client làm tham số, không import singleton.
-- `Runtime.spec.ts`: dựng runtime với transport mock → request có token + `X-Store-Id` + `Accept-Language`; `authFailure` điều hướng về `auth.login`. Đây là test cho wiring prod.
+- `Runtime.spec.ts`: dựng runtime với transport mock → request có token + `Accept-Language`; `authFailure` điều hướng về `auth.login`. Đây là test cho wiring prod.
 
-### M.3. StoreScope: feature không cần biết `storeId`
+### M.3. Một Store, không có header Store
 
-- `HttpClient` gắn header `X-Store-Id` từ `session.getStoreId()` vào mọi request (bỏ qua nếu null).
-- `switchStore(id)` (Session) tự persist và gọi `queryClient.clear()` → cache Store cũ bị xoá, query đang mở tự fetch lại.
-- Hệ quả: query key **không** chứa `storeId` (`['products', 'list', params]`); file `*.api.ts` không gọi `useStoreScope()`.
-- **Chờ BE xác nhận** nhận header `X-Store-Id`. _Phương án dự phòng (chưa đưa vào interface, D40):_ nếu BE bắt buộc `storeId` trong path (`/stores/{storeId}/products`), thêm vào `HttpClientDeps` một `getDefaultPathParams()` do runtime cấp từ `session.getStoreId()` — chỉ làm khi BE chốt.
-- `StoreSwitcher.vue` đặt ở `layouts/components/`, chỉ dùng `useStoreScope()`; composable không trả về component.
-
-> Nguồn: [`src/features/StoreScope/UseStoreScope.ts`](../src/features/StoreScope/UseStoreScope.ts) — tài liệu không chép lại code, đọc file.
+- Hệ thống chỉ có **một Store**: không có khái niệm Store đang quản lý, không có `StoreScope`, `switchStore` hay `storeId`, và HttpClient **không** gửi header `X-Store-Id`.
+- Query key không chứa Store (`['products', 'list', params]`); file `*.api.ts` không cần tham số Store.
+- Session chỉ giữ access token; `localStorage` không còn key `cms.session.storeId` (bootstrap Session xoá key cũ còn sót).
 
 ---
 
@@ -816,7 +802,7 @@ Toàn bộ là **chi tiết nội bộ** trong `HttpClient.ts`; interface vẫn 
 
 | Thứ tự | Hàm nội bộ (trong `HttpClient.ts`) | Loại                 | Việc làm                                                                                                                                                                  |
 | ------ | ---------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1      | `attachHeaders(config)`            | request interceptor  | Gắn `Authorization` (bỏ nếu `skipAuth`), `Accept-Language`, `X-Store-Id` (bỏ nếu null)                                                                                    |
+| 1      | `attachHeaders(config)`            | request interceptor  | Gắn `Authorization` (bỏ nếu `skipAuth`), `Accept-Language`                                                                                    |
 | 2      | `retryAfterRefresh(error)`         | response interceptor | 401 → chờ **một** `session.refresh()` đang chạy, gắn token mới, gửi lại request; refresh trả null → ném lỗi (Session đã phát `authFailure`); bỏ qua request có `skipAuth` |
 | 3      | `toApiError(error)`                | response interceptor | Mọi lỗi còn lại → `throw ApiError` (bảng dưới); đăng ký **cuối cùng** để chạy sau bước 2                                                                                  |
 
@@ -976,15 +962,6 @@ features/
 │   ├── Auth.routes.ts
 │   ├── UseAuth.ts                          # useAuth() — bọc Session
 │   └── UseAuth.spec.ts
-├── StoreScope/                             # Foundation (stub) · P3
-│   ├── api/
-│   │   └── StoreScope.api.ts               # Store user được truy cập
-│   ├── stores/
-│   │   └── StoreScope.store.ts             # danh sách Store; storeId nằm ở Session (D34)
-│   ├── types/
-│   │   └── StoreScope.types.ts
-│   ├── UseStoreScope.ts                    # useStoreScope() — bọc Session
-│   └── UseStoreScope.spec.ts
 ├── dashboard/                              # P4
 │   ├── api/
 │   │   └── Dashboard.api.ts
@@ -1105,11 +1082,10 @@ Bảng gồm shared module (`shared/`) và interface công khai của feature / 
 
 | Module                                               | Interface                                                                                                                   | Giấu bên trong                                                                                            |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `shared/lib/api/client/HttpClient.ts`                | `createHttpClient(deps): HttpClient` (get/post/put/patch/delete có kiểu theo Swagger), `HTTP_CLIENT_KEY`, `useHttpClient()` | axios, gắn header (token, locale, `X-Store-Id`), path param mặc định, gom refresh, timeout, chuẩn hoá lỗi |
-| `shared/lib/session/Session.ts`                      | `createSession()`, `useSession()`                                                                                           | token, storeId, refresh (1 lần đồng thời), xoá cache khi logout/đổi Store, sự kiện `authFailure`          |
+| `shared/lib/api/client/HttpClient.ts`                | `createHttpClient(deps): HttpClient` (get/post/put/patch/delete có kiểu theo Swagger), `HTTP_CLIENT_KEY`, `useHttpClient()` | axios, gắn header (token, locale), gom refresh, timeout, chuẩn hoá lỗi |
+| `shared/lib/session/Session.ts`                      | `createSession()`, `useSession()`                                                                                           | token, refresh (1 lần đồng thời), xoá cache khi logout, sự kiện `authFailure`          |
 | `features/auth/UseAuth.ts`                           | `useAuth()` → `{ user, isAuthenticated, can, ensureUser, login, logout }`                                                   | user, login/logout qua Session                                                                            |
 | `shared/lib/api/errors/ApiError.ts` + `ErrorCode.ts` | `ApiError`, `isApiError`, `ErrorCode`, `codeFromStatus`                                                                     | — (kiểu dữ liệu)                                                                                          |
-| `features/StoreScope/UseStoreScope.ts`               | `useStoreScope()` → `{ storeId, stores, current, switchStore }`                                                             | danh sách Store; đổi Store ủy quyền cho Session                                                           |
 | `shared/composables/UsePwa.ts`                       | `usePwa()` → `{ needRefresh, reload }`                                                                                      | Đăng ký SW, kiểm tra định kỳ                                                                              |
 | `shared/lib/form/ApplyApiErrorToForm.ts`             | `applyApiErrorToForm(error, form): boolean`                                                                                 | Map `fields`, phân biệt 400/422                                                                           |
 | `shared/composables/UseNotify.ts`                    | `useNotify()` → `{ success, error, prompt }`; `createNotifier(deps)` dùng ngoài setup                                       | Hiển thị toast; key lấy từ `ErrorPolicy.messageKeyOf`                                                     |
@@ -1235,7 +1211,7 @@ Route meta dùng chung (khai báo kiểu trong `src/app/router/RouteMeta.d.ts`):
 | Loại                    | Ở đâu                                 | Ví dụ                                          | Quy tắc                                                                        |
 | ----------------------- | ------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------ |
 | Server state            | Vue Query cache (qua `api/`)          | danh sách sản phẩm, đơn hàng                   | **Không** copy vào Pinia/`ref`; đọc qua query, đổi qua mutation + invalidate   |
-| Client state dùng chung | Pinia trong `stores/` của feature     | token, Store đang chọn                         | Chỉ `api/` và `Use<Feature>.ts` đọc/ghi                                        |
+| Client state dùng chung | Pinia trong `stores/` của feature     | token                                          | Chỉ `api/` và `Use<Feature>.ts` đọc/ghi                                        |
 | UI / form state         | `ref` trong component hoặc composable | bản nháp form, dialog mở, filter (đồng bộ URL) | Form làm việc trên **bản nháp** (`XxxInput` từ schema), submit mới `toPayload` |
 
 ### T.3. DTO không đi ra khỏi `api/`
@@ -1313,8 +1289,8 @@ const { remove } = useProductActions() // composables/: confirm + mutation
 | **S** — Single Responsibility | Mỗi tầng một lý do để đổi: hiển thị (component), điều phối (view), logic màn hình (composable), server state (api), hình dạng dữ liệu (mapper), vận chuyển HTTP (HttpClient). Tầng tuỳ chọn (composable, mapper) chỉ tạo khi có trách nhiệm thật                                                                      | §T.1, §O.3                 |
 | **O** — Open/Closed           | Mở rộng bằng **khai báo**, không sửa lõi: thêm route → tự vào sidebar/command palette/phím tắt qua `meta`; thêm mã lỗi → thêm key `errors.*`; thêm cột bảng → mảng `columns` truyền vào `DataTable`; thêm trạng thái → thêm dòng trong map màu                                                                        | §S.1, §O.2, §L.4, §22      |
 | **L** — Liskov Substitution   | Mọi adapter tại một seam phải giữ đúng hợp đồng của interface: `HttpClient` test (adapter mock) vẫn ném `ApiError`, vẫn trả `data`; Session dựng với `initial` trong test vẫn phát `authFailure` khi refresh thất bại. Component bọc Nuxt UI (VD `DataTable`) nhận/emit đúng như component gốc, không đổi nghĩa props | §M, §I                     |
-| **I** — Interface Segregation | Interface nhỏ theo nhu cầu caller: `useStoreScope()` chỉ 3 thành viên; HttpClient chỉ thấy `Session` (token, storeId, refresh) — không thấy `login`, `user`, danh sách Store; props component chỉ nhận Model cần hiển thị, không nhận cả object query                                                                 | §M, §Q.3                   |
-| **D** — Dependency Inversion  | Tầng thấp không biết tầng cao: `HttpClient` phụ thuộc hàm (`getAccessToken`, `getStoreId`…), không import feature; feature phụ thuộc interface `HttpClient`, không phụ thuộc axios; mọi thứ được nối ở **một** nơi — `createAppRuntime()` trong `app/Runtime.ts` (composition root, D37)                              | §A (chiều phụ thuộc), §M.2 |
+| **I** — Interface Segregation | Interface nhỏ theo nhu cầu caller: HttpClient chỉ thấy `Session` (token, refresh) — không thấy `login`, `user`; props component chỉ nhận Model cần hiển thị, không nhận cả object query                                                                 | §M, §Q.3                   |
+| **D** — Dependency Inversion  | Tầng thấp không biết tầng cao: `HttpClient` phụ thuộc hàm (`getAccessToken`, `getLocale`…), không import feature; feature phụ thuộc interface `HttpClient`, không phụ thuộc axios; mọi thứ được nối ở **một** nơi — `createAppRuntime()` trong `app/Runtime.ts` (composition root, D37)                              | §A (chiều phụ thuộc), §M.2 |
 
 **Không làm (tránh over-engineering):**
 
@@ -1333,6 +1309,6 @@ const { remove } = useProductActions() // composables/: confirm + mutation
 Các routes nghiệp vụ được lắp trong `src/app/router/Routes.ts`; bảng điều hướng hiện tại ở [navigation-flow.md](./navigation-flow.md). Danh mục và báo cáo ở [cms-pages-components](./plans/cms-pages-components/spec.md).
 
 - `useListState` sở hữu URL state; `DataTable` chỉ điều khiển UTable ở chế độ server-side. `Paginated<T>` ở `shared/types/Pagination.types.ts` dùng `{ data, meta }`.
-- Session vẫn xoá cache khi đổi Store; query key không chứa Store ID. Model nghiệp vụ hiện là hợp đồng tạm trong `features/*/types` vì backend chưa tồn tại; không sửa hoặc giả lập nội dung `Api.generated.ts`.
+- Session xoá cache khi logout; hệ thống chỉ có một Store nên query key không chứa Store ID. Model nghiệp vụ hiện là hợp đồng tạm trong `features/*/types` vì backend chưa tồn tại; không sửa hoặc giả lập nội dung `Api.generated.ts`.
 - Validation dùng Zod 4 với vee-validate; xem quyết định tương thích adapter và hydration ở FE_architecture §19. Upload theo lifecycle ở §17.1, XHR storage riêng để có byte progress và hủy.
 - Người phụ trách chọn kiểm View + logic thuần trong phiên này, hoãn E2E. Không coi kết quả HTTP mock là xác nhận tích hợp backend.

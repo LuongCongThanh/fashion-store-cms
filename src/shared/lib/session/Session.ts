@@ -39,6 +39,8 @@ export interface SessionDeps {
 
 export function createSession(deps: SessionDeps): Session {
   const store = useSessionStore(deps.pinia)
+  // Key cũ của StoreScope (đã bỏ); xoá một lần cho người dùng còn dữ liệu cũ.
+  localStorage.removeItem('cms.session.storeId')
   if (deps.initial) {
     store.accessToken = deps.initial.accessToken ?? null
   }
