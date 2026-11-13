@@ -7,7 +7,7 @@ export const categoryRoutes: RouteRecordRaw[] = [
     meta: {
       titleKey: 'products.category',
       permission: 'CATALOG_CATEGORY_VIEW',
-      sidebarGroup: 'store',
+      sidebarGroup: 'catalog',
       command: { icon: 'i-lucide-folder-tree', group: 'navigate' },
     },
   },

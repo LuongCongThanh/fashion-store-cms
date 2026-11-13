@@ -53,7 +53,8 @@ const definitions: DashboardWidget[] = [
     key: 'top-products',
     title: 'dashboard.topProducts',
     kind: 'list',
-    permission: 'CATALOG_PRODUCT_VIEW',
+    // Bán chạy cần Đơn hàng (Tier 2); tới đó vẫn chờ quyền thật.
+    permission: 'order:read',
     link: (item) => `/products/${encodeURIComponent(item.id)}`,
   },
   {

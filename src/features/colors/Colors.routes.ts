@@ -7,7 +7,7 @@ export const colorRoutes: RouteRecordRaw[] = [
     meta: {
       titleKey: 'colors.title',
       permission: 'CATALOG_PRODUCT_OPTION_VIEW',
-      sidebarGroup: 'store',
+      sidebarGroup: 'catalog',
       command: { icon: 'i-lucide-palette', group: 'navigate' },
     },
   },

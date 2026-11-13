@@ -7,7 +7,7 @@ export const productRoutes: RouteRecordRaw[] = [
     meta: {
       titleKey: 'dashboard.products',
       permission: 'CATALOG_PRODUCT_VIEW',
-      sidebarGroup: 'store',
+      sidebarGroup: 'catalog',
       command: { icon: 'i-lucide-shirt', group: 'navigate' },
     },
   },

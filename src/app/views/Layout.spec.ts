@@ -62,7 +62,7 @@ async function renderLayout(permissions: string[] = []) {
         meta: {
           permission: 'order:read',
           titleKey: 'nav.orders',
-          sidebarGroup: 'store',
+          sidebarGroup: 'operations',
           command: { icon: 'i-lucide-receipt', group: 'navigate' },
         },
       },
@@ -99,7 +99,7 @@ describe('Layout navigation', () => {
   it('groups permitted links under their domain', async () => {
     const { wrapper } = await renderLayout(['order:read'])
     await flushPromises()
-    expect(wrapper.find('nav[aria-label="Menu điều hướng"]').text()).toContain('Cửa hàng')
+    expect(wrapper.find('nav[aria-label="Menu điều hướng"]').text()).toContain('Vận hành')
     expect(wrapper.find('nav[aria-label="Menu điều hướng"] a[href="/orders"]').exists()).toBe(true)
   })
   it('opens a navigation drawer from the header menu button', async () => {

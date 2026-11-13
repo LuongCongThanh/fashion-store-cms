@@ -7,7 +7,7 @@ export const promotionRoutes: RouteRecordRaw[] = [
     meta: {
       permission: 'promotion:read',
       titleKey: 'promotions.title',
-      sidebarGroup: 'marketing',
+      sidebarGroup: 'catalog',
       command: { icon: 'i-lucide-ticket-percent', group: 'navigate' },
     },
   },
