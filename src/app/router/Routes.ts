@@ -30,11 +30,6 @@ const devRoutes: RouteRecordRaw[] = import.meta.env.DEV
         component: () => import('@features/dashboard/prototype/DashboardPrototype.vue'),
       },
       {
-        path: 'prototype/products',
-        name: 'prototype-products',
-        component: () => import('@features/products/prototype/ProductListPrototype.vue'),
-      },
-      {
         path: 'prototype/orders',
         name: 'prototype-orders',
         component: () => import('@features/orders/prototype/OrderDetailPrototype.vue'),

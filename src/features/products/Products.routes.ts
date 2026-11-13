@@ -11,7 +11,6 @@ export const productRoutes: RouteRecordRaw[] = [
       command: { icon: 'i-lucide-shirt', group: 'navigate' },
     },
   },
-
   {
     path: 'products/new',
     name: 'products.create',
@@ -19,15 +18,11 @@ export const productRoutes: RouteRecordRaw[] = [
     meta: { permission: 'CATALOG_PRODUCT_MANAGE', titleKey: 'common.create' },
   },
   {
-    path: 'products/:id',
-    name: 'products.detail',
-    component: () => import('./views/ProductDetailView.vue'),
-    meta: { permission: 'CATALOG_PRODUCT_VIEW', titleKey: 'dashboard.products' },
-  },
-  {
     path: 'products/:id/edit',
     name: 'products.edit',
     component: () => import('./views/ProductEditView.vue'),
-    meta: { permission: 'CATALOG_PRODUCT_MANAGE', titleKey: 'common.edit' },
+    // Ai xem được danh sách đều mở được chi tiết; không có quyền MANAGE thì chỉ xem.
+    meta: { permission: 'CATALOG_PRODUCT_VIEW', titleKey: 'dashboard.products' },
   },
+  { path: 'products/:id', redirect: (to) => `/products/${String(to.params.id)}/edit` },
 ]

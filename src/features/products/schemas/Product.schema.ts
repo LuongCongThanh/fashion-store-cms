@@ -1,37 +1,37 @@
 import { z } from 'zod'
-export const variantSchema = z.object({
-  sku: z.string(),
-  size: z.string(),
-  color: z.string(),
-  price: z.coerce.number().nonnegative(),
-  stock: z.coerce.number().int().nonnegative(),
-})
-export const productDraftSchema = z.object({
-  name: z.string().trim().min(1),
-  description: z.string(),
-  brand: z.string(),
-  price: z.coerce.number().nonnegative(),
-  comparePrice: z.coerce.number().nonnegative(),
-  cost: z.coerce.number().nonnegative(),
-  categoryIds: z.array(z.string()),
-  images: z.array(z.object({ id: z.string(), url: z.string(), name: z.string() })),
-  mainImageId: z.string(),
-  variants: z.array(variantSchema).min(1),
-  slug: z.string(),
-  metaTitle: z.string(),
-  metaDescription: z.string(),
-  status: z.enum(['draft', 'published', 'archived']),
-})
-export type ProductInput = z.infer<typeof productDraftSchema>
 
-export const productPublishSchema = productDraftSchema.superRefine((value, context) => {
-  if (!value.slug.trim()) context.addIssue({ code: 'custom', path: ['slug'], message: 'required' })
-  if (value.price <= 0) context.addIssue({ code: 'custom', path: ['price'], message: 'required' })
-  const skus = new Set<string>()
-  value.variants.forEach((variant, index) => {
-    const sku = variant.sku.trim().toUpperCase()
-    if (!sku || skus.has(sku))
-      context.addIssue({ code: 'custom', path: ['variants', index, 'sku'], message: 'required' })
-    skus.add(sku)
-  })
+/** Thông tin Sản phẩm (BR-CAT-06, BR-CAT-10): tên, mô tả tiếng Việt, một danh mục, cân nặng gram > 0. */
+export const productInfoSchema = z.object({
+  name: z.string().trim().min(1).max(255),
+  description: z.string(),
+  categoryId: z.string().min(1),
+  weightGrams: z.number().int().min(1),
 })
+export type ProductInfoInput = z.infer<typeof productInfoSchema>
+
+/** Một Biến thể = size × màu (BR-CAT-02); SKU in hoa, số, gạch nối, không đổi sau khi tạo (BR-CAT-03). */
+export const variantSchema = z.object({
+  sizeId: z.string().min(1),
+  colorId: z.string().min(1),
+  sku: z
+    .string()
+    .trim()
+    .min(1)
+    .max(100)
+    .regex(/^[A-Z0-9-]+$/),
+  price: z.number().int().min(1),
+})
+export type VariantInput = z.infer<typeof variantSchema>
+
+/** Gợi ý SKU từ tiền tố, mã size và mã màu: `TSHIRT-BASIC` + `M` + `WHT` → `TSHIRT-BASIC-WHT-M`. */
+export function suggestSku(prefix: string, colorCode: string, sizeCode: string): string {
+  return [prefix, colorCode, sizeCode]
+    .map((part) =>
+      part
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]+/g, '-'),
+    )
+    .filter(Boolean)
+    .join('-')
+}

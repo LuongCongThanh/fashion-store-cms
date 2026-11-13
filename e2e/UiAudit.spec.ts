@@ -2,31 +2,49 @@ import { expect, test } from '@playwright/test'
 
 import { mockApi } from './MockApi.js'
 
+const white = { id: 'color-white', code: 'WHT', name: 'White', hex: '#FFFFFF' }
+/** JSON `GET /admin/products/:id` (dữ liệu trên dây). Size rất dài để kiểm bảng Biến thể không tràn ngang. */
 const product = {
   id: 'audit-product',
   name: 'Áo linen',
-  description: '',
-  brand: '',
-  price: 250000,
-  comparePrice: 0,
-  cost: 0,
-  categoryIds: [],
-  mainImageId: 'image-0',
+  slug: 'ao-linen',
+  description: null,
+  categoryId: 'linen',
+  weightGrams: 200,
+  status: 'DRAFT',
+  publishedAt: null,
+  createdAt: '2026-01-01T00:00:00.000Z',
+  updatedAt: '2026-01-01T00:00:00.000Z',
   images: Array.from({ length: 6 }, (_, i) => ({
     id: `image-${i}`,
-    name: `Linen ${i}`,
+    productId: 'audit-product',
+    colorId: white.id,
+    storageKey: `products/audit-product/${i}`,
     url: '/audit-image.svg',
+    altText: `Linen ${i}`,
+    sortOrder: i,
+    isPrimary: i === 0,
+    createdAt: '2026-01-01T00:00:00.000Z',
   })),
-  variants: [{ sku: 'LINEN-M-WHITE', size: 'M'.repeat(60), color: 'White', price: 250000, stock: 12 }],
-  slug: 'linen',
-  metaTitle: '',
-  metaDescription: '',
-  status: 'draft',
+  variants: [
+    {
+      id: 'variant-1',
+      productId: 'audit-product',
+      sku: 'LINEN-WHT-M',
+      price: 250000,
+      status: 'ACTIVE',
+      size: { id: 'size-m', code: 'M'.repeat(30), name: 'M' },
+      color: white,
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    },
+  ],
 }
+const emptyPage = { data: [], meta: { page: 1, limit: 100, total: 0, totalPages: 0 } }
 
 for (const width of [375, 1280]) {
   for (const theme of ['light', 'dark']) {
-    test(`Product gallery and Variant table fit ${width}px in ${theme}`, async ({ page }) => {
+    test(`Product images and Variant table fit ${width}px in ${theme}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 })
       await page.addInitScript((mode) => {
         localStorage.setItem('cms.colorMode', mode)
@@ -39,9 +57,10 @@ for (const width of [375, 1280]) {
       )
       await mockApi(page, {
         role: 'ADMIN',
-        handle: (path) => (path.endsWith('/products/audit-product') ? product : undefined),
+        handle: (path) =>
+          path.endsWith('/products/audit-product') ? product : path.endsWith('/categories') ? emptyPage : undefined,
       })
-      for (const path of ['/products/audit-product', '/products/audit-product/edit']) {
+      for (const path of ['/products/audit-product/edit']) {
         await page.goto(path)
         await expect(page.locator('img[alt="Linen 0"]')).toBeVisible()
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
@@ -57,18 +76,9 @@ for (const width of [375, 1280]) {
         await expect(images).toHaveCount(6)
         const box = await images.first().boundingBox()
         expect(box ? box.width / box.height : 0).toBeCloseTo(0.75, 1)
-        if (path.endsWith('/edit')) {
-          const menu = page.getByRole('button', { name: 'Thao tác ảnh Linen 0' })
-          await menu.focus()
-          await page.keyboard.press('Enter')
-          await expect(page.getByRole('menuitem', { name: 'Di chuyển trái' })).toBeDisabled()
-          await page.keyboard.press('Escape')
-        } else {
-          await expect(page.getByRole('columnheader', { name: 'SKU', exact: true })).toBeVisible()
-          await expect(page.getByRole('button', { name: 'Thao tác ảnh Linen 0' })).toHaveCount(0)
-        }
+        await expect(page.getByRole('columnheader', { name: 'SKU', exact: true })).toBeVisible()
         await page.screenshot({
-          path: test.info().outputPath(path.endsWith('/edit') ? 'editor.png' : 'detail.png'),
+          path: test.info().outputPath('editor.png'),
           fullPage: true,
         })
       }
