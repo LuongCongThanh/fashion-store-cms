@@ -3,41 +3,62 @@
  * Nguồn: OPENAPI_URL. DTO chỉ được import trong features/<feature>/api/ và shared/lib/api/ (§T.3).
  */
 export interface paths {
-    "/api/v1/auth/register": {
+    "/api/v1/admin/categories": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** List every category flat, including hidden ones (paginated, STAFF/ADMIN) */
+        get: operations["AdminCategoryController_findAll_v1"];
         put?: never;
-        /** Register a new CUSTOMER account */
-        post: operations["AuthController_register_v1"];
+        /** Create a category, optionally under a parent (ADMIN only) */
+        post: operations["AdminCategoryController_create_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/verify-email": {
+    "/api/v1/admin/categories/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get any category by id, including hidden ones (STAFF/ADMIN) */
+        get: operations["AdminCategoryController_findOne_v1"];
         put?: never;
-        /** Verify email address using the 6-digit code sent by email */
-        post: operations["AuthController_verifyEmail_v1"];
+        post?: never;
+        /** Delete an empty leaf category (409 while it has subcategories or products, ADMIN only) */
+        delete: operations["AdminCategoryController_remove_v1"];
+        options?: never;
+        head?: never;
+        /** Update a category: rename (new slug), move to another parent or root, reorder, hide (ADMIN only) */
+        patch: operations["AdminCategoryController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/colors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List every color including hidden ones (STAFF/ADMIN) */
+        get: operations["AdminProductOptionController_listColors_v1"];
+        put?: never;
+        /** Create a color with a #RRGGBB swatch (ADMIN only) */
+        post: operations["AdminProductOptionController_createColor_v1"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/resend-verification": {
+    "/api/v1/admin/colors/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -46,15 +67,32 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Resend the email verification code */
-        post: operations["AuthController_resendVerification_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Rename, recolor or hide a color; the code is immutable (ADMIN only) */
+        patch: operations["AdminProductOptionController_updateColor_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/internal-accounts/{accountId}/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List the roles held by an internal account (requires ADMINISTRATION_INTERNAL_ACCOUNT_VIEW) */
+        get: operations["AdminRoleController_findAccountRoles_v1"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/login": {
+    "/api/v1/admin/internal-accounts/{accountId}/roles/{roleId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -62,16 +100,70 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
+        /** Assign a role to an internal account; idempotent (requires ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE). Accounts holding the role must log in again: their access tokens stop working and their refresh tokens are revoked. The Admin role cannot be assigned to a second account. */
+        put: operations["AdminRoleController_assignRole_v1"];
+        post?: never;
+        /** Remove a role from an internal account (requires ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE). Accounts holding the role must log in again: their access tokens stop working and their refresh tokens are revoked. The sole active Admin cannot lose the Admin role. */
+        delete: operations["AdminRoleController_removeRoleFromAccount_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/permissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List every Permission, grouped by prefix (requires ADMINISTRATION_ROLE_VIEW) */
+        get: operations["AdminRoleController_listPermissions_v1"];
         put?: never;
-        /** Log in and receive an access token (refresh token is set as an HttpOnly cookie) */
-        post: operations["AuthController_login_v1"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/refresh": {
+    "/api/v1/admin/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List products of any status (paginated, filterable by category/status, STAFF/ADMIN) */
+        get: operations["AdminProductController_findAll_v1"];
+        put?: never;
+        /** Create a product; it starts as DRAFT (ADMIN only) */
+        post: operations["AdminProductController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a product of any status with all its variants (STAFF/ADMIN) */
+        get: operations["AdminProductController_findOne_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update a product; changing status follows DRAFT → ACTIVE ↔ ARCHIVED (ADMIN only) */
+        patch: operations["AdminProductController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/archive": {
         parameters: {
             query?: never;
             header?: never;
@@ -80,8 +172,269 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Rotate the refresh token cookie and issue a new access token */
-        post: operations["AuthController_refresh_v1"];
+        /** Archive a product instead of deleting it; idempotent (ADMIN only) */
+        post: operations["AdminProductController_archive_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Attach image metadata to a product color; isPrimary replaces that color primary (ADMIN only) */
+        post: operations["AdminProductController_createImage_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/images/{imageId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove image metadata from a product (ADMIN only) */
+        delete: operations["AdminProductController_removeImage_v1"];
+        options?: never;
+        head?: never;
+        /** Update image metadata or make it the primary image of its color (ADMIN only) */
+        patch: operations["AdminProductController_updateImage_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/unarchive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bring an archived product back to ACTIVE; idempotent (ADMIN only) */
+        post: operations["AdminProductController_unarchive_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/variants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a variant, atomically creating its inventory row (ADMIN only) */
+        post: operations["AdminProductController_createVariant_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/variants/{variantId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update a variant (ADMIN only) */
+        patch: operations["AdminProductController_updateVariant_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/variants/{variantId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive a variant (stop selling it); idempotent (ADMIN only) */
+        post: operations["AdminProductController_archiveVariant_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}/variants/{variantId}/unarchive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bring an archived variant back to ACTIVE; idempotent (ADMIN only) */
+        post: operations["AdminProductController_unarchiveVariant_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List roles with their permissions, by name (requires ADMINISTRATION_ROLE_VIEW) */
+        get: operations["AdminRoleController_findAllRoles_v1"];
+        put?: never;
+        /** Create a role with a set of permissions (requires ADMINISTRATION_ROLE_MANAGE) */
+        post: operations["AdminRoleController_createRole_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/roles/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get one role (requires ADMINISTRATION_ROLE_VIEW) */
+        get: operations["AdminRoleController_findOneRole_v1"];
+        put?: never;
+        post?: never;
+        /** Delete a role (requires ADMINISTRATION_ROLE_MANAGE). Rejected for system roles and for roles still assigned to accounts */
+        delete: operations["AdminRoleController_removeRole_v1"];
+        options?: never;
+        head?: never;
+        /** Edit a role's description, name or permissions (requires ADMINISTRATION_ROLE_MANAGE). Accounts holding the role must log in again: their access tokens stop working and their refresh tokens are revoked. The Admin role is read-only; system roles cannot be renamed. */
+        patch: operations["AdminRoleController_updateRole_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/sizes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List every size including hidden ones, by display order (STAFF/ADMIN) */
+        get: operations["AdminProductOptionController_listSizes_v1"];
+        put?: never;
+        /** Create a size (ADMIN only) */
+        post: operations["AdminProductOptionController_createSize_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sizes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Rename, reorder or hide a size; the code is immutable (ADMIN only) */
+        patch: operations["AdminProductOptionController_updateSize_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/staff": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List staff accounts, newest first (requires ADMINISTRATION_INTERNAL_ACCOUNT_VIEW) */
+        get: operations["AdminStaffController_findAll_v1"];
+        put?: never;
+        /** Create a staff account with an initial password (requires ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE) */
+        post: operations["AdminStaffController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/staff/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Rename a staff account (requires ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE) */
+        patch: operations["AdminStaffController_rename_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/staff/{id}/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Disable a staff account and end all its sessions immediately; idempotent (requires ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE) */
+        post: operations["AdminStaffController_disable_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/staff/{id}/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Re-enable a disabled staff account; idempotent (requires ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE) */
+        post: operations["AdminStaffController_enable_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -105,7 +458,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/auth/reset-password": {
+    "/api/v1/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -114,25 +467,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Reset password using the token received by email */
-        post: operations["AuthController_resetPassword_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/auth/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get the currently authenticated user */
-        get: operations["AuthController_getMe_v1"];
-        put?: never;
-        post?: never;
+        /** Log in and receive an access token (refresh token is set as an HttpOnly cookie) */
+        post: operations["AuthController_login_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -173,15 +509,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/me": {
+    "/api/v1/auth/me": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get the signed-in customer profile (CUSTOMER only) */
-        get: operations["MeController_getProfile_v1"];
+        /** Get the currently authenticated user */
+        get: operations["AuthController_getMe_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -190,25 +526,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/staff": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List staff accounts, newest first (ADMIN only) */
-        get: operations["AdminStaffController_findAll_v1"];
-        put?: never;
-        /** Create a staff account with an initial password (ADMIN only) */
-        post: operations["AdminStaffController_create_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/staff/{id}": {
+    "/api/v1/auth/refresh": {
         parameters: {
             query?: never;
             header?: never;
@@ -216,43 +534,128 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
+        put?: never;
+        /** Rotate the refresh token cookie and issue a new access token */
+        post: operations["AuthController_refresh_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Register a new CUSTOMER account */
+        post: operations["AuthController_register_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/resend-verification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resend the email verification code */
+        post: operations["AuthController_resendVerification_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/reset-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reset password using the token received by email */
+        post: operations["AuthController_resetPassword_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/verify-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify email address using the 6-digit code sent by email */
+        post: operations["AuthController_verifyEmail_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the visible category tree for the storefront menu (public) */
+        get: operations["CategoryController_tree_v1"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** Rename a staff account (ADMIN only) */
-        patch: operations["AdminStaffController_rename_v1"];
+        patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/staff/{id}/disable": {
+    "/api/v1/categories/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get a visible category by id (public) */
+        get: operations["CategoryController_findOne_v1"];
         put?: never;
-        /** Disable a staff account and end all its sessions immediately; idempotent (ADMIN only) */
-        post: operations["AdminStaffController_disable_v1"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/staff/{id}/enable": {
+    "/api/v1/colors": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** List visible colors for storefront filters and swatches (public) */
+        get: operations["ProductOptionController_listColors_v1"];
         put?: never;
-        /** Re-enable a disabled staff account; idempotent (ADMIN only) */
-        post: operations["AdminStaffController_enable_v1"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -293,75 +696,21 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/categories": {
+    "/api/v1/me": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Get the visible category tree for the storefront menu (public) */
-        get: operations["CategoriesController_tree_v1"];
+        /** Get the signed-in customer profile (CUSTOMER only) */
+        get: operations["MeController_getProfile_v1"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/api/v1/categories/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a visible category by id (public) */
-        get: operations["CategoriesController_findOne_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List every category flat, including hidden ones (paginated, STAFF/ADMIN) */
-        get: operations["AdminCategoriesController_findAll_v1"];
-        put?: never;
-        /** Create a category, optionally under a parent (ADMIN only) */
-        post: operations["AdminCategoriesController_create_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/categories/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get any category by id, including hidden ones (STAFF/ADMIN) */
-        get: operations["AdminCategoriesController_findOne_v1"];
-        put?: never;
-        post?: never;
-        /** Delete an empty leaf category (409 while it has subcategories or products, ADMIN only) */
-        delete: operations["AdminCategoriesController_remove_v1"];
-        options?: never;
-        head?: never;
-        /** Update a category: rename (new slug), move to another parent or root, reorder, hide (ADMIN only) */
-        patch: operations["AdminCategoriesController_update_v1"];
         trace?: never;
     };
     "/api/v1/products": {
@@ -372,7 +721,7 @@ export interface paths {
             cookie?: never;
         };
         /** List ACTIVE products (paginated, filterable by category, public) */
-        get: operations["ProductsController_findAll_v1"];
+        get: operations["ProductController_findAll_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -389,7 +738,7 @@ export interface paths {
             cookie?: never;
         };
         /** Get an ACTIVE product with its ACTIVE variants (public) */
-        get: operations["ProductsController_findOne_v1"];
+        get: operations["ProductController_findOne_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -406,7 +755,7 @@ export interface paths {
             cookie?: never;
         };
         /** List ACTIVE variants of an ACTIVE product (paginated, public) */
-        get: operations["ProductsController_findAllVariants_v1"];
+        get: operations["ProductController_findAllVariants_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -423,186 +772,13 @@ export interface paths {
             cookie?: never;
         };
         /** Get an ACTIVE variant of an ACTIVE product (public) */
-        get: operations["ProductsController_findOneVariant_v1"];
+        get: operations["ProductController_findOneVariant_v1"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List products of any status (paginated, filterable by category/status, STAFF/ADMIN) */
-        get: operations["AdminProductsController_findAll_v1"];
-        put?: never;
-        /** Create a product; it starts as DRAFT (ADMIN only) */
-        post: operations["AdminProductsController_create_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a product of any status with all its variants (STAFF/ADMIN) */
-        get: operations["AdminProductsController_findOne_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update a product; changing status follows DRAFT → ACTIVE ↔ ARCHIVED (ADMIN only) */
-        patch: operations["AdminProductsController_update_v1"];
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/archive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Archive a product instead of deleting it; idempotent (ADMIN only) */
-        post: operations["AdminProductsController_archive_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/unarchive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Bring an archived product back to ACTIVE; idempotent (ADMIN only) */
-        post: operations["AdminProductsController_unarchive_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/variants": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create a variant, atomically creating its inventory row (ADMIN only) */
-        post: operations["AdminProductsController_createVariant_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/variants/{variantId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Update a variant (ADMIN only) */
-        patch: operations["AdminProductsController_updateVariant_v1"];
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/variants/{variantId}/archive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Archive a variant (stop selling it); idempotent (ADMIN only) */
-        post: operations["AdminProductsController_archiveVariant_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/variants/{variantId}/unarchive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Bring an archived variant back to ACTIVE; idempotent (ADMIN only) */
-        post: operations["AdminProductsController_unarchiveVariant_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/images": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Attach image metadata to a product color; isPrimary replaces that color primary (ADMIN only) */
-        post: operations["AdminProductsController_createImage_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/products/{id}/images/{imageId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Remove image metadata from a product (ADMIN only) */
-        delete: operations["AdminProductsController_removeImage_v1"];
-        options?: never;
-        head?: never;
-        /** Update image metadata or make it the primary image of its color (ADMIN only) */
-        patch: operations["AdminProductsController_updateImage_v1"];
         trace?: never;
     };
     "/api/v1/sizes": {
@@ -613,219 +789,179 @@ export interface paths {
             cookie?: never;
         };
         /** List visible sizes for storefront filters (public) */
-        get: operations["ProductOptionsController_listSizes_v1"];
+        get: operations["ProductOptionController_listSizes_v1"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/api/v1/colors": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List visible colors for storefront filters and swatches (public) */
-        get: operations["ProductOptionsController_listColors_v1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/sizes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List every size including hidden ones, by display order (STAFF/ADMIN) */
-        get: operations["AdminProductOptionsController_listSizes_v1"];
-        put?: never;
-        /** Create a size (ADMIN only) */
-        post: operations["AdminProductOptionsController_createSize_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/sizes/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Rename, reorder or hide a size; the code is immutable (ADMIN only) */
-        patch: operations["AdminProductOptionsController_updateSize_v1"];
-        trace?: never;
-    };
-    "/api/v1/admin/colors": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List every color including hidden ones (STAFF/ADMIN) */
-        get: operations["AdminProductOptionsController_listColors_v1"];
-        put?: never;
-        /** Create a color with a #RRGGBB swatch (ADMIN only) */
-        post: operations["AdminProductOptionsController_createColor_v1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/admin/colors/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Rename, recolor or hide a color; the code is immutable (ADMIN only) */
-        patch: operations["AdminProductOptionsController_updateColor_v1"];
         trace?: never;
     };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        RegisterDto: {
-            /** @example user@example.com */
-            email: string;
-            /** @example Abc@1234 */
-            password: string;
-            /** @example John Doe */
-            fullName: string;
-            /** @example 0912345678 */
-            phone: string;
-        };
-        RegisterResponseDto: {
-            id: string;
-            email: string;
-        };
-        ErrorResponseDto: {
-            /** @example 404 */
-            statusCode: number;
-            /**
-             * @description Thông báo lỗi; là mảng khi validate DTO thất bại (mỗi phần tử 1 lỗi field)
-             * @example Category #3f2a… not found
-             */
-            message: string | string[];
-            /**
-             * @description Trùng header X-Request-Id, dùng để tra log
-             * @example 7c9e6679-7425-40de-944b-e07fc1f90ae7
-             */
-            requestId: string;
-        };
-        VerifyEmailDto: {
-            /** @example user@example.com */
-            email: string;
-            /**
-             * @description 6-digit code received by email
-             * @example 123456
-             */
-            code: string;
-        };
-        MessageResponseDto: {
-            message: string;
-        };
-        ResendVerificationDto: {
-            /** @example user@example.com */
-            email: string;
-        };
-        LoginDto: {
-            /** @example user@example.com */
-            email: string;
-            /** @example Abc@1234 */
-            password: string;
+        AccountRolesResponseDto: {
+            accountId: string;
+            roles: components["schemas"]["RoleSummaryResponseDto"][];
         };
         /** @enum {string} */
-        Role: "CUSTOMER" | "STAFF" | "ADMIN";
+        AccountType: "CUSTOMER" | "STAFF" | "ADMIN";
         AuthUserResponseDto: {
-            id: string;
             email: string;
-            fullName: string;
-            /** @example CUSTOMER */
-            role: components["schemas"]["Role"];
             emailVerified: boolean;
-        };
-        LoginResponseDto: {
-            accessToken: string;
-            user: components["schemas"]["AuthUserResponseDto"];
-        };
-        RefreshResponseDto: {
-            accessToken: string;
-        };
-        ForgotPasswordDto: {
-            /** @example user@example.com */
-            email: string;
-        };
-        ResetPasswordDto: {
-            /**
-             * @description Raw token taken from the reset link in the password-reset email
-             * @example 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
-             */
-            token: string;
-            /** @example NewAbc@1234 */
-            password: string;
-            /** @example NewAbc@1234 */
-            confirmPassword: string;
-        };
-        CustomerProfileResponseDto: {
-            id: string;
-            email: string;
             fullName: string;
-            phone: string;
-        };
-        /** @enum {string} */
-        UserStatus: "ACTIVE" | "DISABLED";
-        StaffResponseDto: {
             id: string;
-            email: string;
-            name: string;
-            status: components["schemas"]["UserStatus"];
+            /** @example CUSTOMER */
+            role: components["schemas"]["AccountType"];
+        };
+        CategoryResponseDto: {
             /** Format: date-time */
             createdAt: string;
+            description?: Record<string, never> | null;
+            id: string;
+            isVisible: boolean;
+            name: string;
+            /** @description null for a root category */
+            parentId?: Record<string, never> | null;
+            slug: string;
+            sortOrder: number;
             /** Format: date-time */
             updatedAt: string;
         };
-        PaginationMetaDto: {
-            /** @example 1 */
-            page: number;
-            /** @example 20 */
-            limit: number;
-            /** @example 42 */
-            total: number;
-            /** @example 3 */
-            totalPages: number;
+        CategoryTreeNodeDto: {
+            /** @description Visible children ordered by sortOrder, then name */
+            children: components["schemas"]["CategoryTreeNodeDto"][];
+            id: string;
+            name: string;
+            slug: string;
         };
-        PaginatedStaffResponseDto: {
-            data: components["schemas"]["StaffResponseDto"][];
-            meta: components["schemas"]["PaginationMetaDto"];
+        ColorResponseDto: {
+            /** @example WHT */
+            code: string;
+            /** @example #FFFFFF */
+            hex: string;
+            id: string;
+            isHidden: boolean;
+            /** @example Trắng */
+            name: string;
+        };
+        ColorSummaryDto: {
+            /** @example M */
+            code: string;
+            /** @example #FFFFFF */
+            hex: string;
+            id: string;
+            /** @example Size M */
+            name: string;
+        };
+        CreateCategoryDto: {
+            /** @example Apparel and accessories for men */
+            description?: string;
+            /**
+             * @description Hidden categories (and their subtree) leave the storefront
+             * @default true
+             * @example true
+             */
+            isVisible: boolean;
+            /** @example Men's Clothing */
+            name: string;
+            /**
+             * @description Parent category; omit or null for a root category
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            parentId?: Record<string, never> | null;
+            /**
+             * @description Ascending order among siblings
+             * @default 0
+             * @example 0
+             */
+            sortOrder: number;
+        };
+        CreateColorDto: {
+            /** @example WHT */
+            code: string;
+            /** @example #FFFFFF */
+            hex: string;
+            /**
+             * @default false
+             * @example false
+             */
+            isHidden: boolean;
+            /** @example Trắng */
+            name: string;
+        };
+        CreateImageDto: {
+            /** @example Áo thun trắng, mặt trước */
+            altText?: string;
+            /**
+             * @description Color this image belongs to (BR-CAT-05)
+             * @example 550e8400-e29b-41d4-a716-446655440001
+             */
+            colorId: string;
+            /**
+             * @description Replaces the current primary image of this color
+             * @default false
+             * @example true
+             */
+            isPrimary: boolean;
+            /**
+             * @default 0
+             * @example 0
+             */
+            sortOrder: number;
+            /**
+             * @description Object storage key, not an absolute URL
+             * @example products/tshirt-basic/white-1.jpg
+             */
+            storageKey: string;
+        };
+        CreateProductDto: {
+            /**
+             * @description UUID của Category đã tồn tại
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            categoryId: string;
+            /** @example Wireless Headphones */
+            name: string;
+            /**
+             * @description Shipping weight in grams (BR-CAT-06)
+             * @example 250
+             */
+            weightGrams: number;
+        };
+        CreateRoleDto: {
+            /** @example Can view the catalog */
+            description?: string;
+            /**
+             * @description Unique, case-insensitive
+             * @example Warehouse
+             */
+            name: string;
+            /**
+             * @description Permissions ticked for this role (may be empty)
+             * @example [
+             *       "CATALOG_PRODUCT_VIEW"
+             *     ]
+             */
+            permissions: components["schemas"]["Permission"][];
+        };
+        CreateSizeDto: {
+            /** @example M */
+            code: string;
+            /**
+             * @default false
+             * @example false
+             */
+            isHidden: boolean;
+            /** @example Size M */
+            name: string;
+            /**
+             * @description Ascending display order on the storefront
+             * @example 20
+             */
+            sortOrder: number;
         };
         CreateStaffDto: {
             /** @example staff@example.com */
@@ -838,217 +974,7 @@ export interface components {
              */
             password: string;
         };
-        UpdateStaffDto: {
-            /** @example Nguyen Van C */
-            name: string;
-        };
-        CategoryTreeNodeDto: {
-            id: string;
-            name: string;
-            slug: string;
-            /** @description Visible children ordered by sortOrder, then name */
-            children: components["schemas"]["CategoryTreeNodeDto"][];
-        };
-        CategoryResponseDto: {
-            id: string;
-            name: string;
-            slug: string;
-            description?: Record<string, never> | null;
-            /** @description null for a root category */
-            parentId?: Record<string, never> | null;
-            sortOrder: number;
-            isVisible: boolean;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        PaginatedCategoryResponseDto: {
-            data: components["schemas"]["CategoryResponseDto"][];
-            meta: components["schemas"]["PaginationMetaDto"];
-        };
-        CreateCategoryDto: {
-            /** @example Men's Clothing */
-            name: string;
-            /** @example Apparel and accessories for men */
-            description?: string;
-            /**
-             * @description Parent category; omit or null for a root category
-             * @example 550e8400-e29b-41d4-a716-446655440000
-             */
-            parentId?: Record<string, never> | null;
-            /**
-             * @description Ascending order among siblings
-             * @default 0
-             * @example 0
-             */
-            sortOrder: number;
-            /**
-             * @description Hidden categories (and their subtree) leave the storefront
-             * @default true
-             * @example true
-             */
-            isVisible: boolean;
-        };
-        UpdateCategoryDto: {
-            /** @example Men's Clothing */
-            name?: string;
-            /** @example Apparel and accessories for men */
-            description?: string;
-            /**
-             * @description Parent category; omit or null for a root category
-             * @example 550e8400-e29b-41d4-a716-446655440000
-             */
-            parentId?: Record<string, never> | null;
-            /**
-             * @description Ascending order among siblings
-             * @default 0
-             * @example 0
-             */
-            sortOrder: number;
-            /**
-             * @description Hidden categories (and their subtree) leave the storefront
-             * @default true
-             * @example true
-             */
-            isVisible: boolean;
-        };
-        /** @enum {string} */
-        ProductStatus: "DRAFT" | "ACTIVE" | "ARCHIVED";
-        ProductResponseDto: {
-            id: string;
-            categoryId: string;
-            name: string;
-            slug: string;
-            description?: Record<string, never> | null;
-            /** @description Shipping weight in grams */
-            weightGrams: number;
-            status: components["schemas"]["ProductStatus"];
-            /** @description First time the product became ACTIVE */
-            publishedAt?: Record<string, never> | null;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        PaginatedProductResponseDto: {
-            data: components["schemas"]["ProductResponseDto"][];
-            meta: components["schemas"]["PaginationMetaDto"];
-        };
-        SizeSummaryDto: {
-            id: string;
-            /** @example M */
-            code: string;
-            /** @example Size M */
-            name: string;
-        };
-        ColorSummaryDto: {
-            id: string;
-            /** @example M */
-            code: string;
-            /** @example Size M */
-            name: string;
-            /** @example #FFFFFF */
-            hex: string;
-        };
-        /** @enum {string} */
-        VariantStatus: "ACTIVE" | "ARCHIVED";
-        VariantResponseDto: {
-            id: string;
-            productId: string;
-            sku: string;
-            size: components["schemas"]["SizeSummaryDto"];
-            color: components["schemas"]["ColorSummaryDto"];
-            /**
-             * @description Integer VND
-             * @example 199000
-             */
-            price: number;
-            status: components["schemas"]["VariantStatus"];
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        ImageResponseDto: {
-            id: string;
-            productId: string;
-            colorId: string;
-            storageKey: string;
-            altText?: Record<string, never> | null;
-            sortOrder: number;
-            isPrimary: boolean;
-            /** Format: date-time */
-            createdAt: string;
-        };
-        ProductDetailResponseDto: {
-            id: string;
-            categoryId: string;
-            name: string;
-            slug: string;
-            description?: Record<string, never> | null;
-            /** @description Shipping weight in grams */
-            weightGrams: number;
-            status: components["schemas"]["ProductStatus"];
-            /** @description First time the product became ACTIVE */
-            publishedAt?: Record<string, never> | null;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-            /** @description Storefront: ACTIVE variants only. Back-office: every variant. */
-            variants: components["schemas"]["VariantResponseDto"][];
-            /** @description Images grouped by color via colorId, ordered by sortOrder */
-            images: components["schemas"]["ImageResponseDto"][];
-        };
-        PaginatedVariantResponseDto: {
-            data: components["schemas"]["VariantResponseDto"][];
-            meta: components["schemas"]["PaginationMetaDto"];
-        };
-        CreateProductDto: {
-            /** @example Wireless Headphones */
-            name: string;
-            /**
-             * @description UUID của Category đã tồn tại
-             * @example 550e8400-e29b-41d4-a716-446655440000
-             */
-            categoryId: string;
-            /**
-             * @description Shipping weight in grams (BR-CAT-06)
-             * @example 250
-             */
-            weightGrams: number;
-        };
-        UpdateProductDto: {
-            /** @example Wireless Headphones */
-            name?: string;
-            /**
-             * @description UUID của Category đã tồn tại
-             * @example 550e8400-e29b-41d4-a716-446655440000
-             */
-            categoryId?: string;
-            /**
-             * @description Shipping weight in grams (BR-CAT-06)
-             * @example 250
-             */
-            weightGrams?: number;
-            /**
-             * @description DRAFT → ACTIVE, ACTIVE ↔ ARCHIVED, DRAFT → ARCHIVED; never back to DRAFT
-             * @example ACTIVE
-             */
-            status?: components["schemas"]["ProductStatus"];
-        };
         CreateVariantDto: {
-            /**
-             * @description Uppercase letters, digits and hyphens; globally unique and immutable after creation
-             * @example TSHIRT-BASIC-WHT-M
-             */
-            sku: string;
-            /**
-             * @description A size from the shared size list (not hidden)
-             * @example 550e8400-e29b-41d4-a716-446655440000
-             */
-            sizeId: string;
             /**
              * @description A color from the shared palette (not hidden)
              * @example 550e8400-e29b-41d4-a716-446655440001
@@ -1059,6 +985,352 @@ export interface components {
              * @example 199000
              */
             price: number;
+            /**
+             * @description A size from the shared size list (not hidden)
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            sizeId: string;
+            /**
+             * @description Uppercase letters, digits and hyphens; globally unique and immutable after creation
+             * @example TSHIRT-BASIC-WHT-M
+             */
+            sku: string;
+        };
+        CustomerProfileResponseDto: {
+            email: string;
+            fullName: string;
+            id: string;
+            phone: string;
+        };
+        ErrorResponseDto: {
+            /**
+             * @description Thông báo lỗi; là mảng khi validate DTO thất bại (mỗi phần tử 1 lỗi field)
+             * @example Category #3f2a… not found
+             */
+            message: string | string[];
+            /**
+             * @description Trùng header X-Request-Id, dùng để tra log
+             * @example 7c9e6679-7425-40de-944b-e07fc1f90ae7
+             */
+            requestId: string;
+            /** @example 404 */
+            statusCode: number;
+        };
+        ForgotPasswordDto: {
+            /** @example user@example.com */
+            email: string;
+        };
+        ImageResponseDto: {
+            altText?: Record<string, never> | null;
+            colorId: string;
+            /** Format: date-time */
+            createdAt: string;
+            id: string;
+            isPrimary: boolean;
+            productId: string;
+            sortOrder: number;
+            storageKey: string;
+        };
+        LoginDto: {
+            /** @example user@example.com */
+            email: string;
+            /** @example Abc@1234 */
+            password: string;
+        };
+        LoginResponseDto: {
+            accessToken: string;
+            user: components["schemas"]["AuthUserResponseDto"];
+        };
+        MeResponseDto: {
+            email: string;
+            emailVerified: boolean;
+            fullName: string;
+            id: string;
+            /**
+             * @description Union of the permissions granted by the account roles (empty for customers)
+             * @example [
+             *       "CATALOG_PRODUCT_VIEW"
+             *     ]
+             */
+            permissions: components["schemas"]["Permission"][];
+            /** @example CUSTOMER */
+            role: components["schemas"]["AccountType"];
+            /**
+             * @description Names of the RBAC roles assigned to the account
+             * @example [
+             *       "Staff"
+             *     ]
+             */
+            roles: string[];
+        };
+        MessageResponseDto: {
+            message: string;
+        };
+        PaginatedCategoryResponseDto: {
+            data: components["schemas"]["CategoryResponseDto"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+        };
+        PaginatedProductResponseDto: {
+            data: components["schemas"]["ProductResponseDto"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+        };
+        PaginatedRoleResponseDto: {
+            data: components["schemas"]["RoleResponseDto"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+        };
+        PaginatedStaffResponseDto: {
+            data: components["schemas"]["StaffResponseDto"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+        };
+        PaginatedVariantResponseDto: {
+            data: components["schemas"]["VariantResponseDto"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+        };
+        PaginationMetaDto: {
+            /** @example 20 */
+            limit: number;
+            /** @example 1 */
+            page: number;
+            /** @example 42 */
+            total: number;
+            /** @example 3 */
+            totalPages: number;
+        };
+        /**
+         * @description Union of the permissions granted by the account roles (empty for customers)
+         * @enum {string}
+         */
+        Permission: "CATALOG_PRODUCT_VIEW" | "CATALOG_PRODUCT_MANAGE" | "CATALOG_CATEGORY_VIEW" | "CATALOG_CATEGORY_MANAGE" | "CATALOG_PRODUCT_OPTION_VIEW" | "CATALOG_PRODUCT_OPTION_MANAGE" | "ADMINISTRATION_ROLE_VIEW" | "ADMINISTRATION_ROLE_MANAGE" | "ADMINISTRATION_INTERNAL_ACCOUNT_VIEW" | "ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE";
+        PermissionGroupResponseDto: {
+            /**
+             * @description Prefix of the permission names
+             * @example CATALOG
+             */
+            group: string;
+            permissions: components["schemas"]["Permission"][];
+        };
+        ProductDetailResponseDto: {
+            categoryId: string;
+            /** Format: date-time */
+            createdAt: string;
+            description?: Record<string, never> | null;
+            id: string;
+            /** @description Images grouped by color via colorId, ordered by sortOrder */
+            images: components["schemas"]["ImageResponseDto"][];
+            name: string;
+            /** @description First time the product became ACTIVE */
+            publishedAt?: Record<string, never> | null;
+            slug: string;
+            status: components["schemas"]["ProductStatus"];
+            /** Format: date-time */
+            updatedAt: string;
+            /** @description Storefront: ACTIVE variants only. Back-office: every variant. */
+            variants: components["schemas"]["VariantResponseDto"][];
+            /** @description Shipping weight in grams */
+            weightGrams: number;
+        };
+        ProductResponseDto: {
+            categoryId: string;
+            /** Format: date-time */
+            createdAt: string;
+            description?: Record<string, never> | null;
+            id: string;
+            name: string;
+            /** @description First time the product became ACTIVE */
+            publishedAt?: Record<string, never> | null;
+            slug: string;
+            status: components["schemas"]["ProductStatus"];
+            /** Format: date-time */
+            updatedAt: string;
+            /** @description Shipping weight in grams */
+            weightGrams: number;
+        };
+        /** @enum {string} */
+        ProductStatus: "DRAFT" | "ACTIVE" | "ARCHIVED";
+        RefreshResponseDto: {
+            accessToken: string;
+        };
+        RegisterDto: {
+            /** @example user@example.com */
+            email: string;
+            /** @example John Doe */
+            fullName: string;
+            /** @example Abc@1234 */
+            password: string;
+            /** @example 0912345678 */
+            phone: string;
+        };
+        RegisterResponseDto: {
+            email: string;
+            id: string;
+        };
+        ResendVerificationDto: {
+            /** @example user@example.com */
+            email: string;
+        };
+        ResetPasswordDto: {
+            /** @example NewAbc@1234 */
+            confirmPassword: string;
+            /** @example NewAbc@1234 */
+            password: string;
+            /**
+             * @description Raw token taken from the reset link in the password-reset email
+             * @example 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+             */
+            token: string;
+        };
+        RoleResponseDto: {
+            /** @description Number of accounts currently holding this role */
+            accountCount: number;
+            /** Format: date-time */
+            createdAt: string;
+            description: string | null;
+            id: string;
+            /** @description System roles (Admin, Staff) cannot be deleted or renamed */
+            isSystem: boolean;
+            name: string;
+            permissions: components["schemas"]["Permission"][];
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        RoleSummaryResponseDto: {
+            id: string;
+            isSystem: boolean;
+            name: string;
+        };
+        SizeResponseDto: {
+            /** @example M */
+            code: string;
+            id: string;
+            isHidden: boolean;
+            /** @example Size M */
+            name: string;
+            /** @example 20 */
+            sortOrder: number;
+        };
+        SizeSummaryDto: {
+            /** @example M */
+            code: string;
+            id: string;
+            /** @example Size M */
+            name: string;
+        };
+        StaffResponseDto: {
+            /** Format: date-time */
+            createdAt: string;
+            email: string;
+            id: string;
+            name: string;
+            status: components["schemas"]["UserStatus"];
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        UpdateCategoryDto: {
+            /** @example Apparel and accessories for men */
+            description?: string;
+            /**
+             * @description Hidden categories (and their subtree) leave the storefront
+             * @default true
+             * @example true
+             */
+            isVisible: boolean;
+            /** @example Men's Clothing */
+            name?: string;
+            /**
+             * @description Parent category; omit or null for a root category
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            parentId?: Record<string, never> | null;
+            /**
+             * @description Ascending order among siblings
+             * @default 0
+             * @example 0
+             */
+            sortOrder: number;
+        };
+        UpdateColorDto: {
+            /** @example #FFFFFF */
+            hex?: string;
+            /**
+             * @default false
+             * @example false
+             */
+            isHidden: boolean;
+            /** @example Trắng */
+            name?: string;
+        };
+        UpdateImageDto: {
+            /** @example Áo thun trắng, mặt trước */
+            altText?: string;
+            /**
+             * @description Replaces the current primary image of this color
+             * @default false
+             * @example true
+             */
+            isPrimary: boolean;
+            /**
+             * @default 0
+             * @example 0
+             */
+            sortOrder: number;
+            /**
+             * @description Object storage key, not an absolute URL
+             * @example products/tshirt-basic/white-1.jpg
+             */
+            storageKey?: string;
+        };
+        UpdateProductDto: {
+            /**
+             * @description UUID của Category đã tồn tại
+             * @example 550e8400-e29b-41d4-a716-446655440000
+             */
+            categoryId?: string;
+            /** @example Wireless Headphones */
+            name?: string;
+            /**
+             * @description DRAFT → ACTIVE, ACTIVE ↔ ARCHIVED, DRAFT → ARCHIVED; never back to DRAFT
+             * @example ACTIVE
+             */
+            status?: components["schemas"]["ProductStatus"];
+            /**
+             * @description Shipping weight in grams (BR-CAT-06)
+             * @example 250
+             */
+            weightGrams?: number;
+        };
+        UpdateRoleDto: {
+            /** @example Can view the catalog */
+            description?: string;
+            /**
+             * @description Unique, case-insensitive
+             * @example Warehouse
+             */
+            name?: string;
+            /**
+             * @description Permissions ticked for this role (may be empty)
+             * @example [
+             *       "CATALOG_PRODUCT_VIEW"
+             *     ]
+             */
+            permissions?: components["schemas"]["Permission"][];
+        };
+        UpdateSizeDto: {
+            /**
+             * @default false
+             * @example false
+             */
+            isHidden: boolean;
+            /** @example Size M */
+            name?: string;
+            /**
+             * @description Ascending display order on the storefront
+             * @example 20
+             */
+            sortOrder?: number;
+        };
+        UpdateStaffDto: {
+            /** @example Nguyen Van C */
+            name: string;
         };
         UpdateVariantDto: {
             /**
@@ -1069,124 +1341,35 @@ export interface components {
             /** @example ARCHIVED */
             status?: components["schemas"]["VariantStatus"];
         };
-        CreateImageDto: {
-            /**
-             * @description Color this image belongs to (BR-CAT-05)
-             * @example 550e8400-e29b-41d4-a716-446655440001
-             */
-            colorId: string;
-            /**
-             * @description Object storage key, not an absolute URL
-             * @example products/tshirt-basic/white-1.jpg
-             */
-            storageKey: string;
-            /** @example Áo thun trắng, mặt trước */
-            altText?: string;
-            /**
-             * @default 0
-             * @example 0
-             */
-            sortOrder: number;
-            /**
-             * @description Replaces the current primary image of this color
-             * @default false
-             * @example true
-             */
-            isPrimary: boolean;
-        };
-        UpdateImageDto: {
-            /**
-             * @description Object storage key, not an absolute URL
-             * @example products/tshirt-basic/white-1.jpg
-             */
-            storageKey?: string;
-            /** @example Áo thun trắng, mặt trước */
-            altText?: string;
-            /**
-             * @default 0
-             * @example 0
-             */
-            sortOrder: number;
-            /**
-             * @description Replaces the current primary image of this color
-             * @default false
-             * @example true
-             */
-            isPrimary: boolean;
-        };
-        SizeResponseDto: {
+        /** @enum {string} */
+        UserStatus: "ACTIVE" | "DISABLED";
+        VariantResponseDto: {
+            color: components["schemas"]["ColorSummaryDto"];
+            /** Format: date-time */
+            createdAt: string;
             id: string;
-            /** @example M */
+            /**
+             * @description Integer VND
+             * @example 199000
+             */
+            price: number;
+            productId: string;
+            size: components["schemas"]["SizeSummaryDto"];
+            sku: string;
+            status: components["schemas"]["VariantStatus"];
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        /** @enum {string} */
+        VariantStatus: "ACTIVE" | "ARCHIVED";
+        VerifyEmailDto: {
+            /**
+             * @description 6-digit code received by email
+             * @example 123456
+             */
             code: string;
-            /** @example Size M */
-            name: string;
-            /** @example 20 */
-            sortOrder: number;
-            isHidden: boolean;
-        };
-        ColorResponseDto: {
-            id: string;
-            /** @example WHT */
-            code: string;
-            /** @example Trắng */
-            name: string;
-            /** @example #FFFFFF */
-            hex: string;
-            isHidden: boolean;
-        };
-        CreateSizeDto: {
-            /** @example M */
-            code: string;
-            /** @example Size M */
-            name: string;
-            /**
-             * @description Ascending display order on the storefront
-             * @example 20
-             */
-            sortOrder: number;
-            /**
-             * @default false
-             * @example false
-             */
-            isHidden: boolean;
-        };
-        UpdateSizeDto: {
-            /** @example Size M */
-            name?: string;
-            /**
-             * @description Ascending display order on the storefront
-             * @example 20
-             */
-            sortOrder?: number;
-            /**
-             * @default false
-             * @example false
-             */
-            isHidden: boolean;
-        };
-        CreateColorDto: {
-            /** @example WHT */
-            code: string;
-            /** @example Trắng */
-            name: string;
-            /** @example #FFFFFF */
-            hex: string;
-            /**
-             * @default false
-             * @example false
-             */
-            isHidden: boolean;
-        };
-        UpdateColorDto: {
-            /** @example Trắng */
-            name?: string;
-            /** @example #FFFFFF */
-            hex?: string;
-            /**
-             * @default false
-             * @example false
-             */
-            isHidden: boolean;
+            /** @example user@example.com */
+            email: string;
         };
     };
     responses: never;
@@ -1197,28 +1380,27 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    AuthController_register_v1: {
+    AdminCategoryController_findAll_v1: {
         parameters: {
-            query?: never;
+            query?: {
+                page?: number;
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegisterDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
-            201: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RegisterResponseDto"];
+                    "application/json": components["schemas"]["PaginatedCategoryResponseDto"];
                 };
             };
-            /** @description Invalid input */
+            /** @description Invalid input (validation failed or malformed id) */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1227,7 +1409,93 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Email already exists */
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminCategoryController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCategoryDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Parent category not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Category name already exists */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1247,29 +1515,26 @@ export interface operations {
             };
         };
     };
-    AuthController_verifyEmail_v1: {
+    AdminCategoryController_findOne_v1: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VerifyEmailDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
-            /** @description Email verified successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MessageResponseDto"];
+                    "application/json": components["schemas"]["CategoryResponseDto"];
                 };
             };
-            /** @description Invalid input, code already used or expired, or too many attempts */
+            /** @description Invalid input (validation failed or malformed id) */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1278,7 +1543,25 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Invalid email or code */
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Category not found */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1298,29 +1581,25 @@ export interface operations {
             };
         };
     };
-    AuthController_resendVerification_v1: {
+    AdminCategoryController_remove_v1: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResendVerificationDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
-            /** @description A new verification email has been sent (if applicable) */
-            200: {
+            /** @description Deleted */
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["MessageResponseDto"];
-                };
+                content?: never;
             };
-            /** @description Invalid input */
+            /** @description Invalid input (validation failed or malformed id) */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1329,48 +1608,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AuthController_login_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LoginResponseDto"];
-                };
-            };
-            /** @description Invalid input */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Invalid credentials, account locked, or email not verified */
+            /** @description Missing, invalid, or expired access token */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1379,6 +1617,33 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Category not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Category still has subcategories or products */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
             /** @description Rate limit exceeded — retry after the window resets */
             429: {
                 headers: {
@@ -1390,7 +1655,86 @@ export interface operations {
             };
         };
     };
-    AuthController_refresh_v1: {
+    AdminCategoryController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCategoryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryResponseDto"];
+                };
+            };
+            /** @description Invalid body or the move would create a cycle */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Category or parent not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Category name already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductOptionController_listColors_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1404,11 +1748,2197 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RefreshResponseDto"];
+                    "application/json": components["schemas"]["ColorResponseDto"][];
                 };
             };
-            /** @description Missing, invalid, expired, or reused refresh token */
+            /** @description Missing, invalid, or expired access token */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductOptionController_createColor_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateColorDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ColorResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Color code already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductOptionController_updateColor_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateColorDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ColorResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Color not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_findAccountRoles_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountRolesResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Internal account not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_assignRole_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: string;
+                roleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountRolesResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Internal account or role not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Admin role is already assigned to another account */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_removeRoleFromAccount_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: string;
+                roleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountRolesResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Internal account, role, or assignment not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Sole active Admin cannot lose the Admin role */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_listPermissions_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PermissionGroupResponseDto"][];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_findAll_v1: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+                categoryId?: string;
+                /** @description Size codes; repeat the param for several (`?size=M&size=L`) */
+                size?: string[];
+                /** @description Color codes; repeat the param for several (`?color=WHT&color=BLK`) */
+                color?: string[];
+                status?: components["schemas"]["ProductStatus"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedProductResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProductDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Category not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product name already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_findOne_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductDetailResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProductDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductResponseDto"];
+                };
+            };
+            /** @description Invalid body or status transition */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product or category not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product name already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_archive_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_createImage_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateImageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageResponseDto"];
+                };
+            };
+            /** @description Invalid body or unknown color */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_removeImage_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                imageId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Image removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Image not found on this product */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_updateImage_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                imageId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateImageDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Image not found on this product */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_unarchive_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductResponseDto"];
+                };
+            };
+            /** @description Product is still DRAFT */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_createVariant_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateVariantDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VariantResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description SKU already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_updateVariant_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                variantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateVariantDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VariantResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Variant not found on this product */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description SKU already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_archiveVariant_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                variantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VariantResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Variant not found on this product */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductController_unarchiveVariant_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                variantId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VariantResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Variant not found on this product */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_findAllRoles_v1: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedRoleResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_createRole_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRoleDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Role name is already in use */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_findOneRole_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Role not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_removeRole_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Role deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Role not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description System role, or role still assigned to accounts */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminRoleController_updateRole_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRoleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Role not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Name in use, Admin role is read-only, or system role rename */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductOptionController_listSizes_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SizeResponseDto"][];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductOptionController_createSize_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSizeDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SizeResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Size code already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminProductOptionController_updateSize_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSizeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SizeResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Size not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminStaffController_findAll_v1: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedStaffResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminStaffController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateStaffDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Email is already in use */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminStaffController_rename_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateStaffDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Staff account not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminStaffController_disable_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Staff account not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminStaffController_enable_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Staff account not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1469,7 +3999,7 @@ export interface operations {
             };
         };
     };
-    AuthController_resetPassword_v1: {
+    AuthController_login_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1478,20 +4008,19 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ResetPasswordDto"];
+                "application/json": components["schemas"]["LoginDto"];
             };
         };
         responses: {
-            /** @description Password has been reset */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MessageResponseDto"];
+                    "application/json": components["schemas"]["LoginResponseDto"];
                 };
             };
-            /** @description Invalid, expired, or already-used token; or invalid input */
+            /** @description Invalid input */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1500,35 +4029,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AuthController_getMe_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthUserResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
+            /** @description Invalid credentials, account locked, or email not verified */
             401: {
                 headers: {
                     [name: string]: unknown;
@@ -1622,7 +4123,7 @@ export interface operations {
             };
         };
     };
-    MeController_getProfile_v1: {
+    AuthController_getMe_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1636,20 +4137,11 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CustomerProfileResponseDto"];
+                    "application/json": components["schemas"]["MeResponseDto"];
                 };
             };
             /** @description Missing, invalid, or expired access token */
             401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1668,12 +4160,9 @@ export interface operations {
             };
         };
     };
-    AdminStaffController_findAll_v1: {
+    AuthController_refresh_v1: {
         parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -1685,29 +4174,11 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedStaffResponseDto"];
+                    "application/json": components["schemas"]["RefreshResponseDto"];
                 };
             };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
+            /** @description Missing, invalid, expired, or reused refresh token */
             401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1726,7 +4197,7 @@ export interface operations {
             };
         };
     };
-    AdminStaffController_create_v1: {
+    AuthController_register_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1735,7 +4206,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateStaffDto"];
+                "application/json": components["schemas"]["RegisterDto"];
             };
         };
         responses: {
@@ -1744,10 +4215,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["StaffResponseDto"];
+                    "application/json": components["schemas"]["RegisterResponseDto"];
                 };
             };
-            /** @description Invalid input (validation failed or malformed id) */
+            /** @description Invalid input */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1756,25 +4227,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Email is already in use */
+            /** @description Email already exists */
             409: {
                 headers: {
                     [name: string]: unknown;
@@ -1794,30 +4247,29 @@ export interface operations {
             };
         };
     };
-    AdminStaffController_rename_v1: {
+    AuthController_resendVerification_v1: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                id: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateStaffDto"];
+                "application/json": components["schemas"]["ResendVerificationDto"];
             };
         };
         responses: {
+            /** @description A new verification email has been sent (if applicable) */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["StaffResponseDto"];
+                    "application/json": components["schemas"]["MessageResponseDto"];
                 };
             };
-            /** @description Invalid input (validation failed or malformed id) */
+            /** @description Invalid input */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -1826,8 +4278,8 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Missing, invalid, or expired access token */
-            401: {
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1835,8 +4287,32 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Authenticated user lacks the required role */
-            403: {
+        };
+    };
+    AuthController_resetPassword_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordDto"];
+            };
+        };
+        responses: {
+            /** @description Password has been reset */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponseDto"];
+                };
+            };
+            /** @description Invalid, expired, or already-used token; or invalid input */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1844,7 +4320,49 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Staff account not found */
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_verifyEmail_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmailDto"];
+            };
+        };
+        responses: {
+            /** @description Email verified successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageResponseDto"];
+                };
+            };
+            /** @description Invalid input, code already used or expired, or too many attempts */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Invalid email or code */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1864,7 +4382,35 @@ export interface operations {
             };
         };
     };
-    AdminStaffController_disable_v1: {
+    CategoryController_tree_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryTreeNodeDto"][];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    CategoryController_findOne_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1880,7 +4426,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["StaffResponseDto"];
+                    "application/json": components["schemas"]["CategoryResponseDto"];
                 };
             };
             /** @description Invalid input (validation failed or malformed id) */
@@ -1892,25 +4438,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Staff account not found */
+            /** @description Category not found or hidden */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1930,13 +4458,11 @@ export interface operations {
             };
         };
     };
-    AdminStaffController_enable_v1: {
+    ProductOptionController_listColors_v1: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                id: string;
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -1946,43 +4472,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["StaffResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Staff account not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
+                    "application/json": components["schemas"]["ColorResponseDto"][];
                 };
             };
             /** @description Rate limit exceeded — retry after the window resets */
@@ -2061,7 +4551,7 @@ export interface operations {
             };
         };
     };
-    CategoriesController_tree_v1: {
+    MeController_getProfile_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2075,95 +4565,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CategoryTreeNodeDto"][];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    CategoriesController_findOne_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CategoryResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category not found or hidden */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminCategoriesController_findAll_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedCategoryResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
+                    "application/json": components["schemas"]["CustomerProfileResponseDto"];
                 };
             };
             /** @description Missing, invalid, or expired access token */
@@ -2175,7 +4577,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
-            /** @description Authenticated user lacks the required role */
+            /** @description Authenticated user lacks the required permission or account type */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -2195,303 +4597,7 @@ export interface operations {
             };
         };
     };
-    AdminCategoriesController_create_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCategoryDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CategoryResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Parent category not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category name already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminCategoriesController_findOne_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CategoryResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminCategoriesController_remove_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Deleted */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category still has subcategories or products */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminCategoriesController_update_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateCategoryDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CategoryResponseDto"];
-                };
-            };
-            /** @description Invalid body or the move would create a cycle */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category or parent not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category name already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ProductsController_findAll_v1: {
+    ProductController_findAll_v1: {
         parameters: {
             query?: {
                 page?: number;
@@ -2536,7 +4642,7 @@ export interface operations {
             };
         };
     };
-    ProductsController_findOne_v1: {
+    ProductController_findOne_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2584,7 +4690,7 @@ export interface operations {
             };
         };
     };
-    ProductsController_findAllVariants_v1: {
+    ProductController_findAllVariants_v1: {
         parameters: {
             query?: {
                 page?: number;
@@ -2635,7 +4741,7 @@ export interface operations {
             };
         };
     };
-    ProductsController_findOneVariant_v1: {
+    ProductController_findOneVariant_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2684,925 +4790,7 @@ export interface operations {
             };
         };
     };
-    AdminProductsController_findAll_v1: {
-        parameters: {
-            query?: {
-                page?: number;
-                limit?: number;
-                categoryId?: string;
-                /** @description Size codes; repeat the param for several (`?size=M&size=L`) */
-                size?: string[];
-                /** @description Color codes; repeat the param for several (`?color=WHT&color=BLK`) */
-                color?: string[];
-                status?: components["schemas"]["ProductStatus"];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedProductResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_create_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateProductDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProductResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Category not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product name already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_findOne_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProductDetailResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_update_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateProductDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProductResponseDto"];
-                };
-            };
-            /** @description Invalid body or status transition */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product or category not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product name already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_archive_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProductResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_unarchive_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProductResponseDto"];
-                };
-            };
-            /** @description Product is still DRAFT */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_createVariant_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateVariantDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["VariantResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description SKU already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_updateVariant_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-                variantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateVariantDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["VariantResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Variant not found on this product */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description SKU already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_archiveVariant_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-                variantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["VariantResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Variant not found on this product */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_unarchiveVariant_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-                variantId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["VariantResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Variant not found on this product */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_createImage_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateImageDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ImageResponseDto"];
-                };
-            };
-            /** @description Invalid body or unknown color */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Product not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_removeImage_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-                imageId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Image removed */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Image not found on this product */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductsController_updateImage_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-                imageId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateImageDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ImageResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Image not found on this product */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ProductOptionsController_listSizes_v1: {
+    ProductOptionController_listSizes_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -3617,402 +4805,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SizeResponseDto"][];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    ProductOptionsController_listColors_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ColorResponseDto"][];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductOptionsController_listSizes_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SizeResponseDto"][];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductOptionsController_createSize_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateSizeDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SizeResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Size code already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductOptionsController_updateSize_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateSizeDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SizeResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Size not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductOptionsController_listColors_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ColorResponseDto"][];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductOptionsController_createColor_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateColorDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ColorResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Color code already exists */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Rate limit exceeded — retry after the window resets */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-        };
-    };
-    AdminProductOptionsController_updateColor_v1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateColorDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ColorResponseDto"];
-                };
-            };
-            /** @description Invalid input (validation failed or malformed id) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Missing, invalid, or expired access token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Authenticated user lacks the required role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
-                };
-            };
-            /** @description Color not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
             /** @description Rate limit exceeded — retry after the window resets */

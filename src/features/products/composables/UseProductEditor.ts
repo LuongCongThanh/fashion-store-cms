@@ -64,7 +64,7 @@ export function useProductEditor() {
   )
   useUnsavedGuard(() => meta.value.dirty)
   async function submit(status: 'draft' | 'published') {
-    if (!can('product:write') || mutation.isPending.value || media.uploading.value) return
+    if (!can('CATALOG_PRODUCT_MANAGE') || mutation.isPending.value || media.uploading.value) return
     const parsed = (status === 'published' ? productPublishSchema : productDraftSchema).safeParse({
       ...values,
       status,

@@ -1,3 +1,4 @@
+import type { RequiredPermission } from '@shared/lib/api/Permission'
 import type { ValueFormat } from '@shared/lib/format/Format'
 
 export interface DashboardItem {
@@ -14,7 +15,7 @@ export interface DashboardWidget {
   key: string
   title: string
   kind: 'stat' | 'chart' | 'list'
-  permission: string
+  permission: RequiredPermission
   /** Cách hiển thị giá trị của stat/list; mặc định là số đếm. */
   format?: ValueFormat
   /** Widget list: mỗi item dẫn tới đâu. */

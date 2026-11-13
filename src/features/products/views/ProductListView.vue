@@ -37,7 +37,7 @@ watch(params, () => {
   selection.value = {}
 })
 async function bulk(action: 'publish' | 'unpublish' | 'delete', selectedIds = ids.value) {
-  if (!can('product:write') || !selectedIds.length) return
+  if (!can('CATALOG_PRODUCT_MANAGE') || !selectedIds.length) return
   if (
     !(await confirm({
       title: t(`products.${action}`),
@@ -62,7 +62,7 @@ function rowAction(action: string, id: string) {
   <div class="space-y-6">
     <PageHeader :title="t('dashboard.products')">
       <template #actions>
-        <UButton v-if="can('product:write')" to="/products/new">{{ t('common.create') }}</UButton>
+        <UButton v-if="can('CATALOG_PRODUCT_MANAGE')" to="/products/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
     <ProductStatusPresets
@@ -77,7 +77,7 @@ function rowAction(action: string, id: string) {
       :title="
         tn('common.results', query.data.value?.meta.total ?? 0, { n: format.number(query.data.value?.meta.total ?? 0) })
       "
-      :count="can('product:write') ? ids.length : 0"
+      :count="can('CATALOG_PRODUCT_MANAGE') ? ids.length : 0"
       :columns="[
         { id: 'name', label: t('common.name') },
         { id: 'price', label: t('products.price') },
@@ -106,7 +106,7 @@ function rowAction(action: string, id: string) {
       :error="query.error.value"
       :sort="params.sort"
       :visibility="visibility"
-      :canWrite="can('product:write')"
+      :canWrite="can('CATALOG_PRODUCT_MANAGE')"
       @sort="setSort"
       @retry="query.refetch()"
       @action="rowAction"

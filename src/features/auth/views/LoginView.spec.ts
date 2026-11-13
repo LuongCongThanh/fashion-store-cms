@@ -2,7 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
-import { buildUser } from '@test/factories/User.factory'
+import { buildUser, buildUserDto } from '@test/factories/User.factory'
 import { renderWithPlugins } from '@test/Render'
 
 import LoginView from './LoginView.vue'
@@ -47,6 +47,7 @@ describe('LoginView', () => {
       accessToken: 'at-1',
       user: { id: user.id, email: user.email, fullName: user.name, role: user.role, emailVerified: true },
     })
+    http.onGet(/\/auth\/me$/).reply(200, buildUserDto({ id: user.id, email: user.email, fullName: user.name }))
 
     await fill(wrapper, 'lan@shop.vn', 'secret')
 
@@ -65,6 +66,7 @@ describe('LoginView', () => {
       accessToken: 'at-1',
       user: { id: user.id, email: user.email, fullName: user.name, role: user.role, emailVerified: true },
     })
+    http.onGet(/\/auth\/me$/).reply(200, buildUserDto({ id: user.id, email: user.email, fullName: user.name }))
 
     await fill(wrapper, 'lan@shop.vn', 'secret')
 
@@ -94,6 +96,7 @@ describe('LoginView', () => {
       accessToken: 'at-1',
       user: { id: 'c1', email: 'c@shop.vn', fullName: 'Khách', role: 'CUSTOMER', emailVerified: true },
     })
+    http.onGet(/\/auth\/me$/).reply(200, buildUserDto({ role: 'CUSTOMER', roles: [], permissions: [] }))
     http.onPost(/\/auth\/logout$/).reply(204)
 
     await fill(wrapper, 'c@shop.vn', 'secret')

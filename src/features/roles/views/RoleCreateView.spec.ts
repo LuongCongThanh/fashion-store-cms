@@ -9,11 +9,11 @@ import RoleCreateView from './RoleCreateView.vue'
 it('builds the permission matrix from backend resources/actions and toggles rows and columns', async () => {
   const { wrapper, http } = await renderFeature(RoleCreateView, {
     path: '/roles/new',
-    permissions: ['role:write'],
+    permissions: ['ADMINISTRATION_ROLE_MANAGE'],
     mock(http) {
       http.onGet(/\/permissions$/).reply(200, [
-        { key: 'product:read', resource: 'product', action: 'read' },
-        { key: 'product:write', resource: 'product', action: 'write' },
+        { key: 'CATALOG_PRODUCT_VIEW', resource: 'product', action: 'read' },
+        { key: 'CATALOG_PRODUCT_MANAGE', resource: 'product', action: 'write' },
         { key: 'order:read', resource: 'order', action: 'read' },
         { key: 'report:export', resource: 'report', action: 'export' },
       ])

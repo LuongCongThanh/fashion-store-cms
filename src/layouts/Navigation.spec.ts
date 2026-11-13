@@ -28,7 +28,7 @@ const ROUTES: RouteRecordRaw[] = [
         component: View,
         meta: {
           titleKey: 'nav.orders',
-          permission: 'orders.read',
+          permission: 'CATALOG_PRODUCT_VIEW',
           command: { icon: 'i-lucide-receipt', group: 'navigate', shortcut: ['g', 'o'] },
         },
       },
@@ -38,7 +38,7 @@ const ROUTES: RouteRecordRaw[] = [
         component: View,
         meta: {
           titleKey: 'products.create',
-          permission: 'products.write',
+          permission: 'CATALOG_PRODUCT_MANAGE',
           command: { icon: 'i-lucide-plus', group: 'create', shortcut: ['n'] },
         },
       },
@@ -54,11 +54,14 @@ describe('buildNavigation', () => {
       { name: 'home', path: '/', titleKey: 'nav.dashboard', icon: 'i-lucide-home' },
     ])
 
-    expect(buildNavigation(ROUTES, allow(['orders.read'])).sidebar.map((i) => i.path)).toEqual(['/', '/orders'])
+    expect(buildNavigation(ROUTES, allow(['CATALOG_PRODUCT_VIEW'])).sidebar.map((i) => i.path)).toEqual([
+      '/',
+      '/orders',
+    ])
   })
 
   it('builds palette commands for every permitted route with a command', () => {
-    const { commands } = buildNavigation(ROUTES, allow(['products.write']))
+    const { commands } = buildNavigation(ROUTES, allow(['CATALOG_PRODUCT_MANAGE']))
 
     expect(commands).toEqual([
       {
@@ -79,7 +82,7 @@ describe('buildNavigation', () => {
   })
 
   it('collects keyboard shortcuts from permitted routes', () => {
-    const { shortcuts } = buildNavigation(ROUTES, allow(['orders.read']))
+    const { shortcuts } = buildNavigation(ROUTES, allow(['CATALOG_PRODUCT_VIEW']))
 
     expect(shortcuts).toEqual([
       { keys: ['g', 'd'], path: '/', titleKey: 'nav.dashboard' },

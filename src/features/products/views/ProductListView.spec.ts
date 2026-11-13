@@ -119,7 +119,7 @@ it('asks for confirmation before deleting selected products', async () => {
   const { renderFeature } = await import('@test/RenderFeature')
   const { wrapper, http } = await renderFeature(ProductListView, {
     path: '/products',
-    permissions: ['product:write'],
+    permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/products$/).reply(200, {
         data: [{ id: 'p1', name: 'Áo linen', status: 'published', price: 250000 }],

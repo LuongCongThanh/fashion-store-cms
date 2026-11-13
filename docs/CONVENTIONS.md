@@ -78,7 +78,7 @@ cms/
 │   │   └── auth/                           # feature đăng nhập / đăng xuất / thông tin user
 │   │       ├── api/                        # hàm gọi API của feature
 │   │       │   ├── Auth.api.ts             # gọi API login, forgot/reset-password, me, logout
-│   │       │   └── Auth.mapper.ts          # AuthUserResponseDto → CurrentUser, ma trận quyền theo role
+│   │       │   └── Auth.mapper.ts          # MeResponseDto → CurrentUser; Quyền lấy nguyên từ API
 │   │       ├── components/                 # component nội bộ feature
 │   │       │   └── LoginForm.vue           # form đăng nhập (props/emits), view lo gọi API
 │   │       ├── schemas/                    # Zod schema của form
@@ -715,6 +715,8 @@ Chỉnh tập trung trong `src/app/config/Ui.config.ts`, import vào `vite.confi
 - **Một file** (`HttpClient.ts`, ~150 dòng): không tách `AxiosTransport` / `RefreshQueue` / `NormalizeError`, không cần rule ESLint `noClientInternals` (D40). Chỉ tách khi file > ~300 dòng **và** phần tách ra có spec riêng có ích.
 - `skipAuth` là cách duy nhất để gọi API không kèm token; refresh vì thế vẫn có `Accept-Language` và lỗi vẫn là `ApiError`.
 - Trước khi có Swagger thật, `paths` là placeholder → các helper kiểu rơi về `unknown`; khi `npm run gen:api` chạy (đọc `OPENAPI_URL` từ `.env.local` hoặc biến môi trường) thì URL, body, response tự có kiểu và path không có trong Swagger sẽ báo lỗi typecheck.
+- `OPENAPI_URL` trong `.env.development` pin asset `openapi.json` của một tag `openapi-v*` của be-demo. Đổi hợp đồng = đổi tag ở đây rồi chạy `npm run gen:api`; job CI `openapi-contract` sinh lại và fail khi `Api.generated.ts` lệch. Muốn sinh từ BE local thì ghi đè `OPENAPI_URL` trong `.env.local`.
+- Quyền: `Permission` là enum của API (`shared/lib/api/Permission.ts`). `meta.permission`, `can()` và widget chỉ nhận `Permission` hoặc `PendingPermission` (quyền của màn hình chưa có API, không bao giờ được cấp). Không tự đặt chuỗi quyền mới, không kiểm theo tên Vai trò.
 - Upload file lên S3 (presigned PUT) **không** đi qua HttpClient (khác origin, không gắn token) — `MediaUpload.ts` dùng `fetch` riêng.
 
 ### M.2. Session và composition root
@@ -956,7 +958,7 @@ features/
 │   ├── stores/
 │   │   └── Auth.store.ts                   # token + user, nội bộ
 │   ├── types/
-│   │   └── Auth.types.ts                   # CurrentUser, Permission
+│   │   └── Auth.types.ts                   # CurrentUser (Quyền kiểu `Permission` từ `shared/lib/api/Permission.ts`)
 │   ├── views/
 │   │   └── LoginView.vue
 │   ├── Auth.routes.ts

@@ -9,7 +9,7 @@ it('shows the category tree and rolls back a failed drag move', async () => {
   let finishMove: ((response: [number, object]) => void) | undefined
   const { wrapper, http } = await renderFeature(CategoryListView, {
     path: '/categories',
-    permissions: ['category:write'],
+    permissions: ['CATALOG_CATEGORY_MANAGE'],
     mock(http) {
       http.onGet(/\/categories$/).replyOnce(200, [
         { id: 'a', name: 'Áo', parentId: null },

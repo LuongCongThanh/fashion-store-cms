@@ -61,7 +61,7 @@ describe('DashboardView', () => {
 
 it('loads the current user when opening the dashboard directly after a reload', async () => {
   const { wrapper, http } = renderWithPlugins(DashboardView)
-  http.onGet(/\/auth\/me$/).reply(200, buildUserDto({ role: 'STAFF' }))
+  http.onGet(/\/auth\/me$/).reply(200, buildUserDto({ role: 'STAFF', permissions: ['CATALOG_PRODUCT_VIEW'] }))
   http.onGet(/\/dashboard\//).reply(200, { value: 12, points: [], items: [] })
   await flushPromises()
   expect(wrapper.find('[data-widget="products"]').text()).toContain('12')
@@ -77,7 +77,7 @@ it('links a recent order directly to its detail page', async () => {
 
 it('formats revenue as money and counts with the locale separator', async () => {
   const { wrapper, http } = renderWithPlugins(DashboardView, {
-    user: buildUser({ permissions: ['order:read', 'product:read'] }),
+    user: buildUser({ permissions: ['order:read', 'CATALOG_PRODUCT_VIEW'] }),
   })
   http.onGet(/\/dashboard\/revenue$/).reply(200, { value: 1_284_560_000 })
   http.onGet(/\/dashboard\/orders$/).reply(200, { value: 1_842 })

@@ -10,7 +10,7 @@ it('replaces role assignments and changes account status when editing a user', a
   const { wrapper, http } = await renderFeature(UserEditView, {
     path: '/users/u1/edit',
     routePath: '/users/:id/edit',
-    permissions: ['user:write'],
+    permissions: ['ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE'],
     mock(http) {
       http.onGet(/\/users\/u1$/).reply(200, {
         id: 'u1',

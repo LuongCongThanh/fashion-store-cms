@@ -34,7 +34,7 @@ async function setup(initial = '/login') {
         path: '/orders',
         name: 'orders.list',
         component: Blank,
-        meta: { requiresAuth: true, permission: 'orders.read' },
+        meta: { requiresAuth: true, permission: 'CATALOG_PRODUCT_VIEW' },
       },
       { path: '/403', name: 'forbidden', component: Blank },
     ],
@@ -81,7 +81,7 @@ describe('authGuard', () => {
 
   it('allows the route when the user has its permission', async () => {
     auth.isAuthenticated.value = true
-    auth.permissions.value = ['orders.read']
+    auth.permissions.value = ['CATALOG_PRODUCT_VIEW']
     const router = await setup()
 
     await router.push('/orders')
@@ -91,7 +91,7 @@ describe('authGuard', () => {
 
   it('loads the user before checking permissions after a reload', async () => {
     auth.isAuthenticated.value = true
-    auth.permissionsAfterLoad = ['orders.read']
+    auth.permissionsAfterLoad = ['CATALOG_PRODUCT_VIEW']
     const router = await setup()
 
     await router.push('/orders')

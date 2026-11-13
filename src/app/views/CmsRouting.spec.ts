@@ -16,11 +16,11 @@ async function renderCms(permissions: string[]) {
 }
 
 it.each([
-  ['/products/new', 'product:read'],
-  ['/categories/new', 'category:read'],
+  ['/products/new', 'CATALOG_PRODUCT_VIEW'],
+  ['/categories/new', 'CATALOG_CATEGORY_VIEW'],
   ['/promotions/new', 'promotion:read'],
-  ['/users/new', 'user:read'],
-  ['/roles/new', 'role:read'],
+  ['/users/new', 'ADMINISTRATION_INTERNAL_ACCOUNT_VIEW'],
+  ['/roles/new', 'ADMINISTRATION_ROLE_VIEW'],
   ['/settings/store', 'settings:read'],
   ['/settings/localization', 'settings:read'],
 ])('blocks write route %s for a user with only %s', async (path, permission) => {
@@ -48,7 +48,7 @@ it('redirects settings to the Store editor for an authorized user', async () => 
 })
 
 it('shows the product ancestor in breadcrumbs for a create route', async () => {
-  const { wrapper, router, http } = await renderCms(['product:read', 'product:write'])
+  const { wrapper, router, http } = await renderCms(['CATALOG_PRODUCT_VIEW', 'CATALOG_PRODUCT_MANAGE'])
   http.onGet(/\/categories$/).reply(200, [])
   await router.push('/products/new')
   await flushPromises()
@@ -58,7 +58,7 @@ it('shows the product ancestor in breadcrumbs for a create route', async () => {
 })
 
 it('keeps an unsaved product form open when the user cancels leaving', async () => {
-  const { wrapper, router, http } = await renderCms(['product:read', 'product:write'])
+  const { wrapper, router, http } = await renderCms(['CATALOG_PRODUCT_VIEW', 'CATALOG_PRODUCT_MANAGE'])
   http.onGet(/\/categories$/).reply(200, [])
   await router.push('/products/new')
   await flushPromises()

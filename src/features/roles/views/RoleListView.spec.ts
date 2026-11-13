@@ -7,7 +7,7 @@ import RoleListView from './RoleListView.vue'
 it('lets role writers open the role editor from the server list', async () => {
   const { wrapper } = await renderFeature(RoleListView, {
     path: '/roles',
-    permissions: ['role:write'],
+    permissions: ['ADMINISTRATION_ROLE_MANAGE'],
     mock(http) {
       http.onGet(/\/roles$/).reply(200, {
         data: [{ id: 'r1', name: 'Bán hàng', permissions: ['order:read'] }],

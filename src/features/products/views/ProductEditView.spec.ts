@@ -28,7 +28,7 @@ it('preserves unsaved edits when a background refresh returns changed server dat
   const { wrapper, http } = await renderFeature(ProductEditView, {
     path: '/products/p1/edit',
     routePath: '/products/:id/edit',
-    permissions: ['product:write'],
+    permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/products\/p1$/).reply(() => [200, { ...product, name }])
       http.onGet(/\/categories$/).reply(200, [])
@@ -50,7 +50,7 @@ it('warns before switching records and then hydrates the newly chosen product', 
   const { wrapper, router } = await renderFeature(ProductEditView, {
     path: '/products/p1/edit',
     routePath: '/products/:id/edit',
-    permissions: ['product:write'],
+    permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/products\/p1$/).reply(200, product)
       http.onGet(/\/products\/p2$/).reply(200, { ...product, id: 'p2', name: 'Áo thứ hai' })

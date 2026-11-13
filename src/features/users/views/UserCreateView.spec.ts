@@ -9,7 +9,7 @@ import UserCreateView from './UserCreateView.vue'
 it('creates a user with explicitly selected role', async () => {
   const { wrapper, http } = await renderFeature(UserCreateView, {
     path: '/users/new',
-    permissions: ['user:write'],
+    permissions: ['ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE'],
     mock(http) {
       http.onGet(/\/roles$/).reply(200, {
         data: [{ id: 'r1', name: 'Bán hàng', permissions: [] }],

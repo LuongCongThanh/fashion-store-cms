@@ -8,7 +8,7 @@ import CategoryCreateView from './CategoryCreateView.vue'
 it('validates a localized category and maps API validation errors to the field', async () => {
   const { wrapper, http } = await renderFeature(CategoryCreateView, {
     path: '/categories/new',
-    permissions: ['category:write'],
+    permissions: ['CATALOG_CATEGORY_MANAGE'],
     mock(http) {
       http.onGet(/\/categories$/).reply(200, [])
       http.onPost(/\/categories$/).reply(422, {

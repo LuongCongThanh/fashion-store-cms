@@ -13,7 +13,7 @@ const { can } = useAuth()
 const query = useCategoriesQuery()
 const mutation = useMoveCategoryMutation()
 function move(id: string, parentId: string | null) {
-  if (can('category:write')) mutation.mutate({ id, parentId })
+  if (can('CATALOG_CATEGORY_MANAGE')) mutation.mutate({ id, parentId })
 }
 </script>
 
@@ -21,7 +21,7 @@ function move(id: string, parentId: string | null) {
   <div class="space-y-4">
     <PageHeader :title="t('products.category')">
       <template #actions>
-        <CategoryTreeToolbar :canWrite="can('category:write')" />
+        <CategoryTreeToolbar :canWrite="can('CATALOG_CATEGORY_MANAGE')" />
       </template>
     </PageHeader>
     <LoadingState v-if="query.isPending.value" />
@@ -29,7 +29,7 @@ function move(id: string, parentId: string | null) {
     <CategoryTree
       v-else-if="query.data.value?.length"
       :items="query.data.value"
-      :canWrite="can('category:write')"
+      :canWrite="can('CATALOG_CATEGORY_MANAGE')"
       :pending="mutation.isPending.value"
       @move="move"
     />
