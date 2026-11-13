@@ -2,6 +2,7 @@ import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
+import { categoryPage } from '@test/factories/Category.factory'
 import { plainSpaces } from '@test/Intl'
 import { renderWithPlugins } from '@test/Render'
 import { chooseOption } from '@test/Select'
@@ -43,7 +44,7 @@ it('removes one active filter without dropping the others', async () => {
   })
   await router.push('/products?search=lua&status=published&categoryId=linen&minPrice=15500000&page=2')
   const { wrapper, http } = renderWithPlugins(ProductListView, { router })
-  http.onGet(/\/categories$/).reply(200, [{ id: 'linen', name: 'Linen', parentId: null }])
+  http.onGet(/\/categories$/).reply(200, categoryPage([{ id: 'linen', name: 'Linen', parentId: null }]))
   http.onGet(/\/products$/).reply(200, {
     data: [],
     meta: { page: 2, pageSize: 20, total: 1, totalPages: 1 },
@@ -150,7 +151,7 @@ it('filters products using category options from the category feature', async ()
   const { wrapper, router } = await renderFeature(ProductListView, {
     path: '/products',
     mock(http) {
-      http.onGet(/\/categories$/).reply(200, [{ id: 'linen', name: 'Linen', parentId: null }])
+      http.onGet(/\/categories$/).reply(200, categoryPage([{ id: 'linen', name: 'Linen', parentId: null }]))
       http.onGet(/\/products$/).reply(200, { data: [], meta: { page: 1, pageSize: 20, total: 0, totalPages: 0 } })
     },
   })

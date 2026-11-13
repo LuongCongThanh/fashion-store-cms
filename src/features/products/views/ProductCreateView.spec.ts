@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { categoryPage } from '@test/factories/Category.factory'
 import { setNumber } from '@test/NumberField'
 import { renderFeature } from '@test/RenderFeature'
 import { chooseOption } from '@test/Select'
@@ -12,7 +13,7 @@ it('saves a draft with one default variant without requiring publish fields', as
     path: '/products/new',
     permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
-      http.onGet(/\/categories$/).reply(200, [])
+      http.onGet(/\/categories$/).reply(200, categoryPage([]))
       http.onPost(/\/products$/).reply(201, { id: 'p1' })
     },
   })
@@ -30,7 +31,7 @@ it('rejects publishing a product with incomplete variants and SEO', async () => 
     path: '/products/new',
     permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
-      http.onGet(/\/categories$/).reply(200, [])
+      http.onGet(/\/categories$/).reply(200, categoryPage([]))
     },
   })
   await wrapper.find('input[name="name"]').setValue('Áo mới')
@@ -45,7 +46,7 @@ it('publishes a categorized product with pricing, SEO and generated size/color v
     path: '/products/new',
     permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
-      http.onGet(/\/categories$/).reply(200, [{ id: 'linen', name: 'Linen', parentId: null }])
+      http.onGet(/\/categories$/).reply(200, categoryPage([{ id: 'linen', name: 'Linen', parentId: null }]))
       http.onPost(/\/products$/).reply(201, { id: 'p1' })
     },
   })
@@ -96,7 +97,7 @@ it('preserves fractional product and variant prices when saving a draft', async 
     path: '/products/new',
     permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
-      http.onGet(/\/categories$/).reply(200, [])
+      http.onGet(/\/categories$/).reply(200, categoryPage([]))
       http.onPost(/\/products$/).reply(201, { id: 'p1' })
     },
   })

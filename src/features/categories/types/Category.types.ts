@@ -1,9 +1,9 @@
 export interface Category {
   id: string
   name: string
+  slug: string
   parentId: string | null
-  slug?: string
-  metaTitle?: string
-  metaDescription?: string
-  translations?: Record<string, { name: string; description: string }>
+  description: string | null
+  sortOrder: number
+  isVisible: boolean
 }

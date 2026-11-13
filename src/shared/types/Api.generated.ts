@@ -721,7 +721,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List ACTIVE products (paginated, filterable by category, public) */
+        /**
+         * List ACTIVE products with a price range (paginated, public)
+         * @description Search by name, filter by category, size, color and price, sort by newest or price.
+         */
         get: operations["ProductController_findAll_v1"];
         put?: never;
         post?: never;
@@ -820,12 +823,12 @@ export interface components {
         CategoryResponseDto: {
             /** Format: date-time */
             createdAt: string;
-            description?: Record<string, never> | null;
+            description: string | null;
             id: string;
             isVisible: boolean;
             name: string;
             /** @description null for a root category */
-            parentId?: Record<string, never> | null;
+            parentId: string | null;
             slug: string;
             sortOrder: number;
             /** Format: date-time */
@@ -865,20 +868,20 @@ export interface components {
              * @default true
              * @example true
              */
-            isVisible: boolean;
+            isVisible?: boolean;
             /** @example Men's Clothing */
             name: string;
             /**
              * @description Parent category; omit or null for a root category
              * @example 550e8400-e29b-41d4-a716-446655440000
              */
-            parentId?: Record<string, never> | null;
+            parentId?: string | null;
             /**
              * @description Ascending order among siblings
              * @default 0
              * @example 0
              */
-            sortOrder: number;
+            sortOrder?: number;
         };
         CreateColorDto: {
             /** @example WHT */
@@ -889,7 +892,7 @@ export interface components {
              * @default false
              * @example false
              */
-            isHidden: boolean;
+            isHidden?: boolean;
             /** @example Trắng */
             name: string;
         };
@@ -906,12 +909,12 @@ export interface components {
              * @default false
              * @example true
              */
-            isPrimary: boolean;
+            isPrimary?: boolean;
             /**
              * @default 0
              * @example 0
              */
-            sortOrder: number;
+            sortOrder?: number;
             /**
              * @description Object storage key, not an absolute URL
              * @example products/tshirt-basic/white-1.jpg
@@ -955,7 +958,7 @@ export interface components {
              * @default false
              * @example false
              */
-            isHidden: boolean;
+            isHidden?: boolean;
             /** @example Size M */
             name: string;
             /**
@@ -1022,7 +1025,7 @@ export interface components {
             email: string;
         };
         ImageResponseDto: {
-            altText?: Record<string, never> | null;
+            altText: string | null;
             colorId: string;
             /** Format: date-time */
             createdAt: string;
@@ -1071,6 +1074,10 @@ export interface components {
             data: components["schemas"]["CategoryResponseDto"][];
             meta: components["schemas"]["PaginationMetaDto"];
         };
+        PaginatedProductListResponseDto: {
+            data: components["schemas"]["ProductListItemResponseDto"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+        };
         PaginatedProductResponseDto: {
             data: components["schemas"]["ProductResponseDto"][];
             meta: components["schemas"]["PaginationMetaDto"];
@@ -1114,13 +1121,16 @@ export interface components {
             categoryId: string;
             /** Format: date-time */
             createdAt: string;
-            description?: Record<string, never> | null;
+            description: string | null;
             id: string;
             /** @description Images grouped by color via colorId, ordered by sortOrder */
             images: components["schemas"]["ImageResponseDto"][];
             name: string;
-            /** @description First time the product became ACTIVE */
-            publishedAt?: Record<string, never> | null;
+            /**
+             * Format: date-time
+             * @description First time the product became ACTIVE
+             */
+            publishedAt: string | null;
             slug: string;
             status: components["schemas"]["ProductStatus"];
             /** Format: date-time */
@@ -1130,15 +1140,28 @@ export interface components {
             /** @description Shipping weight in grams */
             weightGrams: number;
         };
-        ProductResponseDto: {
+        ProductListItemResponseDto: {
             categoryId: string;
             /** Format: date-time */
             createdAt: string;
-            description?: Record<string, never> | null;
+            description: string | null;
             id: string;
+            /**
+             * @description Highest price among ACTIVE variants, integer VND
+             * @example 249000
+             */
+            maxPrice: number;
+            /**
+             * @description Lowest price among ACTIVE variants, integer VND
+             * @example 199000
+             */
+            minPrice: number;
             name: string;
-            /** @description First time the product became ACTIVE */
-            publishedAt?: Record<string, never> | null;
+            /**
+             * Format: date-time
+             * @description First time the product became ACTIVE
+             */
+            publishedAt: string | null;
             slug: string;
             status: components["schemas"]["ProductStatus"];
             /** Format: date-time */
@@ -1146,6 +1169,27 @@ export interface components {
             /** @description Shipping weight in grams */
             weightGrams: number;
         };
+        ProductResponseDto: {
+            categoryId: string;
+            /** Format: date-time */
+            createdAt: string;
+            description: string | null;
+            id: string;
+            name: string;
+            /**
+             * Format: date-time
+             * @description First time the product became ACTIVE
+             */
+            publishedAt: string | null;
+            slug: string;
+            status: components["schemas"]["ProductStatus"];
+            /** Format: date-time */
+            updatedAt: string;
+            /** @description Shipping weight in grams */
+            weightGrams: number;
+        };
+        /** @enum {string} */
+        ProductSort: "newest" | "price_asc" | "price_desc";
         /** @enum {string} */
         ProductStatus: "DRAFT" | "ACTIVE" | "ARCHIVED";
         RefreshResponseDto: {
@@ -1236,20 +1280,20 @@ export interface components {
              * @default true
              * @example true
              */
-            isVisible: boolean;
+            isVisible?: boolean;
             /** @example Men's Clothing */
             name?: string;
             /**
              * @description Parent category; omit or null for a root category
              * @example 550e8400-e29b-41d4-a716-446655440000
              */
-            parentId?: Record<string, never> | null;
+            parentId?: string | null;
             /**
              * @description Ascending order among siblings
              * @default 0
              * @example 0
              */
-            sortOrder: number;
+            sortOrder?: number;
         };
         UpdateColorDto: {
             /** @example #FFFFFF */
@@ -1258,7 +1302,7 @@ export interface components {
              * @default false
              * @example false
              */
-            isHidden: boolean;
+            isHidden?: boolean;
             /** @example Trắng */
             name?: string;
         };
@@ -1270,12 +1314,12 @@ export interface components {
              * @default false
              * @example true
              */
-            isPrimary: boolean;
+            isPrimary?: boolean;
             /**
              * @default 0
              * @example 0
              */
-            sortOrder: number;
+            sortOrder?: number;
             /**
              * @description Object storage key, not an absolute URL
              * @example products/tshirt-basic/white-1.jpg
@@ -1322,7 +1366,7 @@ export interface components {
              * @default false
              * @example false
              */
-            isHidden: boolean;
+            isHidden?: boolean;
             /** @example Size M */
             name?: string;
             /**
@@ -2191,11 +2235,9 @@ export interface operations {
                 page?: number;
                 limit?: number;
                 categoryId?: string;
-                /** @description Size codes; repeat the param for several (`?size=M&size=L`) */
-                size?: string[];
-                /** @description Color codes; repeat the param for several (`?color=WHT&color=BLK`) */
-                color?: string[];
                 status?: components["schemas"]["ProductStatus"];
+                /** @description Substring of the product name or a variant SKU, case-insensitive. Trimmed; empty means no search. */
+                q?: string;
             };
             header?: never;
             path?: never;
@@ -4672,10 +4714,18 @@ export interface operations {
                 page?: number;
                 limit?: number;
                 categoryId?: string;
+                /** @description Substring of the product name, case- and Vietnamese-accent-insensitive (BR-CAT-13). Trimmed; empty means no search. */
+                q?: string;
                 /** @description Size codes; repeat the param for several (`?size=M&size=L`) */
                 size?: string[];
                 /** @description Color codes; repeat the param for several (`?color=WHT&color=BLK`) */
                 color?: string[];
+                /** @description Lowest product price (integer VND) at least this */
+                minPrice?: number;
+                /** @description Lowest product price (integer VND) at most this */
+                maxPrice?: number;
+                /** @description Price sorts use the lowest price among ACTIVE variants */
+                sort?: components["schemas"]["ProductSort"];
             };
             header?: never;
             path?: never;
@@ -4688,7 +4738,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedProductResponseDto"];
+                    "application/json": components["schemas"]["PaginatedProductListResponseDto"];
                 };
             };
             /** @description Invalid input (validation failed or malformed id) */

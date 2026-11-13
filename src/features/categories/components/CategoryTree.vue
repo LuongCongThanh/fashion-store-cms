@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UBadge from '@nuxt/ui/components/Badge.vue'
 import { computed } from 'vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
@@ -11,7 +12,10 @@ const rows = computed(() => {
   const ordered: { item: Category; depth: number }[] = []
   const seen = new Set<string>()
   function append(parentId: string | null, depth: number) {
-    for (const item of props.items.filter((item) => item.parentId === parentId)) {
+    const children = props.items
+      .filter((item) => item.parentId === parentId)
+      .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, 'vi'))
+    for (const item of children) {
       if (seen.has(item.id)) continue
       seen.add(item.id)
       ordered.push({ item, depth })
@@ -57,6 +61,9 @@ function drop(event: DragEvent, parentId: string | null) {
       @drop.prevent.stop="drop($event, row.item.id)"
     >
       <span>{{ row.item.name }}</span>
+      <UBadge v-if="!row.item.isVisible" color="neutral" variant="subtle" class="ml-2">
+        {{ t('categories.hidden') }}
+      </UBadge>
       <RouterLink
         v-if="canWrite"
         :to="`/categories/${encodeURIComponent(row.item.id)}/edit`"
