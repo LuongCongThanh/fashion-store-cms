@@ -397,7 +397,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get one staff account with its roles (requires ADMINISTRATION_INTERNAL_ACCOUNT_VIEW) */
+        get: operations["AdminStaffController_findOne_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1221,6 +1222,8 @@ export interface components {
             email: string;
             id: string;
             name: string;
+            /** @description RBAC roles assigned to the account, sorted by name */
+            roles: components["schemas"]["RoleSummaryResponseDto"][];
             status: components["schemas"]["UserStatus"];
             /** Format: date-time */
             updatedAt: string;
@@ -3737,6 +3740,72 @@ export interface operations {
             };
             /** @description Email is already in use */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminStaffController_findOne_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Staff account not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

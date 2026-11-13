@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
 
+import { internalAccountRoutes } from '@features/accounts/InternalAccounts.routes'
 import { authRoutes } from '@features/auth/Auth.routes'
 import { categoryRoutes } from '@features/categories/Categories.routes'
 import { customerRoutes } from '@features/customers/Customers.routes'
@@ -11,7 +12,6 @@ import { productRoutes } from '@features/products/Products.routes'
 import { promotionRoutes } from '@features/promotions/Promotions.routes'
 import { roleRoutes } from '@features/roles/Roles.routes'
 import { settingsRoutes } from '@features/settings/Settings.routes'
-import { userRoutes } from '@features/users/Users.routes'
 
 /** Trang chỉ dùng ở dev (§L.10). */
 const devRoutes: RouteRecordRaw[] = import.meta.env.DEV
@@ -48,7 +48,7 @@ export const routes: RouteRecordRaw[] = [
     children: [
       ...dashboardRoutes,
       ...settingsRoutes,
-      ...userRoutes,
+      ...internalAccountRoutes,
       ...roleRoutes,
       ...promotionRoutes,
       ...inventoryRoutes,

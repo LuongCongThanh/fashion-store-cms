@@ -283,8 +283,17 @@
     "endAt": "End",
     "invalid": "Invalid input; check code, value and dates"
   },
-  "users": {
-    "title": "Users"
+  "internalAccounts": {
+    "title": "Internal accounts",
+    "emailTaken": "This email is already in use",
+    "initialPassword": "Initial password",
+    "passwordHint": "At least 8 characters with upper and lower case letters, a number and a symbol.",
+    "createHint": "New accounts get the Staff role. Assign more roles on the edit page after creating.",
+    "rolesHint": "Changes apply immediately; the account must sign in again to get the new permissions.",
+    "disable": "Disable",
+    "enable": "Re-enable",
+    "disableTitle": "Disable account \"{name}\"?",
+    "disableDescription": "The account is signed out everywhere and cannot sign in until re-enabled."
   },
   "roles": {
     "title": "Roles",

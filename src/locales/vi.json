@@ -283,8 +283,17 @@
     "endAt": "Kết thúc",
     "invalid": "Dữ liệu không hợp lệ; kiểm tra mã, giá trị và thời gian"
   },
-  "users": {
-    "title": "Người dùng"
+  "internalAccounts": {
+    "title": "Tài khoản nội bộ",
+    "emailTaken": "Email đã được dùng",
+    "initialPassword": "Mật khẩu ban đầu",
+    "passwordHint": "Ít nhất 8 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt.",
+    "createHint": "Tài khoản mới có Vai trò Staff. Gán thêm Vai trò ở trang sửa sau khi tạo.",
+    "rolesHint": "Tick hoặc bỏ tick có hiệu lực ngay; tài khoản sẽ phải đăng nhập lại để nhận Quyền mới.",
+    "disable": "Vô hiệu hoá",
+    "enable": "Kích hoạt lại",
+    "disableTitle": "Vô hiệu hoá tài khoản \"{name}\"?",
+    "disableDescription": "Tài khoản bị đăng xuất khỏi mọi thiết bị và không đăng nhập được cho tới khi kích hoạt lại."
   },
   "roles": {
     "title": "Vai trò",
