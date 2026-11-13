@@ -1,6 +1,6 @@
 # 05 — Dashboard products widget from the API; menu in three groups
 
-Status: ready-for-agent
+Status: resolved
 Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.4 (C7, C9)
 
 ## What to build
@@ -13,3 +13,7 @@ Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.4 (C7, C9)
 - No request to `/dashboard/*` when logged in as Admin.
 - Menu shows the three groups; hidden screens stay hidden.
 - `typecheck`, `lint`, `knip`, `build`, `test` pass.
+
+## Comments
+
+- 2026-11-14: done in #73.

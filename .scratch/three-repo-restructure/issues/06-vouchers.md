@@ -1,6 +1,6 @@
 # 06 — Voucher screens on the admin API (promotions → vouchers)
 
-Status: ready-for-agent
+Status: resolved
 Spec: `docs/plans/cms-restructure-plan.md` Voucher, PR V.1 (C2, C6)
 
 ## What to build
@@ -15,3 +15,7 @@ Spec: `docs/plans/cms-restructure-plan.md` Voucher, PR V.1 (C2, C6)
 - `git grep -i -E "promotion|coupon" -- src` is empty.
 - Admin creates, edits, deactivates and deletes a Voucher against the real API; Staff does not see the menu.
 - `typecheck`, `lint`, `knip`, `build`, `test` pass.
+
+## Comments
+
+- 2026-11-14: done in #74.
