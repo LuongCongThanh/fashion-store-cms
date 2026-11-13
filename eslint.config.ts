@@ -299,15 +299,6 @@ export default defineConfig(
     },
   },
   {
-    // Trang chỉ có ở dev (design system, prototype Phase 0.5) — không cần i18n.
-    files: [
-      'src/app/views/DesignSystemView.vue',
-      'src/features/*/prototype/**/*.vue',
-      'src/shared/components/prototype/**/*.vue',
-    ],
-    rules: { 'vue/no-bare-strings-in-template': 'off' },
-  },
-  {
     // import() động và vi.mock()/vi.importActual() cũng phải dùng alias, không dùng ../
     files: ['src/**/*.{ts,vue}'],
     rules: {

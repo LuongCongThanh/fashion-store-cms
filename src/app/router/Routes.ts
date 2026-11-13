@@ -15,28 +15,6 @@ import { roleRoutes } from '@features/roles/Roles.routes'
 import { settingsRoutes } from '@features/settings/Settings.routes'
 import { sizeRoutes } from '@features/sizes/Sizes.routes'
 
-/** Trang chỉ dùng ở dev (§L.10). */
-const devRoutes: RouteRecordRaw[] = import.meta.env.DEV
-  ? [
-      {
-        path: 'design-system',
-        name: 'design-system',
-        component: () => import('@app/views/DesignSystemView.vue'),
-      },
-      // Phase 0.5 UI/UX hardening: 3 biến thể mỗi màn, `?variant=A|B|C`, fixture tĩnh, không gọi API.
-      {
-        path: 'prototype/dashboard',
-        name: 'prototype-dashboard',
-        component: () => import('@features/dashboard/prototype/DashboardPrototype.vue'),
-      },
-      {
-        path: 'prototype/orders',
-        name: 'prototype-orders',
-        component: () => import('@features/orders/prototype/OrderDetailPrototype.vue'),
-      },
-    ]
-  : []
-
 export const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -56,7 +34,6 @@ export const routes: RouteRecordRaw[] = [
       ...colorRoutes,
       ...productRoutes,
       { path: '403', name: 'forbidden', component: () => import('@app/views/ForbiddenView.vue') },
-      ...devRoutes,
     ],
   },
   // Sau DashboardLayout: cả hai cùng path '/', '/' phải khớp vào dashboard.

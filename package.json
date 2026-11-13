@@ -23,8 +23,7 @@
     "pwa:assets": "pwa-assets-generator",
     "knip": "knip",
     "analyze": "vite build --mode analyze",
-    "gen:api": "tsx scripts/GenApi.ts",
-    "metrics:tokens": "tsx scripts/CodexUsage.ts"
+    "gen:api": "tsx scripts/GenApi.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
