@@ -7,7 +7,7 @@ export interface InventoryItem {
   available: number
   status: 'in-stock' | 'low-stock' | 'out-of-stock'
 }
-export interface StockMovement {
+export interface InventoryMovement {
   id: string
   sku: string
   type: 'in' | 'out' | 'adjustment'

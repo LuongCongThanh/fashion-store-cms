@@ -230,13 +230,15 @@
   "orders": {
     "noItems": "Đơn hàng chưa có sản phẩm",
     "status": {
-      "pending": "Chờ xác nhận",
-      "confirmed": "Đã xác nhận",
-      "processing": "Đang xử lý",
-      "shipped": "Đã gửi",
-      "delivered": "Đã giao",
-      "cancelled": "Đã hủy",
-      "refunded": "Đã hoàn tiền"
+      "PENDING_PAYMENT": "Chờ thanh toán",
+      "PLACED": "Chờ xác nhận",
+      "CONFIRMED": "Đã xác nhận",
+      "PACKING": "Đang đóng gói",
+      "SHIPPING": "Đang giao",
+      "DELIVERED": "Đã giao",
+      "COMPLETED": "Hoàn tất",
+      "CANCELLED": "Đã huỷ",
+      "RETURNED_TO_SENDER": "Hoàn hàng"
     },
     "paymentStatus": {
       "unpaid": "Chưa thanh toán",
@@ -248,7 +250,6 @@
     "discount": "Giảm giá",
     "shippingCost": "Phí giao hàng",
     "total": "Tổng cộng",
-    "cancelConfirm": "Hủy đơn hàng này?",
     "shipping": "Giao hàng",
     "payment": "Thanh toán",
     "timeline": "Lịch sử",

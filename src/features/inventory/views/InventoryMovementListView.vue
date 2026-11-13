@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useStockMovementsQuery } from '@features/inventory/api/Inventory.api'
-import StockMovementFilters from '@features/inventory/components/StockMovementFilters.vue'
-import StockMovementTable from '@features/inventory/components/StockMovementTable.vue'
+import { useInventoryMovementsQuery } from '@features/inventory/api/Inventory.api'
+import InventoryMovementFilters from '@features/inventory/components/InventoryMovementFilters.vue'
+import InventoryMovementTable from '@features/inventory/components/InventoryMovementTable.vue'
 import { movementListSchema } from '@features/inventory/schemas/Inventory.schema'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
@@ -9,14 +9,14 @@ import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
 const { t } = useT()
 const { params, setFilter, setPage, setSort } = useListState(movementListSchema)
-const query = useStockMovementsQuery(params)
+const query = useInventoryMovementsQuery(params)
 </script>
 
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('inventory.movements')" />
-    <StockMovementFilters :params="params" @filter="setFilter" />
-    <StockMovementTable
+    <InventoryMovementFilters :params="params" @filter="setFilter" />
+    <InventoryMovementTable
       :data="query.data.value?.data ?? []"
       :loading="query.isPending.value"
       :error="query.error.value"
