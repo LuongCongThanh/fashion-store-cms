@@ -1,6 +1,6 @@
 # Kế hoạch tái cấu trúc CMS
 
-> Trạng thái: **approved — grill 2026-11-14** · Tiến độ: Tier 0 xong (#70–#73), Voucher xong (#74, `openapi-v0.7.0`). Tiếp theo: Tier 1, chờ API (§7).
+> Trạng thái: **approved — grill 2026-11-14** · Tiến độ: Tier 0 xong (#70–#73), Voucher xong (#74, `openapi-v0.7.0`). Tier 1 prep xong (#76). Tiếp theo: Tier 1, chờ API (§7, issue 07).
 > Nguồn: [`THREE-REPO-RESTRUCTURE-PLAN.md`](../../../THREE-REPO-RESTRUCTURE-PLAN.md) (re-plan API-first theo tier, 2026-11-14), [`THREE-REPO-RESTRUCTURE-SPEC.md`](../../../THREE-REPO-RESTRUCTURE-SPEC.md), [`TARGET-REPOSITORY-TREE.md`](../../../TARGET-REPOSITORY-TREE.md) §2, [`GLOSSARY-MAP.md`](../../../GLOSSARY-MAP.md).
 > Thuật ngữ nghiệp vụ theo `be-demo/GLOSSARY.md`; thuật ngữ kỹ thuật theo [`GLOSSARY.md`](../../GLOSSARY.md).
 > Issue con: `.scratch/three-repo-restructure/issues/`, tạo khi bắt đầu từng tier.
@@ -38,8 +38,9 @@ Pin hiện tại: `openapi-v0.6.0`; API đã phát hành `openapi-v0.7.0` (Vouch
 | C12 | Mỗi feature CMS bắt đầu ngay khi module API tương ứng có tag OpenAPI; thứ tự giữa các feature vẫn theo tier. |
 | C13 | `inventory` Tier 1: danh sách theo Biến thể (Tồn kho, Hàng chờ xuất, Hàng trên kệ), nhập kho, điều chỉnh có lý do, sổ biến động. Kiểm kê sang Tier 2. |
 | C14 | `orders` Tier 1: danh sách + lọc theo filter API có; chi tiết (dòng đơn snapshot, phân bổ Voucher, lịch sử trạng thái, hành động gồm huỷ); chỉ COD; Staff không tạo đơn. Thanh toán online/vận đơn Tier 3; Đổi trả/Hoàn tiền Tier 4. |
-| C15 | Đề nghị API đưa `OrderFlag` vào Tier 1 cùng `ordering`; CMS hiện Cờ trong chi tiết đơn từ Tier 1. |
+| C15 | ~~Cờ ở Tier 1~~ → sửa 2026-11-14: Cờ cần xử lý đi cùng **Tier 3** (API và CMS), vì mọi loại Cờ đều phát sinh từ GHN hoặc cổng thanh toán; Tier 1 COD không có nguồn sinh Cờ. |
 | C16 | **Quy tắc giữ/xoá:** feature đã nối API → giữ. Code cũ không map được với API (api/types viết tay, logic tự suy, prototype, form cho dữ liệu API không có) → xoá. UI đã dựng mà API sắp tích hợp cần (bảng, filter, badge, form, chart) → giữ tới tier của nó, nối lại thay vì dựng mới. |
+| C17 | Khi API chưa có hợp đồng: CMS **không** code `api/`/`types/`/mapper/màn hình theo DTO đoán, **không** dựng mock/MSW. Chỉ làm việc dựa trên glossary và `be-demo/docs/business` (Tier 1 prep, #76) và ghi nhu cầu hợp đồng cho be-demo (issue 07). |
 
 ## 4. Phân loại file feature cũ
 
@@ -51,12 +52,12 @@ Pin hiện tại: `openapi-v0.6.0`; API đã phát hành `openapi-v0.7.0` (Vouch
 | --- | --- | --- |
 | `prototype/*` | D (Tier 0) | |
 | `api/Orders.api.ts`, `types/Order.types.ts`, `UseOrders.ts` | R | Type sinh + mapper DTO → view model |
-| `schemas/OrderStatus.ts` | D | Bảng chuyển trạng thái tự suy, trái C8 |
-| `components/OrderStatusAction.vue` | R → `OrderActions.vue` | Nút theo `allowedActions[]`, không ô chọn trạng thái |
+| `schemas/OrderStatus.ts` | D (#76) | Bảng chuyển trạng thái tự suy, trái C8 |
+| `components/OrderStatusAction.vue` | D (#76) → `OrderActions.vue` mới ở Tier 1 | Nút theo `allowedActions[]`, không ô chọn trạng thái |
 | `schemas/OrderList.schema.ts`, `OrderFilters.vue`, `OrderTable.vue` | K/R | Chỉ giữ filter API hỗ trợ |
 | `OrderItems.vue`, `OrderSummary.vue`, `OrderTimeline.vue`, `OrderCustomerInfo.vue`, `OrderShippingInfo.vue`, `OrderStatusBadge.vue` | K | Nối lại dữ liệu; `OrderItems` → hiển thị OrderLine |
 | `OrderPaymentInfo.vue`, `PaymentStatusBadge.vue` | K (Tier 3) | Tier 1 chỉ hiện COD |
-| (mới) Cờ cần xử lý trong chi tiết đơn | N | Phụ thuộc C15 |
+| (mới) Cờ cần xử lý trong chi tiết đơn | N (Tier 3) | C15 |
 
 ### `inventory` (Tier 1; Kiểm kê Tier 2)
 
@@ -65,7 +66,7 @@ Pin hiện tại: `openapi-v0.6.0`; API đã phát hành `openapi-v0.7.0` (Vouch
 | `api/Inventory.api.ts`, `types/Inventory.types.ts`, `schemas/Inventory.schema.ts` | R | |
 | `InventoryTable.vue`, `InventoryFilters.vue`, `StockStatusBadge.vue`, `InventoryListView.vue` | K | Thêm cột Hàng chờ xuất, Hàng trên kệ |
 | `StockAdjustDialog.vue` | K | Điều chỉnh tồn kho có lý do (StockAdjustment) |
-| `StockMovementTable.vue`, `StockMovementFilters.vue`, `StockMovementListView.vue` | → `InventoryMovement*` | Glossary: sổ là InventoryMovement |
+| `StockMovementTable.vue`, `StockMovementFilters.vue`, `StockMovementListView.vue` | → `InventoryMovement*` (#76) | Glossary: sổ là InventoryMovement |
 | (mới) dialog nhập kho | N | |
 | (mới) Kiểm kê | N (Tier 2) | |
 
@@ -79,7 +80,7 @@ Toàn bộ UI `K` chờ Tier 2. `api/`, `types/`, `schemas/` `R` khi có API. `C
 | --- | --- |
 | `LocalizationSettingsView.vue`, `LocalizationSettingsForm.vue`, `UseLocalizationEditor.ts` | D (Tier 0) |
 | Logo trong `StoreSettingsForm.vue` / `UseStoreSettingsEditor.ts` (phụ thuộc `useMedia`) | D (Tier 0) |
-| `StoreSettingsForm.vue`, `StoreSettingsView.vue`, `UseStoreSettingsEditor.ts` | K → R Tier 1 theo field API |
+| `StoreSettingsForm.vue`, `StoreSettingsView.vue`, `UseStoreSettingsEditor.ts` | R Tier 1 | Field hiện tại (tên, mô tả, email, điện thoại, địa chỉ) là nội dung tĩnh FE theo US-1002 AC2 → bỏ; form chỉ còn Phí ship dự phòng, ngưỡng miễn phí ship, hạn mức COD |
 | `api/Settings.api.ts`, `schemas/Settings.schema.ts` | R Tier 1 |
 
 ### `dashboard` (Tier 2)
@@ -157,8 +158,8 @@ Thoát: Admin tạo/sửa/vô hiệu hoá Voucher trên CMS; Staff không thấy
 | PR | Phụ thuộc API | Nội dung |
 | --- | --- | --- |
 | 1.1 | `inventory` | C13 + §4 inventory. |
-| 1.2 | `settings` (US-1002) | Form theo field API (phí ship cố định, ngưỡng miễn ship…). |
-| 1.3 | `ordering` (+ `allowedActions[]`, `OrderFlag`) | C14, C15 + §4 orders. |
+| 1.2 | `settings` (US-1002) | Form theo field API: Phí ship dự phòng, ngưỡng miễn phí ship, hạn mức COD (Admin). |
+| 1.3 | `ordering` (+ `allowedActions[]`) | C14 + §4 orders. Cờ ở Tier 3 (C15). |
 
 Thoát: Staff thấy đơn COD Khách vãng lai vừa đặt, đi hết hành động API cho phép tới bàn giao/huỷ; tồn kho trên CMS khớp Giữ hàng/Hàng chờ xuất.
 
@@ -173,7 +174,7 @@ Thoát: Staff thấy đơn COD Khách vãng lai vừa đặt, đi hết hành đ
 
 ### Tier 3 — tích hợp
 
-Chi tiết đơn: trạng thái thanh toán VNPay/MoMo, thu COD, tạo và theo dõi vận đơn GHN (giữ `OrderPaymentInfo`, `PaymentStatusBadge`, `OrderShippingInfo`).
+Chi tiết đơn: trạng thái thanh toán VNPay/MoMo, thu COD, tạo và theo dõi vận đơn GHN, Cờ cần xử lý (xem, lọc theo loại, gỡ — US-601 AC2) (giữ `OrderPaymentInfo`, `PaymentStatusBadge`, `OrderShippingInfo`).
 
 ### Tier 4 — sau bán hàng và pháp lý
 
@@ -187,8 +188,9 @@ Grep `StoreScope`, `X-Store-Id`, `prototype`, `Promotion`, `Coupon`, `PendingPer
 
 | Cần | Tier | Dùng cho |
 | --- | --- | --- |
+| Nhu cầu hợp đồng Tier 1 (inventory, orders, settings, quyền) | 1 | issue 07 |
 | `allowedActions[]` trong DTO đơn admin | 1 | C8 |
-| `OrderFlag` cùng `ordering` | 1 | C15 |
+| `OrderFlag` | 3 | C15 |
 | Quyền `OPERATIONS_*` cho inventory/order/settings | 1 | Thay `PendingPermission` |
 | API danh sách Khách hàng cho back-office | 2 | `customers` |
 | Báo cáo doanh thu | 2 | `dashboard` |
