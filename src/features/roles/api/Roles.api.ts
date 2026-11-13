@@ -5,38 +5,86 @@ import type { MaybeRefOrGetter } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
-import type { RoleInput } from '@features/roles/schemas/Role.schema'
-import type { Permission, Role } from '@features/roles/types/Role.types'
+import type { RoleInput, RoleListParams } from '@features/roles/schemas/Role.schema'
+import type { PermissionGroup, Role } from '@features/roles/types/Role.types'
+import type { components } from '@shared/types/Api.generated'
 import type { Paginated } from '@shared/types/Pagination.types'
-export function useRolesQuery(params: MaybeRefOrGetter<Record<string, unknown>> = {}) {
+
+import { toRole } from './Role.mapper'
+
+import type { RoleResponseDto } from './Role.mapper'
+
+type PaginatedRoleResponseDto = components['schemas']['PaginatedRoleResponseDto']
+type PermissionGroupResponseDto = components['schemas']['PermissionGroupResponseDto']
+type CreateRoleDto = components['schemas']['CreateRoleDto']
+type UpdateRoleDto = components['schemas']['UpdateRoleDto']
+
+export function useRolesQuery(params: MaybeRefOrGetter<RoleListParams>) {
   const http = useHttpClient()
   return useQuery({
     queryKey: computed(() => ['roles', toValue(params)]),
-    queryFn: ({ signal }) => http.get('/roles', { signal, query: toValue(params) }) as Promise<Paginated<Role>>,
+    queryFn: async ({ signal }): Promise<Paginated<Role>> => {
+      const { page, pageSize } = toValue(params)
+      const dto = (await http.get('/admin/roles', {
+        signal,
+        query: { page, limit: pageSize },
+      })) as PaginatedRoleResponseDto
+      const { limit, ...meta } = dto.meta
+      return { data: dto.data.map(toRole), meta: { ...meta, pageSize: limit } }
+    },
   })
 }
-export function usePermissionsQuery() {
+
+export function usePermissionGroupsQuery() {
   const http = useHttpClient()
   return useQuery({
     queryKey: ['permissions'],
-    queryFn: ({ signal }) => http.get('/permissions', { signal }) as Promise<Permission[]>,
+    queryFn: async ({ signal }): Promise<PermissionGroup[]> =>
+      (await http.get('/admin/permissions', { signal })) as PermissionGroupResponseDto[],
   })
 }
+
 export function useRoleQuery(id: MaybeRefOrGetter<string>) {
   const http = useHttpClient()
   return useQuery({
     queryKey: computed(() => ['roles', 'detail', toValue(id)]),
     enabled: computed(() => !!toValue(id)),
-    queryFn: ({ signal }) => http.get(`/roles/${encodeURIComponent(toValue(id))}`, { signal }) as Promise<Role>,
+    queryFn: async ({ signal }) =>
+      toRole((await http.get(`/admin/roles/${encodeURIComponent(toValue(id))}`, { signal })) as RoleResponseDto),
   })
 }
-export function useSaveRoleMutation(id: MaybeRefOrGetter<string>) {
+
+/** Vai trò hệ thống không đổi tên được: khi sửa chỉ gửi Quyền và mô tả. */
+export function useSaveRoleMutation(id: MaybeRefOrGetter<string>, isSystem: MaybeRefOrGetter<boolean>) {
   const http = useHttpClient()
   const client = useQueryClient()
   return useMutation({
     meta: { errorHandling: 'local' },
-    mutationFn: (input: RoleInput) =>
-      toValue(id) ? http.put(`/roles/${encodeURIComponent(toValue(id))}`, input) : http.post('/roles', input),
+    mutationFn: (input: RoleInput) => {
+      const roleId = toValue(id)
+      if (!roleId) {
+        const body: CreateRoleDto = {
+          name: input.name,
+          description: input.description || undefined,
+          permissions: input.permissions,
+        }
+        return http.post('/admin/roles', body)
+      }
+      const body: UpdateRoleDto = toValue(isSystem)
+        ? { description: input.description, permissions: input.permissions }
+        : { name: input.name, description: input.description, permissions: input.permissions }
+      return http.patch(`/admin/roles/${encodeURIComponent(roleId)}`, body)
+    },
+    onSuccess: () => client.invalidateQueries({ queryKey: ['roles'] }),
+  })
+}
+
+export function useDeleteRoleMutation() {
+  const http = useHttpClient()
+  const client = useQueryClient()
+  return useMutation({
+    meta: { errorHandling: 'local' },
+    mutationFn: (id: string) => http.delete(`/admin/roles/${encodeURIComponent(id)}`),
     onSuccess: () => client.invalidateQueries({ queryKey: ['roles'] }),
   })
 }

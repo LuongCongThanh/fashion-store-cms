@@ -21,6 +21,7 @@ export const roleRoutes: RouteRecordRaw[] = [
     path: 'roles/:id/edit',
     name: 'roles.edit',
     component: () => import('./views/RoleEditView.vue'),
-    meta: { permission: 'ADMINISTRATION_ROLE_MANAGE', titleKey: 'common.edit' },
+    // Ai xem được Vai trò đều mở được chi tiết; không có ADMINISTRATION_ROLE_MANAGE thì form chỉ đọc.
+    meta: { permission: 'ADMINISTRATION_ROLE_VIEW', titleKey: 'common.edit' },
   },
 ]

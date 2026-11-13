@@ -49,7 +49,8 @@
     "createdAt": "Created at",
     "active": "Active",
     "inactive": "Inactive",
-    "saved": "Saved"
+    "saved": "Saved",
+    "back": "Back"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -288,7 +289,31 @@
   "roles": {
     "title": "Roles",
     "permissions": "Permissions",
-    "resource": "Resource"
+    "resource": "Resource",
+    "description": "Description",
+    "system": "System",
+    "accounts": "Accounts",
+    "nameTaken": "A role with this name already exists",
+    "deleteTitle": "Delete role \"{name}\"?",
+    "deleteDescription": "Accounts holding this role lose its permissions.",
+    "readOnly": "The Admin role always has every permission and cannot be edited.",
+    "systemNameLocked": "System roles cannot be renamed.",
+    "groups": {
+      "CATALOG": "Catalog",
+      "ADMINISTRATION": "Administration",
+      "OPERATIONS": "Operations"
+    },
+    "resources": {
+      "PRODUCT": "Products",
+      "CATEGORY": "Categories",
+      "PRODUCT_OPTION": "Sizes and colors",
+      "ROLE": "Roles",
+      "INTERNAL_ACCOUNT": "Internal accounts"
+    },
+    "actions": {
+      "VIEW": "View",
+      "MANAGE": "Manage"
+    }
   },
   "settings": {
     "title": "Settings",

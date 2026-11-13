@@ -5,15 +5,13 @@ import { useAuth } from '@features/auth/UseAuth'
 import { useRolesQuery } from '@features/roles/api/Roles.api'
 import RoleTable from '@features/roles/components/RoleTable.vue'
 import { roleListSchema } from '@features/roles/schemas/Role.schema'
-import FilterBar from '@shared/components/list/FilterBar.vue'
-import ListSearch from '@shared/components/list/ListSearch.vue'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
 const { t } = useT()
 const { can } = useAuth()
-const { params, setFilter, setPage, setSort } = useListState(roleListSchema)
+const { params, setFilter, setPage } = useListState(roleListSchema)
 const query = useRolesQuery(params)
 </script>
 
@@ -24,16 +22,10 @@ const query = useRolesQuery(params)
         <UButton v-if="can('ADMINISTRATION_ROLE_MANAGE')" to="/roles/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
-    <FilterBar>
-      <ListSearch :modelValue="params.search" @update:modelValue="setFilter('search', $event)" />
-    </FilterBar>
     <RoleTable
       :data="query.data.value?.data ?? []"
       :loading="query.isPending.value"
       :error="query.error.value"
-      :sort="params.sort"
-      :canWrite="can('ADMINISTRATION_ROLE_MANAGE')"
-      @sort="setSort"
       @retry="query.refetch()"
     />
     <DataTablePagination

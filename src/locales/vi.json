@@ -49,7 +49,8 @@
     "createdAt": "Ngày tạo",
     "active": "Hoạt động",
     "inactive": "Ngừng hoạt động",
-    "saved": "Đã lưu"
+    "saved": "Đã lưu",
+    "back": "Quay lại"
   },
   "nav": {
     "dashboard": "Tổng quan",
@@ -288,7 +289,31 @@
   "roles": {
     "title": "Vai trò",
     "permissions": "Quyền truy cập",
-    "resource": "Tài nguyên"
+    "resource": "Tài nguyên",
+    "description": "Mô tả",
+    "system": "Hệ thống",
+    "accounts": "Tài khoản",
+    "nameTaken": "Tên Vai trò đã tồn tại",
+    "deleteTitle": "Xoá Vai trò \"{name}\"?",
+    "deleteDescription": "Tài khoản đang giữ Vai trò này sẽ mất các Quyền của nó.",
+    "readOnly": "Vai trò Admin luôn có mọi Quyền và không sửa được.",
+    "systemNameLocked": "Vai trò hệ thống không đổi tên được.",
+    "groups": {
+      "CATALOG": "Danh mục hàng hoá",
+      "ADMINISTRATION": "Quản trị",
+      "OPERATIONS": "Vận hành"
+    },
+    "resources": {
+      "PRODUCT": "Sản phẩm",
+      "CATEGORY": "Danh mục",
+      "PRODUCT_OPTION": "Size và màu",
+      "ROLE": "Vai trò",
+      "INTERNAL_ACCOUNT": "Tài khoản nội bộ"
+    },
+    "actions": {
+      "VIEW": "Xem",
+      "MANAGE": "Quản lý"
+    }
   },
   "settings": {
     "title": "Cài đặt",

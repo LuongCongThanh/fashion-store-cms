@@ -9,9 +9,18 @@ it('lets role writers open the role editor from the server list', async () => {
     path: '/roles',
     permissions: ['ADMINISTRATION_ROLE_MANAGE'],
     mock(http) {
-      http.onGet(/\/roles$/).reply(200, {
-        data: [{ id: 'r1', name: 'Bán hàng', permissions: ['order:read'] }],
-        meta: { page: 1, pageSize: 20, total: 1, totalPages: 1 },
+      http.onGet(/\/admin\/roles$/).reply(200, {
+        data: [
+          {
+            id: 'r1',
+            name: 'Bán hàng',
+            description: null,
+            isSystem: false,
+            permissions: ['CATALOG_PRODUCT_VIEW'],
+            accountCount: 1,
+          },
+        ],
+        meta: { page: 1, limit: 20, total: 1, totalPages: 1 },
       })
     },
   })

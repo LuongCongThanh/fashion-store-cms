@@ -7,20 +7,16 @@ import PageHeader from '@shared/components/page/PageHeader.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 const editor = useRoleEditor()
 const { t } = useT()
-function retry() {
-  void editor.query.refetch()
-  void editor.permissions.refetch()
-}
 </script>
 
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('roles.title')" />
-    <LoadingState v-if="editor.permissions.isPending.value || (editor.id.value && editor.query.isPending.value)" />
+    <LoadingState v-if="editor.permissions.isPending.value" />
     <ErrorState
-      v-else-if="editor.query.isError.value || editor.permissions.isError.value"
-      :error="editor.query.error.value ?? editor.permissions.error.value"
-      @retry="retry"
+      v-else-if="editor.permissions.isError.value"
+      :error="editor.permissions.error.value"
+      @retry="editor.permissions.refetch()"
     />
     <RoleForm
       v-else
@@ -28,6 +24,8 @@ function retry() {
       :errors="editor.errors.value"
       :pending="editor.mutation.isPending.value"
       :permissions="editor.permissions.data.value ?? []"
+      :readOnly="false"
+      :nameLocked="false"
       @submit="editor.submit"
       @cancel="editor.cancel"
     />
