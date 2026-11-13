@@ -292,25 +292,49 @@
       "adjustment": "Adjustment"
     }
   },
-  "promotions": {
-    "status": {
-      "draft": "Draft",
-      "active": "Active",
-      "inactive": "Inactive"
-    },
-    "title": "Promotions",
-    "type": "Type",
-    "coupon": "Coupon",
-    "auto": "Automatic",
+  "vouchers": {
+    "title": "Vouchers",
+    "create": "New voucher",
+    "terms": "Discount terms",
+    "limits": "Limits and period",
     "code": "Code",
-    "discountType": "Discount type",
-    "fixed": "Fixed amount",
-    "value": "Value",
-    "minimumOrder": "Minimum order",
-    "usageLimit": "Usage limit",
-    "startAt": "Start",
-    "endAt": "End",
-    "invalid": "Invalid input; check code, value and dates"
+    "codeHint": "3–32 letters, digits, - or _; stored upper case and cannot change after creation.",
+    "codeTaken": "Voucher code already exists",
+    "type": "Discount type",
+    "types": {
+      "PERCENT": "Percent",
+      "FIXED": "Fixed amount"
+    },
+    "percentValue": "Discount (%)",
+    "fixedValue": "Discount amount (₫)",
+    "maxDiscount": "Maximum discount (₫)",
+    "minSubtotal": "Minimum subtotal (₫)",
+    "totalLimit": "Total uses",
+    "perBuyerLimit": "Uses per buyer",
+    "emptyUnlimited": "Leave empty for no limit",
+    "zeroNone": "0 = no minimum",
+    "startsAt": "Starts",
+    "endsAt": "Ends",
+    "isActive": "Active",
+    "isActiveHint": "Untick to pause the voucher without deleting it.",
+    "discount": "Discount",
+    "usage": "Used",
+    "period": "Period",
+    "usedCount": "Used {count} times",
+    "usedHint": "This voucher has been used: only the end time, use limits and active flag can change.",
+    "status": {
+      "ACTIVE": "Running",
+      "UPCOMING": "Upcoming",
+      "ENDED": "Ended",
+      "EXHAUSTED": "Exhausted",
+      "DISABLED": "Disabled"
+    },
+    "invalid": {
+      "percent": "Percent discount must be 1–100",
+      "after": "End time must be after start time"
+    },
+    "deleteTitle": "Delete voucher \"{code}\"?",
+    "deleteDescription": "This voucher has not been used, so it can be deleted for good. This cannot be undone."
   },
   "internalAccounts": {
     "title": "Internal accounts",

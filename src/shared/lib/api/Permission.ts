@@ -4,7 +4,7 @@ import type { components } from '@shared/lib/api/Api.generated'
 export type Permission = components['schemas']['Permission']
 
 /**
- * Quyền của màn hình chưa có hợp đồng API (đơn hàng, tồn kho, khách hàng, voucher, cài đặt).
+ * Quyền của màn hình chưa có hợp đồng API (đơn hàng, tồn kho, khách hàng, cài đặt).
  * API không bao giờ cấp các chuỗi này nên `can()` luôn trả false: route ẩn khỏi menu, guard trả 403.
  * Slice nối API của màn hình nào thì đổi sang `Permission` thật và xoá chuỗi đó khỏi đây.
  */
@@ -14,8 +14,6 @@ export type PendingPermission =
   | 'inventory:read'
   | 'inventory:write'
   | 'customer:read'
-  | 'promotion:read'
-  | 'promotion:write'
   | 'settings:read'
   | 'settings:write'
 

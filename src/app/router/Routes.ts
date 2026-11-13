@@ -10,10 +10,10 @@ import { dashboardRoutes } from '@features/dashboard/Dashboard.routes'
 import { inventoryRoutes } from '@features/inventory/Inventory.routes'
 import { orderRoutes } from '@features/orders/Orders.routes'
 import { productRoutes } from '@features/products/Products.routes'
-import { promotionRoutes } from '@features/promotions/Promotions.routes'
 import { roleRoutes } from '@features/roles/Roles.routes'
 import { settingsRoutes } from '@features/settings/Settings.routes'
 import { sizeRoutes } from '@features/sizes/Sizes.routes'
+import { voucherRoutes } from '@features/vouchers/Vouchers.routes'
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -26,7 +26,7 @@ export const routes: RouteRecordRaw[] = [
       ...categoryRoutes,
       ...sizeRoutes,
       ...colorRoutes,
-      ...promotionRoutes,
+      ...voucherRoutes,
       ...orderRoutes,
       ...inventoryRoutes,
       ...customerRoutes,
