@@ -7,7 +7,7 @@ export const sizeRoutes: RouteRecordRaw[] = [
     meta: {
       titleKey: 'sizes.title',
       permission: 'CATALOG_PRODUCT_OPTION_VIEW',
-      sidebarGroup: 'store',
+      sidebarGroup: 'catalog',
       command: { icon: 'i-lucide-ruler', group: 'navigate' },
     },
   },

@@ -7,7 +7,7 @@ export const settingsRoutes: RouteRecordRaw[] = [
     meta: {
       permission: 'settings:read',
       titleKey: 'settings.title',
-      sidebarGroup: 'system',
+      sidebarGroup: 'administration',
       command: { icon: 'i-lucide-settings', group: 'navigate' },
     },
   },

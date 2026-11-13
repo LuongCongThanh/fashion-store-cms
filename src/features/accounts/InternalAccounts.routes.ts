@@ -7,7 +7,7 @@ export const internalAccountRoutes: RouteRecordRaw[] = [
     meta: {
       permission: 'ADMINISTRATION_INTERNAL_ACCOUNT_VIEW',
       titleKey: 'internalAccounts.title',
-      sidebarGroup: 'system',
+      sidebarGroup: 'administration',
       command: { icon: 'i-lucide-user-cog', group: 'navigate' },
     },
   },

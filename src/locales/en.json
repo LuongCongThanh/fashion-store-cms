@@ -58,10 +58,9 @@
     "collapse": "Collapse",
     "orders": "Orders",
     "groups": {
-      "store": "Store",
-      "customers": "Customers",
-      "marketing": "Marketing",
-      "system": "System"
+      "catalog": "Catalog",
+      "operations": "Operations",
+      "administration": "Administration"
     }
   },
   "auth": {

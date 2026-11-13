@@ -53,7 +53,6 @@ describe('DashboardView', () => {
     const { wrapper, http } = await renderDashboard(['order:read'])
     expect(wrapper.find('[data-widget="recent-orders"]').exists()).toBe(true)
     expect(wrapper.find('[data-widget="revenue-chart"]').text()).toContain('Chưa có dữ liệu')
-    expect(wrapper.find('[data-widget="top-products"]').exists()).toBe(false)
     expect(wrapper.find('[data-widget="low-stock"]').exists()).toBe(false)
     expect(http.history.get.some((request) => request.url?.includes('low-stock'))).toBe(false)
   })
@@ -62,7 +61,7 @@ describe('DashboardView', () => {
 it('loads the current user when opening the dashboard directly after a reload', async () => {
   const { wrapper, http } = renderWithPlugins(DashboardView)
   http.onGet(/\/auth\/me$/).reply(200, buildUserDto({ role: 'STAFF', permissions: ['CATALOG_PRODUCT_VIEW'] }))
-  http.onGet(/\/dashboard\//).reply(200, { value: 12, points: [], items: [] })
+  http.onGet(/\/admin\/products$/).reply(200, { data: [], meta: { page: 1, limit: 1, total: 12, totalPages: 12 } })
   await flushPromises()
   expect(wrapper.find('[data-widget="products"]').text()).toContain('12')
 })

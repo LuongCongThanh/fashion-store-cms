@@ -7,7 +7,7 @@ export const roleRoutes: RouteRecordRaw[] = [
     meta: {
       permission: 'ADMINISTRATION_ROLE_VIEW',
       titleKey: 'roles.title',
-      sidebarGroup: 'system',
+      sidebarGroup: 'administration',
       command: { icon: 'i-lucide-shield', group: 'navigate' },
     },
   },

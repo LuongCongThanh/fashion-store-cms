@@ -7,7 +7,7 @@ export const orderRoutes: RouteRecordRaw[] = [
     meta: {
       titleKey: 'nav.orders',
       permission: 'order:read',
-      sidebarGroup: 'store',
+      sidebarGroup: 'operations',
       command: { icon: 'i-lucide-receipt', group: 'navigate' },
     },
   },

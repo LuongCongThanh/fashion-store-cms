@@ -7,7 +7,7 @@ export const inventoryRoutes: RouteRecordRaw[] = [
     meta: {
       titleKey: 'inventory.title',
       permission: 'inventory:read',
-      sidebarGroup: 'store',
+      sidebarGroup: 'operations',
       command: { icon: 'i-lucide-boxes', group: 'navigate' },
     },
   },

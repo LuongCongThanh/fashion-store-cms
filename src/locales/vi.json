@@ -58,10 +58,9 @@
     "collapse": "Thu gọn",
     "orders": "Đơn hàng",
     "groups": {
-      "store": "Cửa hàng",
-      "customers": "Khách hàng",
-      "marketing": "Tiếp thị",
-      "system": "Hệ thống"
+      "catalog": "Hàng hoá",
+      "operations": "Vận hành",
+      "administration": "Quản trị"
     }
   },
   "auth": {

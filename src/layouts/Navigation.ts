@@ -110,7 +110,7 @@ export function buildNavigation(routes: readonly RouteRecordRaw[], can: (permiss
       })
   }
 
-  const sidebarGroups = ([undefined, 'store', 'customers', 'marketing', 'system'] as const)
+  const sidebarGroups = ([undefined, 'catalog', 'operations', 'administration'] as const)
     .map((group) => ({
       titleKey: group ? `nav.groups.${group}` : null,
       items: sidebar.filter((item) => allowed.find((route) => route.name === item.name)?.meta.sidebarGroup === group),

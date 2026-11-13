@@ -7,7 +7,7 @@ export const customerRoutes: RouteRecordRaw[] = [
     meta: {
       permission: 'customer:read',
       titleKey: 'dashboard.customers',
-      sidebarGroup: 'customers',
+      sidebarGroup: 'operations',
       command: { icon: 'i-lucide-users', group: 'navigate' },
     },
   },
