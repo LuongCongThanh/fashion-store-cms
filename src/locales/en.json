@@ -191,12 +191,19 @@
   "categories": {
     "root": "Drop here to move to root",
     "name": "Name",
+    "description": "Description",
+    "parent": "Parent category",
+    "invalidParent": "Parent creates a cycle or does not exist",
+    "sortOrder": "Display order",
+    "isVisible": "Visible on storefront",
+    "hidden": "Hidden",
+    "nameTaken": "Category name already exists",
+    "deleteTitle": "Delete category {name}?",
+    "deleteDescription": "Only a category with no subcategories and no products can be deleted. This cannot be undone.",
     "slug": "Slug",
     "metaTitle": "Meta title",
     "metaDescription": "Meta description",
-    "description": "Description",
-    "parent": "Parent category",
-    "invalidParent": "Parent creates a cycle or does not exist"
+    "notEmpty": "Cannot delete: the category still has subcategories or products. Move them to another category first."
   },
   "orders": {
     "noItems": "This order has no items",
@@ -340,5 +347,33 @@
     "numberFormat": "Number format",
     "dateFormat": "Date format",
     "invalid": "Invalid configuration"
+  },
+  "sizes": {
+    "title": "Sizes",
+    "description": "Sizes shared by every product. A size used by a variant can be hidden, not deleted.",
+    "code": "Size code",
+    "codeHint": "Uppercase letters, digits and hyphens, e.g. M, XL, FREESIZE",
+    "codeLocked": "The code cannot change after creation",
+    "sortOrder": "Display order",
+    "isHidden": "Hidden",
+    "isHiddenHint": "A hidden size cannot be picked for new variants and is not a storefront filter",
+    "hidden": "Hidden",
+    "visible": "In use",
+    "codeTaken": "Size code already exists",
+    "invalid": "Invalid value"
+  },
+  "colors": {
+    "title": "Colors",
+    "description": "Colors shared by every product. A color used by a variant can be hidden, not deleted.",
+    "code": "Color code",
+    "codeHint": "Uppercase letters, digits and hyphens, e.g. BLK, WHT",
+    "codeLocked": "The code cannot change after creation",
+    "hex": "Hex code",
+    "isHidden": "Hidden",
+    "isHiddenHint": "A hidden color cannot be picked for new variants and is not a storefront filter",
+    "hidden": "Hidden",
+    "visible": "In use",
+    "codeTaken": "Color code already exists",
+    "invalid": "Invalid value"
   }
 }

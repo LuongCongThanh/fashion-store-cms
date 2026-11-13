@@ -1,39 +1,59 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
-import { computed } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
-import { useLocale } from '@shared/lib/i18n/I18n'
 
 import type { Category } from '@features/categories/types/Category.types'
+import type { components } from '@shared/types/Api.generated'
+
+import { toCategory } from './Category.mapper'
+
+type PaginatedCategoryResponseDto = components['schemas']['PaginatedCategoryResponseDto']
+type UpdateCategoryDto = components['schemas']['UpdateCategoryDto']
+
+const KEY = ['categories', 'all'] as const
+/** API trả danh sách phẳng có phân trang (tối đa 100/trang); cây dựng ở client nên đọc hết các trang. */
+const PAGE_LIMIT = 100
+
 export function useCategoriesQuery() {
   const http = useHttpClient()
-  const { locale } = useLocale()
   return useQuery({
-    queryKey: computed(() => ['categories', locale.value]),
-    queryFn: ({ signal }) => http.get('/categories', { signal }) as Promise<Category[]>,
+    queryKey: KEY,
+    queryFn: async ({ signal }): Promise<Category[]> => {
+      const categories: Category[] = []
+      for (let page = 1; ; page++) {
+        const dto = (await http.get('/admin/categories', {
+          signal,
+          query: { page, limit: PAGE_LIMIT },
+        })) as PaginatedCategoryResponseDto
+        categories.push(...dto.data.map(toCategory))
+        if (page >= dto.meta.totalPages) return categories
+      }
+    },
   })
 }
+
+/** Kéo-thả trong cây: đổi `parentId` bằng PATCH, cập nhật lạc quan rồi đọc lại. */
 export function useMoveCategoryMutation() {
   const http = useHttpClient()
   const client = useQueryClient()
-  const { locale } = useLocale()
-  const key = () => ['categories', locale.value]
   return useMutation({
-    mutationFn: (input: { id: string; parentId: string | null }) =>
-      http.patch(`/categories/${encodeURIComponent(input.id)}/move`, { parentId: input.parentId }),
+    mutationFn: (input: { id: string; parentId: string | null }) => {
+      const body: UpdateCategoryDto = { parentId: input.parentId }
+      return http.patch(`/admin/categories/${encodeURIComponent(input.id)}`, body)
+    },
     onMutate: async (input) => {
-      await client.cancelQueries({ queryKey: key() })
-      const previous = client.getQueryData<Category[]>(key())
-      client.setQueryData<Category[]>(key(), (categories) =>
+      await client.cancelQueries({ queryKey: KEY })
+      const previous = client.getQueryData<Category[]>(KEY)
+      client.setQueryData<Category[]>(KEY, (categories) =>
         categories?.map((category) =>
           category.id === input.id ? { ...category, parentId: input.parentId } : category,
         ),
       )
-      return { previous, key: key() }
+      return { previous }
     },
     onError: (_error, _input, context) => {
-      if (context) client.setQueryData(context.key, context.previous)
+      if (context) client.setQueryData(KEY, context.previous)
     },
-    onSettled: () => client.invalidateQueries({ queryKey: key() }),
+    onSettled: () => client.invalidateQueries({ queryKey: ['categories'] }),
   })
 }

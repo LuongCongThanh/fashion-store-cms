@@ -191,12 +191,19 @@
   "categories": {
     "root": "Kéo vào đây để chuyển về gốc",
     "name": "Tên",
+    "description": "Mô tả",
+    "parent": "Danh mục cha",
+    "invalidParent": "Danh mục cha tạo vòng lặp hoặc không tồn tại",
+    "sortOrder": "Thứ tự hiển thị",
+    "isVisible": "Hiện trên storefront",
+    "hidden": "Đang ẩn",
+    "nameTaken": "Tên danh mục đã tồn tại",
+    "deleteTitle": "Xoá danh mục {name}?",
+    "deleteDescription": "Chỉ xoá được danh mục không còn danh mục con và không có Sản phẩm. Thao tác này không hoàn tác được.",
     "slug": "Đường dẫn",
     "metaTitle": "Tiêu đề SEO",
     "metaDescription": "Mô tả SEO",
-    "description": "Mô tả",
-    "parent": "Danh mục cha",
-    "invalidParent": "Danh mục cha tạo vòng lặp hoặc không tồn tại"
+    "notEmpty": "Không xoá được: danh mục còn danh mục con hoặc Sản phẩm. Chuyển chúng sang danh mục khác trước."
   },
   "orders": {
     "noItems": "Đơn hàng chưa có sản phẩm",
@@ -340,5 +347,33 @@
     "numberFormat": "Định dạng số",
     "dateFormat": "Định dạng ngày",
     "invalid": "Cấu hình không hợp lệ"
+  },
+  "sizes": {
+    "title": "Danh sách size",
+    "description": "Size dùng chung cho mọi Sản phẩm. Size đã có Biến thể chỉ ẩn được, không xoá được.",
+    "code": "Mã size",
+    "codeHint": "Chữ in hoa, số và dấu gạch ngang, ví dụ M, XL, FREESIZE",
+    "codeLocked": "Mã không đổi được sau khi tạo",
+    "sortOrder": "Thứ tự hiển thị",
+    "isHidden": "Ẩn",
+    "isHiddenHint": "Size ẩn không chọn được cho Biến thể mới và không hiện trong bộ lọc storefront",
+    "hidden": "Đang ẩn",
+    "visible": "Đang dùng",
+    "codeTaken": "Mã size đã tồn tại",
+    "invalid": "Giá trị không hợp lệ"
+  },
+  "colors": {
+    "title": "Bảng màu",
+    "description": "Màu dùng chung cho mọi Sản phẩm. Màu đã có Biến thể chỉ ẩn được, không xoá được.",
+    "code": "Mã màu",
+    "codeHint": "Chữ in hoa, số và dấu gạch ngang, ví dụ BLK, WHT",
+    "codeLocked": "Mã không đổi được sau khi tạo",
+    "hex": "Mã hex",
+    "isHidden": "Ẩn",
+    "isHiddenHint": "Màu ẩn không chọn được cho Biến thể mới và không hiện trong bộ lọc storefront",
+    "hidden": "Đang ẩn",
+    "visible": "Đang dùng",
+    "codeTaken": "Mã màu đã tồn tại",
+    "invalid": "Giá trị không hợp lệ"
   }
 }

@@ -1,6 +1,7 @@
 import { flushPromises } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 
+import { categoryPage } from '@test/factories/Category.factory'
 import { renderFeature } from '@test/RenderFeature'
 
 import CategoryListView from './CategoryListView.vue'
@@ -11,12 +12,15 @@ it('shows the category tree and rolls back a failed drag move', async () => {
     path: '/categories',
     permissions: ['CATALOG_CATEGORY_MANAGE'],
     mock(http) {
-      http.onGet(/\/categories$/).replyOnce(200, [
-        { id: 'a', name: 'Áo', parentId: null },
-        { id: 'b', name: 'Linen', parentId: null },
-      ])
+      http.onGet(/\/categories$/).replyOnce(
+        200,
+        categoryPage([
+          { id: 'a', name: 'Áo', parentId: null },
+          { id: 'b', name: 'Linen', parentId: null },
+        ]),
+      )
       http.onGet(/\/categories$/).reply(() => new Promise(() => {}))
-      http.onPatch(/\/categories\/b\/move$/).reply(
+      http.onPatch(/\/admin\/categories\/b$/).reply(
         () =>
           new Promise((resolve) => {
             finishMove = resolve

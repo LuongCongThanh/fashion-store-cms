@@ -20,7 +20,6 @@ const { t } = useT()
     />
     <CategoryForm
       v-else
-      :id="editor.id.value"
       v-model="editor.model.value"
       :errors="editor.errors.value"
       :pending="editor.mutation.isPending.value"

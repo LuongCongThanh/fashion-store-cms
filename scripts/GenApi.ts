@@ -30,7 +30,8 @@ async function main() {
   const url = /^[a-z]+:\/\//i.test(source)
     ? new URL(source)
     : new URL(source, `file://${process.cwd()}/`)
-  const ast = await openapiTS(url)
+  // Field có `default` trong body request vẫn là optional (BE tự điền default).
+  const ast = await openapiTS(url, { defaultNonNullable: false })
   await writeFile(OUTPUT, HEADER + astToString(ast))
   console.warn(`Đã sinh ${OUTPUT} từ ${source}`)
 }

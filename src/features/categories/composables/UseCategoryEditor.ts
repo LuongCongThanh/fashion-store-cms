@@ -1,21 +1,31 @@
 import { useForm } from 'vee-validate'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { useCategoriesQuery } from '@features/categories/api/Categories.api'
-import { useCategoryDetailQuery, useSaveCategoryMutation } from '@features/categories/api/CategoryEditor.api'
+import {
+  useCategoryDetailQuery,
+  useDeleteCategoryMutation,
+  useSaveCategoryMutation,
+} from '@features/categories/api/CategoryEditor.api'
 import { categorySchema } from '@features/categories/schemas/Category.schema'
 import { categoryParentOptions } from '@features/categories/schemas/CategoryTree'
+import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { useUnsavedGuard } from '@shared/composables/UseUnsavedGuard'
+import { isApiError } from '@shared/lib/api/errors/ApiError'
 import { applyApiErrorToForm } from '@shared/lib/form/ApplyApiErrorToForm'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { CategoryInput } from '@features/categories/schemas/Category.schema'
+
+const INITIAL: CategoryInput = { name: '', description: '', parentId: null, sortOrder: 0, isVisible: true }
+
 export function useCategoryEditor() {
   const notify = useNotify()
+  const confirm = useConfirm()
   const route = useRoute()
   const router = useRouter()
   const { t } = useT()
@@ -25,17 +35,11 @@ export function useCategoryEditor() {
   const categories = useCategoriesQuery()
   const parentOptions = computed(() => categoryParentOptions(categories.data.value ?? [], id.value))
   const mutation = useSaveCategoryMutation(id)
-  const initial: CategoryInput = {
-    name: '',
-    slug: '',
-    parentId: null,
-    metaTitle: '',
-    metaDescription: '',
-    translations: { vi: { name: '', description: '' }, en: { name: '', description: '' } },
-  }
-  const { values, errors, setValues, setErrors, resetForm, meta } = useForm({
-    initialValues: initial,
-  })
+  const removal = useDeleteCategoryMutation()
+  const canDelete = computed(() => !!id.value && can('CATALOG_CATEGORY_MANAGE'))
+  /** API trả 409 khi còn danh mục con hoặc Sản phẩm: nói rõ lý do thay vì toast lỗi chung. */
+  const deleteBlocked = ref(false)
+  const { values, errors, setValues, setErrors, resetForm, meta } = useForm({ initialValues: INITIAL })
   const model = computed({
     get: () => values,
     set: (value: CategoryInput) => {
@@ -48,9 +52,11 @@ export function useCategoryEditor() {
     (data) => {
       resetForm({
         values: {
-          ...initial,
-          ...data,
-          translations: { ...initial.translations, ...data.translations },
+          name: data.name,
+          description: data.description ?? '',
+          parentId: data.parentId,
+          sortOrder: data.sortOrder,
+          isVisible: data.isVisible,
         },
       })
     },
@@ -75,17 +81,41 @@ export function useCategoryEditor() {
       resetForm({ values: parsed.data })
       await router.push('/categories')
     } catch (error) {
-      if (!applyApiErrorToForm(error, setErrors)) notify.error(error)
+      if (isApiError(error) && error.status === 409) setErrors({ name: t('categories.nameTaken') })
+      else if (!applyApiErrorToForm(error, setErrors)) notify.error(error)
+    }
+  }
+  async function remove() {
+    if (!canDelete.value || removal.isPending.value) return
+    const accepted = await confirm({
+      title: t('categories.deleteTitle', { name: values.name }),
+      description: t('categories.deleteDescription'),
+      confirmLabel: t('common.delete'),
+      color: 'error',
+    })
+    if (!accepted) return
+    deleteBlocked.value = false
+    try {
+      await removal.mutateAsync(id.value)
+      resetForm({ values })
+      await router.push('/categories')
+    } catch (error) {
+      if (isApiError(error) && error.status === 409) deleteBlocked.value = true
+      else notify.error(error)
     }
   }
   return {
+    deleteBlocked,
     parentOptions,
     model,
     errors,
     query,
     categories,
     mutation,
+    removal,
+    canDelete,
     submit,
+    remove,
     id,
     cancel: () => router.push('/categories'),
   }
