@@ -205,7 +205,14 @@
     "images": "Ảnh theo màu",
     "imagesHint": "Mọi size cùng màu dùng chung bộ ảnh. Ảnh đầu tiên của mỗi màu là ảnh chính.",
     "imagesNeedVariant": "Thêm Biến thể trước: mỗi màu đang có Biến thể sẽ có một khung tải ảnh.",
-    "imageDeleteDescription": "Ảnh bị xoá khỏi sản phẩm và khỏi kho ảnh."
+    "imageDeleteDescription": "Ảnh bị xoá khỏi sản phẩm và khỏi kho ảnh.",
+    "gender": "Giới tính",
+    "genders": {
+      "MEN": "Nam",
+      "WOMEN": "Nữ",
+      "KIDS": "Trẻ em",
+      "UNISEX": "Unisex"
+    }
   },
   "categories": {
     "root": "Kéo vào đây để chuyển về gốc",

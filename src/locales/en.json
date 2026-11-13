@@ -205,7 +205,14 @@
     "images": "Images by color",
     "imagesHint": "All sizes of a color share its images. The first image of each color is the main image.",
     "imagesNeedVariant": "Add a variant first: each color with a variant gets its own image uploader.",
-    "imageDeleteDescription": "The image is removed from the product and from storage."
+    "imageDeleteDescription": "The image is removed from the product and from storage.",
+    "gender": "Gender",
+    "genders": {
+      "MEN": "Men",
+      "WOMEN": "Women",
+      "KIDS": "Kids",
+      "UNISEX": "Unisex"
+    }
   },
   "categories": {
     "root": "Drop here to move to root",

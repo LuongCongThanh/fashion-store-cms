@@ -6,6 +6,7 @@ import USelect from '@nuxt/ui/components/Select.vue'
 import UTextarea from '@nuxt/ui/components/Textarea.vue'
 import { computed } from 'vue'
 
+import { PRODUCT_GENDERS, type ProductGender } from '@features/products/types/Product.types'
 import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
@@ -23,6 +24,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ 'update:modelValue': [value: ProductInfoInput]; submit: []; cancel: [] }>()
 const { t } = useT()
+const genderItems = computed(() => PRODUCT_GENDERS.map((value) => ({ label: t(`products.genders.${value}`), value })))
 const categoryItems = computed(() => props.categories.map((category) => ({ label: category.name, value: category.id })))
 function update<K extends keyof ProductInfoInput>(key: K, value: ProductInfoInput[K]) {
   emit('update:modelValue', { ...props.modelValue, [key]: value })
@@ -76,6 +78,16 @@ function update<K extends keyof ProductInfoInput>(key: K, value: ProductInfoInpu
           <template #error="{ error }">
             <span data-error="weightGrams">{{ error }}</span>
           </template>
+        </UFormField>
+        <UFormField :label="t('products.gender')" name="gender" :error="errors.gender">
+          <USelect
+            data-field="gender"
+            :modelValue="modelValue.gender"
+            :items="genderItems"
+            :disabled="readOnly"
+            class="w-full"
+            @update:modelValue="update('gender', $event as ProductGender)"
+          />
         </UFormField>
       </div>
       <UFormField :label="t('products.description')" name="description" :error="errors.description">

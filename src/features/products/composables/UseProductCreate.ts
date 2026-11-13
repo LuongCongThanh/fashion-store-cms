@@ -13,7 +13,13 @@ import { useT } from '@shared/lib/i18n/I18n'
 
 import type { ProductInfoInput } from '@features/products/schemas/Product.schema'
 
-export const EMPTY_PRODUCT_INFO: ProductInfoInput = { name: '', description: '', categoryId: '', weightGrams: 200 }
+export const EMPTY_PRODUCT_INFO: ProductInfoInput = {
+  name: '',
+  description: '',
+  categoryId: '',
+  weightGrams: 200,
+  gender: 'UNISEX',
+}
 
 /** Tạo Sản phẩm (DRAFT) với thông tin cơ bản rồi chuyển sang trang sửa để thêm Biến thể và ảnh. */
 export function useProductCreate() {

@@ -56,6 +56,7 @@ export function useProductEditor() {
           description: product.description,
           categoryId: product.categoryId,
           weightGrams: product.weightGrams,
+          gender: product.gender,
         },
       })
     },

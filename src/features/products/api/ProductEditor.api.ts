@@ -53,6 +53,7 @@ export function useCreateProductMutation() {
         description: input.description.trim() || undefined,
         categoryId: input.categoryId,
         weightGrams: input.weightGrams,
+        gender: input.gender,
       }
       return (await http.post('/admin/products', body)) as ProductResponseDto
     },
@@ -71,6 +72,7 @@ export function useUpdateProductMutation(id: MaybeRefOrGetter<string>) {
         description: input.description.trim(),
         categoryId: input.categoryId,
         weightGrams: input.weightGrams,
+        gender: input.gender,
       }
       return http.patch(path(toValue(id)), body)
     },
