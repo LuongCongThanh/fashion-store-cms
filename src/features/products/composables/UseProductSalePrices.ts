@@ -10,15 +10,11 @@ import {
   useSalePricesQuery,
   useUpdateSalePriceMutation,
 } from '@features/products/api/SalePrices.api'
-import {
-  discountPercent,
-  isoToLocal,
-  localToIso,
-  salePriceFormSchema,
-} from '@features/products/schemas/SalePrice.schema'
+import { discountPercent, salePriceFormSchema } from '@features/products/schemas/SalePrice.schema'
 import { useConfirm } from '@shared/components/confirm/UseConfirm'
 import { useNotify } from '@shared/composables/UseNotify'
 import { isApiError } from '@shared/lib/api/errors/ApiError'
+import { isoToLocal, localToIso } from '@shared/lib/format/DateTimeLocal'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { SalePriceFormInput } from '@features/products/schemas/SalePrice.schema'

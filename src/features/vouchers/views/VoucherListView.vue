@@ -2,35 +2,32 @@
 import UButton from '@nuxt/ui/components/Button.vue'
 
 import { useAuth } from '@features/auth/UseAuth'
-import { usePromotionsQuery } from '@features/promotions/api/Promotions.api'
-import PromotionFilters from '@features/promotions/components/PromotionFilters.vue'
-import PromotionTable from '@features/promotions/components/PromotionTable.vue'
-import { promotionListSchema } from '@features/promotions/schemas/Promotion.schema'
+import { useVouchersQuery } from '@features/vouchers/api/Vouchers.api'
+import VoucherFilters from '@features/vouchers/components/VoucherFilters.vue'
+import VoucherTable from '@features/vouchers/components/VoucherTable.vue'
+import { voucherListSchema } from '@features/vouchers/schemas/Voucher.schema'
 import PageHeader from '@shared/components/page/PageHeader.vue'
 import DataTablePagination from '@shared/components/table/DataTablePagination.vue'
 import { useListState } from '@shared/composables/UseListState'
 import { useT } from '@shared/lib/i18n/I18n'
 const { t } = useT()
 const { can } = useAuth()
-const { params, setFilter, setPage, setSort } = useListState(promotionListSchema)
-const query = usePromotionsQuery(params)
+const { params, setFilter, setPage } = useListState(voucherListSchema)
+const query = useVouchersQuery(params)
 </script>
 
 <template>
   <div class="space-y-4">
-    <PageHeader :title="t('promotions.title')">
+    <PageHeader :title="t('vouchers.title')">
       <template #actions>
-        <UButton v-if="can('promotion:write')" to="/promotions/new">{{ t('common.create') }}</UButton>
+        <UButton v-if="can('PRICING_VOUCHER_MANAGE')" to="/vouchers/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
-    <PromotionFilters :search="params.search" :status="params.status" :type="params.type" @filter="setFilter" />
-    <PromotionTable
+    <VoucherFilters :search="params.search" :status="params.status" @filter="setFilter" />
+    <VoucherTable
       :data="query.data.value?.data ?? []"
       :loading="query.isPending.value"
       :error="query.error.value"
-      :sort="params.sort"
-      :canWrite="can('promotion:write')"
-      @sort="setSort"
       @retry="query.refetch()"
     />
     <DataTablePagination

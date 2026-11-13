@@ -521,6 +521,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/vouchers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List vouchers, newest first; search by code, filter by status now */
+        get: operations["AdminVoucherController_findAll_v1"];
+        put?: never;
+        /** Create a voucher; the code is stored upper case and never changes */
+        post: operations["AdminVoucherController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/vouchers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a voucher with its use count */
+        get: operations["AdminVoucherController_findOne_v1"];
+        put?: never;
+        post?: never;
+        /** Delete an unused voucher; a used one can only be deactivated */
+        delete: operations["AdminVoucherController_remove_v1"];
+        options?: never;
+        head?: never;
+        /**
+         * Change a voucher
+         * @description Unused: any field but the code. Used: only endsAt, totalLimit (not below usedCount), perBuyerLimit, isActive.
+         */
+        patch: operations["AdminVoucherController_update_v1"];
+        trace?: never;
+    };
     "/api/v1/auth/forgot-password": {
         parameters: {
             query?: never;
@@ -1147,6 +1187,49 @@ export interface components {
              */
             sku: string;
         };
+        CreateVoucherDto: {
+            /**
+             * @description 3–32 letters, digits, - or _; stored upper case (BR-VCH-09)
+             * @example sale10
+             */
+            code: string;
+            /**
+             * Format: date-time
+             * @description Exclusive end, after startsAt
+             */
+            endsAt: string;
+            /** @default true */
+            isActive?: boolean;
+            /**
+             * @description PERCENT only; cap in VND
+             * @example 50000
+             */
+            maxDiscount?: number | null;
+            /**
+             * @description Minimum Subtotal in VND
+             * @default 0
+             * @example 300000
+             */
+            minSubtotal?: number;
+            /**
+             * @description null = unlimited
+             * @example 1
+             */
+            perBuyerLimit?: number | null;
+            /** Format: date-time */
+            startsAt: string;
+            /**
+             * @description null = unlimited
+             * @example 100
+             */
+            totalLimit?: number | null;
+            type: components["schemas"]["VoucherType"];
+            /**
+             * @description PERCENT: 1–100; FIXED: integer VND > 0
+             * @example 10
+             */
+            value: number;
+        };
         CustomerProfileResponseDto: {
             email: string;
             fullName: string;
@@ -1245,6 +1328,10 @@ export interface components {
             data: components["schemas"]["VariantResponseDto"][];
             meta: components["schemas"]["PaginationMetaDto"];
         };
+        PaginatedVoucherResponseDto: {
+            data: components["schemas"]["VoucherResponseDto"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+        };
         PaginationMetaDto: {
             /** @example 20 */
             limit: number;
@@ -1259,7 +1346,7 @@ export interface components {
          * @description Union of the permissions granted by the account roles (empty for customers)
          * @enum {string}
          */
-        Permission: "CATALOG_PRODUCT_VIEW" | "CATALOG_PRODUCT_MANAGE" | "CATALOG_CATEGORY_VIEW" | "CATALOG_CATEGORY_MANAGE" | "CATALOG_PRODUCT_OPTION_VIEW" | "CATALOG_PRODUCT_OPTION_MANAGE" | "PRICING_SALE_PRICE_VIEW" | "PRICING_SALE_PRICE_MANAGE" | "ADMINISTRATION_ROLE_VIEW" | "ADMINISTRATION_ROLE_MANAGE" | "ADMINISTRATION_INTERNAL_ACCOUNT_VIEW" | "ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE";
+        Permission: "CATALOG_PRODUCT_VIEW" | "CATALOG_PRODUCT_MANAGE" | "CATALOG_CATEGORY_VIEW" | "CATALOG_CATEGORY_MANAGE" | "CATALOG_PRODUCT_OPTION_VIEW" | "CATALOG_PRODUCT_OPTION_MANAGE" | "PRICING_SALE_PRICE_VIEW" | "PRICING_SALE_PRICE_MANAGE" | "PRICING_VOUCHER_VIEW" | "PRICING_VOUCHER_MANAGE" | "ADMINISTRATION_ROLE_VIEW" | "ADMINISTRATION_ROLE_MANAGE" | "ADMINISTRATION_INTERNAL_ACCOUNT_VIEW" | "ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE";
         PermissionGroupResponseDto: {
             /**
              * @description Prefix of the permission names
@@ -1686,6 +1773,44 @@ export interface components {
             /** @example ARCHIVED */
             status?: components["schemas"]["VariantStatus"];
         };
+        UpdateVoucherDto: {
+            /**
+             * Format: date-time
+             * @description Exclusive end, after startsAt
+             */
+            endsAt?: string;
+            /** @default true */
+            isActive?: boolean;
+            /**
+             * @description PERCENT only; cap in VND
+             * @example 50000
+             */
+            maxDiscount?: number | null;
+            /**
+             * @description Minimum Subtotal in VND
+             * @default 0
+             * @example 300000
+             */
+            minSubtotal?: number;
+            /**
+             * @description null = unlimited
+             * @example 1
+             */
+            perBuyerLimit?: number | null;
+            /** Format: date-time */
+            startsAt?: string;
+            /**
+             * @description null = unlimited
+             * @example 100
+             */
+            totalLimit?: number | null;
+            type?: components["schemas"]["VoucherType"];
+            /**
+             * @description PERCENT: 1–100; FIXED: integer VND > 0
+             * @example 10
+             */
+            value?: number;
+        };
         /** @enum {string} */
         UserStatus: "ACTIVE" | "DISABLED";
         VariantResponseDto: {
@@ -1716,6 +1841,63 @@ export interface components {
             /** @example user@example.com */
             email: string;
         };
+        VoucherResponseDto: {
+            /**
+             * @description Upper case, immutable
+             * @example SALE10
+             */
+            code: string;
+            /** Format: date-time */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description Exclusive end
+             */
+            endsAt: string;
+            id: string;
+            isActive: boolean;
+            /**
+             * @description PERCENT only; cap in VND, null = no cap
+             * @example 50000
+             */
+            maxDiscount: number | null;
+            /**
+             * @description Minimum Subtotal in VND, 0 = none
+             * @example 300000
+             */
+            minSubtotal: number;
+            /**
+             * @description Uses per Buyer (account or phone), null = unlimited
+             * @example 1
+             */
+            perBuyerLimit: number | null;
+            /** Format: date-time */
+            startsAt: string;
+            /** @description At request time */
+            status: components["schemas"]["VoucherStatus"];
+            /**
+             * @description Total uses, null = unlimited
+             * @example 100
+             */
+            totalLimit: number | null;
+            type: components["schemas"]["VoucherType"];
+            /** Format: date-time */
+            updatedAt: string;
+            /**
+             * @description Uses counted so far (orders arrive in slice C)
+             * @example 0
+             */
+            usedCount: number;
+            /**
+             * @description PERCENT: 1–100; FIXED: integer VND
+             * @example 10
+             */
+            value: number;
+        };
+        /** @enum {string} */
+        VoucherStatus: "ACTIVE" | "UPCOMING" | "ENDED" | "EXHAUSTED" | "DISABLED";
+        /** @enum {string} */
+        VoucherType: "PERCENT" | "FIXED";
     };
     responses: never;
     parameters: never;
@@ -4817,6 +4999,353 @@ export interface operations {
             };
             /** @description Staff account not found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminVoucherController_findAll_v1: {
+        parameters: {
+            query?: {
+                page?: number;
+                limit?: number;
+                /** @description Part of the code, case-insensitive */
+                q?: string;
+                status?: components["schemas"]["VoucherStatus"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedVoucherResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminVoucherController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateVoucherDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VoucherResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Code already exists */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminVoucherController_findOne_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VoucherResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Voucher not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminVoucherController_remove_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Voucher not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Already used */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminVoucherController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateVoucherDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VoucherResponseDto"];
+                };
+            };
+            /** @description Invalid input (validation failed or malformed id) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Missing, invalid, or expired access token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Authenticated user lacks the required permission or account type */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Voucher not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Field locked after first use */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

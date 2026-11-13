@@ -292,25 +292,49 @@
       "adjustment": "Điều chỉnh"
     }
   },
-  "promotions": {
-    "status": {
-      "draft": "Bản nháp",
-      "active": "Hoạt động",
-      "inactive": "Ngừng hoạt động"
-    },
-    "title": "Khuyến mãi",
-    "type": "Loại",
-    "coupon": "Mã giảm giá",
-    "auto": "Tự động",
+  "vouchers": {
+    "title": "Voucher",
+    "create": "Tạo Voucher",
+    "terms": "Điều kiện giảm",
+    "limits": "Giới hạn và thời gian",
     "code": "Mã",
-    "discountType": "Loại giảm giá",
-    "fixed": "Số tiền cố định",
-    "value": "Giá trị",
-    "minimumOrder": "Đơn tối thiểu",
-    "usageLimit": "Lượt sử dụng tối đa",
-    "startAt": "Bắt đầu",
-    "endAt": "Kết thúc",
-    "invalid": "Dữ liệu không hợp lệ; kiểm tra mã, giá trị và thời gian"
+    "codeHint": "3–32 ký tự: chữ, số, - hoặc _; lưu in hoa và không đổi được sau khi tạo.",
+    "codeTaken": "Mã Voucher đã tồn tại",
+    "type": "Loại giảm",
+    "types": {
+      "PERCENT": "Theo %",
+      "FIXED": "Số tiền cố định"
+    },
+    "percentValue": "Mức giảm (%)",
+    "fixedValue": "Số tiền giảm (₫)",
+    "maxDiscount": "Giảm tối đa (₫)",
+    "minSubtotal": "Tạm tính tối thiểu (₫)",
+    "totalLimit": "Tổng lượt dùng",
+    "perBuyerLimit": "Lượt dùng mỗi Người mua",
+    "emptyUnlimited": "Để trống = không giới hạn",
+    "zeroNone": "0 = không điều kiện",
+    "startsAt": "Bắt đầu",
+    "endsAt": "Kết thúc",
+    "isActive": "Đang kích hoạt",
+    "isActiveHint": "Bỏ chọn để tạm ngừng Voucher mà không xoá.",
+    "discount": "Mức giảm",
+    "usage": "Đã dùng",
+    "period": "Thời gian",
+    "usedCount": "Đã dùng {count} lượt",
+    "usedHint": "Voucher đã được dùng: chỉ đổi được thời gian kết thúc, giới hạn lượt dùng và trạng thái kích hoạt.",
+    "status": {
+      "ACTIVE": "Đang chạy",
+      "UPCOMING": "Sắp diễn ra",
+      "ENDED": "Đã kết thúc",
+      "EXHAUSTED": "Hết lượt",
+      "DISABLED": "Đã tắt"
+    },
+    "invalid": {
+      "percent": "Mức giảm theo % từ 1 đến 100",
+      "after": "Thời gian kết thúc phải sau thời gian bắt đầu"
+    },
+    "deleteTitle": "Xoá Voucher \"{code}\"?",
+    "deleteDescription": "Voucher chưa được dùng nên có thể xoá hẳn. Thao tác không hoàn tác được."
   },
   "internalAccounts": {
     "title": "Tài khoản nội bộ",
