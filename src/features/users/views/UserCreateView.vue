@@ -16,9 +16,7 @@ function retry() {
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('users.title')" />
-    <LoadingState
-      v-if="editor.roles.isPending.value || (editor.id.value && editor.query.isPending.value)"
-    />
+    <LoadingState v-if="editor.roles.isPending.value || (editor.id.value && editor.query.isPending.value)" />
     <ErrorState
       v-else-if="editor.query.isError.value || editor.roles.isError.value"
       :error="editor.query.error.value ?? editor.roles.error.value"
