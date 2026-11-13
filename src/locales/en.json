@@ -360,19 +360,11 @@
   "settings": {
     "title": "Settings",
     "store": "Store settings",
-    "localization": "Localization",
     "name": "Name",
     "description": "Description",
     "contactEmail": "Contact email",
     "phone": "Phone",
-    "address": "Address",
-    "languages": "Languages (comma separated)",
-    "defaultLanguage": "Default language",
-    "timezone": "Timezone",
-    "currency": "Currency",
-    "numberFormat": "Number format",
-    "dateFormat": "Date format",
-    "invalid": "Invalid configuration"
+    "address": "Address"
   },
   "sizes": {
     "title": "Sizes",

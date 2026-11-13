@@ -12,7 +12,6 @@ it('loads Store settings and saves the edited contact information', async () => 
     mock(http) {
       http.onGet(/\/settings\/store$/).reply(200, {
         name: 'Fashion',
-        logo: null,
         description: '',
         contactEmail: 'old@shop.vn',
         phone: '',

@@ -17,10 +17,4 @@ export const settingsRoutes: RouteRecordRaw[] = [
     component: () => import('./views/StoreSettingsView.vue'),
     meta: { permission: 'settings:write', titleKey: 'settings.store' },
   },
-  {
-    path: 'settings/localization',
-    name: 'settings.localization',
-    component: () => import('./views/LocalizationSettingsView.vue'),
-    meta: { permission: 'settings:write', titleKey: 'settings.localization' },
-  },
 ]

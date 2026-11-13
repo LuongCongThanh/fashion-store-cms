@@ -7,11 +7,9 @@ import { onBeforeUnmount, ref, useId } from 'vue'
 
 import { useT } from '@shared/lib/i18n/I18n'
 
-import type { MediaImage } from '@features/media/types/Media.types'
 defineProps<{
   uploading: boolean
   error?: string
-  image?: MediaImage
   progress?: number
   canRetry?: boolean
 }>()
@@ -49,9 +47,9 @@ onBeforeUnmount(() => {
         class="flex cursor-pointer items-center gap-4 rounded-lg border border-dashed border-default bg-elevated/50 p-4 transition-colors duration-150 hover:border-primary has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-75 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary motion-reduce:transition-none"
       >
         <img
-          v-if="image || preview"
-          :src="image?.url ?? preview"
-          :alt="image?.name ?? t('media.preview')"
+          v-if="preview"
+          :src="preview"
+          :alt="t('media.preview')"
           class="size-20 shrink-0 rounded-md border border-default object-cover"
         />
         <span
