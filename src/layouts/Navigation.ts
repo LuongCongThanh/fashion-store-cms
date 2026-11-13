@@ -6,6 +6,8 @@ import type { RouteMeta, RouteRecordRaw } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
 
+import type { RequiredPermission } from '@shared/lib/api/Permission'
+
 export interface NavItem {
   name: string
   path: string
@@ -45,7 +47,7 @@ function joinPath(parent: string, child: string) {
 }
 
 /** Hàm thuần: route + quyền → sidebar, commands, shortcuts, titleOf. */
-export function buildNavigation(routes: readonly RouteRecordRaw[], can: (permission: string) => boolean) {
+export function buildNavigation(routes: readonly RouteRecordRaw[], can: (permission: RequiredPermission) => boolean) {
   const allowed = flatten(routes).filter((r) => !r.meta.permission || can(r.meta.permission))
 
   const commands: NavCommand[] = allowed.flatMap(({ name, path, meta }) =>

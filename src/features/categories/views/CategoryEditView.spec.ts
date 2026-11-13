@@ -11,7 +11,7 @@ it('excludes descendants from parent choices and rejects a stale cyclic parent s
   const { wrapper, http } = await renderFeature(CategoryEditView, {
     path: '/categories/a/edit',
     routePath: '/categories/:id/edit',
-    permissions: ['category:write'],
+    permissions: ['CATALOG_CATEGORY_MANAGE'],
     mock(http) {
       http.onGet(/\/categories$/).reply(200, [
         { id: 'a', name: 'Áo', parentId: null },

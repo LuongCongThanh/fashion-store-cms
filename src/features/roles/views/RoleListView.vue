@@ -21,7 +21,7 @@ const query = useRolesQuery(params)
   <div class="space-y-4">
     <PageHeader :title="t('roles.title')">
       <template #actions>
-        <UButton v-if="can('role:write')" to="/roles/new">{{ t('common.create') }}</UButton>
+        <UButton v-if="can('ADMINISTRATION_ROLE_MANAGE')" to="/roles/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
     <FilterBar>
@@ -32,7 +32,7 @@ const query = useRolesQuery(params)
       :loading="query.isPending.value"
       :error="query.error.value"
       :sort="params.sort"
-      :canWrite="can('role:write')"
+      :canWrite="can('ADMINISTRATION_ROLE_MANAGE')"
       @sort="setSort"
       @retry="query.refetch()"
     />

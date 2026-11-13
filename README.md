@@ -19,7 +19,7 @@ npm run dev
 | `npm test` / `npm run test:coverage`                    | Unit + component test (Vitest)                        |
 | `npm run test:e2e`                                      | E2E (Playwright)                                      |
 | `npm run lint` / `npm run format` / `npm run typecheck` | Kiểm tra code                                         |
-| `npm run gen:api`                                       | Sinh kiểu API từ Swagger (`OPENAPI_URL`)              |
+| `npm run gen:api`                                       | Sinh kiểu API từ tag OpenAPI của BE (`OPENAPI_URL`)   |
 | `npm run knip` / `npm run analyze`                      | Tìm code thừa / xem kích thước bundle                 |
 
 ## Tài liệu

@@ -6,7 +6,7 @@ export const productRoutes: RouteRecordRaw[] = [
     component: () => import('./views/ProductListView.vue'),
     meta: {
       titleKey: 'dashboard.products',
-      permission: 'product:read',
+      permission: 'CATALOG_PRODUCT_VIEW',
       sidebarGroup: 'store',
       command: { icon: 'i-lucide-shirt', group: 'navigate' },
     },
@@ -16,18 +16,18 @@ export const productRoutes: RouteRecordRaw[] = [
     path: 'products/new',
     name: 'products.create',
     component: () => import('./views/ProductCreateView.vue'),
-    meta: { permission: 'product:write', titleKey: 'common.create' },
+    meta: { permission: 'CATALOG_PRODUCT_MANAGE', titleKey: 'common.create' },
   },
   {
     path: 'products/:id',
     name: 'products.detail',
     component: () => import('./views/ProductDetailView.vue'),
-    meta: { permission: 'product:read', titleKey: 'dashboard.products' },
+    meta: { permission: 'CATALOG_PRODUCT_VIEW', titleKey: 'dashboard.products' },
   },
   {
     path: 'products/:id/edit',
     name: 'products.edit',
     component: () => import('./views/ProductEditView.vue'),
-    meta: { permission: 'product:write', titleKey: 'common.edit' },
+    meta: { permission: 'CATALOG_PRODUCT_MANAGE', titleKey: 'common.edit' },
   },
 ]

@@ -56,9 +56,11 @@ const columns = computed<TableColumn<VariantRow>[]>(() => [
   <div v-else-if="query.data.value" class="min-w-0 space-y-6">
     <PageHeader :title="query.data.value.name">
       <template #actions>
-        <UButton v-if="can('product:write')" :to="`/products/${encodeURIComponent(query.data.value.id)}/edit`">{{
-          t('common.edit')
-        }}</UButton>
+        <UButton
+          v-if="can('CATALOG_PRODUCT_MANAGE')"
+          :to="`/products/${encodeURIComponent(query.data.value.id)}/edit`"
+          >{{ t('common.edit') }}</UButton
+        >
       </template>
     </PageHeader>
     <ProductStatusBadge :status="query.data.value.status" />

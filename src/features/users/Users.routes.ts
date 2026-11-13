@@ -5,7 +5,7 @@ export const userRoutes: RouteRecordRaw[] = [
     name: 'users.list',
     component: () => import('./views/UserListView.vue'),
     meta: {
-      permission: 'user:read',
+      permission: 'ADMINISTRATION_INTERNAL_ACCOUNT_VIEW',
       titleKey: 'users.title',
       sidebarGroup: 'system',
       command: { icon: 'i-lucide-user-cog', group: 'navigate' },
@@ -15,12 +15,12 @@ export const userRoutes: RouteRecordRaw[] = [
     path: 'users/new',
     name: 'users.create',
     component: () => import('./views/UserCreateView.vue'),
-    meta: { permission: 'user:write', titleKey: 'common.create' },
+    meta: { permission: 'ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE', titleKey: 'common.create' },
   },
   {
     path: 'users/:id/edit',
     name: 'users.edit',
     component: () => import('./views/UserEditView.vue'),
-    meta: { permission: 'user:write', titleKey: 'common.edit' },
+    meta: { permission: 'ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE', titleKey: 'common.edit' },
   },
 ]

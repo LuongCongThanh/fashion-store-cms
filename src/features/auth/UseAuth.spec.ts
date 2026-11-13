@@ -9,7 +9,17 @@ import type { SessionSnapshot } from '@shared/lib/session/Session'
 
 import { useAuth } from './UseAuth'
 
-const USER = buildUser({ name: 'Lan', role: 'STAFF', permissions: ['category:read'] })
+const USER = buildUser({ name: 'Lan', role: 'STAFF', permissions: ['CATALOG_CATEGORY_VIEW'] })
+/** Response `/auth/me` của USER: login không trả Quyền nên useAuth nạp lại qua đây. */
+const ME = {
+  id: USER.id,
+  email: USER.email,
+  fullName: USER.name,
+  role: USER.role,
+  emailVerified: true,
+  roles: USER.roles,
+  permissions: USER.permissions,
+}
 
 /** Render một component dùng useAuth() và trả ra instance để gọi hành động. */
 function renderAuth(session: SessionSnapshot = {}) {
@@ -31,6 +41,7 @@ describe('useAuth', () => {
       accessToken: 'at-1',
       user: { id: USER.id, email: USER.email, fullName: USER.name, role: 'STAFF', emailVerified: true },
     })
+    http.onGet(/\/auth\/me$/).reply(200, ME)
 
     await auth().login({ email: 'lan@shop.vn', password: 'secret' })
     await flushPromises()
@@ -41,8 +52,8 @@ describe('useAuth', () => {
     })
     expect(auth().isAuthenticated.value).toBe(true)
     expect(wrapper.text()).toBe('Lan')
-    expect(auth().can('category:read')).toBe(true)
-    expect(auth().can('category:write')).toBe(false)
+    expect(auth().can('CATALOG_CATEGORY_VIEW')).toBe(true)
+    expect(auth().can('CATALOG_CATEGORY_MANAGE')).toBe(false)
   })
 
   it('logs out: clears the user and goes back to login', async () => {
@@ -53,6 +64,8 @@ describe('useAuth', () => {
       fullName: USER.name,
       role: USER.role,
       emailVerified: true,
+      roles: USER.roles,
+      permissions: USER.permissions,
     })
     await auth().ensureUser()
     await flushPromises()
@@ -75,13 +88,15 @@ describe('useAuth', () => {
       fullName: USER.name,
       role: USER.role,
       emailVerified: true,
+      roles: USER.roles,
+      permissions: USER.permissions,
     })
 
     await Promise.all([auth().ensureUser(), auth().ensureUser()])
     await auth().ensureUser()
 
     expect(http.history.get).toHaveLength(1)
-    expect(auth().can('category:read')).toBe(true)
+    expect(auth().can('CATALOG_CATEGORY_VIEW')).toBe(true)
   })
 
   it('ends the session and revokes the cookie when /auth/me returns a customer', async () => {
@@ -92,6 +107,8 @@ describe('useAuth', () => {
       fullName: USER.name,
       role: 'CUSTOMER',
       emailVerified: true,
+      roles: [],
+      permissions: [],
     })
     http.onPost(/\/auth\/logout$/).reply(204)
 

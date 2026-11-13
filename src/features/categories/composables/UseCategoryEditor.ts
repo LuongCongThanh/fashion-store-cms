@@ -57,7 +57,7 @@ export function useCategoryEditor() {
   )
   useUnsavedGuard(() => meta.value.dirty)
   async function submit() {
-    if (!can('category:write') || mutation.isPending.value) return
+    if (!can('CATALOG_CATEGORY_MANAGE') || mutation.isPending.value) return
     if (values.parentId && !parentOptions.value.some((category) => category.id === values.parentId)) {
       setErrors({ parentId: t('categories.invalidParent') })
       return

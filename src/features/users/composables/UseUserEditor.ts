@@ -42,7 +42,13 @@ export function useUserEditor() {
   )
   useUnsavedGuard(() => meta.value.dirty)
   async function submit() {
-    if (!can('user:write') || mutation.isPending.value || roles.isPending.value || roles.isError.value) return
+    if (
+      !can('ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE') ||
+      mutation.isPending.value ||
+      roles.isPending.value ||
+      roles.isError.value
+    )
+      return
     const parsed = userSchema.safeParse(values)
     if (!parsed.success) {
       setErrors(

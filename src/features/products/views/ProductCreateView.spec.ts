@@ -10,7 +10,7 @@ import ProductCreateView from './ProductCreateView.vue'
 it('saves a draft with one default variant without requiring publish fields', async () => {
   const { wrapper, http, router } = await renderFeature(ProductCreateView, {
     path: '/products/new',
-    permissions: ['product:write'],
+    permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/categories$/).reply(200, [])
       http.onPost(/\/products$/).reply(201, { id: 'p1' })
@@ -28,7 +28,7 @@ it('saves a draft with one default variant without requiring publish fields', as
 it('rejects publishing a product with incomplete variants and SEO', async () => {
   const { wrapper, http } = await renderFeature(ProductCreateView, {
     path: '/products/new',
-    permissions: ['product:write'],
+    permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/categories$/).reply(200, [])
     },
@@ -43,7 +43,7 @@ it('rejects publishing a product with incomplete variants and SEO', async () => 
 it('publishes a categorized product with pricing, SEO and generated size/color variants', async () => {
   const { wrapper, http } = await renderFeature(ProductCreateView, {
     path: '/products/new',
-    permissions: ['product:write'],
+    permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/categories$/).reply(200, [{ id: 'linen', name: 'Linen', parentId: null }])
       http.onPost(/\/products$/).reply(201, { id: 'p1' })
@@ -94,7 +94,7 @@ it('publishes a categorized product with pricing, SEO and generated size/color v
 it('preserves fractional product and variant prices when saving a draft', async () => {
   const { wrapper, http } = await renderFeature(ProductCreateView, {
     path: '/products/new',
-    permissions: ['product:write'],
+    permissions: ['CATALOG_PRODUCT_MANAGE'],
     mock(http) {
       http.onGet(/\/categories$/).reply(200, [])
       http.onPost(/\/products$/).reply(201, { id: 'p1' })

@@ -6,7 +6,7 @@ export const categoryRoutes: RouteRecordRaw[] = [
     component: () => import('./views/CategoryListView.vue'),
     meta: {
       titleKey: 'products.category',
-      permission: 'category:read',
+      permission: 'CATALOG_CATEGORY_VIEW',
       sidebarGroup: 'store',
       command: { icon: 'i-lucide-folder-tree', group: 'navigate' },
     },
@@ -15,12 +15,12 @@ export const categoryRoutes: RouteRecordRaw[] = [
     path: 'categories/new',
     name: 'categories.create',
     component: () => import('./views/CategoryCreateView.vue'),
-    meta: { titleKey: 'common.create', permission: 'category:write' },
+    meta: { titleKey: 'common.create', permission: 'CATALOG_CATEGORY_MANAGE' },
   },
   {
     path: 'categories/:id/edit',
     name: 'categories.edit',
     component: () => import('./views/CategoryEditView.vue'),
-    meta: { titleKey: 'common.edit', permission: 'category:write' },
+    meta: { titleKey: 'common.edit', permission: 'CATALOG_CATEGORY_MANAGE' },
   },
 ]

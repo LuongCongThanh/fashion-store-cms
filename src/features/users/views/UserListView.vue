@@ -22,7 +22,7 @@ const query = useUsersQuery(params)
   <div class="space-y-4">
     <PageHeader :title="t('users.title')">
       <template #actions>
-        <UButton v-if="can('user:write')" to="/users/new">{{ t('common.create') }}</UButton>
+        <UButton v-if="can('ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE')" to="/users/new">{{ t('common.create') }}</UButton>
       </template>
     </PageHeader>
     <UserFilters :search="params.search" :status="params.status" :roleId="params.roleId" @filter="setFilter" />
@@ -31,7 +31,7 @@ const query = useUsersQuery(params)
       :loading="query.isPending.value"
       :error="query.error.value"
       :sort="params.sort"
-      :canWrite="can('user:write')"
+      :canWrite="can('ADMINISTRATION_INTERNAL_ACCOUNT_MANAGE')"
       @sort="setSort"
       @retry="query.refetch()"
       @action="(_action, id) => router.push(`/users/${encodeURIComponent(id)}/edit`)"

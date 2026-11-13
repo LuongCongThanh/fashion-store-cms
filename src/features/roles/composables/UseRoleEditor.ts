@@ -40,7 +40,12 @@ export function useRoleEditor() {
   )
   useUnsavedGuard(() => meta.value.dirty)
   async function submit() {
-    if (!can('role:write') || mutation.isPending.value || permissions.isError.value || permissions.isPending.value)
+    if (
+      !can('ADMINISTRATION_ROLE_MANAGE') ||
+      mutation.isPending.value ||
+      permissions.isError.value ||
+      permissions.isPending.value
+    )
       return
     const parsed = roleSchema.safeParse(values)
     if (!parsed.success) {

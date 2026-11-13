@@ -9,16 +9,22 @@ interface UserJson {
   fullName: string
   role: CurrentUser['role']
   emailVerified: boolean
+  roles: string[]
+  permissions: string[]
 }
 
+/** Quyền trong test là chuỗi trên dây, kể cả `PendingPermission` mà API không bao giờ cấp. */
+type UserOverrides = Omit<Partial<CurrentUser>, 'permissions'> & { permissions?: readonly string[] }
+
 /** User (Model FE) giả cho test (§S.2). Ghi đè field cần cố định qua `overrides`. */
-export function buildUser(overrides: Partial<CurrentUser> = {}): CurrentUser {
+export function buildUser({ permissions = [], ...overrides }: UserOverrides = {}): CurrentUser {
   return {
     id: faker.string.uuid(),
     name: faker.person.fullName(),
     email: faker.internet.email(),
     role: 'STAFF',
-    permissions: [],
+    roles: ['Staff'],
+    permissions: [...permissions] as CurrentUser['permissions'],
     ...overrides,
   }
 }
@@ -31,6 +37,8 @@ export function buildUserDto(overrides: Partial<UserJson> = {}): UserJson {
     fullName: faker.person.fullName(),
     role: 'STAFF',
     emailVerified: true,
+    roles: ['Staff'],
+    permissions: [],
     ...overrides,
   }
 }

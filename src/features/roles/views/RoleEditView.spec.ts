@@ -10,7 +10,7 @@ it('loads an existing role and saves a renamed role with its permissions removed
   const { wrapper, http } = await renderFeature(RoleEditView, {
     path: '/roles/r1/edit',
     routePath: '/roles/:id/edit',
-    permissions: ['role:write'],
+    permissions: ['ADMINISTRATION_ROLE_MANAGE'],
     mock(http) {
       http.onGet(/\/roles\/r1$/).reply(200, { id: 'r1', name: 'Bán hàng', permissions: ['order:read'] })
       http.onGet(/\/permissions$/).reply(200, [{ key: 'order:read', resource: 'order', action: 'read' }])

@@ -1,3 +1,6 @@
+import type { Permission } from '@shared/lib/api/Permission'
+
+/** Loại tài khoản (AccountType của API). Quyền không suy từ đây mà từ `permissions`. */
 export type AuthRole = 'CUSTOMER' | 'STAFF' | 'ADMIN'
 
 /** Người dùng đang đăng nhập (Model của FE — không alias DTO, §T.3). */
@@ -6,7 +9,10 @@ export interface CurrentUser {
   name: string
   email: string
   role: AuthRole
-  permissions: string[]
+  /** Tên các Vai trò được gán (vd. `Staff`), chỉ để hiển thị. */
+  roles: string[]
+  /** Hợp các Quyền của mọi Vai trò được gán, do API tính. */
+  permissions: Permission[]
 }
 
 /** Thông tin đăng nhập do form gửi lên. */

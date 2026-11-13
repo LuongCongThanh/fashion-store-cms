@@ -10,14 +10,14 @@ import type { components } from '@shared/types/Api.generated'
 
 import { toCurrentUser } from './Auth.mapper'
 
-import type { AuthUserResponseDto } from './Auth.mapper'
+import type { MeResponseDto } from './Auth.mapper'
 
 type LoginDto = components['schemas']['LoginDto']
 type LoginResponseDto = components['schemas']['LoginResponseDto']
 type ForgotPasswordDto = components['schemas']['ForgotPasswordDto']
 type ResetPasswordDto = components['schemas']['ResetPasswordDto']
 
-export function assertCmsUser(user: CurrentUser) {
+function assertCmsUser(user: CurrentUser) {
   if (user.role === 'CUSTOMER') {
     throw new ApiError(403, ErrorCode.FORBIDDEN, 'Customer accounts cannot access the CMS.')
   }
@@ -33,11 +33,11 @@ export function createAuthApi(http: HttpClient) {
     login: async (payload: LoginPayload) => {
       const body: LoginDto = payload
       const result = (await http.post('/auth/login', body, { skipAuth: true })) as LoginResponseDto
-      // Không assert ở đây: UseAuth cần access token để thu hồi cookie nếu là tài khoản CUSTOMER.
-      return { accessToken: result.accessToken, user: toCurrentUser(result.user) }
+      // Response login không có Quyền: UseAuth nạp user qua `me()` ngay sau khi có access token.
+      return { accessToken: result.accessToken }
     },
     me: async (signal?: AbortSignal) => {
-      const dto = (await http.get('/auth/me', { signal })) as AuthUserResponseDto
+      const dto = (await http.get('/auth/me', { signal })) as MeResponseDto
       return assertCmsUser(toCurrentUser(dto))
     },
     forgotPassword: async (payload: ForgotPasswordDto) => {

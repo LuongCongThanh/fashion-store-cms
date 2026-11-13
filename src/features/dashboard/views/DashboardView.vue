@@ -33,7 +33,7 @@ const definitions: DashboardWidget[] = [
   { key: 'revenue', title: 'dashboard.revenue', kind: 'stat', permission: 'order:read', format: 'money' },
   { key: 'orders', title: 'nav.orders', kind: 'stat', permission: 'order:read' },
   { key: 'customers', title: 'dashboard.customers', kind: 'stat', permission: 'customer:read' },
-  { key: 'products', title: 'dashboard.products', kind: 'stat', permission: 'product:read' },
+  { key: 'products', title: 'dashboard.products', kind: 'stat', permission: 'CATALOG_PRODUCT_VIEW' },
   {
     key: 'revenue-chart',
     title: 'dashboard.revenueChart',
@@ -53,7 +53,7 @@ const definitions: DashboardWidget[] = [
     key: 'top-products',
     title: 'dashboard.topProducts',
     kind: 'list',
-    permission: 'product:read',
+    permission: 'CATALOG_PRODUCT_VIEW',
     link: (item) => `/products/${encodeURIComponent(item.id)}`,
   },
   {

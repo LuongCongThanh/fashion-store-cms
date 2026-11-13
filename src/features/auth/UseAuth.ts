@@ -3,8 +3,9 @@ import { computed, readonly } from 'vue'
 import { isApiError } from '@shared/lib/api/errors/ApiError'
 import { useSession } from '@shared/lib/session/Session'
 
-import { assertCmsUser, useAuthApi, useAuthMutations } from './api/Auth.api'
-import { ALL_PERMISSIONS } from './api/Auth.mapper'
+import type { RequiredPermission } from '@shared/lib/api/Permission'
+
+import { useAuthApi, useAuthMutations } from './api/Auth.api'
 import { useAuthStore } from './stores/Auth.store'
 
 import type { LoginPayload, ResetPasswordPayload } from './types/Auth.types'
@@ -18,19 +19,20 @@ export function useAuth() {
 
   const isAuthenticated = computed(() => session.getAccessToken() !== null)
 
-  /** Chỉ đọc permissions của user; role nào được gì nằm ở ma trận trong Auth.mapper. */
-  function can(permission: string) {
-    const granted = store.user?.permissions ?? []
-    return granted.includes(ALL_PERMISSIONS) || granted.includes(permission)
+  /** Chỉ đọc `permissions` do API trả; `PendingPermission` không bao giờ được cấp nên luôn false. */
+  function can(permission: RequiredPermission) {
+    const granted: readonly RequiredPermission[] = store.user?.permissions ?? []
+    return granted.includes(permission)
   }
 
   async function login(payload: LoginPayload) {
     const result = await mutations.login.mutateAsync(payload)
     session.signIn({ accessToken: result.accessToken })
     try {
-      store.setUser(assertCmsUser(result.user))
+      // `me()` từ chối tài khoản CUSTOMER và trả Quyền của tài khoản.
+      await store.loadUser(() => api.me())
     } catch (error) {
-      // BE đã cấp refresh cookie cho CUSTOMER → thu hồi ngay để F5 không tự đăng nhập lại.
+      // BE đã cấp refresh cookie → thu hồi ngay để F5 không tự đăng nhập lại.
       await endSession({ revoke: true })
       throw error
     }
