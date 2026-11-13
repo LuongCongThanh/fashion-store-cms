@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
 import type { Category } from '@features/categories/types/Category.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 import { toCategory } from './Category.mapper'
 

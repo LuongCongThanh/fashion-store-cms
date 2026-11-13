@@ -21,7 +21,7 @@ export default defineConfig((env) =>
         coverage: {
           provider: 'v8',
           include: ['src/**/*.{ts,vue}'],
-          exclude: ['src/**/*.spec.ts', 'src/shared/types/Api.generated.ts', 'src/main.ts'],
+          exclude: ['src/**/*.spec.ts', 'src/shared/lib/api/Api.generated.ts', 'src/main.ts'],
         },
       },
     }),

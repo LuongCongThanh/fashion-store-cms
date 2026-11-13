@@ -1,5 +1,5 @@
 import type { CurrentUser } from '@features/auth/types/Auth.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type MeResponseDto = components['schemas']['MeResponseDto']
 

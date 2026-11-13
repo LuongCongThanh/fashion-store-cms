@@ -1,5 +1,5 @@
 import type { Color } from '@features/colors/types/Color.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type ColorResponseDto = components['schemas']['ColorResponseDto']
 

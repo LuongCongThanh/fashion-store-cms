@@ -4,4 +4,4 @@
 /src/**/*.*
 !/src/**/*.ts
 !/src/**/*.vue
-src/shared/types/Api.generated.ts
+src/shared/lib/api/Api.generated.ts

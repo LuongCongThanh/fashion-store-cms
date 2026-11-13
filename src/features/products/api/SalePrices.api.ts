@@ -6,7 +6,7 @@ import type { MaybeRefOrGetter } from 'vue'
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
 import type { SalePrice } from '@features/products/types/SalePrice.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 type SalePriceResponseDto = components['schemas']['SalePriceResponseDto']
 type CreateSalePriceDto = components['schemas']['CreateSalePriceDto']

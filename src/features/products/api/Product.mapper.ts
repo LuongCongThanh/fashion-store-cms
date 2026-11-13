@@ -4,7 +4,7 @@ import type {
   ProductListItem,
   ProductVariant,
 } from '@features/products/types/Product.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type ProductResponseDto = components['schemas']['ProductResponseDto']
 export type ProductDetailResponseDto = components['schemas']['ProductDetailResponseDto']

@@ -9,8 +9,8 @@ import type { InjectionKey } from 'vue'
 import { ApiError } from '@shared/lib/api/errors/ApiError'
 import { codeFromStatus, ErrorCode } from '@shared/lib/api/errors/ErrorCode'
 
+import type { paths } from '@shared/lib/api/Api.generated'
 import type { Session } from '@shared/lib/session/Session'
-import type { paths } from '@shared/types/Api.generated'
 
 type Method = 'delete' | 'get' | 'patch' | 'post' | 'put'
 // CMS còn có nhiều feature chưa tồn tại trong BE hiện tại. Chỉ feature đã có contract

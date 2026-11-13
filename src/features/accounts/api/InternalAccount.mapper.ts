@@ -1,5 +1,5 @@
 import type { InternalAccount } from '@features/accounts/types/InternalAccount.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 export type StaffResponseDto = components['schemas']['StaffResponseDto']
 

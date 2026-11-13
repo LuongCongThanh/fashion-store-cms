@@ -7,7 +7,7 @@ import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
 import type { ProductInfoInput, VariantInput } from '@features/products/schemas/Product.schema'
 import type { ProductStatus } from '@features/products/types/Product.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 import { toProductDetail } from './Product.mapper'
 

@@ -7,7 +7,7 @@ import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
 import type { RoleInput, RoleListParams } from '@features/roles/schemas/Role.schema'
 import type { PermissionGroup, Role } from '@features/roles/types/Role.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 import type { Paginated } from '@shared/types/Pagination.types'
 
 import { toRole } from './Role.mapper'

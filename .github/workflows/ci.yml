@@ -55,7 +55,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run gen:api
-      - run: git diff --exit-code src/shared/types/Api.generated.ts
+      - run: git diff --exit-code src/shared/lib/api/Api.generated.ts
 
   build:
     runs-on: ubuntu-latest

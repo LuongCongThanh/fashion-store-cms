@@ -7,7 +7,7 @@ import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
 import type { ProductListParams } from '@features/products/schemas/ProductList.schema'
 import type { ProductListItem } from '@features/products/types/Product.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 import type { Paginated } from '@shared/types/Pagination.types'
 
 import { toProductListItem } from './Product.mapper'

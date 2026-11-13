@@ -5,7 +5,7 @@ import type { MaybeRefOrGetter } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 import { productDetailKey } from './ProductEditor.api'
 

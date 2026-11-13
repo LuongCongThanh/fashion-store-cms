@@ -7,7 +7,7 @@ import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
 import type { ColorInput } from '@features/colors/schemas/Color.schema'
 import type { Color } from '@features/colors/types/Color.types'
-import type { components } from '@shared/types/Api.generated'
+import type { components } from '@shared/lib/api/Api.generated'
 
 import { toColor } from './Color.mapper'
 
