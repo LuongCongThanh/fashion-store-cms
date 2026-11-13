@@ -19,7 +19,7 @@ import type { SessionSnapshot } from '@shared/lib/session/Session'
 type MountOptions = Parameters<typeof mount>[1]
 
 export interface RenderOptions {
-  /** Trạng thái Session ban đầu; mặc định đã đăng nhập ở store-1. */
+  /** Trạng thái Session ban đầu; mặc định đã đăng nhập. */
   session?: SessionSnapshot
   /** Router riêng; mặc định memory history với route `auth.login`. */
   router?: Router
@@ -59,7 +59,7 @@ export function renderWithPlugins(component: Component, options: RenderOptions =
   const runtime = createAppRuntime({
     transport: http.adapter(),
     notifier,
-    session: options.session ?? { accessToken: 'test-token', storeId: 'store-1' },
+    session: options.session ?? { accessToken: 'test-token' },
     retry: false,
     router: options.router ?? defaultRouter(),
   })

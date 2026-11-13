@@ -29,7 +29,6 @@ for (const width of [375, 1280]) {
     test(`Product gallery and Variant table fit ${width}px in ${theme}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 })
       await page.addInitScript((mode) => {
-        localStorage.setItem('cms.session.storeId', 'store-1')
         localStorage.setItem('cms.colorMode', mode)
       }, theme)
       await page.route('**/audit-image.svg', (route) =>

@@ -5,7 +5,6 @@ import UDashboardSidebarCollapse from '@nuxt/ui/components/DashboardSidebarColla
 import { useT } from '@shared/lib/i18n/I18n'
 
 import SidebarNav from './SidebarNav.vue'
-import StoreSwitcher from './StoreSwitcher.vue'
 
 const { t } = useT()
 
@@ -33,13 +32,6 @@ const COLLAPSED_WIDTH = 64
       footer: 'hidden border-t border-default px-0 py-2 lg:flex',
     }"
   >
-    <!-- DESIGN.md: store switcher ở đầu sidebar; hàng này cao bằng navbar nên viền dưới thẳng hàng. -->
-    <template #header="{ collapsed }">
-      <div class="min-w-0 flex-1" :class="collapsed && 'flex justify-center'">
-        <StoreSwitcher :collapsed="collapsed" />
-      </div>
-    </template>
-
     <template #default="{ collapsed }">
       <nav :aria-label="t('nav.menu')" :class="collapsed ? 'px-2' : 'px-3'">
         <SidebarNav :collapsed="collapsed" />

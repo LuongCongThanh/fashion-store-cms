@@ -5,17 +5,9 @@ import type { MaybeRefOrGetter } from 'vue'
 
 import { useHttpClient } from '@shared/lib/api/client/HttpClient'
 
-import type { StoreSummary } from '@features/StoreScope/types/StoreScope.types'
 import type { UserInput } from '@features/users/schemas/User.schema'
 import type { StaffUser } from '@features/users/types/User.types'
 import type { Paginated } from '@shared/types/Pagination.types'
-export function useAssignableStoresQuery() {
-  const http = useHttpClient()
-  return useQuery({
-    queryKey: ['assignable-stores'],
-    queryFn: ({ signal }) => http.get('/stores', { signal }) as Promise<StoreSummary[]>,
-  })
-}
 export function useUsersQuery(params: MaybeRefOrGetter<Record<string, unknown>>) {
   const http = useHttpClient()
   return useQuery({

@@ -3,7 +3,6 @@ export const userSchema = z.object({
   name: z.string().trim().min(1),
   email: z.email(),
   roleIds: z.array(z.string()).min(1),
-  storeIds: z.array(z.string()).min(1),
   status: z.enum(['active', 'inactive']),
 })
 export type UserInput = z.infer<typeof userSchema>

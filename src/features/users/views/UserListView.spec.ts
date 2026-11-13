@@ -15,7 +15,6 @@ it('shows users but hides edit and create links without user:write', async () =>
             name: 'Lan',
             email: 'lan@shop.vn',
             roleIds: ['r1'],
-            storeIds: ['s1'],
             status: 'active',
           },
         ],

@@ -23,7 +23,7 @@ function setup(
     queryClient: new QueryClient(),
     callRefresh: vi.fn(opts.callRefresh ?? (async () => ({ accessToken: 'fresh' }))),
     onAuthFailure: opts.onAuthFailure,
-    initial: opts.initial ?? { accessToken: 'token-1', storeId: 'store-1' },
+    initial: opts.initial ?? { accessToken: 'token-1' },
   })
   const http = createHttpClient({
     baseURL: BASE,
@@ -35,7 +35,7 @@ function setup(
 }
 
 describe('HttpClient', () => {
-  it('returns response data and sends auth, store and language headers', async () => {
+  it('returns response data and sends auth and language headers', async () => {
     const { mock, http } = setup()
     mock.onGet(`${BASE}/products`).reply(200, [{ id: 1 }])
 
@@ -44,7 +44,6 @@ describe('HttpClient', () => {
     expect(data).toEqual([{ id: 1 }])
     const headers = mock.history.get[0]?.headers ?? {}
     expect(headers.Authorization).toBe('Bearer token-1')
-    expect(headers['X-Store-Id']).toBe('store-1')
     expect(headers['Accept-Language']).toBe('vi')
     expect(mock.history.get[0]?.withCredentials).toBe(true)
   })
@@ -58,15 +57,6 @@ describe('HttpClient', () => {
     const headers = mock.history.post[0]?.headers ?? {}
     expect(headers.Authorization).toBeUndefined()
     expect(headers['Accept-Language']).toBe('vi')
-  })
-
-  it('omits X-Store-Id when no store is selected', async () => {
-    const { mock, http } = setup({ initial: { accessToken: 't' } })
-    mock.onGet(`${BASE}/me`).reply(200, {})
-
-    await http.get('/me')
-
-    expect(mock.history.get[0]?.headers?.['X-Store-Id']).toBeUndefined()
   })
 
   it('refreshes once for concurrent 401s and retries each request with the new token', async () => {

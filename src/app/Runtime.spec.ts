@@ -25,7 +25,7 @@ describe('createAppRuntime', () => {
     const runtime = createAppRuntime({
       transport: mock.adapter(),
       router: memoryRouter(),
-      session: { accessToken: 'token-1', storeId: 'store-1' },
+      session: { accessToken: 'token-1' },
     })
     mock.onGet(/\/ping$/).reply(200, 'pong')
 
@@ -33,7 +33,6 @@ describe('createAppRuntime', () => {
 
     const headers = mock.history.get[0]?.headers ?? {}
     expect(headers.Authorization).toBe('Bearer token-1')
-    expect(headers['X-Store-Id']).toBe('store-1')
     expect(headers['Accept-Language']).toBeTruthy()
   })
 

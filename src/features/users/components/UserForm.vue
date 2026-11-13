@@ -9,22 +9,19 @@ import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { Role } from '@features/roles/types/Role.types'
-import type { StoreSummary } from '@features/StoreScope/types/StoreScope.types'
 import type { UserInput } from '@features/users/schemas/User.schema'
 
 import UserRoleSelector from './UserRoleSelector.vue'
-import UserStoreSelector from './UserStoreSelector.vue'
 const props = defineProps<{
   modelValue: UserInput
   roles: Role[]
-  stores: StoreSummary[]
   errors: Record<string, string | undefined>
   pending: boolean
 }>()
 const emit = defineEmits<{ 'update:modelValue': [value: UserInput]; submit: []; cancel: [] }>()
 const { t } = useT()
 
-const FIELDS = ['name', 'email', 'status', 'roleIds', 'storeIds']
+const FIELDS = ['name', 'email', 'status', 'roleIds']
 /** Lỗi không gắn được vào field nào vẫn phải hiện. */
 const otherErrors = computed(() =>
   Object.entries(props.errors).filter(([key, error]) => error && !FIELDS.includes(key)),
@@ -74,13 +71,6 @@ function set<K extends keyof UserInput>(key: K, value: UserInput[K]) {
           :options="roles"
           :modelValue="modelValue.roleIds"
           @update:modelValue="set('roleIds', $event)"
-        />
-      </UFormField>
-      <UFormField name="storeIds" :error="errors.storeIds">
-        <UserStoreSelector
-          :options="stores"
-          :modelValue="modelValue.storeIds"
-          @update:modelValue="set('storeIds', $event)"
         />
       </UFormField>
       <p v-for="[key, error] in otherErrors" :key="key" :data-error="key" role="alert" class="text-sm">
