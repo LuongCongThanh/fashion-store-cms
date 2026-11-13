@@ -360,19 +360,11 @@
   "settings": {
     "title": "Cài đặt",
     "store": "Thông tin cửa hàng",
-    "localization": "Ngôn ngữ & định dạng",
     "name": "Tên",
     "description": "Mô tả",
     "contactEmail": "Email liên hệ",
     "phone": "Điện thoại",
-    "address": "Địa chỉ",
-    "languages": "Ngôn ngữ (cách nhau dấu phẩy)",
-    "defaultLanguage": "Ngôn ngữ mặc định",
-    "timezone": "Múi giờ",
-    "currency": "Tiền tệ",
-    "numberFormat": "Định dạng số",
-    "dateFormat": "Định dạng ngày",
-    "invalid": "Cấu hình không hợp lệ"
+    "address": "Địa chỉ"
   },
   "sizes": {
     "title": "Danh sách size",

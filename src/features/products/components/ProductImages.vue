@@ -3,10 +3,11 @@ import UBadge from '@nuxt/ui/components/Badge.vue'
 import UButton from '@nuxt/ui/components/Button.vue'
 import UIcon from '@nuxt/ui/components/Icon.vue'
 
-import { ImageUploader } from '@features/media/UseMediaComponents'
 import { useT } from '@shared/lib/i18n/I18n'
 
 import type { ColorGallery, ProductImage } from '@features/products/types/Product.types'
+
+import ImageUploader from './ImageUploader.vue'
 
 defineProps<{
   galleries: ColorGallery[]

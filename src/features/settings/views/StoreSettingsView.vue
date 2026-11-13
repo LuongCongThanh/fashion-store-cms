@@ -12,7 +12,6 @@ const editor = useStoreSettingsEditor()
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('settings.store')" />
-    <RouterLink to="/settings/localization">{{ t('settings.localization') }}</RouterLink>
     <LoadingState v-if="editor.query.isPending.value" />
     <ErrorState
       v-else-if="editor.query.isError.value"
@@ -25,15 +24,8 @@ const editor = useStoreSettingsEditor()
       :errors="editor.errors.value"
       :pending="editor.mutation.isPending.value"
       :canWrite="editor.canWrite.value"
-      :uploading="editor.media.uploading.value"
-      :uploadError="editor.media.error.value"
-      :uploadProgress="editor.media.progress.value"
-      :canRetryUpload="editor.media.canRetry.value"
-      @uploadCancel="editor.media.cancel"
-      @uploadRetry="editor.media.retry"
       @submit="editor.submit"
       @cancel="editor.cancel"
-      @upload="editor.upload"
     />
   </div>
 </template>

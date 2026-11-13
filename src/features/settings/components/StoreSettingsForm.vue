@@ -3,7 +3,6 @@ import UFormField from '@nuxt/ui/components/FormField.vue'
 import UInput from '@nuxt/ui/components/Input.vue'
 import UTextarea from '@nuxt/ui/components/Textarea.vue'
 
-import { ImageUploader } from '@features/media/UseMediaComponents'
 import FormActions from '@shared/components/form/FormActions.vue'
 import FormSection from '@shared/components/form/FormSection.vue'
 import { useT } from '@shared/lib/i18n/I18n'
@@ -14,16 +13,9 @@ const props = defineProps<{
   errors: Record<string, string | undefined>
   pending: boolean
   canWrite: boolean
-  uploading: boolean
-  uploadError: string
-  uploadProgress: number
-  canRetryUpload: boolean
 }>()
 const emit = defineEmits<{
   'update:modelValue': [value: StoreSettingsInput]
-  upload: [file: File]
-  uploadCancel: []
-  uploadRetry: []
   submit: []
   cancel: []
 }>()
@@ -81,18 +73,8 @@ function set(
             @update:modelValue="set('address', $event)"
           />
         </UFormField>
-        <ImageUploader
-          :uploading="uploading"
-          :error="uploadError"
-          :progress="uploadProgress"
-          :canRetry="canRetryUpload"
-          :image="modelValue.logo ?? undefined"
-          @cancel="emit('uploadCancel')"
-          @retry="emit('uploadRetry')"
-          @select="emit('upload', $event)"
-        />
       </FormSection>
     </fieldset>
-    <FormActions v-if="canWrite" :pending="pending || uploading" @cancel="emit('cancel')" />
+    <FormActions v-if="canWrite" :pending="pending" @cancel="emit('cancel')" />
   </form>
 </template>

@@ -22,7 +22,6 @@ it.each([
   ['/internal-accounts/new', 'ADMINISTRATION_INTERNAL_ACCOUNT_VIEW'],
   ['/roles/new', 'ADMINISTRATION_ROLE_VIEW'],
   ['/settings/store', 'settings:read'],
-  ['/settings/localization', 'settings:read'],
 ])('blocks write route %s for a user with only %s', async (path, permission) => {
   const { wrapper, router } = await renderCms([permission])
   await router.push(path)
@@ -35,7 +34,6 @@ it('redirects settings to the Store editor for an authorized user', async () => 
   const { wrapper, router, http } = await renderCms(['settings:read', 'settings:write'])
   http.onGet(/\/settings\/store$/).reply(200, {
     name: 'Fashion',
-    logo: null,
     description: '',
     contactEmail: 'store@shop.vn',
     phone: '',

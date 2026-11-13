@@ -1,8 +1,7 @@
 import { useForm } from 'vee-validate'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 
 import { useAuth } from '@features/auth/UseAuth'
-import { useMedia } from '@features/media/UseMedia'
 import { useSaveStoreSettingsMutation, useStoreSettingsQuery } from '@features/settings/api/Settings.api'
 import { storeSettingsSchema } from '@features/settings/schemas/Settings.schema'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
@@ -18,10 +17,8 @@ export function useStoreSettingsEditor() {
   const notify = useNotify()
   const query = useStoreSettingsQuery()
   const mutation = useSaveStoreSettingsMutation()
-  const media = useMedia()
   const initial: StoreSettingsInput = {
     name: '',
-    logo: null,
     description: '',
     contactEmail: '',
     phone: '',
@@ -61,21 +58,13 @@ export function useStoreSettingsEditor() {
       if (!applyApiErrorToForm(error, setErrors)) notify.error(error)
     }
   }
-  watch(media.image, (image) => {
-    if (image) setValues({ logo: image })
-  })
-  async function upload(file: File) {
-    if (can('settings:write')) await media.upload(file)
-  }
 
   return {
     model,
     errors,
     query,
     mutation,
-    media,
     submit,
-    upload,
     canWrite: computed(() => can('settings:write')),
     cancel: () => {
       resetForm()
