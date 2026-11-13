@@ -66,7 +66,6 @@ cms/
 │   │   │   ├── Router.ts                   # createRouter() + gắn guard
 │   │   │   └── Routes.ts                   # gộp <Feature>.routes.ts, nơi duy nhất import views/
 │   │   └── views/                          # trang cấp app không thuộc feature nào
-│   │       ├── DesignSystemView.vue        # /design-system, chỉ dev (§L.10)
 │   │       ├── ForbiddenView.vue           # 403
 │   │       └── NotFoundView.vue            # 404
 │   ├── assets/                             # tài nguyên được Vite xử lý (bundle)
@@ -416,7 +415,7 @@ Flat config `eslint.config.ts`, dựa trên `typescript-eslint` (`strictTypeChec
 | `vue/require-typed-ref`, `vue/prefer-use-template-ref`    | error                                                | `ref<T>()` có kiểu; template ref dùng `useTemplateRef`                                              |
 | `vue/no-ref-object-reactivity-loss`, `vue/no-useless-v-bind` | error                                             |                                                                                                     |
 | `vue/padding-line-between-blocks`                         | error                                                | Một dòng trống giữa `<script>`, `<template>`, `<style>`                                             |
-| `vue/no-bare-strings-in-template`                         | warn (allowlist: dấu câu, `SKU`, tên ngôn ngữ)       | Text phải qua i18n (§H). Trang dev `DesignSystemView.vue` được bỏ qua                               |
+| `vue/no-bare-strings-in-template`                         | warn (allowlist: dấu câu, `SKU`, tên ngôn ngữ)       | Text phải qua i18n (§H).                               |
 | `check-file/filename-naming-convention`                   | error                                                | `src/**/*.{ts,vue}` = PascalCase (bỏ qua phần hậu tố `.store`, `.api`…; ngoại lệ §B.1)              |
 | `check-file/folder-naming-convention`                     | error                                                | `src/**/`, `e2e/**/`, `scripts/**/` = `^([a-z0-9]+                                                  | [A-Z][a-zA-Z0-9]*)$` (một từ thường hoặc PascalCase) |
 | `check-file/filename-naming-convention` (ngoài src)       | error                                                | `e2e/**`, `scripts/**`, `src/assets/**`, `public/**` = PascalCase (trừ `favicon.svg`, `robots.txt`) |
@@ -667,7 +666,6 @@ Map màu ngữ nghĩa (bảng §L.2) khai báo **một lần** trong `src/app/co
 ### L.10. Kiểm soát
 
 - ESLint/review: cấm mã màu hex/rgb trong `.vue` và class palette thô (`bg-rose-*`, `text-slate-*`) — thêm rule `no-restricted-syntax` cho chuỗi class khi cần, trước mắt kiểm tra trong PR checklist.
-- Trang `/design-system` (chỉ chạy ở dev) hiển thị toàn bộ màu ngữ nghĩa, badge trạng thái, nút, form — dùng để duyệt token với designer.
 
 ### L.11. Theme
 
