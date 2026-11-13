@@ -125,7 +125,6 @@ src/
 │   └── styles/          # main.css — file CSS duy nhất (token + Tailwind + Nuxt UI)
 ├── features/            # mỗi feature theo khung [CONVENTIONS](./CONVENTIONS.md) §Q
 │   ├── auth/            # UseAuth.ts là interface duy nhất (§8.1)
-│   ├── StoreScope/      # Store đang quản lý, bọc Session (§9)
 │   ├── products/        # (P5) xem §5
 │   └── …                # categories, orders, customers, inventory, media… theo Phase §30
 ├── layouts/             # AuthLayout.vue, DashboardLayout.vue, Navigation.ts, components/
@@ -190,7 +189,7 @@ import type { components } from '@shared/types/Api.generated'
 type Product = components['schemas']['ProductDto']
 
 // --- nội bộ ---
-// Query key KHÔNG chứa storeId: Session xoá cache khi đổi Store (§9 Store scope).
+// Query key không chứa Store: hệ thống chỉ có một Store (xem mục Store).
 const productKeys = {
   all: ['products'] as const,
   list: (params: ProductListParams) => [...productKeys.all, 'list', params] as const,
@@ -250,7 +249,7 @@ const { data, isPending, isError, refetch } = useProductsQuery(params)
 Một module duy nhất `src/shared/lib/api/client/HttpClient.ts` (interface và chi tiết: [CONVENTIONS](./CONVENTIONS.md) §M.1; [quyết định](./CONVENTIONS.md) D34, D40):
 
 - `createHttpClient({ baseURL, session, getLocale })` trả interface hẹp `get/post/put/patch/delete` có kiểu theo `paths` (OpenAPI). Không trả `AxiosInstance`, không export singleton.
-- Gắn `Authorization` từ `session.getAccessToken()`, `X-Store-Id` từ `session.getStoreId()`, `Accept-Language` từ locale hiện tại.
+- Gắn `Authorization` từ `session.getAccessToken()`, `Accept-Language` từ locale hiện tại.
 - Mọi lỗi chuẩn hoá thành `ApiError`; timeout mặc định 15s.
 - `*.api.ts` lấy client bằng `useHttpClient()` trong composable.
 - Object được dựng một lần trong composition root `createAppRuntime()` (`src/app/Runtime.ts`, D37); `main.ts` và `src/test/Render.ts` gọi cùng hàm.
@@ -366,7 +365,7 @@ useAuth() → {
 - Permission **tính từ** `user.permissions` của `/auth/me`, không lưu thêm bản sao ở store khác.
 - Route guard, `v-if` ẩn button, sidebar menu đều dùng cùng `can()`.
 - `Auth.store.ts` là chi tiết nội bộ; code ngoài feature không import trực tiếp.
-- Token và Store hiện tại do `Session` (`shared/lib/session/Session.ts`) sở hữu; `useAuth()` bọc Session: `login()` gọi API rồi `session.signIn()`, `logout()` = `session.logout()` ([CONVENTIONS](./CONVENTIONS.md) §M.2).
+- Token do `Session` (`shared/lib/session/Session.ts`) sở hữu; `useAuth()` bọc Session: `login()` gọi API rồi `session.signIn()`, `logout()` = `session.logout()` ([CONVENTIONS](./CONVENTIONS.md) §M.2).
 
 ---
 
@@ -422,14 +421,9 @@ FE **chỉ kiểm tra permission**, không kiểm tra tên role.
 
 Mapping role → permission do BE quản lý; FE không hard-code.
 
-## Store scope
+## Store
 
-Master Store Manager có thể làm việc với nhiều store, Store Manager / Order Staff gắn với store của mình.
-
-- Store hiện tại do `Session` sở hữu; feature `StoreScope` bọc lại qua `useStoreScope()`.
-- Mọi request gửi header `X-Store-Id` (HttpClient lấy từ `session.getStoreId()`) — chờ BE xác nhận.
-- BE kiểm tra user có quyền trên store đó.
-- Query key **không** chứa `storeId`. Khi đổi store, `session.switchStore(id)` gọi `queryClient.clear()` → cache store cũ bị xoá, query đang mở fetch lại. Xoá cache chỉ xảy ra trong Session ([CONVENTIONS](./CONVENTIONS.md) §M.3).
+Hệ thống chỉ có **một Store**. Không có Store đang quản lý, không có `StoreScope` / `switchStore` / `storeId`, và HttpClient không gửi header `X-Store-Id`. Phân quyền theo role/permission, không theo Store ([CONVENTIONS](./CONVENTIONS.md) §M.3).
 
 Không chỉ ẩn UI.
 
@@ -744,7 +738,7 @@ export function useProductsQuery(params: MaybeRef<ProductListParams>) {
 }
 ```
 
-Query key **không** chứa `storeId` — Session xoá cache khi đổi Store (xem §9 Store scope).
+Query key không chứa Store (hệ thống chỉ có một Store, xem mục Store).
 
 Mutation xong thì `invalidateQueries` theo key, không tự cập nhật Pinia.
 
@@ -752,8 +746,7 @@ Ví dụ Pinia:
 
 ```text
 Auth.store.ts         (nội bộ features/auth)
-StoreScope.store.ts   (nội bộ features/StoreScope)
-Session.store.ts      (nội bộ shared/lib/session — token + storeId)
+Session.store.ts      (nội bộ shared/lib/session — token)
 ```
 
 Không có `App.store.ts` / `Permission.store.ts` — locale do `createAppI18n()` sở hữu, theme do `useTheme()`, sidebar dùng `useLocalStorage`; permission tính từ `Auth.store` qua `useAuth().can()`.
