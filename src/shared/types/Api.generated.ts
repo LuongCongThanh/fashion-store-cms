@@ -757,6 +757,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/products/slug/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get an ACTIVE product by slug with its ACTIVE variants (public) */
+        get: operations["ProductController_findOneBySlug_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/products/{id}": {
         parameters: {
             query?: never;
@@ -955,6 +972,11 @@ export interface components {
              * @example Áo thun cotton 100%, form rộng.
              */
             description?: string;
+            /**
+             * @description Who the product is for (BR-CAT-14)
+             * @example UNISEX
+             */
+            gender: components["schemas"]["Gender"];
             /** @example Wireless Headphones */
             name: string;
             /**
@@ -1052,6 +1074,8 @@ export interface components {
             /** @example user@example.com */
             email: string;
         };
+        /** @enum {string} */
+        Gender: "MEN" | "WOMEN" | "KIDS" | "UNISEX";
         ImageResponseDto: {
             altText: string | null;
             colorId: string;
@@ -1179,6 +1203,7 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
             description: string | null;
+            gender: components["schemas"]["Gender"];
             id: string;
             /** @description Images grouped by color via colorId, ordered by sortOrder */
             images: components["schemas"]["ImageResponseDto"][];
@@ -1202,6 +1227,7 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
             description: string | null;
+            gender: components["schemas"]["Gender"];
             id: string;
             /** @description Card image: a primary image (any color) first, else the first image; null when none */
             imageUrl: string | null;
@@ -1233,6 +1259,7 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
             description: string | null;
+            gender: components["schemas"]["Gender"];
             id: string;
             name: string;
             /**
@@ -1396,6 +1423,11 @@ export interface components {
              * @example Áo thun cotton 100%, form rộng.
              */
             description?: string;
+            /**
+             * @description Who the product is for (BR-CAT-14)
+             * @example MEN
+             */
+            gender?: components["schemas"]["Gender"];
             /** @example Wireless Headphones */
             name?: string;
             /**
@@ -4874,6 +4906,7 @@ export interface operations {
             query?: {
                 page?: number;
                 limit?: number;
+                /** @description Products in this category or any of its descendants */
                 categoryId?: string;
                 /** @description Substring of the product name, case- and Vietnamese-accent-insensitive (BR-CAT-13). Trimmed; empty means no search. */
                 q?: string;
@@ -4881,6 +4914,8 @@ export interface operations {
                 size?: string[];
                 /** @description Color codes; repeat the param for several (`?color=WHT&color=BLK`) */
                 color?: string[];
+                /** @description Repeat the param for several; MEN and WOMEN also match UNISEX (BR-CAT-14) */
+                gender?: components["schemas"]["Gender"][];
                 /** @description Lowest product price (integer VND) at least this */
                 minPrice?: number;
                 /** @description Lowest product price (integer VND) at most this */
@@ -4904,6 +4939,45 @@ export interface operations {
             };
             /** @description Invalid input (validation failed or malformed id) */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description Rate limit exceeded — retry after the window resets */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ProductController_findOneBySlug_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductDetailResponseDto"];
+                };
+            };
+            /** @description Product not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

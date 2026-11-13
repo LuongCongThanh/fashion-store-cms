@@ -39,6 +39,7 @@ export function toProductDetail(dto: ProductDetailResponseDto): ProductDetail {
     description: dto.description ?? '',
     categoryId: dto.categoryId,
     weightGrams: dto.weightGrams,
+    gender: dto.gender,
     status: dto.status,
     publishedAt: dto.publishedAt,
     variants: dto.variants.map(toVariant),

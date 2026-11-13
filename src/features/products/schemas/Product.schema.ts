@@ -1,11 +1,14 @@
 import { z } from 'zod'
 
-/** Thông tin Sản phẩm (BR-CAT-06, BR-CAT-10): tên, mô tả tiếng Việt, một danh mục, cân nặng gram > 0. */
+import { PRODUCT_GENDERS } from '@features/products/types/Product.types'
+
+/** Thông tin Sản phẩm (BR-CAT-06, BR-CAT-10, BR-CAT-14): tên, mô tả tiếng Việt, một danh mục, cân nặng gram > 0, giới tính. */
 export const productInfoSchema = z.object({
   name: z.string().trim().min(1).max(255),
   description: z.string(),
   categoryId: z.string().min(1),
   weightGrams: z.number().int().min(1),
+  gender: z.enum(PRODUCT_GENDERS),
 })
 export type ProductInfoInput = z.infer<typeof productInfoSchema>
 

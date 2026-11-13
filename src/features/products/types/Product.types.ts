@@ -1,6 +1,9 @@
 /** Trạng thái theo API: DRAFT → ACTIVE ↔ ARCHIVED, DRAFT → ARCHIVED, không quay về DRAFT (BR-CAT-07). */
 export const PRODUCT_STATUSES = ['DRAFT', 'ACTIVE', 'ARCHIVED'] as const
 export type ProductStatus = (typeof PRODUCT_STATUSES)[number]
+/** Giới tính của Sản phẩm (BR-CAT-14); storefront lọc Nam/Nữ gộp cả Unisex. */
+export const PRODUCT_GENDERS = ['MEN', 'WOMEN', 'KIDS', 'UNISEX'] as const
+export type ProductGender = (typeof PRODUCT_GENDERS)[number]
 export type VariantStatus = 'ACTIVE' | 'ARCHIVED'
 
 /** Một dòng trong danh sách Sản phẩm của back-office. */
@@ -39,6 +42,7 @@ export interface ProductDetail {
   description: string
   categoryId: string
   weightGrams: number
+  gender: ProductGender
   status: ProductStatus
   publishedAt: string | null
   variants: ProductVariant[]
