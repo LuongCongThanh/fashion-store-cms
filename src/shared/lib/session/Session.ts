@@ -15,13 +15,10 @@ export interface AuthTokens {
 /** Trạng thái Session có thể khởi tạo sẵn (test). */
 export interface SessionSnapshot {
   accessToken?: string
-  storeId?: string
 }
 
 export interface Session {
   getAccessToken(): string | null
-  getStoreId(): string | null
-  switchStore(id: string): Promise<void>
   /** Khôi phục phiên một lần bằng refresh cookie; BE từ chối (401) là guest bình thường. Lỗi mạng/5xx ném tiếp. */
   restore(): Promise<string | null>
   /** Lấy access token mới bằng refresh cookie; BE từ chối (401) = Hết phiên, phát `authFailure`. Lỗi mạng/5xx ném tiếp, giữ phiên. */
@@ -44,7 +41,6 @@ export function createSession(deps: SessionDeps): Session {
   const store = useSessionStore(deps.pinia)
   if (deps.initial) {
     store.accessToken = deps.initial.accessToken ?? null
-    store.storeId = deps.initial.storeId ?? null
   }
 
   let inflight: Promise<string | null> | null = null
@@ -81,12 +77,6 @@ export function createSession(deps: SessionDeps): Session {
 
   return {
     getAccessToken: () => store.accessToken,
-    getStoreId: () => store.storeId,
-    switchStore(id) {
-      store.storeId = id
-      deps.queryClient.clear()
-      return Promise.resolve()
-    },
     refresh: () => refreshOnce(true),
     restore() {
       if (store.accessToken) return Promise.resolve(store.accessToken)
@@ -108,7 +98,7 @@ export function createSession(deps: SessionDeps): Session {
 
 export const SESSION_KEY: InjectionKey<Session> = Symbol('Session')
 
-/** Lấy Session đã provide bởi runtime. Chỉ feature auth / StoreScope nên gọi. */
+/** Lấy Session đã provide bởi runtime. Chỉ feature auth nên gọi. */
 export function useSession(): Session {
   const session = inject(SESSION_KEY)
   if (!session) throw new Error('useSession() cần createAppRuntime().plugin đã được cài.')

@@ -6,7 +6,7 @@ import { setChecked } from '@test/Select'
 
 import UserCreateView from './UserCreateView.vue'
 
-it('creates a user with explicitly selected role and Store assignments', async () => {
+it('creates a user with explicitly selected role', async () => {
   const { wrapper, http } = await renderFeature(UserCreateView, {
     path: '/users/new',
     permissions: ['user:write'],
@@ -15,21 +15,18 @@ it('creates a user with explicitly selected role and Store assignments', async (
         data: [{ id: 'r1', name: 'Bán hàng', permissions: [] }],
         meta: { page: 1, pageSize: 100, total: 1, totalPages: 1 },
       })
-      http.onGet(/\/stores$/).reply(200, [{ id: 'store-1', name: 'Quận 1' }])
       http.onPost(/\/users$/).reply(201, { id: 'u1' })
     },
   })
   await wrapper.find('input[name="name"]').setValue('Lan')
   await wrapper.find('input[name="email"]').setValue('lan@shop.vn')
   await setChecked(wrapper, 'role:r1', true)
-  await setChecked(wrapper, 'store:store-1', true)
   await wrapper.find('form').trigger('submit')
   await flushPromises()
   expect(JSON.parse(http.history.post[0]?.data as string)).toEqual({
     name: 'Lan',
     email: 'lan@shop.vn',
     roleIds: ['r1'],
-    storeIds: ['store-1'],
     status: 'active',
   })
 })

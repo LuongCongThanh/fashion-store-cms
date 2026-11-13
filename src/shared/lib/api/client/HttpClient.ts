@@ -46,7 +46,7 @@ type PathParamsOf<P, M extends Method> = HasPaths extends true
 export interface HttpClientDeps {
   /** Gốc URL API, lấy từ env.VITE_API_BASE_URL. */
   baseURL: string
-  /** Nguồn token + storeId; HttpClient gọi session.refresh() khi gặp 401. */
+  /** Nguồn token; HttpClient gọi session.refresh() khi gặp 401. */
   session: Session
   /** Trả locale hiện tại để gắn header Accept-Language. */
   getLocale: () => string
@@ -120,8 +120,6 @@ export function createHttpClient(deps: HttpClientDeps): HttpClient {
   function attachHeaders(config: Config) {
     const token = session.getAccessToken()
     if (token && !config.skipAuth) config.headers.set('Authorization', `Bearer ${token}`)
-    const storeId = session.getStoreId()
-    if (storeId) config.headers.set('X-Store-Id', storeId)
     config.headers.set('Accept-Language', deps.getLocale())
     return config
   }

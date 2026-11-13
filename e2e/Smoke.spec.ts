@@ -11,12 +11,10 @@ test('unauthenticated visitor is sent to the login page', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Đăng nhập' })).toBeVisible()
 })
 
-test('signed-in user reaches the dashboard with store switcher and user menu', async ({ page }) => {
-  await page.addInitScript(() => { localStorage.setItem('cms.session.storeId', 'store-1'); })
+test('signed-in user reaches the dashboard with the user menu', async ({ page }) => {
   await mockApi(page, { role: 'ADMIN' })
   await page.goto('/')
 
   await expect(page).toHaveURL(/:\d+\/$/)
-  await expect(page.getByRole('button', { name: 'Cửa hàng Quận 1' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Menu tài khoản' })).toBeVisible()
 })

@@ -10,30 +10,22 @@ const { t } = useT()
 function retry() {
   void editor.query.refetch()
   void editor.roles.refetch()
-  void editor.stores.refetch()
 }
 </script>
 
 <template>
   <div class="space-y-4">
     <PageHeader :title="t('users.title')" />
-    <LoadingState
-      v-if="
-        editor.roles.isPending.value ||
-        editor.stores.isPending.value ||
-        (editor.id.value && editor.query.isPending.value)
-      "
-    />
+    <LoadingState v-if="editor.roles.isPending.value || (editor.id.value && editor.query.isPending.value)" />
     <ErrorState
-      v-else-if="editor.query.isError.value || editor.roles.isError.value || editor.stores.isError.value"
-      :error="editor.query.error.value ?? editor.roles.error.value ?? editor.stores.error.value"
+      v-else-if="editor.query.isError.value || editor.roles.isError.value"
+      :error="editor.query.error.value ?? editor.roles.error.value"
       @retry="retry"
     />
     <UserForm
       v-else
       v-model="editor.model.value"
       :roles="editor.roles.data.value?.data ?? []"
-      :stores="editor.stores.data.value ?? []"
       :errors="editor.errors.value"
       :pending="editor.mutation.isPending.value"
       @submit="editor.submit"

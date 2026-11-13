@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { useAuth } from '@features/auth/UseAuth'
 import { useRolesQuery } from '@features/roles/UseRoles'
-import { useAssignableStoresQuery, useSaveUserMutation, useUserQuery } from '@features/users/api/Users.api'
+import { useSaveUserMutation, useUserQuery } from '@features/users/api/Users.api'
 import { userSchema } from '@features/users/schemas/User.schema'
 import { useHydrateForm } from '@shared/composables/UseHydrateForm'
 import { useNotify } from '@shared/composables/UseNotify'
@@ -22,9 +22,8 @@ export function useUserEditor() {
   const id = computed(() => String(route.params.id ?? ''))
   const query = useUserQuery(id)
   const roles = useRolesQuery({ page: 1, pageSize: 100 })
-  const stores = useAssignableStoresQuery()
   const mutation = useSaveUserMutation(id)
-  const initial: UserInput = { name: '', email: '', status: 'active', roleIds: [], storeIds: [] }
+  const initial: UserInput = { name: '', email: '', status: 'active', roleIds: [] }
   const { values, setValues, setErrors, errors, resetForm, meta } = useForm({
     initialValues: initial,
   })
@@ -43,15 +42,7 @@ export function useUserEditor() {
   )
   useUnsavedGuard(() => meta.value.dirty)
   async function submit() {
-    if (
-      !can('user:write') ||
-      mutation.isPending.value ||
-      roles.isPending.value ||
-      stores.isPending.value ||
-      roles.isError.value ||
-      stores.isError.value
-    )
-      return
+    if (!can('user:write') || mutation.isPending.value || roles.isPending.value || roles.isError.value) return
     const parsed = userSchema.safeParse(values)
     if (!parsed.success) {
       setErrors(
@@ -72,7 +63,6 @@ export function useUserEditor() {
     errors,
     query,
     roles,
-    stores,
     mutation,
     id,
     submit,

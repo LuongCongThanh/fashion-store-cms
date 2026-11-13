@@ -35,7 +35,6 @@ const columns = computed<TableColumn<StaffUser>[]>(() => [
   },
   { accessorKey: 'email', header: t('auth.login.email') },
   { id: 'roles', header: t('roles.title'), cell: ({ row }) => row.original.roleIds.join(', ') },
-  { id: 'stores', header: t('common.store'), cell: ({ row }) => row.original.storeIds.join(', ') },
   {
     accessorKey: 'status',
     header: t('common.status'),
