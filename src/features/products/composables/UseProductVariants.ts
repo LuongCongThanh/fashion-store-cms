@@ -30,6 +30,8 @@ export function useProductVariants(id: MaybeRefOrGetter<string>, product: MaybeR
   const skuTouched = ref(false)
   /** Giá đang sửa theo id Biến thể; bằng giá hiện tại nghĩa là không có gì để lưu. */
   const prices = reactive<Record<string, number>>({})
+  /** Lỗi khi lưu giá theo id Biến thể, ví dụ hạ dưới Giá khuyến mãi (BR-PRC-05). */
+  const priceErrors = reactive<Record<string, string>>({})
 
   const selectableSizes = computed(() => (sizes.data.value ?? []).filter((size) => !size.isHidden))
   const selectableColors = computed(() => (colors.data.value ?? []).filter((color) => !color.isHidden))
@@ -77,8 +79,10 @@ export function useProductVariants(id: MaybeRefOrGetter<string>, product: MaybeR
     if (!Number.isInteger(price) || price < 1) return
     try {
       await update.mutateAsync({ variantId: variant.id, price })
+      Reflect.deleteProperty(priceErrors, variant.id)
     } catch (error) {
-      notify.error(error)
+      if (isApiError(error) && error.status === 409) priceErrors[variant.id] = t('salePrices.priceBelowSale')
+      else notify.error(error)
     }
   }
 
@@ -101,6 +105,7 @@ export function useProductVariants(id: MaybeRefOrGetter<string>, product: MaybeR
     draft,
     errors,
     prices,
+    priceErrors,
     create,
     update,
     add,

@@ -340,14 +340,17 @@
     "groups": {
       "CATALOG": "Catalog",
       "ADMINISTRATION": "Administration",
-      "OPERATIONS": "Operations"
+      "OPERATIONS": "Operations",
+      "PRICING": "Pricing"
     },
     "resources": {
       "PRODUCT": "Products",
       "CATEGORY": "Categories",
       "PRODUCT_OPTION": "Sizes and colors",
       "ROLE": "Roles",
-      "INTERNAL_ACCOUNT": "Internal accounts"
+      "INTERNAL_ACCOUNT": "Internal accounts",
+      "SALE_PRICE": "Sale prices",
+      "VOUCHER": "Vouchers"
     },
     "actions": {
       "VIEW": "View",
@@ -398,5 +401,45 @@
     "visible": "In use",
     "codeTaken": "Color code already exists",
     "invalid": "Invalid value"
+  },
+  "salePrices": {
+    "title": "Sale prices",
+    "hint": "A price below the regular price for a period. Each variant has at most one sale price at a time.",
+    "variants": "Variants",
+    "variant": "Variant",
+    "mode": "Discount",
+    "modePercent": "Percent off",
+    "modePrice": "Fixed price",
+    "percentOff": "% off",
+    "price": "Sale price",
+    "startsAt": "Starts",
+    "startsAtHint": "Empty: starts now",
+    "endsAt": "Ends",
+    "period": "Period",
+    "add": "Set sale price",
+    "empty": "No sale prices yet.",
+    "noActiveVariant": "Needs at least one variant on sale.",
+    "created": "Sale price set",
+    "conflict": "Overlaps another sale price of the same variant.",
+    "rejected": "The sale price must be below the price and cannot start in the past.",
+    "changeEnd": "Change end",
+    "endNow": "End now",
+    "endTitle": "End the sale price of {sku} now?",
+    "endDescription": "The effective price returns to the regular price at once.",
+    "deleteTitle": "Delete the upcoming sale price of {sku}?",
+    "deleteDescription": "It has not started, so it can be deleted.",
+    "priceBelowSale": "The price must stay above a current or upcoming sale price. Change the sale price first.",
+    "status": {
+      "UPCOMING": "Upcoming",
+      "ACTIVE": "Active",
+      "ENDED": "Ended"
+    },
+    "invalid": {
+      "percent": "Percent must be 1–99",
+      "after": "End must be after the start",
+      "required": "Required"
+    },
+    "discount": "−{percent}%",
+    "range": "{from} → {to}"
   }
 }

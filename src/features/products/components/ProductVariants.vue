@@ -22,6 +22,7 @@ const props = defineProps<{
   draft: VariantInput
   errors: Partial<Record<keyof VariantInput, string>>
   prices: Record<string, number>
+  priceErrors: Record<string, string>
   canWrite: boolean
   adding: boolean
   updating: boolean
@@ -105,6 +106,9 @@ const dirty = (variant: ProductVariant) =>
                 >
               </div>
               <span v-else>{{ format.money(variant.price) }}</span>
+              <p v-if="priceErrors[variant.id]" class="mt-1 text-xs text-error" :data-error="`price:${variant.sku}`">
+                {{ priceErrors[variant.id] }}
+              </p>
             </td>
             <td class="px-3 py-2">
               <StatusBadge

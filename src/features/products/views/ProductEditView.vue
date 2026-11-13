@@ -4,10 +4,12 @@ import UButton from '@nuxt/ui/components/Button.vue'
 
 import ProductImages from '@features/products/components/ProductImages.vue'
 import ProductInfoForm from '@features/products/components/ProductInfoForm.vue'
+import ProductSalePrices from '@features/products/components/ProductSalePrices.vue'
 import ProductStatusBadge from '@features/products/components/ProductStatusBadge.vue'
 import ProductVariants from '@features/products/components/ProductVariants.vue'
 import { useProductEditor } from '@features/products/composables/UseProductEditor'
 import { useProductImages } from '@features/products/composables/UseProductImages'
+import { useProductSalePrices } from '@features/products/composables/UseProductSalePrices'
 import { useProductVariants } from '@features/products/composables/UseProductVariants'
 import ErrorState from '@shared/components/feedback/ErrorState.vue'
 import LoadingState from '@shared/components/feedback/LoadingState.vue'
@@ -18,6 +20,7 @@ import { useT } from '@shared/lib/i18n/I18n'
 const editor = useProductEditor()
 const variants = useProductVariants(editor.id, editor.query.data)
 const images = useProductImages(editor.id, editor.query.data)
+const sales = useProductSalePrices(editor.id, editor.query.data)
 const { t } = useT()
 </script>
 
@@ -89,6 +92,7 @@ const { t } = useT()
           :draft="variants.draft"
           :errors="variants.errors.value"
           :prices="variants.prices"
+          :priceErrors="variants.priceErrors"
           :canWrite="editor.canWrite.value"
           :adding="variants.create.isPending.value"
           :updating="variants.update.isPending.value"
@@ -98,6 +102,27 @@ const { t } = useT()
           @price="(variantId, value) => (variants.prices[variantId] = value)"
           @savePrice="variants.savePrice"
           @archive="variants.setArchived"
+        />
+      </FormSection>
+      <FormSection v-if="sales.canView.value" :title="t('salePrices.title')" :description="t('salePrices.hint')">
+        <ProductSalePrices
+          :rows="sales.rows.value"
+          :variants="sales.activeVariants.value"
+          :form="sales.form"
+          :errors="sales.errors.value"
+          :editing="sales.editing.value"
+          :editError="sales.editError.value"
+          :canWrite="sales.canWrite.value"
+          :creating="sales.create.isPending.value"
+          :updating="sales.update.isPending.value"
+          @form="(key, value) => Object.assign(sales.form, { [key]: value })"
+          @submit="sales.submit"
+          @edit="sales.startEdit"
+          @editField="(key, value) => sales.editing.value && Object.assign(sales.editing.value, { [key]: value })"
+          @saveEdit="sales.saveEdit"
+          @cancelEdit="sales.cancelEdit"
+          @endNow="sales.endNow"
+          @remove="sales.removeUpcoming"
         />
       </FormSection>
       <FormSection :title="t('products.images')" :description="t('products.imagesHint')">
