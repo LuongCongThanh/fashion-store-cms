@@ -19,7 +19,7 @@ it.each([
   ['/products/new', 'CATALOG_PRODUCT_VIEW'],
   ['/categories/new', 'CATALOG_CATEGORY_VIEW'],
   ['/promotions/new', 'promotion:read'],
-  ['/users/new', 'ADMINISTRATION_INTERNAL_ACCOUNT_VIEW'],
+  ['/internal-accounts/new', 'ADMINISTRATION_INTERNAL_ACCOUNT_VIEW'],
   ['/roles/new', 'ADMINISTRATION_ROLE_VIEW'],
   ['/settings/store', 'settings:read'],
   ['/settings/localization', 'settings:read'],
