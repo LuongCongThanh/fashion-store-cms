@@ -1,7 +1,7 @@
 # Kế hoạch tái cấu trúc CMS
 
 > Trạng thái: **approved — grill 2026-11-14** · Tiến độ: Tier 0 xong (#70–#73), Voucher xong (#74, `openapi-v0.7.0`). Tier 1 prep xong (#76). Tiếp theo: Tier 1, chờ API (§7, issue 07).
-> Nguồn: [`THREE-REPO-RESTRUCTURE-PLAN.md`](../../../THREE-REPO-RESTRUCTURE-PLAN.md) (re-plan API-first theo tier, 2026-11-14), [`THREE-REPO-RESTRUCTURE-SPEC.md`](../../../THREE-REPO-RESTRUCTURE-SPEC.md), [`TARGET-REPOSITORY-TREE.md`](../../../TARGET-REPOSITORY-TREE.md) §2, [`GLOSSARY-MAP.md`](../../../GLOSSARY-MAP.md).
+> Nguồn: [Kế hoạch triển khai](../../../fe-ecommerce-nike-style/docs/plan/three-repo-restructure.md#kế-hoạch-triển-khai) (re-plan API-first theo tier, 2026-11-14), [Spec 11](../../../fe-ecommerce-nike-style/docs/plan/three-repo-restructure.md#spec-11), [Cây thư mục đích](../../../fe-ecommerce-nike-style/docs/plan/three-repo-restructure.md#2-cms--vue-back-office), [Glossary map](../../../fe-ecommerce-nike-style/docs/plan/three-repo-restructure.md#glossary-map).
 > Thuật ngữ nghiệp vụ theo `be-demo/GLOSSARY.md`; thuật ngữ kỹ thuật theo [`GLOSSARY.md`](../../GLOSSARY.md).
 > Issue con: `.scratch/three-repo-restructure/issues/`, tạo khi bắt đầu từng tier.
 
@@ -24,7 +24,7 @@ Pin hiện tại: `openapi-v0.6.0`; API đã phát hành `openapi-v0.7.0` (Vouch
 
 | # | Quyết định |
 | --- | --- |
-| C1 | Plan ở file này; `TARGET-REPOSITORY-TREE.md` §2 sửa theo; issue con tạo theo tier trong `.scratch/three-repo-restructure/issues/`. |
+| C1 | Plan ở file này; [cây thư mục CMS](../../../fe-ecommerce-nike-style/docs/plan/three-repo-restructure.md#2-cms--vue-back-office) sửa theo; issue con tạo theo tier trong `.scratch/three-repo-restructure/issues/`. |
 | C2 | Tên thư mục feature phải là **một từ thường** (lint `check-file/folder-naming-convention`). Danh sách cuối: `auth`, `dashboard`, `accounts`, `roles`, `products`, `categories`, `sizes`, `colors`, `vouchers` (← `promotions`), `orders`, `inventory`, `customers`, `settings`, `returns` (Đổi trả + Hoàn tiền), `audit`, `compliance`. Không gộp `access-control` / `product-options`. |
 | C3 | Feature cũ: viết lại `api/`, `types/`, mapper từ `Api.generated.ts`; giữ view/component còn khớp; bỏ phần API không có. Không viết lại cả feature. |
 | C4 | Giải thể `media`: `ImageUploader` chuyển vào `products` (consumer thật duy nhất); chỉ lên `shared/` khi có consumer thật thứ hai. |
