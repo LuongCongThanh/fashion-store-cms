@@ -1,0 +1,53 @@
+name: Contract bump
+
+# Mở PR nâng API Contract khi be-demo phát hành tag openapi-v* mới (scripts/contract-bump.sh).
+# schedule và workflow_dispatch chỉ chạy khi file này có trên nhánh mặc định (main);
+# push vào dev giúp workflow chạy được ngay cả trước lần release dev → main.
+on:
+  schedule:
+    - cron: '0 1 * * *' # 08:00 giờ Việt Nam
+  workflow_dispatch:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read
+  checks: read
+  pull-requests: read
+  issues: write # tạo nhãn breaking-contract
+
+concurrency:
+  group: contract-bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      # PAT (fine-grained, chỉ repo này: Contents + Pull requests read/write).
+      # Không dùng GITHUB_TOKEN để tạo PR: PR do GITHUB_TOKEN mở không kích hoạt CI.
+      BUMP_TOKEN: ${{ secrets.CONTRACT_BUMP_TOKEN }}
+    steps:
+      - name: Skip without CONTRACT_BUMP_TOKEN
+        if: env.BUMP_TOKEN == ''
+        run: echo "::notice::Chưa có secret CONTRACT_BUMP_TOKEN, bỏ qua."
+
+      - uses: actions/checkout@v7
+        if: env.BUMP_TOKEN != ''
+        with:
+          ref: dev
+          token: ${{ secrets.CONTRACT_BUMP_TOKEN }}
+
+      - uses: actions/setup-node@v7
+        if: env.BUMP_TOKEN != ''
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Bump the API Contract
+        if: env.BUMP_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ secrets.CONTRACT_BUMP_TOKEN }}
+          ACTIONS_TOKEN: ${{ github.token }}
+        run: scripts/contract-bump.sh
