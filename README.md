@@ -9,7 +9,7 @@ Cần Node 22 (`nvm use`).
 ```bash
 npm ci
 cp .env.example .env.local   # sửa VITE_API_BASE_URL nếu cần
-npm run dev
+npm run dev                  # http://localhost:3001, cần Backend ở cổng 8080
 ```
 
 | Lệnh                                                    | Việc                                                  |
