@@ -63,6 +63,10 @@ export default defineConfig(({ command, mode }) => ({
     mode === 'analyze' && visualizer({ filename: 'dist/stats.html', gzipSize: true, open: false }),
   ],
   server: {
+    // Cổng cố định của workspace: Storefront 3000, CMS 3001, Backend 8080.
+    // strictPort: báo lỗi thay vì lặng lẽ nhảy sang cổng khác khi 3001 bận.
+    port: 3001,
+    strictPort: true,
     proxy: {
       '/api/v1': {
         target: 'http://localhost:8080',
