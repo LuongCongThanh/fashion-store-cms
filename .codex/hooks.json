@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 '/home/thanhluongcong/Documents/cms/.codex/hooks/pr-body-guard.py'",
+            "command": "ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || { echo 'Blocked: open the repository root as the workspace so repository hooks can load.' >&2; exit 2; }; python3 \"$ROOT/.codex/hooks/pr-body-guard.py\"",
             "timeout": 30,
             "statusMessage": "Checking PR body against template"
           }
