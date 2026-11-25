@@ -1,6 +1,6 @@
 # Thiết kế đích và lộ trình chuyển cấu trúc CMS
 
-Ngày cập nhật: 26/11/2026. Trạng thái: **thiết kế đã duyệt**; Q1–Q19 được xác nhận ngày 26/11/2026 theo [design map](../../.scratch/cms-architecture-design/map.md). Chưa triển khai source hoặc cập nhật rule hiện hành. [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md) ghi quyết định đã duyệt. Cây dưới thể hiện trách nhiệm; tên file minh hoạ và các nhánh ghi “đề xuất” chưa phải inventory/mapping đã kiểm đủ.
+Ngày cập nhật: 26/11/2026. Trạng thái: **thiết kế đã duyệt**; Q1–Q19 được xác nhận ngày 26/11/2026 theo [design map](../../.scratch/cms-architecture-design/map.md). Chưa triển khai source hoặc cập nhật rule hiện hành. Quyết định đã duyệt nằm ở [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md) (tổ chức, naming, phần CONVENTIONS bị thay), [ADR 0002](../adr/0002-state-runtime-and-session.md) (state, runtime, session) và [ADR 0003](../adr/0003-backend-api-boundary.md) (ranh giới Backend, typing). Cây dưới thể hiện trách nhiệm; tên file minh hoạ và các nhánh ghi “đề xuất” chưa phải inventory/mapping đã kiểm đủ.
 
 ## Nguyên tắc chia file
 
@@ -214,7 +214,7 @@ Service upload là ví dụ có điều kiện: chỉ tách khi quy trình presi
 
 Utility dành riêng cho Biến thể vẫn ở products/variants, không đưa lên shared chỉ vì là hàm thuần. Shared utility chỉ khi có consumer thật cùng semantics và không có tri thức nghiệp vụ. Không bắt buộc tạo file utils cho mỗi hàm ngắn.
 
-CMS hiện quy định union/`as const`, không thêm TypeScript `enum` ([CONVENTIONS §B](../CONVENTIONS.md)); [tsconfig.app.json](../../tsconfig.app.json) bật `erasableSyntaxOnly`. Enum giá trị từ API được dùng qua generated contract, không viết một bảng trạng thái/quyền song song. Trạng thái local CMS như upload có thể là union trong type hoặc object `as const` cạnh owner; không tạo root enums/ cho mọi domain. Nếu muốn đổi policy sang TypeScript enum phải quyết định riêng và cập nhật compiler/lint, không coi đó là yêu cầu của Vue.
+CMS hiện quy định union/`as const`, không thêm TypeScript `enum` ([CONVENTIONS §B](../CONVENTIONS.md)); [tsconfig.app.json](../../tsconfig.app.json) bật `erasableSyntaxOnly`. Enum giá trị từ API được dùng qua Generated API, không viết một bảng trạng thái/quyền song song. Trạng thái local CMS như upload có thể là union trong type hoặc object `as const` cạnh owner; không tạo root enums/ cho mọi domain. Nếu muốn đổi policy sang TypeScript enum phải quyết định riêng và cập nhật compiler/lint, không coi đó là yêu cầu của Vue.
 
 Layout và i18n đã nằm trong root được duyệt. Chi tiết file ở đây là ví dụ mapping cần kiểm lại. UI vi/en thuộc i18n; tên Danh mục dịch bởi Backend thuộc categories/integration theo contract. Không trộn bản dịch nội dung vào JSON giao diện.
 
@@ -318,7 +318,7 @@ integrations/backend/
 ├── client/httpClient.ts
 ├── endpoints/products.api.ts
 ├── generated/                         # Contract Version đã pin
-└── schemas/                           # Runtime validation theo nhu cầu boundary
+└── schemas/                           # Chỉ tạo khi có response cần kiểm lúc chạy (ADR 0003)
 
 modules/auth/
 ├── composables/useAuth.ts             # Login/logout, tài khoản/quyền public
@@ -327,11 +327,11 @@ modules/auth/
 
 Runtime nối session/HTTP/router/query cache; auth điều phối logout qua session để xoá token/cache và thu hồi phiên theo behavior hiện có. Giữ refresh single-flight, phân biệt 401 với lỗi mạng/5xx và cache isolation trong test.
 
-Endpoint phải kiểm kiểu method/path/path params/query/body/response từ generated API Contract. Giữ Axios và lifecycle hiện tại; xác minh cách nối kiểu trong pilot bằng request hợp lệ và ca compile-time sai tương ứng, không chỉ đổi HasPaths rồi tuyên bố đã type-safe. Tách việc củng cố typing khỏi rename nếu cần để review và rollback rõ. Schema runtime chỉ thêm tại boundary có nhu cầu; cast as DTO không kiểm JSON. Không đoán endpoint hoặc DTO cho chức năng chưa có contract.
+Endpoint phải kiểm kiểu method/path/path params/query/body/response từ generated API Contract. Giữ Axios và lifecycle hiện tại; xác minh cách nối kiểu ở issue 06 (proof `POST /auth/login`, trước pilot products) bằng request hợp lệ và ca compile-time sai tương ứng, không chỉ đổi HasPaths rồi tuyên bố đã type-safe. Tách việc củng cố typing khỏi rename nếu cần để review và rollback rõ. Schema runtime chỉ thêm tại boundary có nhu cầu; cast as DTO không kiểm JSON. Không đoán endpoint hoặc DTO cho chức năng chưa có contract.
 
 ## Coverage kiểm kiểu API trong delivery
 
-[Checklist operation](../../.scratch/cms-architecture-design/api-contract-checklist.md) theo dõi toàn bộ Backend call sites, kể cả refresh tại runtime. Issue 01 hoàn thiện inventory, không chỉ endpoint pilot. Issue 06 proof rồi retrofit toàn bộ auth/session đã chuyển ở issue 05; mỗi slice tiếp theo phải áp dụng typed boundary cho mọi operation đã phát hành trong scope trước khi đóng. Bước reconcile đối chiếu ngược source/checklist và yêu cầu 100% operation Backend đã phát hành/còn được sử dụng đạt typed; pending giữ gating/ticket, external storage được phân loại riêng. Không coi generated diff/typecheck xanh hay cast DTO là đủ chứng minh coverage.
+[Checklist operation](../../.scratch/cms-architecture-design/api-contract-checklist.md) liệt kê mọi call site (67 dòng tại 4f44bb7, kể cả refresh tại runtime và upload storage). Thứ tự proof → retrofit → slice → reconcile 100% và các gate từng slice được định nghĩa một lần ở [gate chung cho slice](../../.scratch/cms-architecture-design/spec.md#gate-chung-cho-slice); tài liệu này không lặp lại.
 
 ## Phạm vi còn lại trước triển khai
 

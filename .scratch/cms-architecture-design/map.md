@@ -113,7 +113,7 @@ Frontier tiếp: Q14 route/view/component ownership, Q15 migration từng slice 
 
 ## Q16 clarification: all file roles, layouts and i18n
 
-Người dùng hỏi thêm services/types/enum/utils/layout/i18n vì cây rút gọn chưa thể hiện đầy đủ. Chưa coi Q16 là đã được duyệt. Đã mở rộng thiết kế với service upload, types/store/constants, pure utility, layout components/navigation và i18n/locales. Enum hiện dùng union/as const theo rule repo; giá trị API lấy từ generated contract, không nhân bản. Shared/utils và các nhánh minh hoạ là đề xuất có điều kiện theo consumer, chưa tự chốt mọi file/path. Không cần hỏi lại layout/i18n root vì Q7 đã duyệt; cần chốt cách phân loại bổ sung ở Q16.
+Người dùng hỏi thêm services/types/enum/utils/layout/i18n vì cây rút gọn chưa thể hiện đầy đủ. Chưa coi Q16 là đã được duyệt. Đã mở rộng thiết kế với service upload, types/store/constants, pure utility, layout components/navigation và i18n/locales. Enum hiện dùng union/as const theo rule repo; giá trị API lấy từ Generated API, không nhân bản. Shared/utils và các nhánh minh hoạ là đề xuất có điều kiện theo consumer, chưa tự chốt mọi file/path. Không cần hỏi lại layout/i18n root vì Q7 đã duyệt; cần chốt cách phân loại bổ sung ở Q16.
 
 ## Q16 clarification: config and shared ownership
 

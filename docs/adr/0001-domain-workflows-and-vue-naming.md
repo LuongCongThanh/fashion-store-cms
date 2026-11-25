@@ -8,23 +8,38 @@ Tên component, view và layout giữ PascalCase (`ProductTable.vue`, `ProductEd
 
 Bổ sung ngày 26/11/2026: giữ tên `composables/` theo thuật ngữ Vue, diễn giải là “Xử lý trạng thái và tương tác Vue”. Không thay bằng `logic/` vì quá rộng; không bắt mỗi component có composable riêng.
 
+Quyết định về state, runtime và session nằm ở [ADR 0002](0002-state-runtime-and-session.md); ranh giới Backend và kiểm kiểu API Contract nằm ở [ADR 0003](0003-backend-api-boundary.md).
+
+## Các phương án đã cân nhắc
+
+- **Giữ cây `features/<x>/{api,components,composables,...}` và toàn bộ PascalCase hiện hành**: ít churn nhất, nhưng workflow lớn (product editor, sale prices) bị rải qua nhiều thư mục kỹ thuật và tên file không phân biệt composable với module thường.
+- **Tổ chức theo tầng kỹ thuật cấp repo (`services/`, `stores/`, `views/`...)**: quen thuộc với nhiều dự án Vue, nhưng một thay đổi nghiệp vụ phải sửa nhiều nhóm xa nhau.
+- **Đồng nhất cây với Storefront (Next.js)**: dễ chuyển ngữ cảnh giữa hai app, nhưng ép quy ước của framework khác lên Vue.
+- **Theo nghiệp vụ/workflow, tên theo quy ước Vue (chọn)**: file của một workflow nằm gần nhau, tên phản ánh vai trò; chấp nhận sửa import, alias, mock và naming rules theo từng slice.
+
 ## Đánh đổi
 
-Giữ toàn bộ PascalCase sẽ ít churn hơn nhưng không phân biệt rõ file composable và module thường theo tên hàm. Đích mới chấp nhận sửa import, alias, mock và naming rules theo từng slice. Không đổi generated symbols hoặc field Backend để ép convention; output generated cần được quyết định riêng khi thiết kế API boundary.
+Giữ toàn bộ PascalCase sẽ ít churn hơn nhưng không phân biệt rõ file composable và module thường theo tên hàm. Đích mới chấp nhận sửa import, alias, mock và naming rules theo từng slice. Không đổi generated symbols hoặc field Backend để ép convention.
+
+## Phần CONVENTIONS bị thay thế
+
+ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../CONVENTIONS.md) **cho source đã chuyển**. Source chưa chuyển vẫn theo CONVENTIONS hiện hành; mỗi slice cập nhật mục tương ứng trong cùng thay đổi (gate chung mục 2 trong [spec delivery](../../.scratch/cms-architecture-design/spec.md#gate-chung-cho-slice)).
+
+| Mục CONVENTIONS | Quy định hiện hành | Thay bằng |
+| --- | --- | --- |
+| §A cây thư mục, §Q cấu trúc module | `features/<x>/` với thư mục kỹ thuật cố định | `app`, `layouts`, `modules`, `integrations/backend`, `shared/*`... (mục Hệ quả) |
+| §B.1 tên file và thư mục | Không kebab-case, composable `Use*.ts`, module thường PascalCase | Folder kebab-case, `useXxx.ts`, module thường camelCase, hậu tố vai trò viết thường |
+| §B.3 ranh giới feature | Whitelist `@features/<x>/Use*` và `types/*` | Public entry của module được ghi và lint (ADR 0003) |
+| §N import alias | 7 alias gồm `@features` | Alias theo cây mới, chốt ở issue 02 |
+| §T.3 DTO không ra khỏi `api/` | Model độc lập bắt buộc | Type đi theo owner, mapping ở `integrations/backend` (ADR 0003) |
+| Cây `docs/`: `decisions.md` "thay cho ADR" | Quyết định khó đảo ngược ghi trong thư mục plan của feature | Quyết định cấp feature vẫn dùng `decisions.md`; quyết định xuyên module ghi ở `docs/adr/` |
 
 ## Hệ quả
 
 - Cây cấp root đã được duyệt bổ sung ngày 26/11/2026: `app`, `layouts`, `modules`, `integrations/backend`, `shared/components`, `shared/composables`, `shared/form`, `shared/formatting`, `i18n`, `styles`, `assets`, `pwa`, `testing`; E2E ở root `e2e`. Chỉ tạo folder khi có nội dung.
-- `app` sở hữu khởi tạo ứng dụng, plugin và router Vue; `modules` sở hữu nghiệp vụ; `integrations/backend` sở hữu kết nối Backend. Ranh giới API/query đã duyệt bổ sung ngày 26/11/2026: `integrations/backend` sở hữu transport, endpoints, generated contract và mapping dữ liệu API; `queries` trong module sở hữu Vue Query/cache/refetch/invalidation. Schema form thuộc chức năng; runtime schema API khi cần thuộc `integrations/backend/schemas`; generated contract thuộc `integrations/backend/generated`. Type đi theo owner, không khai báo trùng DTO chỉ để đủ tầng. Module chỉ dùng public entry được ghi nhận/lint; không import private internals hoặc tạo barrel toàn module. Các điểm này được duyệt ở Q10/Q11 ngày 26/11/2026, thay thế policy model độc lập bắt buộc trong CONVENTIONS §T.3 khi migration diễn ra.
+- `app` sở hữu khởi tạo ứng dụng, plugin và router Vue; `modules` sở hữu nghiệp vụ; `integrations/backend` sở hữu kết nối Backend (chi tiết ở ADR 0003).
 - Khi triển khai phải cập nhật CONVENTIONS, cấu hình lint, boundary glob và test cùng source; không di chuyển folder làm mất enforcement.
 - Đánh giá toàn repo; giữ UI và hành vi hiện tại làm mốc regression. Lỗi/thiếu chức năng ghi thành công việc có phạm vi riêng. Thư viện chỉ thay khi có lợi ích cụ thể.
-- Theo dõi các câu hỏi còn mở tại [design map](../../.scratch/cms-architecture-design/map.md).
-
-## State và khởi tạo ứng dụng
-
-Đã duyệt Q12/Q13 ngày 26/11/2026: Vue Query sở hữu server state; URL sở hữu filter/search/page; form/composable sở hữu draft/dirty/errors; component hoặc màn hình sở hữu UI state cục bộ. Pinia chỉ giữ state chia sẻ có lý do, không sao chép query cache; refetch không ghi đè draft đang sửa.
-
-Giữ một factory tại `app/runtime.ts` dùng cho cả production và test với overrides. Factory nối router, i18n, Pinia, Vue Query, HTTP và session; không tạo runtime/singleton thứ hai. Khi migrate phải giữ refresh single-flight, phân biệt hết phiên với lỗi mạng và xoá token/cache khi đăng xuất.
 
 ## Màn hình và migration
 
@@ -34,14 +49,10 @@ Cây tổng hợp và trách nhiệm từng file được trình bày tại [thi
 
 ## Trách nhiệm file, config và code dùng chung
 
-Đã duyệt Q16 ngày 26/11/2026: file có nhiệm vụ chính rõ; services/types/stores/constants/utils chỉ tạo khi có code cần owner riêng. Trạng thái CMS dùng union/as const theo policy hiện hành; giá trị API lấy từ generated contract. Layout và i18n có owner riêng.
+Đã duyệt Q16 ngày 26/11/2026: file có nhiệm vụ chính rõ; services/types/stores/constants/utils chỉ tạo khi có code cần owner riêng. Trạng thái CMS dùng union/as const theo policy hiện hành; giá trị API lấy từ Generated API. Layout và i18n có owner riêng.
 
 Tool config ở root; cấu hình khởi động và UI ở app/config; QueryClient factory và global error wiring ở app/providers. Config Backend ở integration; config riêng chức năng ở module. Shared chỉ chứa code kỹ thuật/UI không biết nghiệp vụ, có consumer thật; nghiệp vụ dùng chéo đi qua public module API. Runtime truyền startup config/dependency, không để modules/shared/integrations import ngược app. Config vận hành Backend thuộc settings.
 
-## Session và API Contract
+## Theo dõi
 
-Đã duyệt Q17/Q18 ngày 26/11/2026: integrations/backend/session sở hữu token/refresh/kết thúc phiên; modules/auth sở hữu thông tin tài khoản/quyền và interface đăng nhập. app/runtime nối session với HTTP/router/cache, giữ single-flight refresh và logout cleanup.
-
-Endpoint kiểm kiểu method/path/params/body/response theo generated API Contract, giữ Axios/session hiện có và xác minh cách nối typing trong pilot. Runtime schema thêm theo nhu cầu thực tế; cast DTO không thay kiểm dữ liệu lúc chạy. Chức năng chưa có contract theo dõi riêng, không đoán API.
-
-Q19 xác nhận hiểu biết chung và thiết kế tổng hợp ngày 26/11/2026. Delivery theo [spec và các issue](../../.scratch/cms-architecture-design/spec.md); việc thiết kế được duyệt không đồng nghĩa source đã migrate hoặc baseline đã chạy.
+Q19 xác nhận hiểu biết chung và thiết kế tổng hợp ngày 26/11/2026. Delivery theo [spec và các issue](../../.scratch/cms-architecture-design/spec.md); việc thiết kế được duyệt không đồng nghĩa source đã migrate hoặc baseline đã chạy. Nhật ký câu hỏi Q1–Q19 nằm ở [design map](../../.scratch/cms-architecture-design/map.md); ADR này tự chứa quyết định, link chỉ để tra lịch sử.

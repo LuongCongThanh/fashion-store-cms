@@ -1,6 +1,6 @@
 # Vue CMS: clean code và kiến trúc theo nghiệp vụ
 
-> Cập nhật quyết định 26/11/2026: đã duyệt root `modules`, `integrations/backend`, `testing` và tên trách nhiệm tại [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md). Endpoint/request/mapping dữ liệu API thuộc `integrations/backend`; Vue Query/cache/invalidation thuộc `queries` trong module. Các phương án giữ root/path/API gộp bên dưới là lịch sử nghiên cứu, không thay thế quyết định mới; source/lint chưa migrate.
+> Tài liệu research hiện hành. Quyết định nằm ở [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md), [0002](../adr/0002-state-runtime-and-session.md), [0003](../adr/0003-backend-api-boundary.md); tài liệu này giữ nguồn và đánh đổi. [Nghiên cứu ngày 25/11](cms-structure-and-naming.md) đã superseded. Các phương án bị loại bên dưới được ghi để tra lý do; source/lint chưa migrate.
 
 Ngày đối chiếu: **26/11/2026**. Phạm vi: toàn repository CMS, giữ Vue SPA + Vite và baseline UI/hành vi.
 Đây là nghiên cứu và đề xuất migration; không phải báo cáo đã refactor, kiểm API thật hoặc đo hiệu năng.
@@ -215,7 +215,7 @@ Nguồn hiện hành: [CONVENTIONS §T](../CONVENTIONS.md), [featureRows trong E
 | Trách nhiệm                               | Owner đề xuất                | Không nên làm                        |
 | ----------------------------------------- | ---------------------------- | ------------------------------------ |
 | Base URL, headers, refresh, chuẩn hóa lỗi | shared transport/session     | Mỗi workflow tạo Axios client        |
-| Generated DTO                             | generated contract chung     | Sửa tay để làm API tưởng như đã có   |
+| Generated DTO                             | Generated API chung     | Sửa tay để làm API tưởng như đã có   |
 | Endpoint/body/response mapping            | `api/` trong domain/workflow | Component tự cast DTO                |
 | Query key/invalidation                    | Domain sở hữu dữ liệu        | Button tự invalidate string rải rác  |
 | Form schema                               | Workflow                     | Dùng DTO response làm form mutable   |
@@ -315,7 +315,7 @@ DTO allowlist, mocks/dynamic imports, test setup, generator output, knip, CI và
 Nested `product-editor/**/api` hiện không được phép DTO theo glob `features/<domain>/api/**`;
 component boundary hiện cũng không tự bao phủ mọi nested workflow. Phải cập nhật/test rule trước khi di chuyển.
 Nguồn: [ESLint](../../eslint.config.ts), [generator](../../scripts/GenApi.ts), [Vite](../../vite.config.ts).
-Đề xuất kiểm generated contract không lệch và theo [workspace contract flow](../../../shared/agents/workspace.md)
+Đề xuất kiểm Generated API không lệch và theo [workspace contract flow](../../../shared/agents/workspace.md)
 khi thay API xuyên repo; không bump contract chỉ vì rename client files.
 Giữ một PR/slice review được; không tuyên bố bundle nhanh hơn nếu chỉ đổi naming/folder.
 Báo cáo này chỉ tạo tài liệu; các gate implementation trên chưa được chạy.

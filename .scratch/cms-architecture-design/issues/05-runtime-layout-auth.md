@@ -20,6 +20,8 @@ Giữ production/test chung factory. Tách auth endpoint/request từ Vue Query/
 
 ## Tiêu chí hoàn tất
 
+Áp dụng mục 2–3 của [gate chung cho slice](../spec.md#gate-chung-cho-slice) (owner docs/rules đồng bộ, public entry được ghi và lint) cho phần đã chuyển trong slice.
+
 Auth guards/session/HttpClient/runtime tests, auth/layout E2E và build pass; concurrent 401 một refresh; mạng/5xx không logout oan; logout clear token/cache; URL/redirect/permissions giữ nguyên.
 
 Cập nhật report với file đổi, lý do, lệnh thực sự chạy và kết quả. Đánh giá C11 của plan cũ đúng phase trước khi thêm test; không dùng nó để bỏ regression proof hoặc tự cho quyền vượt phase. Nếu vướng quy trình, ghi vào inventory và giải quyết trước edit.

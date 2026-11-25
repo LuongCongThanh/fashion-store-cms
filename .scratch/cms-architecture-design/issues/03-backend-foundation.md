@@ -1,4 +1,4 @@
-# Chuyển HTTP, generated contract và error policy
+# Chuyển HTTP, Generated API và error policy
 
 Type: task
 Status: needs-triage
@@ -15,6 +15,8 @@ Không hoàn tác sửa đổi ngoài scope. Source migration chỉ bắt đầu
 Di chuyển transport/generated/error modules theo mapping; đổi imports tất cả consumer trong cùng slice. Giữ Axios/error/refresh adapter behavior. Chưa tách toàn bộ feature API hoặc củng cố typing trong PR path-only này.
 
 ## Tiêu chí hoàn tất
+
+Áp dụng mục 2–3 của [gate chung cho slice](../spec.md#gate-chung-cho-slice) (owner docs/rules đồng bộ, public entry được ghi và lint) cho phần đã chuyển trong slice.
 
 Generator cho nội dung contract tương đương, không bump Contract Version; CI diff trỏ đúng target; HttpClient/error tests và build/typecheck pass; không sửa generated thủ công.
 

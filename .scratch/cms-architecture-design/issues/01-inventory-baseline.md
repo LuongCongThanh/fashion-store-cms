@@ -14,9 +14,13 @@ Không hoàn tác sửa đổi ngoài scope. Source migration chỉ bắt đầu
 
 Cập nhật checkout/source facts; lập mapping source→target cho mọi file/symbol, public consumer, endpoint readiness và test owner. Ghi baseline từng lệnh và lỗi có trước; chia lại ticket nếu một slice không build độc lập.
 
+## Public symbols và config
+
+Mục "Dependency chéo module" của inventory chỉ là trích alias bằng regex, không dùng làm allowlist. Lập danh sách public symbol thực tế (tên export + consumer) bằng TypeScript/ESLint import resolution hoặc knip, làm đầu vào cho public entry ở issue 02. Refresh bảng config của inventory theo `origin/dev` mới nhất (đã biết `vite.config.ts` và `docs/CONVENTIONS.md` đổi sau aa5fa92).
+
 ## Inventory API bắt buộc
 
-Hoàn thiện [checklist operation](../api-contract-checklist.md) cho mọi Backend call site và external request, gồm auth/session refresh ở runtime. Đối chiếu Contract Version/generated paths, owner/caller, gating và slice phụ trách; không để bảng chỉ có sáu dòng auth khởi tạo. Mỗi operation phải có normalized method+contract path và trạng thái ban đầu, không suy release từ việc source có import DTO.
+Xác nhận lại [checklist operation](../api-contract-checklist.md) (67 dòng khảo sát tĩnh tại 4f44bb7) trên source mới nhất cho mọi Backend call site và external request, gồm auth/session refresh ở runtime. Bổ sung evidence gating cho 10 call site không có path ở contract đã pin, owner/caller và slice phụ trách. Mỗi operation phải có normalized method+contract path và trạng thái ban đầu, không suy release từ việc source có import DTO.
 
 ## Tiêu chí hoàn tất
 

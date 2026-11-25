@@ -1,16 +1,15 @@
 # Nghiên cứu cấu trúc và đặt tên cho CMS
 
-> Cập nhật quyết định 26/11/2026: đã duyệt root `modules`, `integrations/backend`, `testing` và tên trách nhiệm tại [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md). Endpoint/request/mapping dữ liệu API thuộc `integrations/backend`; Vue Query/cache/invalidation thuộc `queries` trong module. Các phương án giữ root/path/API gộp bên dưới là lịch sử nghiên cứu, không thay thế quyết định mới; source/lint chưa migrate.
+> **Status: superseded** — lịch sử nghiên cứu ngày 25/11/2026, không còn là khuyến nghị. Quyết định hiện hành ở [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md), [0002](../adr/0002-state-runtime-and-session.md), [0003](../adr/0003-backend-api-boundary.md); đối chiếu nguồn và đánh đổi hiện hành ở [Vue CMS: clean code và kiến trúc theo nghiệp vụ](vue-cms-clean-architecture.md). Mọi kết luận bên dưới (giữ `features`, `lib/api`, PascalCase, query/HTTP/DTO trong feature) đã bị thay; chỉ đọc để tra lý do.
 
-Ngày đối chiếu: **25/11/2026**. Trạng thái: **nghiên cứu và đề xuất; chưa ban hành quyết định mới**.
+Ngày đối chiếu: **25/11/2026**. Trạng thái: **superseded**.
 Phạm vi: Vue SPA, tổ chức nghiệp vụ, đặt tên, ownership state và boundary tích hợp Backend.
 
-> Cập nhật sau phiên thiết kế 25/11/2026: người dùng đã duyệt tổ chức theo nghiệp vụ/workflow và naming Vue mới tại [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md). Khuyến nghị giữ toàn bộ PascalCase/folder cũ bên dưới là kết quả nghiên cứu trước quyết định đó; source/lint hiện hành chưa được migrate. Các lựa chọn root và API boundary vẫn đang thảo luận.
 > Chỉ thêm tài liệu này; không di chuyển source, sửa convention/config, sinh contract, chạy migration, commit hoặc push.
 > Khảo sát tĩnh ở checkout `dev`, đang chậm hơn remote-tracking `origin/dev` 3 commit tại lúc đọc; không pull.
 > Không suy ra trạng thái remote/CI hoặc hành vi chạy thật từ khảo sát này.
 
-## 1. Kết luận đề xuất
+## 1. Kết luận đề xuất (đã bị thay)
 
 **Giữ feature modular hiện có, làm rõ trách nhiệm và siết public boundary theo nhu cầu.**
 CMS đã có composition root, feature, layout, transport, mapper, query cache và test seam khá rõ.
@@ -114,7 +113,7 @@ không cần nhân bản dạng `ProductRepository → ProductService → Produc
 Đây là đánh giá thiết kế theo [Runtime](../../src/app/Runtime.ts) và [CONVENTIONS §M](../CONVENTIONS.md),
 không tuyên bố Vue bắt buộc hoặc cấm class/repository.
 
-## 5. Cây đích khuyến nghị cho CMS
+## 5. Cây đích khuyến nghị cho CMS (đã bị thay)
 
 Cây dưới đây giữ phần lớn hiện trạng; chỉ thêm module khi code và consumer yêu cầu.
 Không phải checklist tạo folder rỗng. `ProductList` là ví dụ tương lai có điều kiện.
@@ -154,7 +153,7 @@ src/
     composables/                  # UseListState.ts, UseNotify.ts, UseTheme.ts…
     lib/
       api/
-        Api.generated.ts          # generated contract, không sửa tay
+        Api.generated.ts          # Generated API, không sửa tay
         client/HttpClient.ts      # transport dùng chung
         errors/                   # ApiError, policy
       session/Session.ts          # lifecycle token/cache
@@ -207,7 +206,7 @@ C2 yêu cầu feature một từ; ví dụ tổng quát `AuditLogs/` trong CONVE
 thay feature `audit` đã được duyệt bằng tên mới.
 
 Giữ union/`as const` theo CONVENTIONS, không thêm enum hoặc root `enums/interfaces` chỉ để phân loại.
-Giá trị API lấy từ generated contract; form schema thuộc input. Model vẫn khai báo độc lập theo §T.3,
+Giá trị API lấy từ Generated API; form schema thuộc input. Model vẫn khai báo độc lập theo §T.3,
 không alias DTO; chỉ tạo mapper khi DTO và Model khác semantics.
 Suffix `.service.ts`, `.queries.ts`, `.port.ts`, `.repository.ts` **chưa thuộc whitelist hiện tại**.
 Nếu cần một vai trò mới, phải quyết định rõ trách nhiệm rồi sửa owner docs + ESLint + test naming;

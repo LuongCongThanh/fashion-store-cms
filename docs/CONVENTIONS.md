@@ -7,6 +7,8 @@ Quy ước kỹ thuật đang áp dụng cho code trong repo. Mỗi mục giữ 
 - Khi code đã có, tài liệu trỏ tới file nguồn thay vì chép code. File nguồn là chuẩn; mô tả ở đây là chuẩn cho những gì chưa có code.
 - Đổi một quy ước thì sửa file này trong cùng PR với code.
 
+> **Đang migrate cấu trúc ([ADR 0001](./adr/0001-domain-workflows-and-vue-naming.md), [0002](./adr/0002-state-runtime-and-session.md), [0003](./adr/0003-backend-api-boundary.md)).** Các mục §A, §B.1, §B.3, §N, §Q và §T.3 vẫn áp dụng cho source **chưa chuyển**. Source đã chuyển theo ADR; bảng "Phần CONVENTIONS bị thay thế" trong ADR 0001 liệt kê từng mục. Mỗi slice migration sửa mục tương ứng ở file này trong cùng PR.
+
 ## A. Cây thư mục đầy đủ
 
 Ký hiệu: không đánh dấu = có từ Foundation · `(P2)`, `(P5)`… = tạo khi tới Phase tương ứng ở §30 FE_architecture. Thư mục chỉ được tạo khi có file đầu tiên bên trong (không tạo thư mục rỗng). Cấu trúc bên trong từng feature: xem §Q.
@@ -29,6 +31,7 @@ cms/
 │   ├── settings.json                       # format on save, ESLint/Prettier làm mặc định
 │   └── extensions.json                     # extension VS Code khuyến nghị
 ├── docs/                                   # tài liệu kiến trúc + quy ước
+│   ├── adr/                                # quyết định xuyên module (bối cảnh → phương án → quyết định → hệ quả)
 │   ├── archive/                            # tài liệu đã xong, giữ để tra lý do
 │   │   ├── scaffold/                       # 14 plan con của scaffold (spec, plan, report) — đã xong
 │   │   └── scaffold-plan.md                # plan dựng khung: quyết định D1–D41, lý do §V
@@ -37,8 +40,9 @@ cms/
 │   │   └── <feature>/                      # thư mục tên feature
 │   │       ├── spec.md                     # contract, yêu cầu
 │   │       ├── plan.md                     # phạm vi, các bước
-│   │       ├── decisions.md                # quyết định khó đảo ngược (bối cảnh → quyết định → hệ quả); thay cho ADR
+│   │       ├── decisions.md                # quyết định khó đảo ngược của feature; xuyên module thì ghi docs/adr/
 │   │       └── report.md                   # kết quả, rủi ro, cách chạy, số liệu
+│   ├── research/                           # nghiên cứu nguồn, đánh đổi; không phải quyết định
 │   ├── CONVENTIONS.md                      # tài liệu này — quy ước kỹ thuật
 │   └── FE_architecture.md                  # kiến trúc FE (nguồn quyết định)
 ├── e2e/                                    # test end-to-end Playwright
@@ -238,6 +242,8 @@ Mục này là bản cho người đọc; bảng `BOUNDARIES` (§E) là bản đ
 
 ### B.1. File và thư mục
 
+> Source đã chuyển theo cấu trúc mới dùng quy tắc của ADR 0001 (bảng thay thế), không dùng mục này.
+
 | Loại                              | Quy tắc                                                                                                                                                 | Ví dụ                                                                                            |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | Thư mục                           | Một từ: viết thường · nhiều từ: PascalCase · không kebab-case; feature số nhiều (trừ danh từ không đếm được: `auth`, `dashboard`, `inventory`, `media`) | `features/products/`, `features/AuditLogs/`, `test/factories/`                                   |
@@ -289,6 +295,8 @@ Lưu ý: tên file `UseAuth.ts` khác hoa/thường với hàm `useAuth` là có
 | Env                      | `VITE_` + UPPER_SNAKE                                                                                     | `VITE_API_BASE_URL`                 |
 
 ### B.3. Ranh giới feature
+
+> Source đã chuyển theo cấu trúc mới dùng quy tắc của ADR 0001 (bảng thay thế), không dùng mục này.
 
 - **Whitelist**: code ngoài feature chỉ được import `@features/<x>/Use*` và `@features/<x>/types/*`; mọi đường dẫn khác vào `@features/**` bị chặn (bao gồm `api/`, `stores/`, `schemas/`, `components/`, `views/` và thư mục thêm sau).
 - Trong cùng một feature: import nội bộ bằng alias `@features/<chính-nó>/...` (được import mọi thư mục của chính nó); chỉ dùng `./` cho file cùng thư mục. Cấm mọi `../` trong toàn bộ `src/` (kể cả `import()` động và `vi.mock()`).
@@ -750,6 +758,8 @@ Chỉnh tập trung trong `src/app/config/Ui.config.ts`, import vào `vite.confi
 ---
 
 ## N. Import alias
+
+> Source đã chuyển theo cấu trúc mới dùng quy tắc của ADR 0001 (bảng thay thế), không dùng mục này.
 
 Mỗi thư mục cấp 1 trong `src/` có một alias (7 alias: `@app`, `@assets`, `@features`, `@layouts`, `@locales`, `@shared`, `@test`). Quy tắc import tương đối (ESLint, §E):
 
@@ -1218,6 +1228,8 @@ Route meta dùng chung (khai báo kiểu trong `src/app/router/RouteMeta.d.ts`):
 | UI / form state         | `ref` trong component hoặc composable | bản nháp form, dialog mở, filter (đồng bộ URL) | Form làm việc trên **bản nháp** (`XxxInput` từ schema), submit mới `toPayload` |
 
 ### T.3. DTO không đi ra khỏi `api/`
+
+> Source đã chuyển theo cấu trúc mới dùng quy tắc của ADR 0001 (bảng thay thế), không dùng mục này.
 
 - Kiểu `components['schemas'][...]` từ `Api.generated.ts` **chỉ** được import trong `features/*/api/**` và `shared/lib/api/**` (ESLint §E, `noDto`).
 - Khi DTO trùng Model: **không tạo mapper**. `types/` vẫn khai báo Model độc lập (không alias DTO); `api/` trả DTO với kiểu Model — TypeScript so khớp cấu trúc nên BE đổi field là typecheck báo lỗi ngay trong `api/`.

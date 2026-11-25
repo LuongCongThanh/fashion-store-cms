@@ -16,6 +16,8 @@ Phân loại từng helper theo owner, không thay shared/lib bằng kho khác. 
 
 ## Tiêu chí hoàn tất
 
+Áp dụng mục 2–3 của [gate chung cho slice](../spec.md#gate-chung-cho-slice) (owner docs/rules đồng bộ, public entry được ghi và lint) cho phần đã chuyển trong slice.
+
 Giữ locale/format/theme/notification/form semantics; test setup và PWA stub hoạt động; build/assets và E2E liên quan pass; không cache API sau logout.
 
 Cập nhật report với file đổi, lý do, lệnh thực sự chạy và kết quả. Đánh giá C11 của plan cũ đúng phase trước khi thêm test; không dùng nó để bỏ regression proof hoặc tự cho quyền vượt phase. Nếu vướng quy trình, ghi vào inventory và giải quyết trước edit.
