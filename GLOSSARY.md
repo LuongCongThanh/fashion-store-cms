@@ -1,6 +1,6 @@
 # Glossary
 
-Thuật ngữ **kỹ thuật** của app CMS. Nghĩa nghiệp vụ (Product, Variant, Voucher, Order, Tài khoản nội bộ…) lấy từ [`be-demo/GLOSSARY.md`](../be-demo/GLOSSARY.md) theo [`GLOSSARY-MAP.md`](../GLOSSARY-MAP.md); không định nghĩa lại ở đây.
+Thuật ngữ **kỹ thuật** của app CMS. Nghĩa nghiệp vụ (Product, Variant, Voucher, Order, Tài khoản nội bộ…) lấy từ [`be-demo/GLOSSARY.md`](../be-demo/GLOSSARY.md) theo [Glossary map](../fe-ecommerce-nike-style/docs/plan/three-repo-restructure.md#glossary-map); không định nghĩa lại ở đây.
 
 | Thuật ngữ          | Nghĩa                                                                                                                                                                                                                                       |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
