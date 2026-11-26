@@ -1,7 +1,7 @@
 # 07 — Tier 1: what the CMS needs from the API contract
 
 Status: ready-for-human
-Spec: `docs/plans/cms-restructure-plan.md` Tier 1 (C8, C13, C14, C17). Input for the be-demo Tier 1 grill; it lists data and actions the CMS screens need, not the API design.
+Spec: `docs/plans/api-restructure/README.md` Tier 1 (C8, C13, C14, C17). Input for the be-demo Tier 1 grill; it lists data and actions the CMS screens need, not the API design.
 
 Sources: `be-demo/docs/business/03-user-stories.md` (US-601, US-602, US-604, US-701, US-702, US-1002), `05-order-lifecycle.md`, `02-actors-permissions.md`.
 

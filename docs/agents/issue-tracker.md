@@ -2,7 +2,7 @@
 
 Issues and specs for this repo live as markdown files in `.scratch/`.
 
-**Exception — scaffold plan (done, archived):** the scaffold effort (Steps 1–7) was tracked in `docs/archive/scaffold/` (parent spec `spec.md`, one `NN-<slug>/` folder per ticket). It is closed; new work after the scaffold uses `.scratch/` as below.
+**Exception — initial CMS build (historical):** scaffold and prototype evidence is consolidated under `docs/archive/cms-initial-build/`. Each numbered file in `foundation/` or `screens/` contains its original requirements and report in separate sections. These are historical records; new issues still use `.scratch/` below.
 
 ## Conventions
 

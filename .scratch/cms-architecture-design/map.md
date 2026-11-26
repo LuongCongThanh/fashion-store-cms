@@ -4,7 +4,7 @@ Status: design-approved
 
 ## Notes
 
-Phiên grill-with-docs ngày 25/11/2026. Đọc `docs/research/cms-structure-and-naming.md`, `docs/CONVENTIONS.md`, `docs/FE_architecture.md` và kiểm source/config. Các quyết định được ghi tuần tự bên dưới; Q1–Q18 đã chốt, chờ Q19 xác nhận bản tổng hợp. Chưa triển khai source.
+Phiên grill-with-docs ngày 25/11/2026. Đọc `docs/research/cms-structure-and-naming.md`, `docs/guides/README.md`, `docs/architecture/README.md` và kiểm source/config. Các quyết định được ghi tuần tự bên dưới; Q1–Q18 đã chốt, chờ Q19 xác nhận bản tổng hợp. Chưa triển khai source.
 
 ## Current frontier
 
@@ -63,7 +63,7 @@ Các độ lệch cần ghi nhận: `01-vision-scope` còn ghi back-office Next.
 
 ## Research 26/11/2026
 
-Kết quả: [Vue CMS clean architecture](../../docs/research/vue-cms-clean-architecture.md). Đề xuất nền modular theo nghiệp vụ/workflow, áp dụng hàm thuần/use case và dependency inversion tại seam có giá trị; không bắt đủ domain/application/infrastructure/repository cho CRUD. Đã đối chiếu nguồn gốc Clean/Hexagonal và tài liệu chính thức Vue, Router, Pinia, Vue Query, Vite, TypeScript. Đây là đề xuất để mở frontier tiếp, chưa là lựa chọn kiến trúc đã duyệt.
+Kết quả: [Vue CMS clean architecture](../../docs/research/cms-architecture/README.md). Đề xuất nền modular theo nghiệp vụ/workflow, áp dụng hàm thuần/use case và dependency inversion tại seam có giá trị; không bắt đủ domain/application/infrastructure/repository cho CRUD. Đã đối chiếu nguồn gốc Clean/Hexagonal và tài liệu chính thức Vue, Router, Pinia, Vue Query, Vite, TypeScript. Đây là đề xuất để mở frontier tiếp, chưa là lựa chọn kiến trúc đã duyệt.
 
 Frontier: Q7 chọn modular Vue + Clean chọn lọc hay full Clean; sau đó chốt root tree, API/query/DTO, public boundary và migration. Giữ naming/workflow Q5/Q6 đã chốt.
 
@@ -109,7 +109,7 @@ Frontier tiếp: Q14 route/view/component ownership, Q15 migration từng slice 
 
 - Q14: Route khai báo URL/meta/quyền/lazy view; view ghép UI và gọi composable; component presentational props/emits và local UI state; composable sở hữu form/actions. Component dùng chung không gọi Backend/router.
 - Q15: Inventory → naming/boundary → pilot products → lint/typecheck/test/build/E2E theo ảnh hưởng → mở rộng và cleanup; giữ behavior/UI/URL, lỗi/feature mới có scope riêng.
-- Người dùng yêu cầu làm rõ clean code và chia file theo nhiệm vụ, kèm cây thư mục. Đã tổng hợp [thiết kế đích](../../docs/plans/cms-structure-migration.md) với root tree, file-level products tree, sơ đồ lưu sản phẩm và các quyết định còn mở. Q16 cần xác nhận quy tắc trách nhiệm file minh hoạ; cây không thay inventory.
+- Người dùng yêu cầu làm rõ clean code và chia file theo nhiệm vụ, kèm cây thư mục. Đã tổng hợp [thiết kế đích](../../docs/plans/structure-migration/README.md) với root tree, file-level products tree, sơ đồ lưu sản phẩm và các quyết định còn mở. Q16 cần xác nhận quy tắc trách nhiệm file minh hoạ; cây không thay inventory.
 
 ## Q16 clarification: all file roles, layouts and i18n
 

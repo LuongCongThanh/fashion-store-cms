@@ -3,7 +3,7 @@
 Status: ready-for-agent
 Blocked by: —
 
-Đối chiếu `docs/plans/cms-pages-components/fashion-store-cms-pages-components.md` với code. Mỗi mục được đánh dấu `implemented` / `partial` / `missing` / `backlog`; visual rule thì trỏ sang `DESIGN.md` thay vì chép lại.
+Đối chiếu `docs/archive/cms-initial-build/catalog/README.md` với code. Mỗi mục được đánh dấu `implemented` / `partial` / `missing` / `backlog`; visual rule thì trỏ sang `DESIGN.md` thay vì chép lại.
 
 Đo baseline:
 

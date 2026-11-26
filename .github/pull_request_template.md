@@ -84,4 +84,4 @@
 
 ---
 
-📖 [README](../blob/dev/README.md) · [Quy ước (CONVENTIONS)](../blob/dev/docs/CONVENTIONS.md) · [Kiến trúc FE](../blob/dev/docs/FE_architecture.md)
+📖 [README](../blob/dev/README.md) · [Hướng dẫn phát triển](../blob/dev/docs/guides/README.md) · [Kiến trúc CMS](../blob/dev/docs/architecture/README.md)

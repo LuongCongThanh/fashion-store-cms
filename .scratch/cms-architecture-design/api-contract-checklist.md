@@ -107,4 +107,4 @@ Issue 01 xác nhận lại bảng trên source mới nhất (call site mới, wr
 
 `npm run gen:api` + generated diff chỉ chứng minh file contract đồng bộ, không chứng minh tất cả caller dùng typed boundary. `as DTO`, generic tuỳ ý do caller chọn hoặc disable typechecking không phải evidence đạt yêu cầu.
 
-Tham khảo [spec delivery](spec.md), [thiết kế đã duyệt](../../docs/plans/cms-structure-migration.md), [issue 06](issues/06-typed-endpoint-proof.md), [issue 15](issues/15-final-reconcile.md).
+Tham khảo [spec delivery](spec.md), [thiết kế đã duyệt](../../docs/plans/structure-migration/README.md), [issue 06](issues/06-typed-endpoint-proof.md), [issue 15](issues/15-final-reconcile.md).

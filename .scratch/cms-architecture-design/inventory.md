@@ -190,8 +190,8 @@ Trích dẫn tĩnh các chuỗi alias `@features/...` trong source (có thể g�
 Snapshot aa5fa92 chưa có `.github/workflows/contract-bump.yml`. Khi chuẩn bị PR đã chuyển task branch lên origin/dev tại 4f44bb7: workflow này và `scripts/contract-bump.sh` đã có. Script còn hard-code generated output ở phần PR body và git add; issue 03 phải cập nhật các references này cùng generator/CI. Đối chiếu `git diff aa5fa92 origin/dev` ngày 26/11/2026: `src/` không đổi (vẫn 295 file), nên danh sách file bên dưới còn đúng tại 4f44bb7. Ngoài `src/`, các thay đổi ảnh hưởng mapping config:
 
 - `vite.config.ts`: thêm `server.port: 3001` và `strictPort: true`. Khi chuyển UI config sang `app/config` phải giữ hai giá trị này.
-- `docs/CONVENTIONS.md`: thêm mục contract-bump (`contract-bump.yml`, `scripts/contract-bump.sh`, nhãn `breaking-contract`). Mục này phải đổi đường dẫn generated cùng issue 03.
-- `docs/CONVENTIONS.md` mô tả upload ảnh dùng `MediaUpload.ts` + `fetch` presigned PUT, nhưng source dùng XHR presigned POST trong `ProductImages.api.ts:postToStorage`. Issue 07 sửa lại doc theo source.
+- `docs/guides/README.md`: thêm mục contract-bump (`contract-bump.yml`, `scripts/contract-bump.sh`, nhãn `breaking-contract`). Mục này phải đổi đường dẫn generated cùng issue 03.
+- `docs/guides/README.md` mô tả upload ảnh dùng `MediaUpload.ts` + `fetch` presigned PUT, nhưng source dùng XHR presigned POST trong `ProductImages.api.ts:postToStorage`. Issue 07 sửa lại doc theo source.
 
 Issue 01 vẫn refresh lại trên source mới nhất trước khi implementation. Không đổi Contract Version khi chỉ di chuyển source.
 

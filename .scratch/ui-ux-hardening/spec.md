@@ -2,7 +2,7 @@
 
 Status: ready-for-agent
 
-**Nguồn:** plan `docs/plans/ui-ux-hardening-plan.md` (#41) · contract `DESIGN.md` (#43) · hướng thiết kế đã duyệt `mockup-decision.md` (prototype #42, screenshot #46) · audit `audit-hallmark.md`, `audit-break-ui.md` · skill `design-skills.md`.
+**Nguồn:** plan `docs/plans/ui-hardening/README.md` (#41) · contract `DESIGN.md` (#43) · hướng thiết kế đã duyệt `mockup-decision.md` (prototype #42, screenshot #46) · audit `audit-hallmark.md`, `audit-break-ui.md` · skill `design-skills.md`.
 
 ## Problem Statement
 
