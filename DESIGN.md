@@ -127,7 +127,7 @@ Có ba tầng token. Component chỉ được dùng **tầng 2**.
 - **Vùng nội dung:** `PageContainer` = `mx-auto max-w-screen-2xl p-4 lg:p-6`.
 - **Breakpoint:** `sm 640 · md 768 · lg 1024 · xl 1280 · 2xl 1536`. Màn đích là desktop ≥ 1280, nhưng mọi route phải dùng được ở 375px.
 - **z-index:** `z-10` cho header bảng sticky, `z-20` cho sidebar mobile. Overlay để Nuxt UI quản lý.
-- **Archetype màn hình** (đã duyệt ở Phase 0.5, xem `.scratch/ui-ux-hardening/mockup-decision.md`):
+- **Archetype màn hình** (đã duyệt ở Phase 0.5, xem `docs/plans/tasks/todo/ui-ux-hardening/mockup-decision.md`):
   - **Dashboard:** header kèm 1 câu tóm tắt → hàng đợi "Cần xử lý" → lưới `lg:grid-cols-3` (KPI hero + chart chiếm 2 cột, 3 KPI phụ xếp dọc 1 cột) → đơn gần đây (2 cột) + sắp hết hàng (1 cột).
   - **List:** page header → tab bộ lọc đã lưu → thanh lọc 1 dòng → bảng compact → phân trang.
   - **Detail:** header gồm link quay lại, mã, badge và nút hành động tiếp theo → thanh tiến trình trạng thái → `lg:grid-cols-[1fr_22rem]`: nội dung chính bên trái, sidebar dính bên phải (`lg:sticky lg:top-4`).

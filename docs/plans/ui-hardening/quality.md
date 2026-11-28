@@ -71,6 +71,6 @@ Effort UI/UX hardening được xem là hoàn tất khi:
 
 ## Tiếp tục triển khai
 
-Đọc [tracker UI/UX hardening](../../../.scratch/ui-ux-hardening/spec.md) và các issue của effort để chọn phần chưa làm. Mockup và [DESIGN.md](../../../DESIGN.md) đã có; không lặp lại chuỗi merge plan → dựng mockup → tạo contract ban đầu. Giữ từng reference archetype và quality gate theo tiêu chí bên trên; không coi kế hoạch là báo cáo đã chạy visual/accessibility/performance checks.
+Đọc [tracker UI/UX hardening](../tasks/todo/ui-ux-hardening/spec.md) và các issue của effort để chọn phần chưa làm. Mockup và [DESIGN.md](../../../DESIGN.md) đã có; không lặp lại chuỗi merge plan → dựng mockup → tạo contract ban đầu. Giữ từng reference archetype và quality gate theo tiêu chí bên trên; không coi kế hoạch là báo cáo đã chạy visual/accessibility/performance checks.
 
 Tra cứu: [Mục lục chủ đề](README.md) · [Toàn bộ tài liệu](../../README.md).
