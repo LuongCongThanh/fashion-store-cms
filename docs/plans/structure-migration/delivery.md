@@ -35,11 +35,11 @@ Endpoint phải kiểm kiểu method/path/path params/query/body/response từ g
 
 ## Coverage kiểm kiểu API trong delivery
 
-[Checklist operation](../../../.scratch/cms-architecture-design/api-contract-checklist.md) liệt kê mọi call site (67 dòng tại 4f44bb7, kể cả refresh tại runtime và upload storage). Thứ tự proof → retrofit → slice → reconcile 100% và các gate từng slice được định nghĩa một lần ở [gate chung cho slice](../../../.scratch/cms-architecture-design/spec.md#gate-chung-cho-slice); tài liệu này không lặp lại.
+[Checklist operation](../tasks/todo/cms-architecture-design/api-contract-checklist.md) liệt kê mọi call site (67 dòng tại 4f44bb7, kể cả refresh tại runtime và upload storage). Thứ tự proof → retrofit → slice → reconcile 100% và các gate từng slice được định nghĩa một lần ở [gate chung cho slice](../tasks/todo/cms-architecture-design/spec.md#gate-chung-cho-slice); tài liệu này không lặp lại.
 
 ## Phạm vi còn lại trước triển khai
 
-- Q19 đã được xác nhận; thiết kế được duyệt. Chưa triển khai source. [Spec delivery](../../../.scratch/cms-architecture-design/spec.md), [inventory ban đầu](../../../.scratch/cms-architecture-design/inventory.md) và các issue riêng sở hữu công việc triển khai.
+- Q19 đã được xác nhận; thiết kế được duyệt. Chưa triển khai source. [Spec delivery](../tasks/todo/cms-architecture-design/spec.md), [inventory ban đầu](../tasks/todo/cms-architecture-design/inventory.md) và các issue riêng sở hữu công việc triển khai.
 - Inventory/spec delivery phải chốt mapping tất cả file/consumer, public symbols/import allowlist, generator output paths và thứ tự slice dựa trên checkout mới nhất. Đây là việc khảo sát triển khai, không phải yêu cầu người dùng tự tìm facts.
 - Module tương lai như Đổi trả/Hoàn tiền/audit/compliance được theo dõi qua business và API Contract readiness trong tracker; không tạo folder rỗng hoặc coi research là quyền mở tính năng mới. Ranh giới chi tiết sẽ được thiết kế khi có scope/contract cụ thể.
 

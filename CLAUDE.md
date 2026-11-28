@@ -8,7 +8,7 @@ Read `DESIGN.md` before changing any UI. It is the design contract; external des
 
 ### Issue tracker
 
-Issues and specs are tracked as local markdown files under `.scratch/<feature>/`. See `docs/agents/issue-tracker.md`.
+Issues and specs are tracked as local markdown files under `docs/plans/tasks/{todo,done,wontfix}/<feature>/`, Wayfinder maps under `docs/plans/wayfinding/`. See `docs/agents/issue-tracker.md`.
 
 ### Domain docs
 
@@ -20,7 +20,7 @@ Single-context: one `GLOSSARY.md` at the repo root. See `docs/agents/domain.md`.
 - Read `DESIGN.md` before changing UI; it remains the visual contract.
 - Use `feature` for implementation work, `vitest` for test-related work, and `api-security-review` only for static, read-only review of API contracts or client-side security handling.
 - `api-security-review` does not authorize requests to running services, active scans, or use of credentials. Review client-visible code and contracts only; backend authorization must be verified in the backend repository.
-- Issues and specs live under `.scratch/`; use `.agents/skills/ship-pr/` only when the user explicitly asks to ship a change. Do not commit, push, or open a PR otherwise.
+- Issues and specs live under `docs/plans/tasks/`; use `.agents/skills/ship-pr/` only when the user explicitly asks to ship a change. Do not commit, push, or open a PR otherwise.
 - Use the repository's declared npm scripts and existing test/configuration patterns. Do not assume commands or framework conventions from sibling repositories.
 
 ## AI configuration and skills

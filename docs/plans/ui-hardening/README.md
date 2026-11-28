@@ -1,8 +1,8 @@
 # UI/UX hardening — mục lục
 
-Lộ trình và tiêu chí chia theo nhóm công việc. [DESIGN.md](../../../DESIGN.md) là nguồn chuẩn giao diện; [tracker](../../../.scratch/ui-ux-hardening/spec.md) là nguồn tiến độ.
+Lộ trình và tiêu chí chia theo nhóm công việc. [DESIGN.md](../../../DESIGN.md) là nguồn chuẩn giao diện; [tracker](../tasks/todo/ui-ux-hardening/spec.md) là nguồn tiến độ.
 
-> **Plan còn hiệu lực, cập nhật trạng thái 26/11/2026:** `DESIGN.md` đã tồn tại và là design contract. Phần dựng mockup/contract bên dưới là lịch sử; công việc còn lại và trạng thái từng ticket ở [UI/UX hardening tracker](../../../.scratch/ui-ux-hardening/spec.md). Không tạo lại DESIGN hoặc xem mọi Phase đã hoàn thành.
+> **Plan còn hiệu lực, cập nhật trạng thái 26/11/2026:** `DESIGN.md` đã tồn tại và là design contract. Phần dựng mockup/contract bên dưới là lịch sử; công việc còn lại và trạng thái từng ticket ở [UI/UX hardening tracker](../tasks/todo/ui-ux-hardening/spec.md). Không tạo lại DESIGN hoặc xem mọi Phase đã hoàn thành.
 
 ## Theo chủ đề
 

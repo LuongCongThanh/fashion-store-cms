@@ -22,7 +22,7 @@
 
 - Phiên bản dependency/scripts: [package.json](../package.json), lockfile và [CI](../.github/workflows/ci.yml).
 - Thuật ngữ kỹ thuật: [GLOSSARY.md](../GLOSSARY.md); nghĩa nghiệp vụ lấy từ Backend.
-- Agent: [issue tracker](agents/issue-tracker.md), [domain docs](agents/domain.md).
+- Agent: [issue tracker](agents/issue-tracker.md) (ticket ở [plans/tasks](plans/README.md)), [domain docs](agents/domain.md).
 - API readiness: [trạng thái tích hợp](architecture/README.md#trạng-thái-tài-liệu-và-tích-hợp--2026-11-26). Không dùng ví dụ prototype thay API Contract đã pin.
 
 ## Quyết định và công việc tiếp theo
@@ -35,6 +35,7 @@
 | Migration cấu trúc đã duyệt, chưa triển khai source | [Mục lục migration](plans/structure-migration/README.md) |
 | Nối API nghiệp vụ theo tier, quyết định C1–C17      | [Mục lục API-first](plans/api-restructure/README.md)     |
 | UI/UX hardening còn tiếp tục; DESIGN đã có          | [Mục lục UI](plans/ui-hardening/README.md)               |
+| Tracker effort, trạng thái và thứ tự tiếp tục       | [Kế hoạch và tracker](plans/README.md)                   |
 | Nguồn và đánh đổi của thiết kế Vue                  | [Mục lục research](research/cms-architecture/README.md)  |
 
 Source chưa chuyển theo guide hiện hành; source đã chuyển theo ADR và policy được cập nhật cùng slice. Không coi thiết kế được duyệt là báo cáo migration đã xong.
@@ -43,7 +44,7 @@ Source chưa chuyển theo guide hiện hành; source đã chuyển theo ADR và
 
 [Archive](archive/README.md) giữ quyết định, tiêu chí và bằng chứng còn giá trị của giai đoạn dựng CMS ban đầu, auth và research cũ. Tên quyền, API mẫu, số đo và trạng thái PR trong đó là snapshot của đợt tương ứng.
 
-Hồ sơ mới nhất: [bỏ file dư và chuẩn hóa cây](../.scratch/cms-docs-cleanup/tree-pruning.md). Các đợt trước: [audit cleanup](../.scratch/cms-docs-cleanup/audit.md), [chuẩn hóa theo chủ đề](../.scratch/cms-docs-cleanup/normalization.md).
+Hồ sơ mới nhất: [bỏ file dư và chuẩn hóa cây](plans/wayfinding/cms-docs-cleanup/tree-pruning.md). Các đợt trước: [audit cleanup](plans/wayfinding/cms-docs-cleanup/audit.md), [chuẩn hóa theo chủ đề](plans/wayfinding/cms-docs-cleanup/normalization.md).
 
 ## Cây thư mục
 
@@ -53,7 +54,7 @@ docs/
 ├── architecture/       # README + navigation
 ├── guides/             # README + hướng dẫn theo chủ đề
 ├── adr/                # quyết định đã chấp nhận
-├── plans/              # api-restructure, structure-migration, ui-hardening
+├── plans/              # README, plan tổng, tasks/{todo,done,wontfix}, wayfinding
 ├── research/           # cms-architecture
 ├── archive/            # cms-initial-build, auth-integration, architecture-research
 └── agents/             # cách dùng tracker và glossary
@@ -61,4 +62,4 @@ docs/
 
 Mỗi effort nhiều file dùng `README.md` bên trong thư mục của nó. Tài liệu hiện hành không trộn với lịch sử; archive mỗi bước ưu tiên một hồ sơ gồm đặc tả/kế hoạch và kết quả/review, không giữ bản plan lặp.
 
-Hồ sơ archive mới nhất: [hợp nhất nền tảng và màn hình CMS](../.scratch/cms-docs-cleanup/archive-unification.md).
+Hồ sơ archive mới nhất: [hợp nhất nền tảng và màn hình CMS](plans/wayfinding/cms-docs-cleanup/archive-unification.md).

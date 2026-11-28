@@ -23,7 +23,7 @@ Giữ toàn bộ PascalCase sẽ ít churn hơn nhưng không phân biệt rõ f
 
 ## Phần CONVENTIONS bị thay thế
 
-ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../guides/README.md) **cho source đã chuyển**. Source chưa chuyển vẫn theo CONVENTIONS hiện hành; mỗi slice cập nhật guide sở hữu policy tương ứng trong cùng thay đổi (gate chung mục 2 trong [spec delivery](../../.scratch/cms-architecture-design/spec.md#gate-chung-cho-slice)).
+ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../guides/README.md) **cho source đã chuyển**. Source chưa chuyển vẫn theo CONVENTIONS hiện hành; mỗi slice cập nhật guide sở hữu policy tương ứng trong cùng thay đổi (gate chung mục 2 trong [spec delivery](../plans/tasks/todo/cms-architecture-design/spec.md#gate-chung-cho-slice)).
 
 | Mục CONVENTIONS                            | Quy định hiện hành                                               | Thay bằng                                                                                 |
 | ------------------------------------------ | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -55,4 +55,4 @@ Tool config ở root; cấu hình khởi động và UI ở app/config; QueryCli
 
 ## Theo dõi
 
-Q19 xác nhận hiểu biết chung và thiết kế tổng hợp ngày 26/11/2026. Delivery theo [spec và các issue](../../.scratch/cms-architecture-design/spec.md); việc thiết kế được duyệt không đồng nghĩa source đã migrate hoặc baseline đã chạy. Nhật ký câu hỏi Q1–Q19 nằm ở [design map](../../.scratch/cms-architecture-design/map.md); ADR này tự chứa quyết định, link chỉ để tra lịch sử.
+Q19 xác nhận hiểu biết chung và thiết kế tổng hợp ngày 26/11/2026. Delivery theo [spec và các issue](../plans/tasks/todo/cms-architecture-design/spec.md); việc thiết kế được duyệt không đồng nghĩa source đã migrate hoặc baseline đã chạy. Nhật ký câu hỏi Q1–Q19 nằm ở [design map](../plans/tasks/todo/cms-architecture-design/map.md); ADR này tự chứa quyết định, link chỉ để tra lịch sử.
