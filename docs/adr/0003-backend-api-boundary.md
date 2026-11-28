@@ -19,6 +19,6 @@ Endpoint kiểm kiểu method/path/params/body/response theo Generated API của
 
 - Thay thế policy model độc lập bắt buộc của CONVENTIONS §T.3 và whitelist §B.3 cho source đã chuyển (bảng thay thế ở ADR 0001).
 - `integrations/backend/schemas` **không tạo sẵn**: chỉ thêm khi một response cần kiểm lúc chạy có lý do cụ thể (ví dụ dữ liệu ngoài contract). Chỉ có một Backend nhưng giữ tên `integrations/backend` để tách khỏi request external như storage upload.
-- Coverage typing đo bằng [checklist operation](../plans/tasks/todo/cms-architecture-design/api-contract-checklist.md); Generated API diff chỉ chứng minh contract đồng bộ, không chứng minh caller typing.
+- Coverage typing đo bằng [checklist operation](../plan/tasks/todo/cms-architecture-design/api-contract-checklist.md); Generated API diff chỉ chứng minh contract đồng bộ, không chứng minh caller typing.
 - `scripts/contract-bump.sh`, generator và CI phải đổi đường dẫn Generated API cùng issue 03; không bump Contract Version khi chỉ di chuyển file.
 - GLOSSARY cập nhật vị trí của Generated API khi issue 03 chuyển source.

@@ -82,7 +82,7 @@
 **Làm gì**
 
 - So cây thư mục thực tế với §A, sửa chỗ lệch; `npm run lint` toàn repo pass.
-- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/guides/README.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/cms-initial-build/README.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
+- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/conventions/README.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/cms-initial-build/README.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
 - Sửa link: `grep -n 'scaffold-plan' docs/architecture/README.md README.md` phải về 0 kết quả — mỗi link (D-số, §B–§U) đổi sang mục tương ứng trong `CONVENTIONS.md`; link tới lý do quyết định (§V) đổi sang `docs/archive/cms-initial-build/README.md`.
 
 **Commit / PR (D27):** mỗi step là một nhánh + PR riêng, squash merge vào `main` (VD `chore(config): init vite project`, `chore(config): add eslint prettier husky`, `feat(api): add http client with refresh seam`…). Step 1 chưa có hook nên tự kiểm tra format commit; từ Step 2 hook tự chặn. Chỉ commit/push khi được đồng ý.

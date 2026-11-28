@@ -23,7 +23,7 @@ Giữ toàn bộ PascalCase sẽ ít churn hơn nhưng không phân biệt rõ f
 
 ## Phần CONVENTIONS bị thay thế
 
-ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../guides/README.md) **cho source đã chuyển**. Source chưa chuyển vẫn theo CONVENTIONS hiện hành; mỗi slice cập nhật guide sở hữu policy tương ứng trong cùng thay đổi (gate chung mục 2 trong [spec delivery](../plans/tasks/todo/cms-architecture-design/spec.md#gate-chung-cho-slice)).
+ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../conventions/README.md) **cho source đã chuyển**. Source chưa chuyển vẫn theo CONVENTIONS hiện hành; mỗi slice cập nhật guide sở hữu policy tương ứng trong cùng thay đổi (gate chung mục 2 trong [spec delivery](../plan/tasks/todo/cms-architecture-design/spec.md#gate-chung-cho-slice)).
 
 | Mục CONVENTIONS                            | Quy định hiện hành                                               | Thay bằng                                                                                 |
 | ------------------------------------------ | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -45,7 +45,7 @@ ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../guid
 
 Đã duyệt Q14/Q15 ngày 26/11/2026: route khai báo URL/meta/lazy view, view ghép màn hình, component nhận props/phát emits và local UI state, composable điều phối form/actions. Chuyển từng slice có inventory, naming/boundary và pilot products; kiểm lint/typecheck/test/build/E2E theo ảnh hưởng rồi mở rộng/cleanup. Giữ UI/URL/hành vi làm baseline.
 
-Cây tổng hợp và trách nhiệm từng file được trình bày tại [thiết kế migration CMS](../plans/structure-migration/README.md); chi tiết ghi là đề xuất/còn mở chưa phải quyết định đã duyệt.
+Cây tổng hợp và trách nhiệm từng file được trình bày tại [thiết kế migration CMS](../plan/initiatives/structure-migration/map.md); chi tiết ghi là đề xuất/còn mở chưa phải quyết định đã duyệt.
 
 ## Trách nhiệm file, config và code dùng chung
 
@@ -55,4 +55,4 @@ Tool config ở root; cấu hình khởi động và UI ở app/config; QueryCli
 
 ## Theo dõi
 
-Q19 xác nhận hiểu biết chung và thiết kế tổng hợp ngày 26/11/2026. Delivery theo [spec và các issue](../plans/tasks/todo/cms-architecture-design/spec.md); việc thiết kế được duyệt không đồng nghĩa source đã migrate hoặc baseline đã chạy. Nhật ký câu hỏi Q1–Q19 nằm ở [design map](../plans/tasks/todo/cms-architecture-design/map.md); ADR này tự chứa quyết định, link chỉ để tra lịch sử.
+Q19 xác nhận hiểu biết chung và thiết kế tổng hợp ngày 26/11/2026. Delivery theo [spec và các issue](../plan/tasks/todo/cms-architecture-design/spec.md); việc thiết kế được duyệt không đồng nghĩa source đã migrate hoặc baseline đã chạy. Nhật ký câu hỏi Q1–Q19 nằm ở [design map](../plan/tasks/todo/cms-architecture-design/map.md); ADR này tự chứa quyết định, link chỉ để tra lịch sử.

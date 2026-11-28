@@ -84,4 +84,4 @@
 
 ---
 
-📖 [README](../blob/dev/README.md) · [Hướng dẫn phát triển](../blob/dev/docs/guides/README.md) · [Kiến trúc CMS](../blob/dev/docs/architecture/README.md)
+📖 [README](../blob/dev/README.md) · [Hướng dẫn phát triển](../blob/dev/docs/conventions/README.md) · [Kiến trúc CMS](../blob/dev/docs/architecture/README.md)

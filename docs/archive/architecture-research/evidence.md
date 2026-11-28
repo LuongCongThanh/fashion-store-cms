@@ -22,8 +22,8 @@ Không cần đồng nhất từng tên folder giữa một Next.js storefront v
 4. Phân ownership URL, query cache, form, local UI và session trước khi thêm store/composable.
 5. Kiểm chính xác dependency và giới hạn lint; tránh hiểu whitelist theo tên file là danh sách public API đã duyệt.
 
-Nguồn sở hữu hiện hành: [CONVENTIONS](../../guides/README.md), [kiến trúc CMS](../../architecture/README.md),
-[plan tái cấu trúc đã duyệt](../../plans/api-restructure/README.md), [ESLint thực thi](../../../eslint.config.ts).
+Nguồn sở hữu hiện hành: [CONVENTIONS](../../conventions/README.md), [kiến trúc CMS](../../architecture/README.md),
+[plan tái cấu trúc đã duyệt](../../plan/initiatives/api-restructure/map.md), [ESLint thực thi](../../../eslint.config.ts).
 Tài liệu này không ghi đè các nguồn đó.
 
 ## 2. Đầu vào và cách diễn giải tài liệu Storefront
@@ -103,7 +103,7 @@ Nguồn: [FSD layers](https://feature-sliced.design/docs/reference/layers),
 Dependency inversion nên dùng interface nhỏ khi thực sự có boundary cần thay adapter hoặc test độc lập.
 CMS đã có ví dụ thực tế: `Session` nhận `callRefresh`, HttpClient nhận session/locale/transport;
 không cần nhân bản dạng `ProductRepository → ProductService → Products.api` cho request đơn giản.
-Đây là đánh giá thiết kế theo [Runtime](../../../src/app/Runtime.ts) và [CONVENTIONS §M](../../guides/README.md),
+Đây là đánh giá thiết kế theo [Runtime](../../../src/app/Runtime.ts) và [CONVENTIONS §M](../../conventions/README.md),
 không tuyên bố Vue bắt buộc hoặc cấm class/repository.
 
 Tra cứu: [Mục lục chủ đề](README.md) · [Toàn bộ tài liệu](../../README.md).

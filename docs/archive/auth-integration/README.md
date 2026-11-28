@@ -33,4 +33,4 @@ Trạng thái lịch sử: done — PR #58. Đây là kết quả của đợt t
 - [Spec](spec.md): contract và security invariants của đợt này.
 - [Quyết định](decisions.md): lưu phiên và Hết phiên.
 - [Báo cáo](report.md): kết quả, rủi ro, local setup và số liệu.
-- Follow-up typing gốc: [openapi-typed-paths](../../plans/tasks/wontfix/openapi-typed-paths/spec.md); hướng delivery mới theo [ADR 0003](../../adr/0003-backend-api-boundary.md).
+- Follow-up typing gốc: [openapi-typed-paths](../../plan/tasks/wontfix/openapi-typed-paths/spec.md); hướng delivery mới theo [ADR 0003](../../adr/0003-backend-api-boundary.md).

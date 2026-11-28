@@ -63,7 +63,7 @@ Nếu một feature chỉ có vài module, giữ phẳng theo khung hiện có.
 Khi chia chức năng thành `ProductList/`, phải cập nhật lint theo đường dẫn mới:
 rule presentational hiện nhận `features/<x>/components/**`, không tự bao phủ
 `features/<x>/ProductList/components/**`. Không tạo sự phân tầng chỉ tồn tại trong tài liệu.
-Nguồn: [ESLint featureRows](../../../eslint.config.ts), [CONVENTIONS §Q](../../guides/README.md).
+Nguồn: [ESLint featureRows](../../../eslint.config.ts), [CONVENTIONS §Q](../../conventions/README.md).
 
 ## 6. Đặt tên: giữ policy CMS, cải thiện nghĩa
 
@@ -89,7 +89,7 @@ Policy **đang có hiệu lực** của CMS cụ thể hơn tài liệu framewor
 | Test                   | `Product.mapper.spec.ts`, `UseAuth.spec.ts` cạnh source          | Giữ basename và glob Vitest hiện hành                              |
 | Generated              | `Api.generated.ts`                                               | Generator sở hữu nội dung và output path                           |
 
-Nguồn: [CONVENTIONS §B](../../guides/README.md), [plan C2](../../plans/api-restructure/README.md),
+Nguồn: [CONVENTIONS §B](../../conventions/README.md), [plan C2](../../plan/initiatives/api-restructure/map.md),
 [eslint naming SUFFIX](../../../eslint.config.ts), [Pinia store conventions](https://pinia.vuejs.org/core-concepts/).
 C2 yêu cầu feature một từ; ví dụ tổng quát `AuditLogs/` trong CONVENTIONS không phải quyền
 thay feature `audit` đã được duyệt bằng tên mới.
@@ -105,7 +105,7 @@ Một phương án khác là camelCase cho `.ts`, `useX.ts`, kebab-case folder �
 Lợi ích chính là tính nhất quán xuyên repo; chi phí là mass rename, import/mock/glob churn và thay policy có chủ đích.
 Chưa có bằng chứng lợi ích đủ lớn cho đợt này; chỉ triển khai nếu có quyết định riêng.
 Rename khác hoa/thường cần bước `git mv` trung gian trên filesystem không phân biệt casing.
-Nguồn: [CONVENTIONS §B.1](../../guides/README.md).
+Nguồn: [CONVENTIONS §B.1](../../conventions/README.md).
 
 ## 7. Ownership state và workflow
 

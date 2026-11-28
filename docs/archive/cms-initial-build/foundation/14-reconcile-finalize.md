@@ -19,13 +19,13 @@ Cây thư mục khớp §A, convention chuyển sang CONVENTIONS.md, plan đư�
 ### Phạm vi (Làm gì)
 
 - So cây thư mục thực tế với §A, sửa chỗ lệch; `npm run lint` toàn repo pass.
-- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/guides/README.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/cms-initial-build/README.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
+- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/conventions/README.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/cms-initial-build/README.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
 - Sửa link: `grep -n 'scaffold-plan' docs/architecture/README.md README.md` phải về 0 kết quả — mỗi link (D-số, §B–§U) đổi sang mục tương ứng trong `CONVENTIONS.md`; link tới lý do quyết định (§V) đổi sang `docs/archive/cms-initial-build/README.md`.
 
 ### Tiêu chí hoàn thành
 
 - Cây thư mục thực tế khớp §A; `npm run lint` toàn repo pass.
-- `docs/guides/README.md` có §B–§U; plan đã chuyển sang `docs/archive/`.
+- `docs/conventions/README.md` có §B–§U; plan đã chuyển sang `docs/archive/`.
 - `grep -n 'scaffold-plan' docs/architecture/README.md README.md` trả về 0 kết quả.
 
 ### Phụ thuộc
@@ -44,7 +44,7 @@ Cây thư mục khớp §A, convention chuyển sang CONVENTIONS.md, plan đư�
 **Làm gì**
 
 - So cây thư mục thực tế với §A, sửa chỗ lệch; `npm run lint` toàn repo pass.
-- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/guides/README.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/cms-initial-build/README.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
+- Tách tài liệu (§ nguyên tắc): §B–§U → `docs/conventions/README.md` (bỏ phần lịch sử/lý do dài); bảng quyết định D + lý do (§V) giữ nguyên trong plan đã archive; plan → `docs/archive/cms-initial-build/README.md`. `FE_architecture.md` link sang `CONVENTIONS.md` thay vì lặp lại.
 - Sửa link: `grep -n 'scaffold-plan' docs/architecture/README.md README.md` phải về 0 kết quả — mỗi link (D-số, §B–§U) đổi sang mục tương ứng trong `CONVENTIONS.md`; link tới lý do quyết định (§V) đổi sang `docs/archive/cms-initial-build/README.md`.
 - Sửa link trong `docs/plan/` (spec tổng + 14 plan con đang trỏ `../scaffold-plan.md` / `./scaffold-plan.md`): đổi sang `docs/archive/cms-initial-build/README.md`, hoặc archive cả `docs/plan/` cùng lúc. Kiểm tra: `grep -rn '\.\../archive/scaffold-plan.md\|\../archive/scaffold-plan.md' docs/plan` về 0 kết quả (hoặc thư mục đã được chuyển).
 
@@ -66,7 +66,7 @@ Ngày hoàn thành: 2026-11-07
   - Thiếu và đã tạo: `layouts/components/AppHeader.vue` (tách header ra khỏi `DashboardLayout`) và `shared/components/page/PageHeader.vue` (gắn sẵn `font-display`, dùng ở `LoginView` và `DesignSystemView`).
   - Thiếu nhưng cố ý hoãn: `StoreScope.api.ts`, sẽ làm ở P3 khi có API Store. Các file khác trong danh sách thiếu đều nằm trong thư mục cha đã đánh dấu `(P5)` hoặc `(P10)`.
   - Có trong repo nhưng chưa có trong §A: `.env.development`, `.env.production`, `knip.json`. Đã bổ sung vào cây §A trong `CONVENTIONS.md`, kèm `Env.config.spec.ts` và các mục `docs/archive`, `docs/plan`.
-- **`docs/guides/README.md`**, viết cho dev trong team:
+- **`docs/conventions/README.md`**, viết cho dev trong team:
   - Gồm §A và §B–§U, giữ nguyên ký hiệu mục để link "§X" cũ vẫn dùng được.
   - 33 code block mẫu đã có file thật được thay bằng link tới file nguồn, để tài liệu không lệch dần so với code.
   - Phần mô tả được cập nhật theo những chỗ đã làm khác plan ở plan 01–13: regex cho ranh giới feature, `useT()`, `tsconfigPaths({ loose: true })`, TS `~5.9`, `ui({ components: false, colorMode: false })`, `createNotifier({ toast, t, te })` và `prompt`, `enableAutoUnmount`, `pwaAssets.integration`, interface ở §Q.3.
@@ -86,7 +86,7 @@ Ngày hoàn thành: 2026-11-07
 | ------------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
 | Cây thư mục thực tế khớp §A                                         | Pass    | Ngoại trừ `StoreScope.api.ts` hoãn tới P3; đã ghi chú ở trên                              |
 | `npm run lint` toàn repo                                            | Pass    |                                                                                           |
-| `docs/guides/README.md` có §B–§U                                    | Pass    | Có thêm §A                                                                                |
+| `docs/conventions/README.md` có §B–§U                                    | Pass    | Có thêm §A                                                                                |
 | Plan đã chuyển sang `docs/archive/`                                 | Pass    |                                                                                           |
 | `grep -n 'scaffold-plan' docs/architecture/README.md README.md` = 0 | Pass    | 0 kết quả                                                                                 |
 | `grep -rn '\.\./scaffold-plan.md\|\./scaffold-plan.md' docs/plan`   | Pass    | Còn đúng 2 dòng, đều là đoạn văn mô tả trong plan 14 (trích tên link cũ), không phải link |

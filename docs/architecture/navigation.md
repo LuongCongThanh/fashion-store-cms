@@ -62,7 +62,7 @@ AuthLayout chứa `/login`, `/forgot-password` (`guestOnly`) và `/reset-passwor
 
 Editor products, internal accounts, roles và vouchers mở bằng quyền VIEW; thao tác thay đổi cần quyền MANAGE. Vì vậy không suy quyền write chỉ từ hậu tố `/edit`. `/settings` redirect sang `/settings/store`; guard kiểm quyền của route đích.
 
-Guard gọi `ensureUser()` trước khi kiểm quyền; guestOnly thử restore Session trước khi quyết định về trang chủ. Sidebar/title/command suy từ navigation và `can()`. Backend phải kiểm authorization độc lập. Một số route chưa nối contract vẫn giữ quyền tạm như `order:read`, `inventory:read`, `customer:read`, `settings:write`; xem [Permission.ts](../../src/shared/lib/api/Permission.ts) và [API readiness](../plans/api-restructure/README.md).
+Guard gọi `ensureUser()` trước khi kiểm quyền; guestOnly thử restore Session trước khi quyết định về trang chủ. Sidebar/title/command suy từ navigation và `can()`. Backend phải kiểm authorization độc lập. Một số route chưa nối contract vẫn giữ quyền tạm như `order:read`, `inventory:read`, `customer:read`, `settings:write`; xem [Permission.ts](../../src/shared/lib/api/Permission.ts) và [API readiness](../plan/initiatives/api-restructure/map.md).
 
 ## URL và Session
 
@@ -74,4 +74,4 @@ Guard gọi `ensureUser()` trước khi kiểm quyền; guestOnly thử restore 
 
 ## Trạng thái tích hợp
 
-Backend và Generated API đã có; mức độ tích hợp từng feature theo [restructure plan](../plans/api-restructure/README.md). [API contracts của prototype](../archive/cms-initial-build/api-contracts.md) chỉ là lịch sử, không phải contract hiện hành. Development/production dùng Backend; HTTP adapter giả chỉ là test seam. CI hiện có Playwright E2E theo [workflow](../../.github/workflows/ci.yml); báo cáo “hoãn E2E” cũ không mô tả CI hiện tại.
+Backend và Generated API đã có; mức độ tích hợp từng feature theo [restructure plan](../plan/initiatives/api-restructure/map.md). [API contracts của prototype](../archive/cms-initial-build/api-contracts.md) chỉ là lịch sử, không phải contract hiện hành. Development/production dùng Backend; HTTP adapter giả chỉ là test seam. CI hiện có Playwright E2E theo [workflow](../../.github/workflows/ci.yml); báo cáo “hoãn E2E” cũ không mô tả CI hiện tại.

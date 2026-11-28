@@ -18,4 +18,4 @@ Archive giữ quyết định, tiêu chí và bằng chứng còn giá trị. N�
 - JSON và bảng metrics không được sửa thành số đo mới khi chỉ sắp xếp tài liệu.
 - Nếu quyết định lịch sử vẫn còn hiệu lực, guide hoặc ADR hiện hành phải dẫn lại lý do cần thiết; không bắt người triển khai đoán policy từ snapshot.
 
-Tiếp tục: [Quy chuẩn tài liệu](../guides/documentation.md).
+Tiếp tục: [Quy chuẩn tài liệu](../conventions/documentation.md).
