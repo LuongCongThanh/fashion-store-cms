@@ -1,6 +1,6 @@
 # Chiến lược kiểm thử CMS
 
-**Trạng thái:** thiết kế đã duyệt, chưa triển khai (2026-11-28). Luật chung cho ba ứng dụng (mức rủi ro, ma trận trách nhiệm Backend – CMS – Storefront, hành trình E2E full-stack, gate, audit) nằm ở `docs/testing/` của repo workspace [fashion-store](https://github.com/LuongCongThanh/fashion-store/tree/main/docs/testing). Cách dựng test (runtime, `renderWithPlugins()`, fake HTTP) nằm ở `docs/CONVENTIONS.md` mục I; file này nói **test gì, ở tầng nào**. Danh sách kịch bản: [testing-traceability.md](testing-traceability.md).
+**Trạng thái:** thiết kế đã duyệt, chưa triển khai (2026-11-28). Luật chung cho ba ứng dụng (mức rủi ro, ma trận trách nhiệm Backend – CMS – Storefront, hành trình E2E full-stack, gate, audit) nằm ở `docs/testing/` của repo workspace [fashion-store](https://github.com/LuongCongThanh/fashion-store/tree/main/docs/testing). Cách dựng test (runtime, `renderWithPlugins()`, fake HTTP) nằm ở [testing.md](testing.md) mục "Cấu hình unit / component test"; file này nói **test gì, ở tầng nào**. Danh sách kịch bản: [testing-traceability.md](testing-traceability.md).
 
 ## CMS bảo vệ gì
 

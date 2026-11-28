@@ -1,7 +1,7 @@
 # 02 — Remove prototype code and dev-only screens
 
 Status: resolved
-Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.1 (C5, C16)
+Spec: `docs/plans/api-restructure/README.md` Tier 0, PR 0.1 (C5, C16)
 
 ## What to build
 

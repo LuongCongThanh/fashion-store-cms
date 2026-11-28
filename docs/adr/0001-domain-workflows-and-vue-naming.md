@@ -23,16 +23,16 @@ Giữ toàn bộ PascalCase sẽ ít churn hơn nhưng không phân biệt rõ f
 
 ## Phần CONVENTIONS bị thay thế
 
-ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../CONVENTIONS.md) **cho source đã chuyển**. Source chưa chuyển vẫn theo CONVENTIONS hiện hành; mỗi slice cập nhật mục tương ứng trong cùng thay đổi (gate chung mục 2 trong [spec delivery](../../.scratch/cms-architecture-design/spec.md#gate-chung-cho-slice)).
+ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../guides/README.md) **cho source đã chuyển**. Source chưa chuyển vẫn theo CONVENTIONS hiện hành; mỗi slice cập nhật guide sở hữu policy tương ứng trong cùng thay đổi (gate chung mục 2 trong [spec delivery](../../.scratch/cms-architecture-design/spec.md#gate-chung-cho-slice)).
 
-| Mục CONVENTIONS | Quy định hiện hành | Thay bằng |
-| --- | --- | --- |
-| §A cây thư mục, §Q cấu trúc module | `features/<x>/` với thư mục kỹ thuật cố định | `app`, `layouts`, `modules`, `integrations/backend`, `shared/*`... (mục Hệ quả) |
-| §B.1 tên file và thư mục | Không kebab-case, composable `Use*.ts`, module thường PascalCase | Folder kebab-case, `useXxx.ts`, module thường camelCase, hậu tố vai trò viết thường |
-| §B.3 ranh giới feature | Whitelist `@features/<x>/Use*` và `types/*` | Public entry của module được ghi và lint (ADR 0003) |
-| §N import alias | 7 alias gồm `@features` | Alias theo cây mới, chốt ở issue 02 |
-| §T.3 DTO không ra khỏi `api/` | Model độc lập bắt buộc | Type đi theo owner, mapping ở `integrations/backend` (ADR 0003) |
-| Cây `docs/`: `decisions.md` "thay cho ADR" | Quyết định khó đảo ngược ghi trong thư mục plan của feature | Quyết định cấp feature vẫn dùng `decisions.md`; quyết định xuyên module ghi ở `docs/adr/` |
+| Mục CONVENTIONS                            | Quy định hiện hành                                               | Thay bằng                                                                                 |
+| ------------------------------------------ | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| §A cây thư mục, §Q cấu trúc module         | `features/<x>/` với thư mục kỹ thuật cố định                     | `app`, `layouts`, `modules`, `integrations/backend`, `shared/*`... (mục Hệ quả)           |
+| §B.1 tên file và thư mục                   | Không kebab-case, composable `Use*.ts`, module thường PascalCase | Folder kebab-case, `useXxx.ts`, module thường camelCase, hậu tố vai trò viết thường       |
+| §B.3 ranh giới feature                     | Whitelist `@features/<x>/Use*` và `types/*`                      | Public entry của module được ghi và lint (ADR 0003)                                       |
+| §N import alias                            | 7 alias gồm `@features`                                          | Alias theo cây mới, chốt ở issue 02                                                       |
+| §T.3 DTO không ra khỏi `api/`              | Model độc lập bắt buộc                                           | Type đi theo owner, mapping ở `integrations/backend` (ADR 0003)                           |
+| Cây `docs/`: `decisions.md` "thay cho ADR" | Quyết định khó đảo ngược ghi trong thư mục plan của feature      | Quyết định cấp feature vẫn dùng `decisions.md`; quyết định xuyên module ghi ở `docs/adr/` |
 
 ## Hệ quả
 
@@ -45,7 +45,7 @@ ADR này và ADR 0002/0003 thay thế các mục sau của [CONVENTIONS](../CONV
 
 Đã duyệt Q14/Q15 ngày 26/11/2026: route khai báo URL/meta/lazy view, view ghép màn hình, component nhận props/phát emits và local UI state, composable điều phối form/actions. Chuyển từng slice có inventory, naming/boundary và pilot products; kiểm lint/typecheck/test/build/E2E theo ảnh hưởng rồi mở rộng/cleanup. Giữ UI/URL/hành vi làm baseline.
 
-Cây tổng hợp và trách nhiệm từng file được trình bày tại [thiết kế migration CMS](../plans/cms-structure-migration.md); chi tiết ghi là đề xuất/còn mở chưa phải quyết định đã duyệt.
+Cây tổng hợp và trách nhiệm từng file được trình bày tại [thiết kế migration CMS](../plans/structure-migration/README.md); chi tiết ghi là đề xuất/còn mở chưa phải quyết định đã duyệt.
 
 ## Trách nhiệm file, config và code dùng chung
 

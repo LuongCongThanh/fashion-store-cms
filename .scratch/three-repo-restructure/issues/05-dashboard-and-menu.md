@@ -1,7 +1,7 @@
 # 05 — Dashboard products widget from the API; menu in three groups
 
 Status: resolved
-Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.4 (C7, C9)
+Spec: `docs/plans/api-restructure/README.md` Tier 0, PR 0.4 (C7, C9)
 
 ## What to build
 

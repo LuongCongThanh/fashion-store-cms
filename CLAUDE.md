@@ -16,7 +16,7 @@ Single-context: one `GLOSSARY.md` at the repo root. See `docs/agents/domain.md`.
 
 ## Repository workflow
 
-- Read `docs/CONVENTIONS.md` before changing application code, and `docs/FE_architecture.md` when a change crosses feature or API boundaries.
+- Read `docs/guides/README.md` before changing application code, and `docs/architecture/README.md` when a change crosses feature or API boundaries.
 - Read `DESIGN.md` before changing UI; it remains the visual contract.
 - Use `feature` for implementation work, `vitest` for test-related work, and `api-security-review` only for static, read-only review of API contracts or client-side security handling.
 - `api-security-review` does not authorize requests to running services, active scans, or use of credentials. Review client-visible code and contracts only; backend authorization must be verified in the backend repository.

@@ -5,7 +5,7 @@ description: Use when implementing a feature, behavior change, or bug fix in the
 
 # Feature workflow
 
-1. Read `AGENTS.md` and `CLAUDE.md`. For application changes, read `docs/CONVENTIONS.md`; consult `docs/FE_architecture.md` for cross-feature or API-boundary work and `DESIGN.md` for UI changes.
+1. Read `AGENTS.md` and `CLAUDE.md`. For application changes, read `docs/guides/README.md`; consult `docs/architecture/README.md` for cross-feature or API-boundary work and `DESIGN.md` for UI changes.
 2. Resolve behavior and scope from the user's request, existing code, and any relevant spec under `.scratch/`. Ask only about decisions that materially change behavior or scope.
 3. Follow the existing Vue 3, TypeScript, Vite, API-client, localization, and UI patterns. Preserve unrelated work and keep changes within the requested feature.
 4. Add or update focused tests when behavior changes. Use the existing Vitest setup and npm scripts; do not infer commands from sibling repositories.

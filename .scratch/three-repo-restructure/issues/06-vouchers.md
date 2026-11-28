@@ -1,7 +1,7 @@
 # 06 — Voucher screens on the admin API (promotions → vouchers)
 
 Status: resolved
-Spec: `docs/plans/cms-restructure-plan.md` Voucher, PR V.1 (C2, C6)
+Spec: `docs/plans/api-restructure/README.md` Voucher, PR V.1 (C2, C6)
 
 ## What to build
 

@@ -4,7 +4,7 @@ Status: design-approved — Q19 được người dùng xác nhận ngày 26/11/
 
 ## Nguồn quyết định
 
-- [Thiết kế đích](../../docs/plans/cms-structure-migration.md)
+- [Thiết kế đích](../../docs/plans/structure-migration/README.md)
 - [ADR](../../docs/adr/0001-domain-workflows-and-vue-naming.md)
 - [Nhật ký Q1–Q19](map.md)
 - [Inventory tĩnh ban đầu](inventory.md)
@@ -28,7 +28,7 @@ Source cũ/new có thể coexist tạm với allowlist/rule giới hạn; mỗi 
 Mỗi issue 07–14 phải đạt đủ bốn mục dưới; issue 03–06 áp dụng mục 2–3 cho phần đã chuyển.
 
 1. **Coverage API.** Mọi dòng có cột Slice trùng số issue trong checklist đạt `typed`, hoặc `blocked-no-contract`/`external`/`removed` có evidence. Evidence phủ method/path/path params/query/body/success response; cast hoặc annotation DTO đơn thuần không đủ.
-2. **Owner docs/rules đồng bộ (Q10).** Phần source đã chuyển trong slice phải được cập nhật cùng lúc trong `docs/CONVENTIONS.md`, `docs/FE_architecture.md`, `GLOSSARY.md` (vị trí kỹ thuật của thuật ngữ), ESLint boundary glob và test. Không dồn việc đồng bộ docs tới issue 15; issue 15 chỉ rà phần sót.
+2. **Owner docs/rules đồng bộ (Q10).** Phần source đã chuyển trong slice phải được cập nhật cùng lúc trong `docs/guides/README.md`, `docs/architecture/README.md`, `GLOSSARY.md` (vị trí kỹ thuật của thuật ngữ), ESLint boundary glob và test. Không dồn việc đồng bộ docs tới issue 15; issue 15 chỉ rà phần sót.
 3. **Public entry (Q11).** Module/integration đã chuyển có public entry được ghi trong docs và được lint chặn import private; danh sách symbol lấy từ inventory public symbols của issue 01.
 4. **Draft dirty (Q12).** Với màn hình có form: refetch/invalidation không ghi đè draft đang dirty, có test chứng minh. Màn hình không có form ghi rõ "không áp dụng".
 

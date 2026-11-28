@@ -28,7 +28,7 @@ Cập nhật report với file đổi, lý do, lệnh thực sự chạy và k�
 
 ## Tham chiếu
 
-- [Thiết kế đã duyệt](../../../docs/plans/cms-structure-migration.md)
+- [Thiết kế đã duyệt](../../../docs/plans/structure-migration/README.md)
 - [Inventory ban đầu](../inventory.md)
 - [Spec điều phối](../spec.md)
 

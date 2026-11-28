@@ -16,7 +16,7 @@ Cập nhật checkout/source facts; lập mapping source→target cho mọi file
 
 ## Public symbols và config
 
-Mục "Dependency chéo module" của inventory chỉ là trích alias bằng regex, không dùng làm allowlist. Lập danh sách public symbol thực tế (tên export + consumer) bằng TypeScript/ESLint import resolution hoặc knip, làm đầu vào cho public entry ở issue 02. Refresh bảng config của inventory theo `origin/dev` mới nhất (đã biết `vite.config.ts` và `docs/CONVENTIONS.md` đổi sau aa5fa92).
+Mục "Dependency chéo module" của inventory chỉ là trích alias bằng regex, không dùng làm allowlist. Lập danh sách public symbol thực tế (tên export + consumer) bằng TypeScript/ESLint import resolution hoặc knip, làm đầu vào cho public entry ở issue 02. Refresh bảng config của inventory theo `origin/dev` mới nhất (đã biết `vite.config.ts` và `docs/guides/README.md` đổi sau aa5fa92).
 
 ## Inventory API bắt buộc
 
@@ -30,7 +30,7 @@ Cập nhật report với file đổi, lý do, lệnh thực sự chạy và k�
 
 ## Tham chiếu
 
-- [Thiết kế đã duyệt](../../../docs/plans/cms-structure-migration.md)
+- [Thiết kế đã duyệt](../../../docs/plans/structure-migration/README.md)
 - [Inventory ban đầu](../inventory.md)
 - [Spec điều phối](../spec.md)
 

@@ -9,4 +9,4 @@ Test (viết trước): Session.spec — remember true/false, logout xoá cả h
 
 ## Comments
 
-- 2026-11-11: Superseded bởi PR #58 (auth backend integration) — Session dùng refresh cookie, bỏ Remember me và Mock auth. Xem `docs/plans/auth-backend-integration/decisions.md` D1.
+- 2026-11-11: Superseded bởi PR #58 (auth backend integration) — Session dùng refresh cookie, bỏ Remember me và Mock auth. Xem `docs/archive/auth-integration/decisions.md` D1.

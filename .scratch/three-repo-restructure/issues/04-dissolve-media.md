@@ -1,7 +1,7 @@
 # 04 — Dissolve the media feature; drop logo and Localization settings
 
 Status: resolved
-Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.3 (C4, C10)
+Spec: `docs/plans/api-restructure/README.md` Tier 0, PR 0.3 (C4, C10)
 
 ## What to build
 

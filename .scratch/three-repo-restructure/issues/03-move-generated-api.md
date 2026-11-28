@@ -1,11 +1,11 @@
 # 03 — Move Api.generated.ts to shared/lib/api
 
 Status: resolved
-Spec: `docs/plans/cms-restructure-plan.md` Tier 0, PR 0.2
+Spec: `docs/plans/api-restructure/README.md` Tier 0, PR 0.2
 
 ## What to build
 
-Move `src/shared/types/Api.generated.ts` to `src/shared/lib/api/Api.generated.ts`. Update `scripts/GenApi.ts`, every import, the CI drift check, lint/knip ignores, `GLOSSARY.md` (Generated API) and `docs/CONVENTIONS.md`.
+Move `src/shared/types/Api.generated.ts` to `src/shared/lib/api/Api.generated.ts`. Update `scripts/GenApi.ts`, every import, the CI drift check, lint/knip ignores, `GLOSSARY.md` (Generated API) and `docs/guides/README.md`.
 
 ## Acceptance criteria
 
