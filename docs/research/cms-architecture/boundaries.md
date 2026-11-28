@@ -11,7 +11,7 @@ Quyết định được ghi tại [ADR domain/workflow/naming](../../adr/0001-d
 thay thế khuyến nghị giữ toàn bộ PascalCase của
 [nghiên cứu trước](../../archive/architecture-research/README.md) **đối với đích migration**.
 
-Source hiện tại vẫn chịu [CONVENTIONS](../../guides/README.md), [FE_architecture](../../architecture/README.md)
+Source hiện tại vẫn chịu [CONVENTIONS](../../conventions/README.md), [FE_architecture](../../architecture/README.md)
 và [ESLint](../../../eslint.config.ts) cho đến khi implementation cập nhật chúng cùng nhau.
 Không áp naming mới lẻ tẻ vào code rồi coi lỗi lint là lý do tắt rule.
 Đề xuất dùng domain-first như nguyên tắc ownership; tên root `features` hay `modules` là quyết định riêng,
@@ -93,7 +93,7 @@ Nguồn scope: [01 vision/scope](../../../../be-demo/docs/business/01-vision-sco
 Các hàng là **đề xuất ownership** suy từ business owner docs ở trên; không phải danh sách API đã tồn tại.
 Đề xuất chưa tạo sẵn mọi folder/domain: yêu cầu thiếu contract được ghi thành nhu cầu Backend.
 C17 hiện cấm đoán DTO/API/màn hình hoặc dùng mock để lấp contract thiếu.
-Nguồn: [plan CMS C17 và dependency](../../plans/api-restructure/README.md).
+Nguồn: [plan CMS C17 và dependency](../../plan/initiatives/api-restructure/map.md).
 
 Có drift tài liệu cần giữ rõ: scope còn dòng “back-office Next.js”, trong khi source CMS dùng Vue/Vite;
 scope loại nội dung sản phẩm đa ngôn ngữ, nhưng rule category cụ thể có yêu cầu vi/en và bảo toàn bản dịch thủ công.

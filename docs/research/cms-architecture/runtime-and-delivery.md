@@ -38,7 +38,7 @@ và [Hexagonal](https://alistair.cockburn.us/hexagonal-architecture); ví dụ t
 Đề xuất public exports chọn lọc theo consumer; không bắt mọi domain có `index.ts`.
 Rule hiện chỉ nhận `Use*.ts`/`types/`; đổi naming phải cập nhật whitelist và ca test boundary.
 Đề xuất pure rule không import UI/DTO; shared không import features/app; liên domain chỉ public API, tránh vòng.
-Nguồn hiện tại: [ESLint](../../../eslint.config.ts), [CONVENTIONS](../../guides/README.md).
+Nguồn hiện tại: [ESLint](../../../eslint.config.ts), [CONVENTIONS](../../conventions/README.md).
 
 ## State, reactivity, forms và lỗi
 
@@ -85,14 +85,14 @@ Nguồn: [lazy loading](https://router.vuejs.org/guide/advanced/lazy-loading.htm
 [navigation guards](https://router.vuejs.org/guide/advanced/navigation-guards.html).
 Đề xuất giữ route names/paths/redirect/permission baseline; guard UI không thay Backend authorization.
 Riêng orders tiếp tục hiển thị `allowedActions[]`, không dựng lại state machine quyết định hành động ở CMS.
-Nguồn: [plan C8](../../plans/api-restructure/README.md), [actors control](../../../../be-demo/docs/business/02-actors-permissions.md).
+Nguồn: [plan C8](../../plan/initiatives/api-restructure/map.md), [actors control](../../../../be-demo/docs/business/02-actors-permissions.md).
 
 Vue phân biệt unit/component/E2E và khuyến khích kiểm hành vi observable thay vì chi tiết implementation.
 Nguồn: [Vue testing](https://vuejs.org/guide/scaling-up/testing.html).
 Đề xuất unit cho pure rule/mapper; component cho form/errors/permissions; integration cho query/invalidation/session;
 E2E cho critical journeys qua route thật. Giữ `.spec.ts` cạnh owner, test infra trong `src/test`.
 Tuân C11 nếu còn áp dụng trong plan hiện hành: không tự thêm test trước Phase 7 chỉ vì report khuyên có test.
-Nguồn: [plan C11](../../plans/api-restructure/README.md), [CONVENTIONS testing](../../guides/README.md).
+Nguồn: [plan C11](../../plan/initiatives/api-restructure/map.md), [CONVENTIONS testing](../../conventions/README.md).
 
 | Đợt đề xuất      | Việc làm                                               | Gate                                                           |
 | ---------------- | ------------------------------------------------------ | -------------------------------------------------------------- |

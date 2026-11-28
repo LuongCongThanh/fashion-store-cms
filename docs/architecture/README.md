@@ -1,6 +1,6 @@
 # Kiến trúc CMS
 
-Tổng quan source đối chiếu ngày 26/11/2026. [Guide](../guides/README.md) giữ policy chi tiết; ADR/migration là thiết kế được duyệt, chưa triển khai source. [Navigation](navigation.md) giữ route và permission.
+Tổng quan source đối chiếu ngày 26/11/2026. [Guide](../conventions/README.md) giữ policy chi tiết; ADR/migration là thiết kế được duyệt, chưa triển khai source. [Navigation](navigation.md) giữ route và permission.
 
 ## Tổng quan kiến trúc CMS
 
@@ -20,23 +20,23 @@ Các phương án scaffold và lý do D1–D41 được giữ ở [scaffold plan
 
 ### Recommended Project Structure
 
-Source hiện hành: `app/Runtime.ts` dựng runtime; `app/router` ghép route; `layouts` dựng shell; `features` sở hữu nghiệp vụ; `shared` chứa kỹ thuật/UI dùng chung. Naming, alias và boundary được định nghĩa ở [CONVENTIONS §A, §B, §N, §Q](../guides/README.md), thực thi bởi [ESLint](../../eslint.config.ts).
+Source hiện hành: `app/Runtime.ts` dựng runtime; `app/router` ghép route; `layouts` dựng shell; `features` sở hữu nghiệp vụ; `shared` chứa kỹ thuật/UI dùng chung. Naming, alias và boundary được định nghĩa ở [CONVENTIONS §A, §B, §N, §Q](../conventions/README.md), thực thi bởi [ESLint](../../eslint.config.ts).
 
-Đích migration được duyệt nhưng **chưa triển khai**: `modules`, `integrations/backend`, `i18n`, `styles`, `testing` và workflow colocated. Xem [thiết kế migration](../plans/structure-migration/README.md) cùng [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md). Không áp tên/path đích lên source chưa chuyển.
+Đích migration được duyệt nhưng **chưa triển khai**: `modules`, `integrations/backend`, `i18n`, `styles`, `testing` và workflow colocated. Xem [thiết kế migration](../plan/initiatives/structure-migration/map.md) cùng [ADR 0001](../adr/0001-domain-workflows-and-vue-naming.md). Không áp tên/path đích lên source chưa chuyển.
 
 ### API Layer
 
-Feature hiện sở hữu request, mapping, query keys và Vue Query trong các file `api/*.api.ts`; feature lớn như products đã có nhiều file theo workflow, không ép về một file duy nhất. View/composable điều phối; component dùng props/emits. Quy tắc chi tiết: [CONVENTIONS §T](../guides/README.md).
+Feature hiện sở hữu request, mapping, query keys và Vue Query trong các file `api/*.api.ts`; feature lớn như products đã có nhiều file theo workflow, không ép về một file duy nhất. View/composable điều phối; component dùng props/emits. Quy tắc chi tiết: [CONVENTIONS §T](../conventions/README.md).
 
 Sau migration, endpoint/mapping thuộc integration và query thuộc module theo [ADR 0003](../adr/0003-backend-api-boundary.md). Chỉ áp dụng khi slice tương ứng chuyển source.
 
 ### Shared Modules
 
-Shared không biết nghiệp vụ, chỉ tách khi có consumer dùng lại thật. Interface và consumer: [CONVENTIONS §Q.3](../guides/README.md). Upload ảnh hiện thuộc products (xem [upload ảnh](#media-upload)); không còn feature `media` dùng chung.
+Shared không biết nghiệp vụ, chỉ tách khi có consumer dùng lại thật. Interface và consumer: [CONVENTIONS §Q.3](../conventions/README.md). Upload ảnh hiện thuộc products (xem [upload ảnh](#media-upload)); không còn feature `media` dùng chung.
 
 ### HTTP Client
 
-HTTP client và refresh seam có một nguồn chuẩn tại [CONVENTIONS §M, §O](../guides/README.md), cùng [HttpClient.ts](../../src/shared/lib/api/client/HttpClient.ts). Client nhận Session/locale qua dependency do runtime nối; không singleton hoặc import ngược feature.
+HTTP client và refresh seam có một nguồn chuẩn tại [CONVENTIONS §M, §O](../conventions/README.md), cùng [HttpClient.ts](../../src/shared/lib/api/client/HttpClient.ts). Client nhận Session/locale qua dependency do runtime nối; không singleton hoặc import ngược feature.
 
 ### API Contract — Swagger
 
@@ -58,7 +58,7 @@ CMS dùng Vue/Vite; Backend và Storefront có repo, tài liệu và vòng đờ
 
 [`useAuth`](../../src/features/auth/UseAuth.ts) điều phối đăng nhập, tài khoản/quyền, restore và logout. [`Session`](../../src/shared/lib/session/Session.ts) giữ access token trong memory, refresh qua cookie do Backend sở hữu; không lưu token vào Web Storage. Runtime nối HTTP, Session, router và QueryClient.
 
-Refresh single-flight; 401 khi refresh là Hết phiên, lỗi mạng/5xx là Mất kết nối và giữ phiên. Chi tiết: [CONVENTIONS §M, §O](../guides/README.md); [quyết định auth](../archive/auth-integration/decisions.md) giữ bối cảnh lịch sử. Cấu hình cookie/CSRF thực tế thuộc Backend, không được suy ra từ ví dụ CMS.
+Refresh single-flight; 401 khi refresh là Hết phiên, lỗi mạng/5xx là Mất kết nối và giữ phiên. Chi tiết: [CONVENTIONS §M, §O](../conventions/README.md); [quyết định auth](../archive/auth-integration/decisions.md) giữ bối cảnh lịch sử. Cấu hình cookie/CSRF thực tế thuộc Backend, không được suy ra từ ví dụ CMS.
 
 ### RBAC
 
@@ -68,7 +68,7 @@ Hệ thống chỉ có một Store; không có StoreScope, switchStore hoặc he
 
 ### State Management
 
-Owner state hiện hành ở [CONVENTIONS §T.2](../guides/README.md); đích được duyệt ở [ADR 0002](../adr/0002-state-runtime-and-session.md). Query key chứa input ảnh hưởng response, không chứa Store ID. Mutation invalidation thuộc query/API owner; UI state cục bộ không cần global store.
+Owner state hiện hành ở [CONVENTIONS §T.2](../conventions/README.md); đích được duyệt ở [ADR 0002](../adr/0002-state-runtime-and-session.md). Query key chứa input ảnh hưởng response, không chứa Store ID. Mutation invalidation thuộc query/API owner; UI state cục bộ không cần global store.
 
 ## Form và ảnh Sản phẩm
 
@@ -82,7 +82,7 @@ Storage dùng XHR riêng để có byte progress và hủy, không gắn token/c
 
 Form dùng vee-validate quản lý values/errors/dirty; Zod 4 `safeParse` kiểm input. Quyết định tương thích lịch sử: adapter `@vee-validate/zod@4.15.1` yêu cầu Zod 3 nên repo không cài; không thêm adapter/hạ Zod chỉ theo ví dụ cũ.
 
-[`useHydrateForm`](../../src/shared/composables/UseHydrateForm.ts) chỉ hydrate khi pristine hoặc đổi route context/entity, không ghi đè dirty draft khi refetch. [`useUnsavedGuard`](../../src/shared/composables/UseUnsavedGuard.ts) xử lý rời route/đổi record. Lỗi field từ API qua helper theo [CONVENTIONS §O, §T](../guides/README.md). Không đưa Store switching trở lại hydration.
+[`useHydrateForm`](../../src/shared/composables/UseHydrateForm.ts) chỉ hydrate khi pristine hoặc đổi route context/entity, không ghi đè dirty draft khi refetch. [`useUnsavedGuard`](../../src/shared/composables/UseUnsavedGuard.ts) xử lý rời route/đổi record. Lỗi field từ API qua helper theo [CONVENTIONS §O, §T](../conventions/README.md). Không đưa Store switching trở lại hydration.
 
 HTML rich text cần được xử lý an toàn ở boundary render; việc package Tiptap tồn tại không chứng minh mọi HTML đã sanitize. Không coi DOMPurify là dependency đã cài khi package.json không khai báo.
 
@@ -90,7 +90,7 @@ HTML rich text cần được xử lý an toàn ở boundary render; việc pack
 
 ### Testing
 
-Test seam, render/runtime overrides và mock boundary ở [CONVENTIONS §I](../guides/README.md). [`ci.yml`](../../.github/workflows/ci.yml) hiện có lint/format, typecheck, coverage, OpenAPI diff, build, Playwright E2E và knip report-only. Báo cáo cũ “hoãn E2E” chỉ mô tả phiên đó, không mô tả CI hiện tại. Đọc script/test thực tế trước khi chọn gate.
+Test seam, render/runtime overrides và mock boundary ở [CONVENTIONS §I](../conventions/README.md). [`ci.yml`](../../.github/workflows/ci.yml) hiện có lint/format, typecheck, coverage, OpenAPI diff, build, Playwright E2E và knip report-only. Báo cáo cũ “hoãn E2E” chỉ mô tả phiên đó, không mô tả CI hiện tại. Đọc script/test thực tế trước khi chọn gate.
 
 ### Environment
 
@@ -104,7 +104,7 @@ Dùng scripts của [package.json](../../package.json): `npm run dev`, `build`, 
 
 ### Trạng thái tài liệu và tích hợp — 2026-11-26
 
-Route/permission hiện tại ở [navigation-flow](navigation.md). Phạm vi nghiệp vụ và API readiness ở [restructure plan](../plans/api-restructure/README.md). Thiết kế cấu trúc đã duyệt ở [migration](../plans/structure-migration/README.md), chưa triển khai source.
+Route/permission hiện tại ở [navigation-flow](navigation.md). Phạm vi nghiệp vụ và API readiness ở [restructure plan](../plan/initiatives/api-restructure/map.md). Thiết kế cấu trúc đã duyệt ở [migration](../plan/initiatives/structure-migration/map.md), chưa triển khai source.
 
 - `useListState` sở hữu URL state; Session xoá cache khi logout. Không có StoreScope hoặc Store ID trong query key.
 - Backend và Generated API đã tồn tại; mức độ nối API phải kiểm từng feature. Không dùng hợp đồng tạm từ prototype thay Contract Version đã pin.

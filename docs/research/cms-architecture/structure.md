@@ -100,6 +100,6 @@ features/products/
 Đề xuất query dùng chung editor đặt ở owner chung gần nhất; không để sibling import private hook của nhau.
 Một SFC nhỏ có thể vừa hiển thị vừa quản lý UI local; component dùng lại/presentational chỉ props/emits.
 Nếu giữ rule components thuần hiện hành, phân loại container rõ và cập nhật lint cho đường dẫn lồng mới.
-Nguồn hiện hành: [CONVENTIONS §T](../../guides/README.md), [featureRows trong ESLint](../../../eslint.config.ts).
+Nguồn hiện hành: [CONVENTIONS §T](../../conventions/README.md), [featureRows trong ESLint](../../../eslint.config.ts).
 
 Tra cứu: [Mục lục chủ đề](README.md) · [Toàn bộ tài liệu](../../README.md).

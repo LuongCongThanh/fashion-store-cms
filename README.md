@@ -25,6 +25,6 @@ npm run dev                  # http://localhost:3001, cần Backend ở cổng 8
 ## Tài liệu
 
 - Kiến trúc frontend: [docs/architecture/README.md](docs/architecture/README.md)
-- Quy ước code (cây thư mục, đặt tên, lint, test, HTTP, lỗi, i18n, design system): [docs/guides/README.md](docs/guides/README.md)
+- Quy ước code (cây thư mục, đặt tên, lint, test, HTTP, lỗi, i18n, design system): [docs/conventions/README.md](docs/conventions/README.md)
 - Thuật ngữ: [GLOSSARY.md](GLOSSARY.md)
-- Giao diện: [`DESIGN.md`](DESIGN.md) là nguồn chuẩn về visual direction và quy tắc UI (thay cho phần design system trong CONVENTIONS §L) — xem thêm [UI/UX hardening plan](docs/plans/ui-hardening/README.md)
+- Giao diện: [`DESIGN.md`](DESIGN.md) là nguồn chuẩn về visual direction và quy tắc UI (thay cho phần design system trong CONVENTIONS §L) — xem thêm [UI/UX hardening plan](docs/plan/initiatives/ui-hardening/map.md)

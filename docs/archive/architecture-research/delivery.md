@@ -7,7 +7,7 @@
 Chiều phụ thuộc chủ đạo hiện tại là `main → app → layouts/features → shared`.
 Đây là partial order: app có thể import feature route; layout có thể dùng public auth;
 feature cũng có thể dùng **public** feature khác khi dependency có chủ đích, không tạo vòng.
-[CONVENTIONS §A/§B.3](../../guides/README.md), [ESLint BOUNDARIES](../../../eslint.config.ts).
+[CONVENTIONS §A/§B.3](../../conventions/README.md), [ESLint BOUNDARIES](../../../eslint.config.ts).
 
 `UseCategories.ts` được phép làm facade export chọn lọc; tránh `index.ts` và re-export toàn bộ nội bộ.
 Pattern hiện cho phép `Use[^/]*` và `types/[^/]+`: đây là whitelist theo đường dẫn khá rộng,
@@ -63,7 +63,7 @@ Giữ C8: đơn hàng chỉ hiện hành động Backend trả qua `allowedActio
 C17: chưa có contract thì không đoán DTO, endpoint hoặc dựng mock để lấp chức năng.
 Thay đổi API xuyên repo phải theo flow contract của workspace tại thời điểm triển khai;
 research này không cập nhật tag generated, không tự xác nhận các tier API đã sẵn sàng.
-Nguồn: [plan CMS C8/C11/C17](../../plans/api-restructure/README.md).
+Nguồn: [plan CMS C8/C11/C17](../../plan/initiatives/api-restructure/map.md).
 
 Các gate trên là đề xuất cho **implementation sau khi duyệt**, chưa được chạy trong nghiên cứu này.
 Không báo hiệu năng tốt hơn từ rename; chỉ đo bundle/request nếu thực sự đổi loading hoặc query behavior.

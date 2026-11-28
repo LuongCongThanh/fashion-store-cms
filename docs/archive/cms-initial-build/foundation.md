@@ -63,7 +63,7 @@ Step 3a, 5b được tách đôi (phần 1/2) chỉ trong danh sách này, khôn
 
 - Cả 14 plan có `Status: done`, và `report.md` của từng plan ghi kết quả pass cho mọi mục kiểm tra.
 - `npm run lint`, `npm run typecheck`, `npm test`, `npm run test:coverage`, `npm run test:e2e` và `npm run build` đều pass; CI xanh.
-- Cây thư mục thực tế khớp với §A; các convention đã được chuyển sang `docs/guides/README.md` (plan 14).
+- Cây thư mục thực tế khớp với §A; các convention đã được chuyển sang `docs/conventions/README.md` (plan 14).
 - [token-usage.md](metrics/foundation.md) có đủ số token của 14 plan.
 - Không có commit nào trên `main` mang tên hoặc attribution của Claude.
 
@@ -75,7 +75,7 @@ Cấu trúc lưu trữ hiện tại: đặc tả/kế hoạch và kết quả/re
 
 ## Bối cảnh khi lập scaffold
 
-Bản scaffold đã đóng, được chia theo chủ đề để tra quyết định D1–D41 và lý do. Quy ước hiện hành nằm trong [CONVENTIONS](../../guides/README.md).
+Bản scaffold đã đóng, được chia theo chủ đề để tra quyết định D1–D41 và lý do. Quy ước hiện hành nằm trong [CONVENTIONS](../../conventions/README.md).
 
 Mục tiêu: dựng khung dự án (Foundation) theo [FE_architecture.md](../../architecture/README.md), **chưa** làm logic nghiệp vụ.
 
@@ -86,4 +86,4 @@ Nguyên tắc thực hiện:
 - Package manager: npm. Node 22 LTS.
 - Ký hiệu tham chiếu: `§` + chữ (§A–§V) và `Step N` là mục trong tài liệu này; `§` + số (VD §5, §21, §30) là mục trong `FE_architecture.md`.
 - Trong lúc scaffold, tài liệu này là nguồn chuẩn cho convention; khi lệch với `FE_architecture.md` thì sửa `FE_architecture.md` theo tài liệu này (Step 0).
-- Plan là tài liệu **tạm**: ở Step 7, các convention bền vững (§B–§U) được chuyển sang `docs/guides/README.md`, rồi plan chuyển vào `docs/archive/`. Sau đó chỉ còn một nguồn chuẩn cho mỗi chủ đề.
+- Plan là tài liệu **tạm**: ở Step 7, các convention bền vững (§B–§U) được chuyển sang `docs/conventions/README.md`, rồi plan chuyển vào `docs/archive/`. Sau đó chỉ còn một nguồn chuẩn cho mỗi chủ đề.

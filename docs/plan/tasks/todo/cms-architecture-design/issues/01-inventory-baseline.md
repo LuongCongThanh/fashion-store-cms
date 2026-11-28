@@ -1,0 +1,37 @@
+# Chốt mapping file, consumer và baseline
+
+Type: task
+Status: ready-for-agent
+Blocked by: none
+
+## Mục tiêu và owner
+
+Toàn bộ src, e2e, config; chỉ khảo sát và hoàn thiện inventory/spec, không đổi behavior.
+
+Không hoàn tác sửa đổi ngoài scope. Source migration chỉ bắt đầu sau mapping/baseline của issue 01; không commit/push/PR nếu chưa có yêu cầu riêng.
+
+## Công việc
+
+Cập nhật checkout/source facts; lập mapping source→target cho mọi file/symbol, public consumer, endpoint readiness và test owner. Ghi baseline từng lệnh và lỗi có trước; chia lại ticket nếu một slice không build độc lập.
+
+## Public symbols và config
+
+Mục "Dependency chéo module" của inventory chỉ là trích alias bằng regex, không dùng làm allowlist. Lập danh sách public symbol thực tế (tên export + consumer) bằng TypeScript/ESLint import resolution hoặc knip, làm đầu vào cho public entry ở issue 02. Refresh bảng config của inventory theo `origin/dev` mới nhất (đã biết `vite.config.ts` và `docs/conventions/README.md` đổi sau aa5fa92).
+
+## Inventory API bắt buộc
+
+Xác nhận lại [checklist operation](../api-contract-checklist.md) (67 dòng khảo sát tĩnh tại 4f44bb7) trên source mới nhất cho mọi Backend call site và external request, gồm auth/session refresh ở runtime. Bổ sung evidence gating cho 10 call site không có path ở contract đã pin, owner/caller và slice phụ trách. Mỗi operation phải có normalized method+contract path và trạng thái ban đầu, không suy release từ việc source có import DTO.
+
+## Tiêu chí hoàn tất
+
+Bảng inventory 295 file được refresh; mọi mapping chưa rõ được giải quyết; kết quả lint/typecheck/test/build/E2E phân biệt chưa chạy/đạt/lỗi có trước. Không đánh dấu xanh từ static inspection. Checklist phủ mọi operation/call site và nêu phần pending/external rõ ràng; semantic mapping không được xem xong nếu còn endpoint chưa phân loại.
+
+Cập nhật report với file đổi, lý do, lệnh thực sự chạy và kết quả. Đánh giá C11 của plan cũ đúng phase trước khi thêm test; không dùng nó để bỏ regression proof hoặc tự cho quyền vượt phase. Nếu vướng quy trình, ghi vào inventory và giải quyết trước edit.
+
+## Tham chiếu
+
+- [Thiết kế đã duyệt](../../../../initiatives/structure-migration/map.md)
+- [Inventory ban đầu](../inventory.md)
+- [Spec điều phối](../spec.md)
+
+## Comments

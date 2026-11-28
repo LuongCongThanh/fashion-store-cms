@@ -8,7 +8,7 @@ File gợi ý: **page (view) nào và component nào cần tạo**, đặt ở �
 
 Không lặp lại kiến trúc. Nguồn chuẩn:
 
-- Cấu trúc thư mục, tên file, chiều import: [CONVENTIONS.md](../../../guides/README.md) §A, §B, §E, §Q
+- Cấu trúc thư mục, tên file, chiều import: [CONVENTIONS.md](../../../conventions/README.md) §A, §B, §E, §Q
 - API layer, `useListState`, RBAC, Store scope, Table, URL state: [FE_architecture.md](../../../architecture/README.md) §5, §6, §9, §22, §23
 - Thứ tự Phase: [FE_architecture.md](../../../architecture/README.md) §30
 - Thuật ngữ: [GLOSSARY.md](../../../../GLOSSARY.md)
