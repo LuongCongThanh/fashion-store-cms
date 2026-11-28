@@ -533,6 +533,8 @@ VS Code: `.vscode/settings.json` (format on save bằng Prettier, `source.fixAll
 
 ## I. Cấu hình unit / component test (Vitest)
 
+> Test gì, ở tầng nào và danh sách kịch bản: [chiến lược kiểm thử](guides/testing-strategy.md), [traceability](guides/testing-traceability.md). Mục này giữ cách dựng test.
+
 **Công cụ:** `vitest`, `@vue/test-utils`, `jsdom`, `@vitest/coverage-v8`, `axios-mock-adapter`.
 
 **Chiến lược fake API (đã bỏ MSW):**
